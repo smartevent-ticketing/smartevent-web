@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+
+<html class="light" lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SMART EVENT - Chọn Sự Kiện</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-error-container": "#93000a",
+                        "on-primary": "#ffffff",
+                        "inverse-on-surface": "#ecf0ff",
+                        "on-primary-fixed": "#0f0069",
+                        "on-tertiary-container": "#fffaf9",
+                        "on-surface": "#111c2d",
+                        "inverse-surface": "#273143",
+                        "on-secondary-container": "#606379",
+                        "primary-container": "#635bff",
+                        "surface-dim": "#d0daf2",
+                        "on-surface-variant": "#464555",
+                        "on-tertiary-fixed-variant": "#910913",
+                        "background": "#f9f9ff",
+                        "surface-variant": "#d9e3fb",
+                        "tertiary": "#ae2424",
+                        "surface-container-low": "#f0f3ff",
+                        "inverse-primary": "#c3c0ff",
+                        "tertiary-fixed-dim": "#ffb3ac",
+                        "on-tertiary": "#ffffff",
+                        "error": "#ba1a1a",
+                        "secondary-container": "#dee1fb",
+                        "surface-container-high": "#dfe8ff",
+                        "outline-variant": "#c7c4d8",
+                        "on-error": "#ffffff",
+                        "surface": "#f9f9ff",
+                        "primary-fixed-dim": "#c3c0ff",
+                        "secondary-fixed-dim": "#c2c5de",
+                        "surface-container-highest": "#d9e3fb",
+                        "on-background": "#111c2d",
+                        "surface-bright": "#f9f9ff",
+                        "on-primary-fixed-variant": "#321ed2",
+                        "on-primary-container": "#fefaff",
+                        "primary-fixed": "#e2dfff",
+                        "on-secondary-fixed": "#171b2d",
+                        "secondary": "#5a5d73",
+                        "tertiary-container": "#d13e3a",
+                        "secondary-fixed": "#dee1fb",
+                        "on-secondary-fixed-variant": "#42465a",
+                        "tertiary-fixed": "#ffdad6",
+                        "surface-tint": "#4c42e9",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "primary": "#493ee5",
+                        "error-container": "#ffdad6",
+                        "outline": "#777587",
+                        "on-tertiary-fixed": "#410003",
+                        "surface-container": "#e8eeff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xl": "32px",
+                        "md": "16px",
+                        "lg": "24px",
+                        "container-max": "1280px",
+                        "xs": "4px",
+                        "base": "8px",
+                        "sm": "8px",
+                        "xxl": "48px",
+                        "gutter": "24px"
+                    },
+                    "fontFamily": {
+                        "display-lg": ["Be Vietnam Pro"],
+                        "label-md": ["Be Vietnam Pro"],
+                        "title-lg": ["Be Vietnam Pro"],
+                        "numeric-tabular": ["Be Vietnam Pro"],
+                        "headline-md": ["Be Vietnam Pro"],
+                        "body-lg": ["Be Vietnam Pro"],
+                        "headline-lg": ["Be Vietnam Pro"],
+                        "body-md": ["Be Vietnam Pro"],
+                        "label-sm": ["Be Vietnam Pro"]
+                    },
+                    "fontSize": {
+                        "display-lg": ["48px", { "lineHeight": "60px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "fontWeight": "500" }],
+                        "title-lg": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "numeric-tabular": ["inherit", { "lineHeight": "inherit", "fontWeight": "inherit" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen flex flex-col font-body-md">
+<!-- TopNavBar -->
+<nav class="bg-surface border-b border-outline-variant shadow-sm w-full sticky top-0 z-50 h-[72px]">
+<div class="flex justify-between items-center w-full px-lg md:px-xl max-w-container-max mx-auto h-full">
+<div class="flex items-center gap-lg">
+<a class="text-title-lg font-title-lg font-bold text-primary" href="#">SMART EVENT</a>
+</div>
+<div class="flex-1 max-w-md mx-lg">
+<div class="relative w-full">
+<span class="material-symbols-outlined absolute left-md top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none">search</span>
+<input class="w-full bg-surface-container-low border border-outline-variant text-on-surface rounded-full py-[10px] pl-xxl pr-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all h-[40px] text-body-md font-body-md placeholder-on-surface-variant" placeholder="Tìm kiếm sự kiện..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-md">
+<button aria-label="Notifications" class="flex items-center justify-center w-[40px] h-[40px] rounded-full bg-surface-container hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined text-on-surface">notifications</span>
+</button>
+<button aria-label="User Avatar" class="flex items-center justify-center w-[40px] h-[40px] rounded-full overflow-hidden border border-outline-variant hover:border-primary transition-colors focus:ring-2 focus:ring-primary focus:ring-offset-2">
+<img class="w-full h-full object-cover" data-alt="A close up, high quality, well lit professional headshot of an event manager with a friendly smile. The lighting is bright and modern, suitable for a professional avatar. The background is a clean, neutral white to ensure the face stands out clearly. The image conveys reliability and professionalism." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB2cRKW0nxD7P0aqf-C7yrsVLeyY5P710oc0V7_1K9GGMQjsCFLz7H7jQwi39kjr8DFGZuOa6Sf_2_mLlQ4_JGPLEcLTzDMKxTA6xRuM2IQFgDlfqMes1KlcF0JFY27M4rQ1-97yK9mIBYOUZhrJPGPm-E8__mEYlKaaHGz9pHY1-oh0qzXpGKDzLUJ1JmoC_APj8so0Yo_YDoIwMCzq6YS-1cyAhh4kWliMb_cRfxqyBZzK_y9F0WG"/>
+</button>
+</div>
+</div>
+</nav>
+<!-- Main Content -->
+<main class="flex-1 w-full max-w-container-max mx-auto px-lg py-xl">
+<div class="mb-lg">
+<h1 class="text-headline-lg font-headline-lg text-on-surface mb-xs">Sự kiện cần Check-in</h1>
+<p class="text-body-md font-body-md text-on-surface-variant">Chọn sự kiện bên dưới để bắt đầu quét vé.</p>
+</div>
+<!-- Event Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">
+<!-- Event Card 1 (Active/Today) -->
+<div class="group flex flex-col bg-surface border border-outline-variant rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 relative">
+<div class="absolute top-md left-md z-10 bg-primary text-on-primary text-label-sm font-label-sm px-sm py-xs rounded-full font-bold shadow-sm">
+                    Hôm nay
+                </div>
+<div class="h-[160px] w-full relative overflow-hidden bg-surface-variant">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A vibrant, wide-angle shot of a large tech conference stage during a keynote presentation. Bright electric indigo spotlights cut through the dark auditorium, creating a dynamic, high-energy atmosphere. The stage features a massive LED screen displaying sleek graphics. The mood is professional, innovative, and electric." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDjK6kL72-EINqIjQgVAZtr1R0jWmAHxyJ8vcyFMdYNaj2ZhTe154UxQC_6l8kP-EuQ0CUhVT8pac9QKRaP2NbxaCqMhp-PceNbRNnDY6CVEU5EJogC_50Z_AHIQsBq3o7wAPj4SiawlbtOVR4zMmO3p-_kOdjuri6O3IdJyewrgJHx7L7sjZLCQBZpQqhDMNipTCuBRJb2Y23UdzG5Imb4E3F9VJ6H2uFV3w--Gq0iXSD2bwbhLzSX"/>
+</div>
+<div class="p-md flex flex-col flex-1">
+<h2 class="text-title-lg font-title-lg text-on-surface mb-sm line-clamp-2">Tech Summit Vietnam 2024 - AI &amp; Tương lai</h2>
+<div class="flex items-center gap-xs text-on-surface-variant text-label-md font-label-md mb-xs">
+<span class="material-symbols-outlined text-[18px]">calendar_month</span>
+<span>08:00 - 17:00, 24/10/2024</span>
+</div>
+<div class="flex items-start gap-xs text-on-surface-variant text-label-md font-label-md mb-md">
+<span class="material-symbols-outlined text-[18px] mt-xs">location_on</span>
+<span class="line-clamp-2">Trung tâm Hội nghị Quốc gia, Hà Nội</span>
+</div>
+<div class="mt-auto pt-md border-t border-outline-variant flex justify-between items-end">
+<div>
+<span class="text-label-sm font-label-sm text-on-surface-variant block mb-xs">Đã check-in</span>
+<div class="text-headline-md font-headline-md font-numeric-tabular text-primary">
+                                450<span class="text-body-md font-body-md text-on-surface-variant font-normal"> / 1200</span>
+</div>
+</div>
+<button class="bg-primary hover:bg-surface-tint text-on-primary h-[40px] px-lg rounded-lg text-label-md font-label-md font-bold transition-colors focus:ring-2 focus:ring-primary focus:ring-offset-2 shadow-sm flex items-center gap-xs">
+<span class="material-symbols-outlined text-[18px]">qr_code_scanner</span>
+                            Quét vé
+                        </button>
+</div>
+</div>
+</div>
+<!-- Event Card 2 (Active/Today) -->
+<div class="group flex flex-col bg-surface border border-outline-variant rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 relative">
+<div class="absolute top-md left-md z-10 bg-primary text-on-primary text-label-sm font-label-sm px-sm py-xs rounded-full font-bold shadow-sm">
+                    Hôm nay
+                </div>
+<div class="h-[160px] w-full relative overflow-hidden bg-surface-variant">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A lively outdoor music festival scene at dusk. The sky is a gradient of deep blue and sunset orange. A large crowd is gathered in front of a stage lit with electric indigo and bright white lasers. The atmosphere is energetic, exciting, and full of anticipation for the main act. The aesthetic is modern and vibrant." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCSxGM2fLRkS2EPrAdfTioKIJNKaKuyvA_vSzRqQGIkelpQxOtsoiLBeHIrJDfwDqypsZD9a8C2_WCMc8B_KjRzaOQhDyyGlDoVRE4j6Ub6eO-dJ7S3WN9woXdInSLGO0CNuPE6yHgZmtp5OArMdM7konsWGHz85KAjOLIFVhwIS4-3EiqGTzb8zQNbJBW0ka19wahfjr1YdLQ2-86somsswedFA_0QQxpwdt-JXTZmfflni6Gx9I9h"/>
+</div>
+<div class="p-md flex flex-col flex-1">
+<h2 class="text-title-lg font-title-lg text-on-surface mb-sm line-clamp-2">Lễ hội Âm nhạc Mùa Thu - EDM Night</h2>
+<div class="flex items-center gap-xs text-on-surface-variant text-label-md font-label-md mb-xs">
+<span class="material-symbols-outlined text-[18px]">calendar_month</span>
+<span>19:00 - 23:30, 24/10/2024</span>
+</div>
+<div class="flex items-start gap-xs text-on-surface-variant text-label-md font-label-md mb-md">
+<span class="material-symbols-outlined text-[18px] mt-xs">location_on</span>
+<span class="line-clamp-2">Sân vận động Quân khu 7, TP.HCM</span>
+</div>
+<div class="mt-auto pt-md border-t border-outline-variant flex justify-between items-end">
+<div>
+<span class="text-label-sm font-label-sm text-on-surface-variant block mb-xs">Đã check-in</span>
+<div class="text-headline-md font-headline-md font-numeric-tabular text-primary">
+                                89<span class="text-body-md font-body-md text-on-surface-variant font-normal"> / 5000</span>
+</div>
+</div>
+<button class="bg-primary hover:bg-surface-tint text-on-primary h-[40px] px-lg rounded-lg text-label-md font-label-md font-bold transition-colors focus:ring-2 focus:ring-primary focus:ring-offset-2 shadow-sm flex items-center gap-xs">
+<span class="material-symbols-outlined text-[18px]">qr_code_scanner</span>
+                            Quét vé
+                        </button>
+</div>
+</div>
+</div>
+<!-- Event Card 3 (Upcoming) -->
+<div class="group flex flex-col bg-surface border border-outline-variant rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300">
+<div class="h-[160px] w-full relative overflow-hidden bg-surface-variant">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90" data-alt="A clean, modern art gallery interior setup for a VIP exhibition opening. Sleek white walls display contemporary art, with subtle, focused lighting illuminating the pieces. The space looks pristine and high-end, utilizing a color palette of stark whites and deep shadows. The atmosphere is sophisticated and calm." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB95Nqme3G5NaLVXQTq8EHchemXLkjshwMG7c0NOq39xEfLeuz730YA8CO62zzhiJm135MMEolEgksXg2b1-oEdzcAnNn5knH2SbD0J0MTXj_nsjX3BaNwd_Mw_co5qpRj8z6RNam5Y-LR9-jqa4DOvygxyeWYsSwkjk-ZbUeEFzPAPj01p12HLywhtpuxdiiNB7BdhLZrC1itrh4t2GP1CNYbaBges4CBypQ1Xe7FdsahvSi6YWWU1"/>
+</div>
+<div class="p-md flex flex-col flex-1">
+<h2 class="text-title-lg font-title-lg text-on-surface mb-sm line-clamp-2">Triển lãm Nghệ thuật Đương đại "Ánh Sáng"</h2>
+<div class="flex items-center gap-xs text-on-surface-variant text-label-md font-label-md mb-xs">
+<span class="material-symbols-outlined text-[18px]">calendar_month</span>
+<span>09:00 - 20:00, 26/10/2024</span>
+</div>
+<div class="flex items-start gap-xs text-on-surface-variant text-label-md font-label-md mb-md">
+<span class="material-symbols-outlined text-[18px] mt-xs">location_on</span>
+<span class="line-clamp-2">Bảo tàng Mỹ thuật, TP.HCM</span>
+</div>
+<div class="mt-auto pt-md border-t border-outline-variant flex justify-between items-end">
+<div>
+<span class="text-label-sm font-label-sm text-on-surface-variant block mb-xs">Vé dự kiến</span>
+<div class="text-headline-md font-headline-md font-numeric-tabular text-on-surface">
+                                0<span class="text-body-md font-body-md text-on-surface-variant font-normal"> / 300</span>
+</div>
+</div>
+<button class="bg-surface-container-high hover:bg-surface-variant text-on-surface h-[40px] px-lg rounded-lg text-label-md font-label-md font-bold transition-colors focus:ring-2 focus:ring-primary focus:ring-offset-2 flex items-center gap-xs">
+                             Chi tiết
+                        </button>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer (Suppressed for transactional app view, keeping structure minimal) -->
+</body></html>

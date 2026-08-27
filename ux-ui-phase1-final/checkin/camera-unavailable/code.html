@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+
+<html lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>SMART EVENT - Không tìm thấy camera</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-high": "#dfe8ff",
+                        "inverse-on-surface": "#ecf0ff",
+                        "surface-dim": "#d0daf2",
+                        "on-primary-container": "#fefaff",
+                        "on-error": "#ffffff",
+                        "surface-container-highest": "#d9e3fb",
+                        "tertiary-fixed-dim": "#ffb3ac",
+                        "on-tertiary": "#ffffff",
+                        "surface-bright": "#f9f9ff",
+                        "inverse-surface": "#273143",
+                        "secondary-container": "#dee1fb",
+                        "on-tertiary-fixed-variant": "#910913",
+                        "error": "#ba1a1a",
+                        "background": "#f9f9ff",
+                        "on-tertiary-container": "#fffaf9",
+                        "on-secondary": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "on-primary-fixed": "#0f0069",
+                        "tertiary-container": "#d13e3a",
+                        "primary-container": "#635bff",
+                        "on-primary-fixed-variant": "#321ed2",
+                        "secondary-fixed-dim": "#c2c5de",
+                        "primary-fixed-dim": "#c3c0ff",
+                        "primary": "#493ee5",
+                        "on-tertiary-fixed": "#410003",
+                        "surface-variant": "#d9e3fb",
+                        "outline": "#777587",
+                        "outline-variant": "#c7c4d8",
+                        "surface-container-low": "#f0f3ff",
+                        "primary-fixed": "#e2dfff",
+                        "tertiary-fixed": "#ffdad6",
+                        "inverse-primary": "#c3c0ff",
+                        "secondary-fixed": "#dee1fb",
+                        "on-background": "#111c2d",
+                        "surface-container": "#e8eeff",
+                        "on-secondary-fixed": "#171b2d",
+                        "on-secondary-container": "#606379",
+                        "surface-tint": "#4c42e9",
+                        "error-container": "#ffdad6",
+                        "secondary": "#5a5d73",
+                        "surface": "#f9f9ff",
+                        "on-surface-variant": "#464555",
+                        "tertiary": "#ae2424",
+                        "surface-container-lowest": "#ffffff",
+                        "on-primary": "#ffffff",
+                        "on-surface": "#111c2d",
+                        "on-secondary-fixed-variant": "#42465a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "lg": "24px",
+                        "xs": "4px",
+                        "base": "8px",
+                        "gutter": "24px",
+                        "xl": "32px",
+                        "md": "16px",
+                        "container-max": "1280px",
+                        "xxl": "48px",
+                        "sm": "8px"
+                    },
+                    "fontFamily": {
+                        "numeric-tabular": ["Be Vietnam Pro"],
+                        "display-lg": ["Be Vietnam Pro"],
+                        "headline-lg": ["Be Vietnam Pro"],
+                        "label-md": ["Be Vietnam Pro"],
+                        "label-sm": ["Be Vietnam Pro"],
+                        "title-lg": ["Be Vietnam Pro"],
+                        "headline-md": ["Be Vietnam Pro"],
+                        "body-md": ["Be Vietnam Pro"],
+                        "body-lg": ["Be Vietnam Pro"]
+                    },
+                    "fontSize": {
+                        "numeric-tabular": ["inherit", { "lineHeight": "inherit", "fontWeight": "inherit" }],
+                        "display-lg": ["48px", { "lineHeight": "60px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "fontWeight": "500" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500" }],
+                        "title-lg": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .pb-safe { padding-bottom: env(safe-area-inset-bottom, 16px); }
+    </style>
+</head>
+<body class="bg-background text-on-background antialiased min-h-screen flex flex-col font-body-md text-body-md pb-safe">
+<!-- Main Content Area -->
+<main class="flex-grow flex flex-col items-center justify-center p-md md:p-gutter max-w-container-max mx-auto w-full">
+<!-- Error State Card -->
+<div class="bg-surface rounded-xl shadow-lg border border-outline-variant w-full max-w-md p-lg flex flex-col items-center text-center space-y-md">
+<!-- Icon -->
+<div class="w-20 h-20 bg-error-container text-on-error-container rounded-full flex items-center justify-center mb-base">
+<span class="material-symbols-outlined text-[40px]" data-icon="videocam_off">videocam_off</span>
+</div>
+<!-- Title -->
+<h1 class="font-headline-md text-headline-md text-on-surface">Không tìm thấy camera</h1>
+<!-- Description -->
+<p class="font-body-md text-body-md text-on-surface-variant">Sử dụng nếu camera bị lỗi hoặc không hỗ trợ.</p>
+<!-- Manual Input Form -->
+<div class="w-full mt-lg">
+<label class="sr-only" for="ticket-code">Nhập mã vé thủ công</label>
+<div class="relative">
+<input class="w-full h-12 px-md border border-outline-variant rounded-lg bg-surface text-on-surface font-body-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all shadow-sm placeholder:text-outline" id="ticket-code" placeholder="Nhập mã vé thủ công" type="text"/>
+</div>
+<button class="w-full h-12 mt-md bg-primary text-on-primary font-label-md text-label-md rounded-lg flex items-center justify-center font-bold shadow-sm hover:opacity-90 active:scale-95 transition-all">
+<span class="material-symbols-outlined mr-xs" data-icon="search">search</span>
+                    Kiểm tra vé
+                </button>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (Mobile Shell) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-2 pb-safe bg-surface dark:bg-inverse-surface shadow-lg border-t border-outline-variant rounded-t-xl">
+<!-- Active Tab: Scanner -->
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-2xl p-2 active:scale-95 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined mb-xs" data-icon="qr_code_scanner" data-weight="fill" style="font-variation-settings: 'FILL' 1;">qr_code_scanner</span>
+<span class="font-label-sm text-label-sm">Scanner</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant p-2 hover:bg-surface-container-high rounded-2xl active:scale-95 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined mb-xs" data-icon="confirmation_number">confirmation_number</span>
+<span class="font-label-sm text-label-sm">Events</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant p-2 hover:bg-surface-container-high rounded-2xl active:scale-95 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined mb-xs" data-icon="history">history</span>
+<span class="font-label-sm text-label-sm">History</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant p-2 hover:bg-surface-container-high rounded-2xl active:scale-95 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined mb-xs" data-icon="person">person</span>
+<span class="font-label-sm text-label-sm">Profile</span>
+</a>
+</nav>
+</body></html>

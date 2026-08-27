@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+
+<html class="light" lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Chi tiết Địa điểm - Kinetic Pulse Admin</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "inverse-on-surface": "#ecf0ff",
+                        "surface-container-highest": "#d9e3fb",
+                        "on-primary": "#ffffff",
+                        "on-secondary-fixed": "#171b2d",
+                        "on-secondary-container": "#606379",
+                        "primary-fixed-dim": "#c3c0ff",
+                        "tertiary-fixed": "#ffdad6",
+                        "on-secondary-fixed-variant": "#42465a",
+                        "on-secondary": "#ffffff",
+                        "on-error": "#ffffff",
+                        "on-primary-fixed-variant": "#321ed2",
+                        "secondary": "#5a5d73",
+                        "outline-variant": "#c7c4d8",
+                        "outline": "#777587",
+                        "inverse-surface": "#273143",
+                        "surface": "#f9f9ff",
+                        "secondary-fixed": "#dee1fb",
+                        "on-primary-container": "#fefaff",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary-fixed-variant": "#910913",
+                        "on-tertiary-container": "#fffaf9",
+                        "tertiary": "#ae2424",
+                        "surface-bright": "#f9f9ff",
+                        "error-container": "#ffdad6",
+                        "surface-variant": "#d9e3fb",
+                        "on-background": "#111c2d",
+                        "secondary-container": "#dee1fb",
+                        "primary": "#493ee5",
+                        "on-tertiary": "#ffffff",
+                        "surface-container-high": "#dfe8ff",
+                        "surface-container-low": "#f0f3ff",
+                        "tertiary-container": "#d13e3a",
+                        "background": "#f9f9ff",
+                        "secondary-fixed-dim": "#c2c5de",
+                        "error": "#ba1a1a",
+                        "primary-container": "#635bff",
+                        "on-tertiary-fixed": "#410003",
+                        "surface-tint": "#4c42e9",
+                        "primary-fixed": "#e2dfff",
+                        "on-primary-fixed": "#0f0069",
+                        "on-surface": "#111c2d",
+                        "surface-dim": "#d0daf2",
+                        "on-surface-variant": "#464555",
+                        "tertiary-fixed-dim": "#ffb3ac",
+                        "inverse-primary": "#c3c0ff",
+                        "surface-container": "#e8eeff",
+                        "on-error-container": "#93000a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xl": "32px",
+                        "sm": "8px",
+                        "xs": "4px",
+                        "gutter": "24px",
+                        "base": "8px",
+                        "lg": "24px",
+                        "xxl": "48px",
+                        "md": "16px",
+                        "container-max": "1280px"
+                    },
+                    "fontFamily": {
+                        "title-lg": ["Be Vietnam Pro"],
+                        "display-lg": ["Be Vietnam Pro"],
+                        "headline-md": ["Be Vietnam Pro"],
+                        "label-sm": ["Be Vietnam Pro"],
+                        "headline-lg": ["Be Vietnam Pro"],
+                        "body-lg": ["Be Vietnam Pro"],
+                        "label-md": ["Be Vietnam Pro"],
+                        "numeric-tabular": ["Be Vietnam Pro"],
+                        "body-md": ["Be Vietnam Pro"]
+                    },
+                    "fontSize": {
+                        "title-lg": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "display-lg": ["48px", { "lineHeight": "60px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "fontWeight": "500" }],
+                        "numeric-tabular": ["inherit", { "lineHeight": "inherit", "fontWeight": "inherit" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Be Vietnam Pro', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .icon-fill { font-variation-settings: 'FILL' 1; }
+        
+        /* Custom Scrollbar for Main Content */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background-color: #c7c4d8; border-radius: 4px; }
+    </style>
+</head>
+<body class="bg-background text-on-background h-screen flex overflow-hidden">
+<!-- SideNavBar -->
+<nav class="bg-surface-container-lowest h-screen w-64 fixed left-0 top-0 overflow-y-auto border-r border-outline-variant z-20">
+<div class="flex flex-col h-full p-md gap-base">
+<!-- Brand Header -->
+<div class="px-md py-lg mb-4">
+<h1 class="font-headline-md text-headline-md font-bold text-primary">Kinetic Pulse</h1>
+<p class="font-label-md text-label-md text-on-surface-variant mt-1">Quản trị viên nền tảng</p>
+</div>
+<!-- Navigation Links -->
+<div class="flex flex-col gap-sm flex-grow">
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-colors group" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-md text-label-md">Bảng điều khiển</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-colors group" href="#">
+<span class="material-symbols-outlined">how_to_reg</span>
+<span class="font-label-md text-label-md">Duyệt sự kiện</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-colors group" href="#">
+<span class="material-symbols-outlined">category</span>
+<span class="font-label-md text-label-md">Danh mục</span>
+</a>
+<!-- Active State for Venues -->
+<a class="flex items-center gap-md px-md py-sm bg-primary-container text-on-primary-container rounded-lg font-bold scale-[0.98] transition-transform duration-150" href="#">
+<span class="material-symbols-outlined icon-fill">location_on</span>
+<span class="font-label-md text-label-md">Địa điểm</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-colors group" href="#">
+<span class="material-symbols-outlined">outbox</span>
+<span class="font-label-md text-label-md">Hộp thư đi</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-colors group" href="#">
+<span class="material-symbols-outlined">health_and_safety</span>
+<span class="font-label-md text-label-md">Trạng thái hệ thống</span>
+</a>
+</div>
+<!-- User Profile Snippet (Bottom) -->
+<div class="mt-auto pt-4 border-t border-outline-variant">
+<div class="flex items-center gap-md px-md py-sm">
+<div class="w-10 h-10 rounded-full bg-surface-container-highest overflow-hidden flex-shrink-0">
+<img alt="Admin Avatar" class="w-full h-full object-cover" data-alt="A small, professional avatar portrait of an admin user in a corporate but modern setting. Bright lighting, clean background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuChB6EBPpHHpLfis5XjggoAc_Lo-G94jaTWP9JFMOmi7qISJ8PxNimNNQtNO_g1owBKZlk5ALi0iBERcuQHg4KvUX2Ni90UJ0_g3gh8B_q5xTn5Mjy8dFHDwTNiQlRSVdCH2TgfbkNWblqPcOoM5XaljKTCgsTXhhKB74vAchAdJmcPIqYo4SZd8tLdYAzpFExBrXGtaX4israpmOpjK0OjizJR4Z3l1J4WylUMh8Wwx5NKVQQuSZF1"/>
+</div>
+<div class="flex-grow overflow-hidden">
+<p class="font-label-md text-label-md font-bold truncate">Admin User</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant truncate">admin@kinetic.pulse</p>
+</div>
+</div>
+</div>
+</div>
+</nav>
+<!-- Main Content Wrapper -->
+<div class="flex flex-col flex-1 ml-64 h-screen">
+<!-- TopNavBar -->
+<header class="bg-surface-bright border-b border-outline-variant shadow-sm h-16 w-full z-10 flex-shrink-0">
+<div class="flex justify-between items-center px-lg h-full">
+<!-- Search (Left Aligned as per JSON) -->
+<div class="flex-1 flex items-center">
+<div class="relative w-full max-w-md">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-surface border border-outline-variant rounded-lg font-body-md text-body-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-shadow" placeholder="Tìm kiếm trong Kinetic Pulse Admin..." type="text"/>
+</div>
+</div>
+<!-- Trailing Actions -->
+<div class="flex items-center gap-sm">
+<button class="p-2 text-on-surface-variant hover:bg-surface-container hover:text-primary rounded-full transition-colors relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-error rounded-full border-2 border-surface-bright"></span>
+</button>
+<button class="p-2 text-on-surface-variant hover:bg-surface-container hover:text-primary rounded-full transition-colors">
+<span class="material-symbols-outlined">settings</span>
+</button>
+</div>
+</div>
+</header>
+<!-- Main Scrollable Area -->
+<main class="flex-1 overflow-y-auto p-lg bg-background">
+<div class="max-w-[1280px] mx-auto">
+<!-- Breadcrumbs & Header Section -->
+<div class="mb-xl flex flex-col md:flex-row md:items-end justify-between gap-md">
+<div>
+<nav class="flex items-center gap-2 mb-2 text-on-surface-variant font-label-md text-label-md">
+<a class="hover:text-primary transition-colors" href="#">Địa điểm</a>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+<span class="text-on-background font-medium">National Indoor Arena</span>
+</nav>
+<div class="flex items-center gap-4">
+<h2 class="font-headline-lg text-headline-lg text-on-background">National Indoor Arena</h2>
+<span class="px-3 py-1 bg-[#e6f4ea] text-[#137333] font-label-sm text-label-sm font-bold rounded-full border border-[#ceead6]">Hoạt động</span>
+</div>
+</div>
+<button class="h-[48px] px-6 bg-primary text-on-primary font-label-md text-label-md font-bold rounded-lg hover:bg-primary-container hover:text-on-primary-container transition-colors shadow-[0_4px_20px_rgba(16,20,38,0.08)] flex items-center gap-2">
+<span class="material-symbols-outlined text-[20px]">edit</span>
+                        Chỉnh sửa địa điểm
+                    </button>
+</div>
+<!-- Top Section: Metric Cards -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-gutter mb-xl">
+<!-- Card 1 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-md shadow-[0_4px_20px_rgba(16,20,38,0.04)]">
+<div class="flex justify-between items-start mb-2">
+<p class="font-label-md text-label-md text-on-surface-variant">Tổng sự kiện đã tổ chức</p>
+<span class="material-symbols-outlined text-primary bg-primary-fixed p-1.5 rounded-md">event</span>
+</div>
+<div class="flex items-baseline gap-2">
+<span class="font-display-lg text-display-lg font-numeric-tabular">156</span>
+<span class="font-label-sm text-label-sm text-[#137333] flex items-center"><span class="material-symbols-outlined text-[14px]">arrow_upward</span> 12%</span>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-md shadow-[0_4px_20px_rgba(16,20,38,0.04)]">
+<div class="flex justify-between items-start mb-2">
+<p class="font-label-md text-label-md text-on-surface-variant">Tỷ lệ tham dự trung bình</p>
+<span class="material-symbols-outlined text-primary bg-primary-fixed p-1.5 rounded-md">groups</span>
+</div>
+<div class="flex items-baseline gap-2">
+<span class="font-display-lg text-display-lg font-numeric-tabular">88%</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">YTD</span>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-md shadow-[0_4px_20px_rgba(16,20,38,0.04)]">
+<div class="flex justify-between items-start mb-2">
+<p class="font-label-md text-label-md text-on-surface-variant">Doanh thu tạo ra</p>
+<span class="material-symbols-outlined text-primary bg-primary-fixed p-1.5 rounded-md">payments</span>
+</div>
+<div class="flex items-baseline gap-2">
+<span class="font-display-lg text-display-lg font-numeric-tabular">$1.2M</span>
+<span class="font-label-sm text-label-sm text-[#137333] flex items-center"><span class="material-symbols-outlined text-[14px]">arrow_upward</span> 5%</span>
+</div>
+</div>
+</div>
+<!-- Main Content Area (2-column layout) -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-gutter">
+<!-- Left Column (Larger) -->
+<div class="lg:col-span-2 flex flex-col gap-gutter">
+<!-- General Information Bento -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden shadow-[0_4px_20px_rgba(16,20,38,0.04)]">
+<div class="px-lg py-md border-b border-outline-variant bg-surface-bright flex justify-between items-center">
+<h3 class="font-title-lg text-title-lg text-on-background">Thông tin chung</h3>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2">
+<div class="p-lg flex flex-col gap-md">
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant mb-1">Địa chỉ</p>
+<p class="font-body-md text-body-md font-medium text-on-background">123 Arena Blvd<br/>Metropolis, NY 10001</p>
+</div>
+<div class="w-full h-px bg-outline-variant/30"></div>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant mb-1">Người liên hệ</p>
+<p class="font-body-md text-body-md font-medium text-on-background">Sarah Jenkins, GM</p>
+</div>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant mb-1">Điện thoại</p>
+<p class="font-body-md text-body-md font-medium text-on-background font-numeric-tabular">+1 (555) 123-4567</p>
+</div>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant mb-1">Email</p>
+<p class="font-body-md text-body-md font-medium text-primary">s.jenkins@nationalarena.com</p>
+</div>
+</div>
+<div class="bg-surface-variant h-48 md:h-auto relative border-l border-outline-variant">
+<img alt="Venue Map" class="w-full h-full object-cover" data-alt="A clean, modern, simplified map view highlighting a large indoor arena location in a metropolitan area. The map uses a light theme UI, similar to Google Maps light mode, with a clear pin dropping on the central location." data-location="New York City" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDvEYzDAPXv8Nwa0exr3y2H-Gaw04408KMnMX6-H_fjRGr19wGj9AchMbmNAO3jagzARJSezIfRLXx9JLIIfgceGgnlxULF9reoBWCLVS1SUfEeuNUNMENPOSEWtjDSEVcGRjXkvXJ_sgIEqdWPEYVasgbpw6iMrNEYU_wfRbXhRXRbbfAbpL_1xnHscIkJbQEJRoV9BwZRmInxTIOOCp3VSOOPb393fEbkyYj_D8N4DfeQJsJx0N6x"/>
+</div>
+</div>
+</div>
+<!-- Capacity & Sections -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden shadow-[0_4px_20px_rgba(16,20,38,0.04)]">
+<div class="px-lg py-md border-b border-outline-variant bg-surface-bright">
+<h3 class="font-title-lg text-title-lg text-on-background">Sức chứa &amp; Phân khu</h3>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="border-b border-outline-variant bg-surface-container-low font-label-md text-label-md text-on-surface-variant">
+<th class="px-lg py-sm font-medium">Phân khu</th>
+<th class="px-lg py-sm font-medium">Sức chứa</th>
+<th class="px-lg py-sm font-medium">Cấu hình hiện tại</th>
+<th class="px-lg py-sm font-medium text-right">Trạng thái</th>
+</tr>
+</thead>
+<tbody class="font-body-md text-body-md text-on-background">
+<tr class="border-b border-outline-variant/50 hover:bg-surface-container transition-colors">
+<td class="px-lg py-md font-medium">VIP Suites</td>
+<td class="px-lg py-md font-numeric-tabular text-on-surface-variant">500</td>
+<td class="px-lg py-md text-on-surface-variant">Khu vực doanh nghiệp</td>
+<td class="px-lg py-md text-right"><span class="px-2 py-1 bg-[#e6f4ea] text-[#137333] text-[12px] font-bold rounded-md">Sẵn sàng</span></td>
+</tr>
+<tr class="border-b border-outline-variant/50 hover:bg-surface-container transition-colors">
+<td class="px-lg py-md font-medium">Standard Seating</td>
+<td class="px-lg py-md font-numeric-tabular text-on-surface-variant">12,000</td>
+<td class="px-lg py-md text-on-surface-variant">In-the-round</td>
+<td class="px-lg py-md text-right"><span class="px-2 py-1 bg-[#e6f4ea] text-[#137333] text-[12px] font-bold rounded-md">Sẵn sàng</span></td>
+</tr>
+<tr class="hover:bg-surface-container transition-colors">
+<td class="px-lg py-md font-medium">Economy / Upper</td>
+<td class="px-lg py-md font-numeric-tabular text-on-surface-variant">5,500</td>
+<td class="px-lg py-md text-on-surface-variant">Đã chặn</td>
+<td class="px-lg py-md text-right"><span class="px-2 py-1 bg-surface-variant text-on-surface-variant text-[12px] font-bold rounded-md">Bảo trì</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Floor Plan -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden shadow-[0_4px_20px_rgba(16,20,38,0.04)]">
+<div class="px-lg py-md border-b border-outline-variant bg-surface-bright flex justify-between items-center">
+<h3 class="font-title-lg text-title-lg text-on-background">Sơ đồ tầng</h3>
+<button class="text-primary font-label-sm text-label-sm hover:underline">Tải PDF</button>
+</div>
+<div class="p-md">
+<div class="w-full h-80 rounded-lg overflow-hidden bg-surface-variant relative border border-outline-variant border-dashed flex items-center justify-center group">
+<img alt="Arena Floor Plan" class="w-full h-full object-contain p-4 opacity-80 group-hover:opacity-100 transition-opacity" data-alt="A highly detailed, technical blueprint-style floor plan of a large indoor arena. Clean white background với crisp blue and grey architectural lines denoting seating sections, stage areas, and emergency exits. Professional CAD style aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAQLuwtrvUbvN7rAlSWIGQkW1NHUFpWj30xpgmiEXZlJgJTV30cu1nVQUuK1dTE_Bvk3wyTdCAfdHC2aKVPRJBb4fGwLo4nJrAXilOPYlInul84DJE7x7cGJ2yno3rAoEZGUtqnek6BykGeCnCt1R6whwrTjd6MIlNJgJseH1uyfBFoBhyKKRhpCFznXwz7VNehpwmoiizefeYwupjMiHfoMSFSrhaUZmn-850VYZsY3ErnHMaxIIyV"/>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column (Sidebar-style) -->
+<div class="flex flex-col gap-gutter">
+<!-- Recent Events -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl shadow-[0_4px_20px_rgba(16,20,38,0.04)]">
+<div class="px-lg py-md border-b border-outline-variant bg-surface-bright">
+<h3 class="font-title-lg text-title-lg text-on-background">Sự kiện gần đây</h3>
+</div>
+<div class="flex flex-col">
+<!-- Event Item -->
+<div class="p-lg border-b border-outline-variant/50 hover:bg-surface-container transition-colors">
+<div class="flex justify-between items-start mb-2">
+<p class="font-label-md text-label-md font-bold text-on-background">Global Tech Summit</p>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Oct 12</span>
+</div>
+<div class="w-full bg-surface-container-highest rounded-full h-2 mb-1">
+<div class="bg-primary h-2 rounded-full" style="width: 95%"></div>
+</div>
+<p class="font-label-sm text-label-sm text-on-surface-variant text-right">95% Sức chứa</p>
+</div>
+<!-- Event Item -->
+<div class="p-lg border-b border-outline-variant/50 hover:bg-surface-container transition-colors">
+<div class="flex justify-between items-start mb-2">
+<p class="font-label-md text-label-md font-bold text-on-background">Symphony Orchestra</p>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Oct 05</span>
+</div>
+<div class="w-full bg-surface-container-highest rounded-full h-2 mb-1">
+<div class="bg-primary h-2 rounded-full" style="width: 82%"></div>
+</div>
+<p class="font-label-sm text-label-sm text-on-surface-variant text-right">82% Sức chứa</p>
+</div>
+<!-- Event Item -->
+<div class="p-lg hover:bg-surface-container transition-colors">
+<div class="flex justify-between items-start mb-2">
+<p class="font-label-md text-label-md font-bold text-on-background">Championship Boxing</p>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Sep 28</span>
+</div>
+<div class="w-full bg-surface-container-highest rounded-full h-2 mb-1">
+<div class="bg-primary h-2 rounded-full" style="width: 100%"></div>
+</div>
+<p class="font-label-sm text-label-sm text-on-surface-variant text-right">Cháy vé</p>
+</div>
+</div>
+<div class="px-lg py-sm border-t border-outline-variant bg-surface-bright text-center rounded-b-xl">
+<button class="text-primary font-label-md text-label-md font-medium hover:underline">Xem tất cả lịch sử</button>
+</div>
+</div>
+<!-- Operational Notes -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl shadow-[0_4px_20px_rgba(16,20,38,0.04)] flex flex-col h-full min-h-[300px]">
+<div class="px-lg py-md border-b border-outline-variant bg-surface-bright flex justify-between items-center">
+<h3 class="font-title-lg text-title-lg text-on-background">Ghi chú vận hành</h3>
+<span class="material-symbols-outlined text-on-surface-variant text-[20px]">edit_note</span>
+</div>
+<div class="p-md flex-grow flex flex-col">
+<textarea class="w-full flex-grow p-4 bg-surface rounded-lg border border-outline-variant text-body-md font-body-md text-on-background focus:ring-2 focus:ring-primary focus:border-transparent resize-none placeholder:text-on-surface-variant/50" placeholder="Thêm ghi chú nội bộ của quản trị viên vào đây... ví dụ: lịch bảo trì HVAC vào tuần tới."></textarea>
+<div class="mt-md flex justify-end">
+<button class="px-4 py-2 bg-surface-container-high text-on-background font-label-md text-label-md font-medium rounded-lg hover:bg-surface-container-highest transition-colors border border-outline-variant">Lưu ghi chú</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Spacer for scrolling -->
+<div class="h-xl"></div>
+</div>
+</main>
+</div>
+</body></html>

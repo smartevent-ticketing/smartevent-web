@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+
+<html lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SMART EVENT - Cấu hình vé</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-high": "#dfe8ff",
+                        "inverse-on-surface": "#ecf0ff",
+                        "surface-dim": "#d0daf2",
+                        "on-primary-container": "#fefaff",
+                        "on-error": "#ffffff",
+                        "surface-container-highest": "#d9e3fb",
+                        "tertiary-fixed-dim": "#ffb3ac",
+                        "on-tertiary": "#ffffff",
+                        "surface-bright": "#f9f9ff",
+                        "inverse-surface": "#273143",
+                        "secondary-container": "#dee1fb",
+                        "on-tertiary-fixed-variant": "#910913",
+                        "error": "#ba1a1a",
+                        "background": "#f9f9ff",
+                        "on-tertiary-container": "#fffaf9",
+                        "on-secondary": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "on-primary-fixed": "#0f0069",
+                        "tertiary-container": "#d13e3a",
+                        "primary-container": "#635bff",
+                        "on-primary-fixed-variant": "#321ed2",
+                        "secondary-fixed-dim": "#c2c5de",
+                        "primary-fixed-dim": "#c3c0ff",
+                        "primary": "#493ee5",
+                        "on-tertiary-fixed": "#410003",
+                        "surface-variant": "#d9e3fb",
+                        "outline": "#777587",
+                        "outline-variant": "#c7c4d8",
+                        "surface-container-low": "#f0f3ff",
+                        "primary-fixed": "#e2dfff",
+                        "tertiary-fixed": "#ffdad6",
+                        "inverse-primary": "#c3c0ff",
+                        "secondary-fixed": "#dee1fb",
+                        "on-background": "#111c2d",
+                        "surface-container": "#e8eeff",
+                        "on-secondary-fixed": "#171b2d",
+                        "on-secondary-container": "#606379",
+                        "surface-tint": "#4c42e9",
+                        "error-container": "#ffdad6",
+                        "secondary": "#5a5d73",
+                        "surface": "#f9f9ff",
+                        "on-surface-variant": "#464555",
+                        "tertiary": "#ae2424",
+                        "surface-container-lowest": "#ffffff",
+                        "on-primary": "#ffffff",
+                        "on-surface": "#111c2d",
+                        "on-secondary-fixed-variant": "#42465a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "lg": "24px",
+                        "xs": "4px",
+                        "base": "8px",
+                        "gutter": "24px",
+                        "xl": "32px",
+                        "md": "16px",
+                        "container-max": "1280px",
+                        "xxl": "48px",
+                        "sm": "8px"
+                    },
+                    "fontFamily": {
+                        "numeric-tabular": ["Be Vietnam Pro"],
+                        "display-lg": ["Be Vietnam Pro"],
+                        "headline-lg": ["Be Vietnam Pro"],
+                        "label-md": ["Be Vietnam Pro"],
+                        "label-sm": ["Be Vietnam Pro"],
+                        "title-lg": ["Be Vietnam Pro"],
+                        "headline-md": ["Be Vietnam Pro"],
+                        "body-md": ["Be Vietnam Pro"],
+                        "body-lg": ["Be Vietnam Pro"]
+                    },
+                    "fontSize": {
+                        "numeric-tabular": ["inherit", { "lineHeight": "inherit", "fontWeight": "inherit" }],
+                        "display-lg": ["48px", { "lineHeight": "60px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "fontWeight": "500" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500" }],
+                        "title-lg": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Be Vietnam Pro', sans-serif; background-color: #f9f9ff; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .border-glow:focus-within { border-color: #493ee5; box-shadow: 0 0 0 2px rgba(73, 62, 229, 0.2); }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex">
+<!-- SideNavBar -->
+<nav class="hidden md:flex flex-col h-screen fixed left-0 top-0 py-lg px-md gap-base border-r border-outline-variant bg-surface-container shadow-sm w-64 z-50">
+<div class="mb-lg px-2">
+<h1 class="font-headline-md text-headline-md font-bold text-primary">SMART EVENT</h1>
+<p class="font-label-md text-label-md text-on-surface-variant">Organizer Portal</p>
+</div>
+<div class="flex-1 space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-container-highest transition-all scale-95 active:scale-90 font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+                Dashboard
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg bg-primary-container text-on-primary-container font-bold font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined">event</span>
+                Event Management
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-container-highest transition-all scale-95 active:scale-90 font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined">assessment</span>
+                Reports
+            </a>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="flex-1 ml-0 md:ml-64 p-4 md:p-gutter max-w-container-max mx-auto w-full">
+<!-- Header -->
+<header class="mb-xl">
+<div class="flex items-center justify-between mb-4">
+<div class="flex items-center gap-2 text-on-surface-variant font-label-md text-label-md">
+<span>Tạo sự kiện</span>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+<span class="text-primary font-bold">Bước 5: Cấu hình vé</span>
+</div>
+</div>
+<h2 class="font-headline-lg text-headline-lg text-on-background">Cấu hình vé</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-2">Thiết lập các loại vé, khu vực, giá cả và đợt mở bán cho sự kiện của bạn.</p>
+</header>
+<!-- Stepper (Visual Only) -->
+<div class="mb-xl flex items-center justify-between relative before:absolute before:top-1/2 before:left-0 before:w-full before:h-0.5 before:bg-surface-variant before:-z-10">
+<div class="flex flex-col items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-primary text-on-primary flex items-center justify-center font-bold text-sm">✓</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Thông tin cơ bản</span>
+</div>
+<div class="flex flex-col items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-primary text-on-primary flex items-center justify-center font-bold text-sm">✓</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Thời gian &amp; Địa điểm</span>
+</div>
+<div class="flex flex-col items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-primary text-on-primary flex items-center justify-center font-bold text-sm">✓</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Mô tả &amp; Hình ảnh</span>
+</div>
+<div class="flex flex-col items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-primary text-on-primary flex items-center justify-center font-bold text-sm">✓</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Cấu hình chỗ ngồi</span>
+</div>
+<div class="flex flex-col items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-primary text-on-primary ring-4 ring-primary-container flex items-center justify-center font-bold text-sm">5</div>
+<span class="font-label-sm text-label-sm text-primary font-bold">Cấu hình vé</span>
+</div>
+<div class="flex flex-col items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-surface-variant text-on-surface-variant flex items-center justify-center font-bold text-sm">6</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Cài đặt thanh toán</span>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-lg">
+<!-- Left Column: Main Configuration Area -->
+<div class="lg:col-span-2 space-y-lg">
+<!-- Ticket Configuration Container -->
+<div class="bg-surface rounded-xl border border-outline-variant p-lg shadow-sm">
+<div class="flex justify-between items-center mb-md border-b border-outline-variant pb-md">
+<h3 class="font-title-lg text-title-lg text-on-background">Khu vực &amp; Loại vé</h3>
+<button class="flex items-center gap-2 text-primary hover:bg-surface-container-low px-3 py-2 rounded-lg transition-colors font-label-md text-label-md font-bold">
+<span class="material-symbols-outlined">add</span>
+                            Thêm khu vực mới
+                        </button>
+</div>
+<!-- Area Block 1 (STANDING) -->
+<div class="mb-lg border border-outline-variant rounded-lg overflow-hidden">
+<div class="bg-surface-container px-4 py-3 flex justify-between items-center cursor-pointer hover:bg-surface-container-high transition-colors">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-on-surface-variant">drag_indicator</span>
+<div>
+<h4 class="font-label-md text-label-md text-on-background font-bold">Khu Vực GA (Fanzone)</h4>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Loại: Đứng (STANDING)</p>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<span class="font-label-md text-label-md text-on-surface-variant">Tổng sức chứa: 1,500</span>
+<span class="material-symbols-outlined text-on-surface-variant">expand_less</span>
+</div>
+</div>
+<div class="p-4 bg-surface space-y-4">
+<!-- Ticket Types within Area -->
+<div class="grid grid-cols-12 gap-4 items-center bg-surface-container-lowest p-3 rounded-lg border border-outline-variant border-glow">
+<div class="col-span-3">
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-1">Tên vé</label>
+<input class="w-full bg-transparent border-none outline-none font-label-md text-label-md text-on-background focus:ring-0 p-0" placeholder="Nhập tên vé" type="text" value="GA Early Bird"/>
+</div>
+<div class="col-span-3">
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-1">Giá (VND)</label>
+<input class="w-full bg-transparent border-none outline-none font-numeric-tabular text-body-md text-on-background focus:ring-0 p-0" placeholder="0" type="text" value="500,000"/>
+</div>
+<div class="col-span-2">
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-1">Số lượng</label>
+<input class="w-full bg-transparent border-none outline-none font-numeric-tabular text-body-md text-on-background focus:ring-0 p-0" placeholder="0" type="number" value="500"/>
+</div>
+<div class="col-span-3">
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-1">Đợt bán</label>
+<select class="w-full bg-transparent border-none outline-none font-label-md text-label-md text-on-background focus:ring-0 p-0 cursor-pointer">
+<option>Giai đoạn 1 (Early Bird)</option>
+<option>Giai đoạn 2 (Regular)</option>
+</select>
+</div>
+<div class="col-span-1 flex justify-end">
+<button class="text-on-surface-variant hover:text-error transition-colors p-2 rounded-full hover:bg-surface-container">
+<span class="material-symbols-outlined">delete</span>
+</button>
+</div>
+</div>
+<div class="grid grid-cols-12 gap-4 items-center bg-surface-container-lowest p-3 rounded-lg border border-outline-variant border-glow">
+<div class="col-span-3">
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-1">Tên vé</label>
+<input class="w-full bg-transparent border-none outline-none font-label-md text-label-md text-on-background focus:ring-0 p-0" placeholder="Nhập tên vé" type="text" value="GA Regular"/>
+</div>
+<div class="col-span-3">
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-1">Giá (VND)</label>
+<input class="w-full bg-transparent border-none outline-none font-numeric-tabular text-body-md text-on-background focus:ring-0 p-0" placeholder="0" type="text" value="750,000"/>
+</div>
+<div class="col-span-2">
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-1">Số lượng</label>
+<input class="w-full bg-transparent border-none outline-none font-numeric-tabular text-body-md text-on-background focus:ring-0 p-0" placeholder="0" type="number" value="1000"/>
+</div>
+<div class="col-span-3">
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-1">Đợt bán</label>
+<select class="w-full bg-transparent border-none outline-none font-label-md text-label-md text-on-background focus:ring-0 p-0 cursor-pointer">
+<option>Giai đoạn 2 (Regular)</option>
+<option>Giai đoạn 1 (Early Bird)</option>
+</select>
+</div>
+<div class="col-span-1 flex justify-end">
+<button class="text-on-surface-variant hover:text-error transition-colors p-2 rounded-full hover:bg-surface-container">
+<span class="material-symbols-outlined">delete</span>
+</button>
+</div>
+</div>
+<button class="text-primary font-label-sm text-label-sm font-bold flex items-center gap-1 hover:underline mt-2">
+<span class="material-symbols-outlined text-[16px]">add</span> Thêm loại vé cho khu vực này
+                            </button>
+</div>
+</div>
+<!-- Area Block 2 (SEATED) -->
+<div class="border border-error rounded-lg overflow-hidden shadow-[0_0_0_1px_#ba1a1a]">
+<div class="bg-error-container/20 px-4 py-3 flex justify-between items-center cursor-pointer hover:bg-error-container/30 transition-colors">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-on-surface-variant">drag_indicator</span>
+<div>
+<h4 class="font-label-md text-label-md text-on-background font-bold">Khu Vực VIP (Khán đài A)</h4>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Loại: Ngồi (SEATED - Có số ghế)</p>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<span class="font-label-md text-label-md text-error font-medium flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">warning</span> Lỗi cấu hình đợt bán
+                                </span>
+<span class="material-symbols-outlined text-on-surface-variant">expand_more</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Global Purchase Rules -->
+<div class="bg-surface rounded-xl border border-outline-variant p-lg shadow-sm mt-lg">
+<h3 class="font-title-lg text-title-lg text-on-background mb-md border-b border-outline-variant pb-md">Quy định mua vé chung</h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-md">
+<div class="border-glow bg-surface-container-lowest border border-outline-variant rounded-lg p-3">
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-1">Tối đa mỗi người dùng (vé/tài khoản)</label>
+<input class="w-full bg-transparent border-none outline-none font-numeric-tabular text-body-md text-on-background focus:ring-0 p-0" placeholder="VD: 4" type="number" value="4"/>
+</div>
+<div class="border-glow bg-surface-container-lowest border border-outline-variant rounded-lg p-3">
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-1">Thời gian giữ vé (phút)</label>
+<input class="w-full bg-transparent border-none outline-none font-numeric-tabular text-body-md text-on-background focus:ring-0 p-0" placeholder="VD: 15" type="number" value="15"/>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: Summary & Actions -->
+<div class="space-y-lg">
+<!-- Validation Summary Box -->
+<div class="bg-error-container rounded-xl p-md border border-error">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-error mt-0.5">error</span>
+<div>
+<h4 class="font-title-lg text-[16px] leading-[24px] font-bold text-on-error-container mb-1">Cần hoàn thiện cấu hình</h4>
+<ul class="font-body-md text-[14px] leading-[20px] text-on-error-container list-disc list-inside space-y-1">
+<li>Chưa cấu hình đợt bán cho Khu Vực VIP (Khán đài A)</li>
+<li>Tổng sức chứa các loại vé (1,500) nhỏ hơn sức chứa tối đa của Khu Vực GA (2,000)</li>
+</ul>
+</div>
+</div>
+</div>
+<!-- Sales Phases Summary -->
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant p-md shadow-sm">
+<div class="flex justify-between items-center mb-md border-b border-outline-variant pb-xs">
+<h4 class="font-label-md text-label-md font-bold text-on-background">Quản lý đợt mở bán</h4>
+<button class="text-primary hover:bg-surface-container-low p-1 rounded transition-colors"><span class="material-symbols-outlined text-[18px]">edit</span></button>
+</div>
+<div class="space-y-3">
+<div class="flex justify-between items-center bg-surface-container-low p-2 rounded">
+<div>
+<p class="font-label-sm text-label-sm font-bold text-on-background">Giai đoạn 1 (Early Bird)</p>
+<p class="font-label-sm text-[10px] text-on-surface-variant">10/10/2023 - 15/10/2023</p>
+</div>
+<span class="bg-primary-container text-on-primary-container px-2 py-0.5 rounded-full font-label-sm text-[10px]">Active</span>
+</div>
+<div class="flex justify-between items-center p-2 rounded">
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Giai đoạn 2 (Regular)</p>
+<p class="font-label-sm text-[10px] text-outline">16/10/2023 - 25/10/2023</p>
+</div>
+<span class="bg-surface-variant text-on-surface-variant px-2 py-0.5 rounded-full font-label-sm text-[10px]">Upcoming</span>
+</div>
+</div>
+</div>
+<!-- Actions Sticky Bottom -->
+<div class="bg-surface p-4 rounded-xl shadow-[0_-4px_20px_rgba(16,20,38,0.05)] border border-outline-variant flex flex-col gap-3">
+<button class="w-full bg-primary hover:bg-surface-tint text-on-primary font-label-md text-label-md font-bold h-12 rounded-lg transition-colors flex items-center justify-center opacity-50 cursor-not-allowed">
+                        Tiếp tục
+                    </button>
+<div class="flex gap-3">
+<button class="flex-1 bg-surface-container-low border border-outline-variant text-on-background hover:bg-surface-container-high font-label-md text-label-md font-medium h-10 rounded-lg transition-colors flex items-center justify-center">
+                            Quay lại
+                        </button>
+<button class="flex-1 bg-transparent border border-primary text-primary hover:bg-primary-container font-label-md text-label-md font-medium h-10 rounded-lg transition-colors flex items-center justify-center">
+                            Lưu bản nháp
+                        </button>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-2 pb-safe bg-surface shadow-lg border-t border-outline-variant rounded-t-xl">
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-2 active:scale-95 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined">qr_code_scanner</span>
+<span class="font-label-sm text-label-sm">Scanner</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-2xl p-2 active:scale-95 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined">confirmation_number</span>
+<span class="font-label-sm text-label-sm">Events</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-2 active:scale-95 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined">history</span>
+<span class="font-label-sm text-label-sm">History</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-2 active:scale-95 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-sm text-label-sm">Profile</span>
+</a>
+</nav>
+</body></html>

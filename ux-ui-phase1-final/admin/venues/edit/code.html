@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+
+<html lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SMART EVENT Admin - Chỉnh sửa địa điểm</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-container": "#d13e3a",
+                        "error": "#ba1a1a",
+                        "on-background": "#111c2d",
+                        "on-tertiary-container": "#fffaf9",
+                        "primary-container": "#635bff",
+                        "on-secondary": "#ffffff",
+                        "surface-container-high": "#dfe8ff",
+                        "secondary-container": "#dee1fb",
+                        "inverse-on-surface": "#ecf0ff",
+                        "tertiary-fixed": "#ffdad6",
+                        "secondary": "#5a5d73",
+                        "primary-fixed": "#e2dfff",
+                        "primary-fixed-dim": "#c3c0ff",
+                        "surface-bright": "#f9f9ff",
+                        "surface-tint": "#4c42e9",
+                        "on-secondary-container": "#606379",
+                        "on-secondary-fixed": "#171b2d",
+                        "outline": "#777587",
+                        "on-primary": "#ffffff",
+                        "surface-container-lowest": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "surface-dim": "#d0daf2",
+                        "inverse-primary": "#c3c0ff",
+                        "surface-variant": "#d9e3fb",
+                        "on-tertiary-fixed-variant": "#910913",
+                        "error-container": "#ffdad6",
+                        "secondary-fixed": "#dee1fb",
+                        "surface-container-low": "#f0f3ff",
+                        "tertiary": "#ae2424",
+                        "background": "#f9f9ff",
+                        "on-primary-fixed": "#0f0069",
+                        "on-secondary-fixed-variant": "#42465a",
+                        "on-tertiary-fixed": "#410003",
+                        "on-error": "#ffffff",
+                        "surface-container-highest": "#d9e3fb",
+                        "tertiary-fixed-dim": "#ffb3ac",
+                        "on-surface": "#111c2d",
+                        "on-primary-fixed-variant": "#321ed2",
+                        "on-tertiary": "#ffffff",
+                        "primary": "#493ee5",
+                        "on-primary-container": "#fefaff",
+                        "inverse-surface": "#273143",
+                        "surface-container": "#e8eeff",
+                        "outline-variant": "#c7c4d8",
+                        "secondary-fixed-dim": "#c2c5de",
+                        "surface": "#f9f9ff",
+                        "on-surface-variant": "#464555"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xs": "4px",
+                        "md": "16px",
+                        "lg": "24px",
+                        "gutter": "24px",
+                        "xl": "32px",
+                        "xxl": "48px",
+                        "container-max": "1280px",
+                        "base": "8px",
+                        "sm": "8px"
+                    },
+                    "fontFamily": {
+                        "title-lg": ["Be Vietnam Pro"],
+                        "label-md": ["Be Vietnam Pro"],
+                        "label-sm": ["Be Vietnam Pro"],
+                        "numeric-tabular": ["Be Vietnam Pro"],
+                        "headline-md": ["Be Vietnam Pro"],
+                        "headline-lg": ["Be Vietnam Pro"],
+                        "body-md": ["Be Vietnam Pro"],
+                        "display-lg": ["Be Vietnam Pro"],
+                        "body-lg": ["Be Vietnam Pro"]
+                    },
+                    "fontSize": {
+                        "title-lg": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "fontWeight": "500" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500" }],
+                        "numeric-tabular": ["inherit", { "lineHeight": "inherit", "fontWeight": "inherit" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "display-lg": ["48px", { "lineHeight": "60px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined.filled {
+            font-variation-settings: 'FILL' 1;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md antialiased h-screen flex overflow-hidden">
+<!-- SideNavBar -->
+<nav class="h-full w-64 fixed left-0 top-0 bg-surface-container-lowest dark:bg-inverse-surface border-r border-outline-variant dark:border-outline flex flex-col h-screen py-md z-50">
+<div class="px-lg pb-xl pt-lg border-b border-outline-variant dark:border-outline mb-md">
+<div class="flex items-center gap-md">
+<div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container">
+<span class="material-symbols-outlined" data-icon="corporate_fare" data-weight="fill">corporate_fare</span>
+</div>
+<div>
+<h1 class="font-headline-md text-headline-md font-bold text-primary dark:text-inverse-primary truncate">SMART EVENT</h1>
+<p class="font-label-sm text-label-sm text-on-surface-variant truncate">Quản trị viên</p>
+</div>
+</div>
+</div>
+<ul class="flex-1 overflow-y-auto px-md space-y-2">
+<li>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant dark:text-surface-variant hover:bg-surface-container-high dark:hover:bg-secondary-container/20 transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-md text-label-md">Tổng quan hệ thống</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant dark:text-surface-variant hover:bg-surface-container-high dark:hover:bg-secondary-container/20 transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="event_available">event_available</span>
+<span class="font-label-md text-label-md">Phê duyệt sự kiện</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant dark:text-surface-variant hover:bg-surface-container-high dark:hover:bg-secondary-container/20 transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="category">category</span>
+<span class="font-label-md text-label-md">Danh mục</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-primary font-bold bg-primary-container/10 border-r-4 border-primary hover:bg-surface-container-high dark:hover:bg-secondary-container/20 transition-colors" href="#">
+<span class="material-symbols-outlined filled" data-icon="location_on" data-weight="fill">location_on</span>
+<span class="font-label-md text-label-md">Địa điểm</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant dark:text-surface-variant hover:bg-surface-container-high dark:hover:bg-secondary-container/20 transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="outbox">outbox</span>
+<span class="font-label-md text-label-md">Hộp thư đi</span>
+</a>
+</li>
+</ul>
+<div class="px-md mt-auto pt-md border-t border-outline-variant dark:border-outline">
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+<span class="font-label-md text-label-md">Đăng xuất</span>
+</a>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="flex-1 ml-64 flex flex-col h-screen overflow-hidden bg-background">
+<!-- TopNavBar -->
+<header class="bg-surface dark:bg-on-background docked full-width top-0 sticky z-40 border-b border-outline-variant dark:border-outline shadow-sm flex justify-between items-center h-16 px-lg shrink-0">
+<div class="flex items-center gap-md">
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer transition-all duration-200 hover:text-primary" data-icon="search">search</span>
+<input class="bg-transparent border-none focus:ring-0 font-body-md text-body-md text-on-surface placeholder-on-surface-variant outline-none w-64 hidden md:block" placeholder="Tìm kiếm địa điểm..." type="text"/>
+</div>
+<div class="flex items-center gap-md">
+<span class="font-title-lg text-title-lg font-bold text-on-surface mr-md hidden lg:block">SMART EVENT Admin</span>
+<button class="w-10 h-10 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface-container dark:hover:bg-inverse-surface cursor-pointer transition-all duration-200">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="w-10 h-10 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface-container dark:hover:bg-inverse-surface cursor-pointer transition-all duration-200">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+<img alt="Ảnh đại diện admin" class="w-10 h-10 rounded-full object-cover ml-sm cursor-pointer transition-all duration-200 border border-outline-variant" data-alt="A professional headshot portrait of an administrator in a modern office setting. The lighting is bright and corporate, evoking a sense of trust and efficiency. The background features subtle architectural elements of a contemporary tech workspace. The color palette incorporates cool whites and subtle indigo tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB9BGG-pGUtjsual_2eCiWse3yx8anEZTq-tT6O_OfFAEpRfvoF390oHDW83DBMYzEZVHSy1LMolqXSPJN7aYEGov8xXOduq1J2xMHcdVUradInjUtwhuO2Q5K0VxdGoximfNDOMKanovxbLEDXGV9_q-4Soo2t_fPDZI6hlbrVmrpRfrc8l5zqZgbIOSNNIUCtlB1Aqykg__3xoGjKV9UO_IjfSNow0qJ8KonU7eNJjVLAF1SnkQvr"/>
+</div>
+</header>
+<!-- Canvas -->
+<div class="flex-1 overflow-y-auto p-lg">
+<div class="max-w-container-max mx-auto">
+<!-- Page Header -->
+<div class="flex items-center justify-between mb-xl">
+<div>
+<a class="inline-flex items-center gap-sm text-primary font-label-md text-label-md mb-sm hover:underline" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="arrow_back">arrow_back</span>
+                            Quay lại danh sách địa điểm
+                        </a>
+<h2 class="font-headline-lg text-headline-lg text-on-surface">Chỉnh sửa địa điểm</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-sm">Cập nhật thông tin chi tiết cho địa điểm tổ chức sự kiện.</p>
+</div>
+<div class="flex gap-md">
+<button class="px-lg py-sm rounded-lg border border-outline-variant font-label-md text-label-md font-bold text-on-surface hover:bg-surface-container-high transition-colors focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:outline-none bg-surface h-[48px]">
+                            Hủy
+                        </button>
+<button class="px-lg py-sm rounded-lg bg-primary font-label-md text-label-md font-bold text-on-primary hover:bg-surface-tint transition-colors focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:outline-none shadow-[0px_4px_20px_rgba(16,20,38,0.08)] h-[48px]">
+                            Lưu thay đổi
+                        </button>
+</div>
+</div>
+<!-- Form Area - Bento Grid Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-lg">
+<!-- Left Column: Main Details -->
+<div class="lg:col-span-2 space-y-lg">
+<!-- Basic Info Card -->
+<div class="bg-surface rounded-xl border border-outline-variant p-lg shadow-sm">
+<h3 class="font-title-lg text-title-lg text-on-surface mb-md flex items-center gap-sm">
+<span class="material-symbols-outlined text-primary" data-icon="info">info</span>
+                                Thông tin cơ bản
+                            </h3>
+<div class="space-y-md">
+<div>
+<label class="block font-label-md text-label-md text-on-surface mb-sm">Tên địa điểm <span class="text-error">*</span></label>
+<input class="w-full h-[48px] px-md rounded-lg border border-outline-variant bg-surface font-body-md text-body-md focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all" type="text" value="SECC - Saigon Exhibition and Convention Center"/>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-md">
+<div>
+<label class="block font-label-md text-label-md text-on-surface mb-sm">Quốc gia/Khu vực</label>
+<div class="relative">
+<select class="w-full h-[48px] px-md appearance-none rounded-lg border border-outline-variant bg-surface font-body-md text-body-md focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all">
+<option>Việt Nam</option>
+</select>
+<span class="material-symbols-outlined absolute right-md top-1/2 -translate-y-1/2 pointer-events-none text-on-surface-variant" data-icon="expand_more">expand_more</span>
+</div>
+</div>
+<div>
+<label class="block font-label-md text-label-md text-on-surface mb-sm">Thành phố/Tỉnh <span class="text-error">*</span></label>
+<div class="relative">
+<select class="w-full h-[48px] px-md appearance-none rounded-lg border border-outline-variant bg-surface font-body-md text-body-md focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all">
+<option>TP.HCM</option>
+</select>
+<span class="material-symbols-outlined absolute right-md top-1/2 -translate-y-1/2 pointer-events-none text-on-surface-variant" data-icon="expand_more">expand_more</span>
+</div>
+</div>
+</div>
+<div>
+<label class="block font-label-md text-label-md text-on-surface mb-sm">Quận/Huyện <span class="text-error">*</span></label>
+<input class="w-full h-[48px] px-md rounded-lg border border-outline-variant bg-surface font-body-md text-body-md focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all" type="text" value="Quận 7"/>
+</div>
+<div>
+<label class="block font-label-md text-label-md text-on-surface mb-sm">Địa chỉ chi tiết</label>
+<textarea class="w-full p-md rounded-lg border border-outline-variant bg-surface font-body-md text-body-md focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all resize-none" rows="3">799 Nguyễn Văn Linh, Phường Tân Phú</textarea>
+</div>
+</div>
+</div>
+<!-- Capacity & Facilities -->
+<div class="bg-surface rounded-xl border border-outline-variant p-lg shadow-sm">
+<h3 class="font-title-lg text-title-lg text-on-surface mb-md flex items-center gap-sm">
+<span class="material-symbols-outlined text-primary" data-icon="groups">groups</span>
+                                Sức chứa &amp; Cơ sở vật chất
+                            </h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-md">
+<div>
+<label class="block font-label-md text-label-md text-on-surface mb-sm">Sức chứa tối đa (người) <span class="text-error">*</span></label>
+<input class="w-full h-[48px] px-md rounded-lg border border-outline-variant bg-surface font-numeric-tabular text-body-md focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all font-bold" type="number" value="10000"/>
+</div>
+<div>
+<label class="block font-label-md text-label-md text-on-surface mb-sm">Diện tích (m²)</label>
+<input class="w-full h-[48px] px-md rounded-lg border border-outline-variant bg-surface font-numeric-tabular text-body-md focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all" type="number" value="40000"/>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: Media & Map -->
+<div class="space-y-lg">
+<!-- Map Location Card -->
+<div class="bg-surface rounded-xl border border-outline-variant p-lg shadow-sm">
+<h3 class="font-title-lg text-title-lg text-on-surface mb-md flex items-center gap-sm">
+<span class="material-symbols-outlined text-primary" data-icon="map">map</span>
+                                Vị trí bản đồ
+                            </h3>
+<div class="w-full h-48 bg-surface-container rounded-lg overflow-hidden border border-outline-variant mb-md relative group">
+<div class="bg-cover bg-center w-full h-full opacity-80 group-hover:opacity-100 transition-opacity" data-alt="A detailed aerial view map graphic of District 7, Ho Chi Minh City, featuring a vibrant pin marker indicating the Saigon Exhibition and Convention Center. The map style is modern, digital, and clean, with subtle electric indigo routing lines and soft high-key lighting indicative of a premium UI interface." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBi9ugalvKS8OknYFai0eDLhGyz0omqroOP4rQYBm_a1z9y5Ol-VpCmOCfr1RynLGyfxCxk584KYxEnO12zYC-KMSQmyNw0NEV0X1gunbNLOsCKbuG5GAA95MKhTgPXmG1NOlmRkzGwF7oF27JkxfSLtzpj28_bU62XhRVPH30UQ5dcTA_7Mi1HxS8gWqS40b_Xs-a0m5udT8tYYVkvLn6CbbFfhb441D0oVzq6Us1QQ7UoO1nz6EvR')"></div>
+<button class="absolute inset-0 m-auto w-10 h-10 bg-primary rounded-full flex items-center justify-center text-on-primary shadow-md hover:scale-110 transition-transform">
+<span class="material-symbols-outlined" data-icon="edit_location">edit_location</span>
+</button>
+</div>
+<div class="flex gap-sm">
+<input class="flex-1 h-[40px] px-sm rounded-lg border border-outline-variant bg-surface-container-low font-numeric-tabular text-label-md outline-none text-on-surface-variant cursor-not-allowed" readonly="" type="text" value="10.7326° N, 106.7218° E"/>
+<button class="h-[40px] px-md rounded-lg border border-outline-variant bg-surface hover:bg-surface-container-high transition-colors font-label-md text-label-md text-on-surface">Cập nhật tọa độ</button>
+</div>
+</div>
+<!-- Images Card -->
+<div class="bg-surface rounded-xl border border-outline-variant p-lg shadow-sm">
+<h3 class="font-title-lg text-title-lg text-on-surface mb-md flex items-center gap-sm">
+<span class="material-symbols-outlined text-primary" data-icon="image">image</span>
+                                Hình ảnh địa điểm
+                            </h3>
+<div class="grid grid-cols-2 gap-sm mb-md">
+<div class="relative h-24 rounded-lg overflow-hidden border border-outline-variant group">
+<img alt="Venue image 1" class="w-full h-full object-cover" data-alt="A wide-angle exterior architectural photograph of the Saigon Exhibition and Convention Center during the daytime. The modern glass facade reflects the bright sky. The composition is clean, corporate, and high-end, fitting for a premium ticketing platform." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDxq0ftccK_i9y8S9sNayST_DAFPeoyKJEz059T-By1HBx9rZ2lL9_gFdxGSLYqUlMSGqHKOIlnfr7p3Pb-Gakdmp_L9Cj_gv_r-9YqOnjq1jRZIu7qBHxnWcIKOzvJGyGNZeDODnQEoKRfszlGj4SQuOxGX-Ox9_XeeB3Q6DGA_bmV19N6X8ug8Ol2a_H1aRcmBLezsLk8Zed2OCYFweQG7utV2a-n7tR5VJJL3pigRpak1peC5511"/>
+<div class="absolute inset-0 bg-on-background/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="text-on-primary hover:text-error transition-colors"><span class="material-symbols-outlined" data-icon="delete">delete</span></button>
+</div>
+</div>
+<div class="relative h-24 rounded-lg overflow-hidden border border-outline-variant group">
+<img alt="Venue image 2" class="w-full h-full object-cover" data-alt="An interior shot of a vast, empty exhibition hall at a convention center. The space is illuminated by bright, even industrial lighting, showing a polished concrete floor and high ceilings. The aesthetic is expansive, clean, and ready for a major event setup." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBacIK7QCzBM4LwpClAge6B6iyY5ehkIe-luS3GOIuv4A7d6mdX2cAy2hLc4Qrwk-t0dVw6pz4pVxxjYCVZ1YyrC7IuSNYhnMIcGfsElkwLZlxeSB0RZr-odzmH0UUeI9hqbojxW42XZXGMmKI3VX-WJ_b0xjJLb9mUbSU7U9WLTmLP5je-b7LTJtbLokkP3Z959v0hK6rDeLZKUuo5XLjbEc8MnNBaDJCE2sZ8wVzL4O1K6G6DkWk5"/>
+<div class="absolute inset-0 bg-on-background/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="text-on-primary hover:text-error transition-colors"><span class="material-symbols-outlined" data-icon="delete">delete</span></button>
+</div>
+</div>
+</div>
+<button class="w-full h-[48px] rounded-lg border-2 border-dashed border-primary-fixed-dim bg-surface-container-low hover:bg-surface-container transition-colors flex items-center justify-center gap-sm text-primary font-label-md font-bold">
+<span class="material-symbols-outlined" data-icon="add_photo_alternate">add_photo_alternate</span>
+                                Tải ảnh lên
+                            </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

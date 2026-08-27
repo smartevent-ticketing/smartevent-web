@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+
+<html lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SMART EVENT - Thanh toán</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "on-primary-fixed-variant": "#321ed2",
+                        "on-background": "#111c2d",
+                        "on-tertiary-container": "#fffaf9",
+                        "tertiary-container": "#d13e3a",
+                        "surface-tint": "#4c42e9",
+                        "on-tertiary-fixed-variant": "#910913",
+                        "surface-container-high": "#dfe8ff",
+                        "secondary-fixed-dim": "#c2c5de",
+                        "primary": "#493ee5",
+                        "primary-fixed": "#e2dfff",
+                        "error": "#ba1a1a",
+                        "surface-variant": "#d9e3fb",
+                        "background": "#f9f9ff",
+                        "outline-variant": "#c7c4d8",
+                        "on-primary": "#ffffff",
+                        "secondary-container": "#dee1fb",
+                        "primary-container": "#635bff",
+                        "surface-container-low": "#f0f3ff",
+                        "on-surface": "#111c2d",
+                        "on-secondary-fixed": "#171b2d",
+                        "surface-bright": "#f9f9ff",
+                        "on-tertiary": "#ffffff",
+                        "surface-container": "#e8eeff",
+                        "on-error-container": "#93000a",
+                        "on-secondary": "#ffffff",
+                        "secondary": "#5a5d73",
+                        "surface-container-highest": "#d9e3fb",
+                        "tertiary-fixed": "#ffdad6",
+                        "on-secondary-container": "#606379",
+                        "on-primary-container": "#fefaff",
+                        "on-primary-fixed": "#0f0069",
+                        "on-surface-variant": "#464555",
+                        "inverse-on-surface": "#ecf0ff",
+                        "inverse-surface": "#273143",
+                        "tertiary-fixed-dim": "#ffb3ac",
+                        "on-error": "#ffffff",
+                        "tertiary": "#ae2424",
+                        "inverse-primary": "#c3c0ff",
+                        "surface-container-lowest": "#ffffff",
+                        "outline": "#777587",
+                        "primary-fixed-dim": "#c3c0ff",
+                        "surface-dim": "#d0daf2",
+                        "error-container": "#ffdad6",
+                        "surface": "#f9f9ff",
+                        "on-tertiary-fixed": "#410003",
+                        "secondary-fixed": "#dee1fb",
+                        "on-secondary-fixed-variant": "#42465a"
+                    },
+                    borderRadius: {
+                        DEFAULT: "0.25rem",
+                        lg: "0.5rem",
+                        xl: "0.75rem",
+                        full: "9999px"
+                    },
+                    spacing: {
+                        sm: "8px",
+                        xl: "32px",
+                        gutter: "24px",
+                        lg: "24px",
+                        base: "8px",
+                        xxl: "48px",
+                        "container-max": "1280px",
+                        xs: "4px",
+                        md: "16px"
+                    },
+                    fontFamily: {
+                        "title-lg": ["Be Vietnam Pro"],
+                        "label-md": ["Be Vietnam Pro"],
+                        "headline-md": ["Be Vietnam Pro"],
+                        "body-md": ["Be Vietnam Pro"],
+                        "display-lg": ["Be Vietnam Pro"],
+                        "headline-lg": ["Be Vietnam Pro"],
+                        "numeric-tabular": ["Be Vietnam Pro"],
+                        "label-sm": ["Be Vietnam Pro"],
+                        "body-lg": ["Be Vietnam Pro"]
+                    },
+                    fontSize: {
+                        "title-lg": ["20px", { lineHeight: "28px", fontWeight: "600" }],
+                        "label-md": ["14px", { lineHeight: "20px", fontWeight: "500" }],
+                        "headline-md": ["24px", { lineHeight: "32px", fontWeight: "600" }],
+                        "body-md": ["16px", { lineHeight: "24px", fontWeight: "400" }],
+                        "display-lg": ["48px", { lineHeight: "60px", letterSpacing: "-0.02em", fontWeight: "700" }],
+                        "headline-lg": ["32px", { lineHeight: "40px", letterSpacing: "-0.01em", fontWeight: "700" }],
+                        "numeric-tabular": ["inherit", { lineHeight: "inherit", fontWeight: "inherit" }],
+                        "label-sm": ["12px", { lineHeight: "16px", letterSpacing: "0.02em", fontWeight: "500" }],
+                        "body-lg": ["18px", { lineHeight: "28px", fontWeight: "400" }]
+                    }
+                }
+            }
+        };
+    </script>
+<style>
+        body { font-family: 'Be Vietnam Pro', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .filled-icon { font-variation-settings: 'FILL' 1; }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col">
+<!-- Top Navigation Bar (Suppressed due to transactional nature of checkout) -->
+<!-- Main Content -->
+<main class="flex-grow w-full max-w-container-max mx-auto px-md md:px-lg py-xl">
+<div class="flex items-center mb-lg">
+<button class="text-primary hover:bg-surface-variant p-sm rounded-full transition-colors mr-sm focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<h1 class="text-headline-lg font-headline-lg">Thanh toán an toàn</h1>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+<!-- Left Column: Buyer Info & Payment Methods -->
+<div class="lg:col-span-7 flex flex-col gap-lg">
+<!-- Countdown Banner -->
+<div class="bg-primary-container text-on-primary-container p-md rounded-lg flex items-center justify-between shadow-sm border border-outline-variant/30">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined">timer</span>
+<span class="text-body-md font-body-md font-semibold">Thời gian giữ vé:</span>
+</div>
+<div class="text-title-lg font-title-lg font-numeric-tabular tracking-wider" id="countdown">10:00</div>
+</div>
+<!-- Buyer Information Form -->
+<section class="bg-surface p-lg rounded-xl shadow-sm border border-outline-variant">
+<h2 class="text-title-lg font-title-lg mb-md flex items-center gap-sm border-b border-outline-variant pb-sm">
+<span class="material-symbols-outlined text-primary">person</span>
+                        Thông tin người mua
+                    </h2>
+<form class="space-y-md">
+<div>
+<label class="block text-label-md font-label-md text-on-surface-variant mb-xs">Họ và tên *</label>
+<input class="w-full h-[48px] px-md border border-outline-variant rounded-md bg-surface text-on-surface text-body-md font-body-md focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-shadow" required="" type="text" value="Nguyễn Văn A"/>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-md">
+<div>
+<label class="block text-label-md font-label-md text-on-surface-variant mb-xs">Email *</label>
+<input class="w-full h-[48px] px-md border border-outline-variant rounded-md bg-surface text-on-surface text-body-md font-body-md focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-shadow" required="" type="email" value="nguyenvana@example.com"/>
+</div>
+<div>
+<label class="block text-label-md font-label-md text-on-surface-variant mb-xs">Số điện thoại *</label>
+<input class="w-full h-[48px] px-md border border-outline-variant rounded-md bg-surface text-on-surface text-body-md font-body-md focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-shadow" required="" type="tel" value="0901234567"/>
+</div>
+</div>
+</form>
+</section>
+<!-- Payment Methods -->
+<section class="bg-surface p-lg rounded-xl shadow-sm border border-outline-variant">
+<h2 class="text-title-lg font-title-lg mb-md flex items-center gap-sm border-b border-outline-variant pb-sm">
+<span class="material-symbols-outlined text-primary">payment</span>
+                        Phương thức thanh toán
+                    </h2>
+<div class="space-y-sm">
+<!-- Option 1: VNPay -->
+<label class="flex items-center p-md border border-outline-variant rounded-lg cursor-pointer hover:bg-surface-container-low transition-colors group has-[:checked]:border-primary has-[:checked]:bg-surface-container-high has-[:checked]:ring-1 has-[:checked]:ring-primary">
+<input checked="" class="w-5 h-5 text-primary border-outline-variant focus:ring-primary focus:ring-2 focus:ring-offset-2" name="payment" type="radio" value="vnpay"/>
+<div class="ml-md flex-grow flex items-center gap-md">
+<div class="w-10 h-10 bg-surface-variant rounded flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-primary">qr_code_scanner</span>
+</div>
+<div>
+<span class="block text-body-md font-body-md font-semibold">Thanh toán qua VNPay</span>
+<span class="block text-label-sm font-label-sm text-on-surface-variant">Quét mã QR từ ứng dụng ngân hàng</span>
+</div>
+</div>
+</label>
+<!-- Option 2: Bank Transfer -->
+<!-- Option 3: Credit Card -->
+</div>
+</section>
+</div>
+<!-- Right Column: Order Summary -->
+<div class="lg:col-span-5">
+<div class="bg-surface p-lg rounded-xl shadow-sm border border-outline-variant sticky top-xl">
+<h2 class="text-title-lg font-title-lg mb-md pb-sm border-b border-outline-variant">Tóm tắt đơn hàng</h2>
+<!-- Event Info -->
+<div class="flex gap-md mb-md pb-md border-b border-outline-variant/50">
+<div class="w-24 h-24 rounded-lg bg-surface-variant overflow-hidden shrink-0">
+<img class="w-full h-full object-cover" data-alt="A vivid concert poster image for 'HAY Glamping Music Festival 2024' featuring vibrant neon lights, energetic performers on a dynamic stage, and a crowd immersed in a high-key, modern festival atmosphere. Electric indigo highlights against a pristine white background with sharp, high-contrast details." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBOx9tMvkkWhPAo8GQvmtzVqazzHTETFzvh91hNcC0nyEHdaQQM9F45FOTOIwv6dG67ksEMNApNTRbrLfAIiYoptXQTyNta0UhThx2-bEp18_4npc32TLsE7W9haPx6gwYQhPwuiUEwGGY72z66yL4GyizZhtjUXrucZ1AhR9HohYftAKLjZV1sOtTrC9dOuX2LXh3bj7XB7vc5you03ykGaLV5KLVLtjU1Z-4dDtZzf2bV63_W9wbZ"/>
+</div>
+<div>
+<h3 class="text-body-lg font-body-lg font-semibold line-clamp-2">HAY Glamping Music Festival 2024 - BORN TO BE WILD</h3>
+<p class="text-label-md font-label-md text-on-surface-variant mt-xs flex items-center gap-xs">
+<span class="material-symbols-outlined text-[16px]">calendar_month</span>
+                                25 Th11, 2024
+                            </p>
+<p class="text-label-md font-label-md text-on-surface-variant flex items-center gap-xs">
+<span class="material-symbols-outlined text-[16px]">location_on</span>
+                                Công viên Yên Sở, Hà Nội
+                            </p>
+</div>
+</div>
+<!-- Ticket List -->
+<div class="space-y-sm mb-md">
+<div class="flex justify-between items-start text-body-md font-body-md">
+<div>
+<span class="font-semibold block">GA - EARLY BIRD</span>
+<span class="text-label-sm font-label-sm text-on-surface-variant">Khu vực: Đứng tự do</span>
+</div>
+<div class="text-right">
+<span class="block font-numeric-tabular">2 x 850.000 ₫</span>
+</div>
+</div>
+</div>
+<!-- Price Breakdown -->
+<div class="space-y-xs pt-sm border-t border-outline-variant/50 text-body-md font-body-md">
+<div class="flex justify-between text-on-surface-variant">
+<span>Tạm tính</span>
+<span class="font-numeric-tabular">1.700.000 ₫</span>
+</div>
+</div>
+<!-- Total -->
+<div class="flex justify-between items-center mt-md pt-md border-t border-outline-variant">
+<span class="text-title-lg font-title-lg">Tổng cộng</span>
+<span class="text-headline-md font-headline-md text-primary font-numeric-tabular">1.785.000 ₫</span>
+</div>
+<!-- Action Button -->
+<button class="w-full h-[48px] mt-lg bg-primary text-on-primary rounded-[10px] text-body-md font-body-md font-bold hover:bg-primary-container transition-colors shadow-md flex items-center justify-center gap-sm focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
+<span class="material-symbols-outlined">lock</span>
+                        Thanh toán an toàn
+                    </button>
+<p class="text-center text-label-sm font-label-sm text-on-surface-variant mt-sm">
+                        Bằng việc bấm Thanh toán, bạn đồng ý với <a class="text-primary underline" href="#">Điều khoản dịch vụ</a>.
+                    </p>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer (Suppressed on transactional screens typically, but keeping a minimal version as per shared components context if needed, opting to suppress for focused checkout) -->
+<script>
+        // Simple countdown timer for 10 minutes
+        const countdownElement = document.getElementById('countdown');
+        let totalSeconds = 10 * 60;
+
+        function updateTimer() {
+            const minutes = Math.floor(totalSeconds / 60);
+            const seconds = totalSeconds % 60;
+            
+            const formattedMinutes = String(minutes).padStart(2, '0');
+            const formattedSeconds = String(seconds).padStart(2, '0');
+            
+            countdownElement.textContent = `${formattedMinutes}:${formattedSeconds}`;
+            
+            if (totalSeconds > 0) {
+                totalSeconds--;
+            }
+        }
+
+        setInterval(updateTimer, 1000);
+        updateTimer();
+    </script>
+</body></html>

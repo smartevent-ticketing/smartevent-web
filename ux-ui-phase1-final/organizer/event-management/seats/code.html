@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+
+<html lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SMART EVENT - Seat Management</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-container-high": "#dfe8ff",
+                      "inverse-on-surface": "#ecf0ff",
+                      "surface-dim": "#d0daf2",
+                      "on-primary-container": "#fefaff",
+                      "on-error": "#ffffff",
+                      "surface-container-highest": "#d9e3fb",
+                      "tertiary-fixed-dim": "#ffb3ac",
+                      "on-tertiary": "#ffffff",
+                      "surface-bright": "#f9f9ff",
+                      "inverse-surface": "#273143",
+                      "secondary-container": "#dee1fb",
+                      "on-tertiary-fixed-variant": "#910913",
+                      "error": "#ba1a1a",
+                      "background": "#f9f9ff",
+                      "on-tertiary-container": "#fffaf9",
+                      "on-secondary": "#ffffff",
+                      "on-error-container": "#93000a",
+                      "on-primary-fixed": "#0f0069",
+                      "tertiary-container": "#d13e3a",
+                      "primary-container": "#635bff",
+                      "on-primary-fixed-variant": "#321ed2",
+                      "secondary-fixed-dim": "#c2c5de",
+                      "primary-fixed-dim": "#c3c0ff",
+                      "primary": "#493ee5",
+                      "on-tertiary-fixed": "#410003",
+                      "surface-variant": "#d9e3fb",
+                      "outline": "#777587",
+                      "outline-variant": "#c7c4d8",
+                      "surface-container-low": "#f0f3ff",
+                      "primary-fixed": "#e2dfff",
+                      "tertiary-fixed": "#ffdad6",
+                      "inverse-primary": "#c3c0ff",
+                      "secondary-fixed": "#dee1fb",
+                      "on-background": "#111c2d",
+                      "surface-container": "#e8eeff",
+                      "on-secondary-fixed": "#171b2d",
+                      "on-secondary-container": "#606379",
+                      "surface-tint": "#4c42e9",
+                      "error-container": "#ffdad6",
+                      "secondary": "#5a5d73",
+                      "surface": "#f9f9ff",
+                      "on-surface-variant": "#464555",
+                      "tertiary": "#ae2424",
+                      "surface-container-lowest": "#ffffff",
+                      "on-primary": "#ffffff",
+                      "on-surface": "#111c2d",
+                      "on-secondary-fixed-variant": "#42465a"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "lg": "24px",
+                      "xs": "4px",
+                      "base": "8px",
+                      "gutter": "24px",
+                      "xl": "32px",
+                      "md": "16px",
+                      "container-max": "1280px",
+                      "xxl": "48px",
+                      "sm": "8px"
+              },
+              "fontFamily": {
+                      "numeric-tabular": [
+                              "Be Vietnam Pro"
+                      ],
+                      "display-lg": [
+                              "Be Vietnam Pro"
+                      ],
+                      "headline-lg": [
+                              "Be Vietnam Pro"
+                      ],
+                      "label-md": [
+                              "Be Vietnam Pro"
+                      ],
+                      "label-sm": [
+                              "Be Vietnam Pro"
+                      ],
+                      "title-lg": [
+                              "Be Vietnam Pro"
+                      ],
+                      "headline-md": [
+                              "Be Vietnam Pro"
+                      ],
+                      "body-md": [
+                              "Be Vietnam Pro"
+                      ],
+                      "body-lg": [
+                              "Be Vietnam Pro"
+                      ]
+              },
+              "fontSize": {
+                      "numeric-tabular": [
+                              "inherit",
+                              {
+                                      "lineHeight": "inherit",
+                                      "fontWeight": "inherit"
+                              }
+                      ],
+                      "display-lg": [
+                              "48px",
+                              {
+                                      "lineHeight": "60px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "label-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "label-sm": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.02em",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "title-lg": [
+                              "20px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "400"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<style>
+        .material-symbols-outlined {
+          font-variation-settings:
+          'FILL' 0,
+          'wght' 400,
+          'GRAD' 0,
+          'opsz' 24
+        }
+        .seat {
+            transition: all 0.2s ease;
+        }
+        .seat:hover:not(.booked) {
+            transform: scale(1.1);
+            cursor: pointer;
+        }
+        .seat.selected {
+            ring: 2px solid #493ee5;
+            ring-offset: 2px;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex antialiased">
+<!-- Side Navigation -->
+<aside class="flex flex-col h-screen fixed left-0 top-0 py-lg px-md gap-base border-r border-outline-variant bg-surface-container shadow-sm w-64 z-50">
+<div class="mb-lg px-2">
+<h1 class="font-headline-md text-headline-md font-bold text-primary">SMART EVENT</h1>
+<p class="font-label-sm text-label-sm text-on-surface-variant mt-1">Organizer Portal</p>
+</div>
+<nav class="flex-1 flex flex-col gap-2">
+<!-- Dashboard (Inactive) -->
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-container-highest transition-all scale-95 active:scale-90 font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span>Dashboard</span>
+</a>
+<!-- Event Management (Active) -->
+<a class="flex items-center gap-3 px-4 py-3 bg-primary-container text-on-primary-container font-bold rounded-lg transition-all scale-95 active:scale-90 font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined" data-icon="event" style="font-variation-settings: 'FILL' 1;">event</span>
+<span>Event Management</span>
+</a>
+<!-- Reports (Inactive) -->
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-container-highest transition-all scale-95 active:scale-90 font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined" data-icon="assessment">assessment</span>
+<span>Reports</span>
+</a>
+</nav>
+<div class="mt-auto border-t border-outline-variant pt-4 px-2">
+<a class="flex items-center gap-3 px-2 py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-highest transition-all" href="#">
+<img alt="Organizer Profile" class="w-8 h-8 rounded-full bg-surface-variant object-cover" data-alt="A small circular avatar placeholder image for a user profile, featuring a generic abstract geometric pattern in shades of blue and white, suitable for a professional application interface." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAqIvRaMQxV2cLUhP1INFRBYXHZri90VW7qemvWTI-7KR2zFV7Vx5jP6p7RFl-SoHgHWF0KTGLuHhwF-EEUoYa-zDcAbkt-Cglp0IfL2RKTDs5Es1eeiO8jLhoQ5pqy8xaYjr-A85uTDvaQuNlOMybTX0cafrsa8VdtVWBFZr57Wg5nas9rI4Ie3SmjqCIIzUiwpTAimY3465OFeBDgdmujQfxVH_xuhsuEdoYQBBwnTR5tFSn9MCbz"/>
+<span class="font-label-md text-label-md">Admin</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="ml-64 flex-1 flex flex-col h-screen overflow-hidden">
+<!-- Top App Bar (Contextual) -->
+<header class="h-16 flex justify-between items-center px-gutter border-b border-outline-variant bg-surface sticky top-0 z-40">
+<div class="flex items-center gap-4">
+<button class="text-on-surface-variant hover:bg-surface-container-low p-2 rounded-full transition-colors flex items-center justify-center">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<div>
+<h2 class="font-title-lg text-title-lg text-on-surface">Vietnam Electronic Weekend 2024</h2>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Khu vực: VIP Lounge A (Seated)</span>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="px-4 py-2 bg-error text-on-error font-label-md text-label-md font-bold rounded-lg hover:bg-opacity-90 transition-opacity flex items-center gap-2" onclick="document.getElementById('deleteAllModal').classList.remove('hidden')">
+<span class="material-symbols-outlined text-sm">delete_sweep</span>
+                    Xóa toàn bộ
+                </button>
+<button class="px-4 py-2 bg-primary text-on-primary font-label-md text-label-md font-bold rounded-lg hover:bg-opacity-90 transition-opacity flex items-center gap-2 shadow-[0px_4px_20px_rgba(16,20,38,0.08)]">
+<span class="material-symbols-outlined text-sm">save</span>
+                    Lưu sơ đồ
+                </button>
+</div>
+</header>
+<div class="flex-1 overflow-hidden flex bg-surface-container-lowest">
+<!-- Left Toolbar - Tools -->
+<div class="w-80 border-r border-outline-variant bg-surface flex flex-col p-gutter overflow-y-auto">
+<h3 class="font-title-lg text-title-lg mb-6">Công cụ quản lý ghế</h3>
+<!-- Auto Generate Seats -->
+<div class="bg-surface-container-low border border-outline-variant rounded-xl p-4 mb-6">
+<h4 class="font-label-md text-label-md font-bold mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">grid_on</span>
+                        Tạo ghế tự động
+                    </h4>
+<div class="grid grid-cols-2 gap-4 mb-4">
+<div>
+<label class="font-label-sm text-label-sm text-on-surface-variant block mb-1">Số hàng (Row)</label>
+<input class="w-full h-10 border border-outline-variant rounded-lg px-3 py-2 focus:border-primary focus:ring-1 focus:ring-primary outline-none font-numeric-tabular bg-surface-container-lowest" type="number" value="10"/>
+</div>
+<div>
+<label class="font-label-sm text-label-sm text-on-surface-variant block mb-1">Số cột (Col)</label>
+<input class="w-full h-10 border border-outline-variant rounded-lg px-3 py-2 focus:border-primary focus:ring-1 focus:ring-primary outline-none font-numeric-tabular bg-surface-container-lowest" type="number" value="15"/>
+</div>
+</div>
+<div class="mb-4">
+<label class="font-label-sm text-label-sm text-on-surface-variant block mb-1">Tiền tố hàng (VD: A, B, C)</label>
+<select class="w-full h-10 border border-outline-variant rounded-lg px-3 py-2 focus:border-primary focus:ring-1 focus:ring-primary outline-none font-body-md bg-surface-container-lowest appearance-none">
+<option>Alphabet (A, B, C...)</option>
+<option>Số (1, 2, 3...)</option>
+</select>
+</div>
+<button class="w-full h-10 bg-secondary-container text-on-secondary-container font-label-md text-label-md font-bold rounded-lg hover:bg-opacity-80 transition-opacity">
+                        Tạo Lưới Ghế
+                    </button>
+</div>
+<!-- Add Single Seat -->
+<div class="bg-surface-container-low border border-outline-variant rounded-xl p-4 mb-6">
+<h4 class="font-label-md text-label-md font-bold mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">chair</span>
+                        Thêm ghế lẻ
+                    </h4>
+<p class="font-body-md text-sm text-on-surface-variant mb-4">Nhấp vào không gian trống trên lưới để thêm ghế lẻ.</p>
+<div class="flex items-center gap-2 mb-2">
+<input class="rounded text-primary focus:ring-primary h-4 w-4 border-outline-variant" id="addSingleMode" type="checkbox"/>
+<label class="font-label-md text-label-md cursor-pointer" for="addSingleMode">Bật chế độ thêm ghế lẻ</label>
+</div>
+</div>
+<!-- Legend & Status -->
+<div class="mt-auto">
+<h4 class="font-label-md text-label-md font-bold mb-3">Chú giải (Legend)</h4>
+<div class="flex flex-col gap-3">
+<div class="flex items-center gap-3">
+<div class="w-6 h-6 rounded-md border border-outline-variant bg-surface flex items-center justify-center">
+<span class="text-[10px] text-on-surface-variant font-numeric-tabular">A1</span>
+</div>
+<span class="font-body-md text-sm">Còn trống</span>
+</div>
+<div class="flex items-center gap-3">
+<div class="w-6 h-6 rounded-md bg-surface-variant flex items-center justify-center">
+<span class="text-[10px] text-on-surface-variant font-numeric-tabular">A2</span>
+</div>
+<span class="font-body-md text-sm">Đang giữ</span>
+</div>
+<div class="flex items-center gap-3">
+<div class="w-6 h-6 rounded-md bg-primary text-on-primary flex items-center justify-center">
+<span class="text-[10px] font-numeric-tabular">A3</span>
+</div>
+<span class="font-body-md text-sm">Đã bán</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Seat Canvas (Right) -->
+<div class="flex-1 relative bg-surface-container p-lg overflow-auto flex items-center justify-center">
+<!-- Stage Indicator -->
+<div class="absolute top-10 left-1/2 -translate-x-1/2 w-2/3 h-12 bg-secondary-fixed-dim rounded-b-3xl flex items-center justify-center shadow-sm opacity-50 pointer-events-none">
+<span class="font-label-md text-label-md font-bold text-on-secondary-fixed-variant tracking-[0.2em] uppercase">Sân Khấu (Stage)</span>
+</div>
+<!-- Seat Grid Container -->
+<div class="bg-surface p-xl rounded-2xl shadow-[0px_12px_32px_rgba(16,20,38,0.12)] border border-outline-variant max-w-[800px] mt-20 relative">
+<!-- Floating Context Menu (Simulated active state on a seat) -->
+<div class="absolute -top-12 left-[40%] bg-inverse-surface text-inverse-on-surface px-3 py-2 rounded-lg shadow-lg flex items-center gap-3 z-10 transition-opacity">
+<span class="font-label-sm font-bold border-r border-outline pr-3">Ghế C4</span>
+<button class="text-error hover:text-tertiary-fixed flex items-center" title="Xóa ghế">
+<span class="material-symbols-outlined text-sm">delete</span>
+</button>
+</div>
+<!-- Row A -->
+<div class="flex items-center justify-center gap-6 mb-3">
+<span class="font-label-md text-on-surface-variant w-6 text-center">A</span>
+<div class="flex gap-2">
+<!-- Empty -->
+<div class="seat w-8 h-8 rounded-md border border-outline-variant bg-surface flex items-center justify-center cursor-pointer hover:border-primary">
+<span class="text-[10px] text-on-surface-variant font-numeric-tabular">1</span>
+</div>
+<div class="seat w-8 h-8 rounded-md border border-outline-variant bg-surface flex items-center justify-center cursor-pointer hover:border-primary">
+<span class="text-[10px] text-on-surface-variant font-numeric-tabular">2</span>
+</div>
+<!-- Booked -->
+<div class="seat booked w-8 h-8 rounded-md bg-primary text-on-primary flex items-center justify-center cursor-not-allowed">
+<span class="text-[10px] font-numeric-tabular">3</span>
+</div>
+<div class="seat booked w-8 h-8 rounded-md bg-primary text-on-primary flex items-center justify-center cursor-not-allowed">
+<span class="text-[10px] font-numeric-tabular">4</span>
+</div>
+<!-- Reserved -->
+<div class="seat w-8 h-8 rounded-md bg-surface-variant flex items-center justify-center cursor-not-allowed">
+<span class="text-[10px] text-on-surface-variant font-numeric-tabular">5</span>
+</div>
+<div class="seat w-8 h-8 rounded-md bg-surface-variant flex items-center justify-center cursor-not-allowed">
+<span class="text-[10px] text-on-surface-variant font-numeric-tabular">6</span>
+</div>
+</div>
+</div>
+<!-- Row B -->
+<div class="flex items-center justify-center gap-6 mb-3">
+<span class="font-label-md text-on-surface-variant w-6 text-center">B</span>
+<div class="flex gap-2">
+<div class="seat w-8 h-8 rounded-md border border-outline-variant bg-surface flex items-center justify-center cursor-pointer hover:border-primary">
+<span class="text-[10px] text-on-surface-variant font-numeric-tabular">1</span>
+</div>
+<div class="seat w-8 h-8 rounded-md border border-outline-variant bg-surface flex items-center justify-center cursor-pointer hover:border-primary">
+<span class="text-[10px] text-on-surface-variant font-numeric-tabular">2</span>
+</div>
+<div class="seat booked w-8 h-8 rounded-md bg-primary text-on-primary flex items-center justify-center cursor-not-allowed">
+<span class="text-[10px] font-numeric-tabular">3</span>
+</div>
+<div class="seat booked w-8 h-8 rounded-md bg-primary text-on-primary flex items-center justify-center cursor-not-allowed">
+<span class="text-[10px] font-numeric-tabular">4</span>
+</div>
+<!-- Selected Seat Simulation -->
+<div class="seat w-8 h-8 rounded-md border-2 border-primary bg-surface flex items-center justify-center cursor-pointer shadow-[0_0_0_2px_#635bff40]">
+<span class="text-[10px] text-primary font-numeric-tabular font-bold">5</span>
+</div>
+<div class="seat w-8 h-8 rounded-md border border-outline-variant bg-surface flex items-center justify-center cursor-pointer hover:border-primary">
+<span class="text-[10px] text-on-surface-variant font-numeric-tabular">6</span>
+</div>
+</div>
+</div>
+<!-- Row C (Curved slightly to show layout capability) -->
+<div class="flex items-center justify-center gap-6 mb-3">
+<span class="font-label-md text-on-surface-variant w-6 text-center">C</span>
+<div class="flex gap-2">
+<div class="seat w-8 h-8 rounded-md border border-outline-variant bg-surface flex items-center justify-center cursor-pointer hover:border-primary -mt-2">
+<span class="text-[10px] text-on-surface-variant font-numeric-tabular">1</span>
+</div>
+<div class="seat w-8 h-8 rounded-md border border-outline-variant bg-surface flex items-center justify-center cursor-pointer hover:border-primary -mt-1">
+<span class="text-[10px] text-on-surface-variant font-numeric-tabular">2</span>
+</div>
+<div class="seat w-8 h-8 rounded-md border border-outline-variant bg-surface flex items-center justify-center cursor-pointer hover:border-primary">
+<span class="text-[10px] text-on-surface-variant font-numeric-tabular">3</span>
+</div>
+<!-- Missing seat to show irregular layout -->
+<div class="w-8 h-8 invisible"></div>
+<div class="seat w-8 h-8 rounded-md border border-outline-variant bg-surface flex items-center justify-center cursor-pointer hover:border-primary -mt-1">
+<span class="text-[10px] text-on-surface-variant font-numeric-tabular">5</span>
+</div>
+<div class="seat w-8 h-8 rounded-md border border-outline-variant bg-surface flex items-center justify-center cursor-pointer hover:border-primary -mt-2">
+<span class="text-[10px] text-on-surface-variant font-numeric-tabular">6</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Zoom Controls -->
+<div class="absolute bottom-lg right-lg bg-surface rounded-xl shadow-lg border border-outline-variant flex flex-col overflow-hidden">
+<button class="p-3 hover:bg-surface-container-low transition-colors text-on-surface flex items-center justify-center border-b border-outline-variant">
+<span class="material-symbols-outlined">add</span>
+</button>
+<button class="p-3 hover:bg-surface-container-low transition-colors text-on-surface flex items-center justify-center border-b border-outline-variant">
+<span class="material-symbols-outlined">remove</span>
+</button>
+<button class="p-3 hover:bg-surface-container-low transition-colors text-on-surface flex items-center justify-center">
+<span class="material-symbols-outlined">fit_screen</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+<!-- Delete All Confirmation Modal (Hidden by default, shown for demonstration) -->
+<div class="hidden fixed inset-0 z-50 flex items-center justify-center bg-on-background/40 backdrop-blur-sm" id="deleteAllModal">
+<div class="bg-surface rounded-2xl w-full max-w-md p-lg shadow-[0px_12px_32px_rgba(16,20,38,0.12)] border border-outline-variant">
+<div class="flex items-start gap-4 mb-6">
+<div class="w-12 h-12 rounded-full bg-error-container text-error flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined">warning</span>
+</div>
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2">Xóa toàn bộ ghế?</h3>
+<p class="font-body-md text-on-surface-variant">Hành động này sẽ xóa tất cả các ghế hiện có trên sơ đồ. Các ghế đã bán hoặc đang giữ sẽ <span class="font-bold text-error">bị mất liên kết</span>. Bạn có chắc chắn muốn tiếp tục?</p>
+</div>
+</div>
+<div class="flex justify-end gap-3">
+<button class="px-6 py-2.5 rounded-lg font-label-md text-label-md text-on-surface border border-outline-variant hover:bg-surface-container-low transition-colors" onclick="document.getElementById('deleteAllModal').classList.add('hidden')">
+                    Hủy bỏ
+                </button>
+<button class="px-6 py-2.5 rounded-lg font-label-md text-label-md font-bold bg-error text-on-error hover:bg-opacity-90 transition-opacity shadow-sm" onclick="document.getElementById('deleteAllModal').classList.add('hidden')">
+                    Đồng ý, xóa tất cả
+                </button>
+</div>
+</div>
+</div>
+</body></html>

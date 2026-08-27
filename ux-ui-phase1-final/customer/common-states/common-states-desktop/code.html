@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+
+<html lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SMART EVENT - Các trạng thái trang chung</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "inverse-surface": "#273143",
+                        "primary-fixed-dim": "#c3c0ff",
+                        "error-container": "#ffdad6",
+                        "error": "#ba1a1a",
+                        "surface-container": "#e8eeff",
+                        "on-primary": "#ffffff",
+                        "on-tertiary-fixed-variant": "#910913",
+                        "inverse-on-surface": "#ecf0ff",
+                        "inverse-primary": "#c3c0ff",
+                        "on-secondary-fixed-variant": "#42465a",
+                        "secondary-fixed-dim": "#c2c5de",
+                        "on-primary-fixed": "#0f0069",
+                        "secondary-container": "#dee1fb",
+                        "outline-variant": "#c7c4d8",
+                        "surface-container-high": "#dfe8ff",
+                        "on-secondary-fixed": "#171b2d",
+                        "surface-dim": "#d0daf2",
+                        "on-background": "#111c2d",
+                        "secondary-fixed": "#dee1fb",
+                        "surface-container-low": "#f0f3ff",
+                        "on-surface": "#111c2d",
+                        "surface-container-highest": "#d9e3fb",
+                        "background": "#f9f9ff",
+                        "on-error-container": "#93000a",
+                        "outline": "#777587",
+                        "primary-container": "#635bff",
+                        "surface-container-lowest": "#ffffff",
+                        "tertiary-container": "#d13e3a",
+                        "primary": "#493ee5",
+                        "tertiary-fixed": "#ffdad6",
+                        "tertiary-fixed-dim": "#ffb3ac",
+                        "surface-variant": "#d9e3fb",
+                        "secondary": "#5a5d73",
+                        "surface-bright": "#f9f9ff",
+                        "on-tertiary-fixed": "#410003",
+                        "on-primary-container": "#fefaff",
+                        "surface": "#f9f9ff",
+                        "surface-tint": "#4c42e9",
+                        "on-primary-fixed-variant": "#321ed2",
+                        "on-secondary": "#ffffff",
+                        "on-surface-variant": "#464555",
+                        "on-secondary-container": "#606379",
+                        "on-tertiary-container": "#fffaf9",
+                        "on-error": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "primary-fixed": "#e2dfff",
+                        "tertiary": "#ae2424"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "container-max": "1280px",
+                        "xs": "4px",
+                        "sm": "8px",
+                        "xl": "32px",
+                        "lg": "24px",
+                        "base": "8px",
+                        "gutter": "24px",
+                        "xxl": "48px",
+                        "md": "16px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Be Vietnam Pro"],
+                        "display-lg": ["Be Vietnam Pro"],
+                        "body-lg": ["Be Vietnam Pro"],
+                        "label-md": ["Be Vietnam Pro"],
+                        "numeric-tabular": ["Be Vietnam Pro"],
+                        "title-lg": ["Be Vietnam Pro"],
+                        "body-md": ["Be Vietnam Pro"],
+                        "label-sm": ["Be Vietnam Pro"],
+                        "headline-lg": ["Be Vietnam Pro"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "display-lg": ["48px", { "lineHeight": "60px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "fontWeight": "500" }],
+                        "numeric-tabular": ["inherit", { "lineHeight": "inherit", "fontWeight": "inherit" }],
+                        "title-lg": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .skeleton {
+            background-color: #e2e8f0;
+            background-image: linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0));
+            background-size: 40px 100%;
+            background-repeat: no-repeat;
+            background-position: left -40px top 0;
+            animation: shine 1s ease-infinite;
+        }
+
+        @keyframes shine {
+            to {
+                background-position: right -40px top 0;
+            }
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen">
+<!-- Navbar -->
+<nav class="fixed top-0 w-full bg-surface border-b border-outline-variant shadow-sm z-50">
+<div class="flex justify-between items-center px-gutter h-16 w-full max-w-container-max mx-auto">
+<div class="flex items-center gap-6">
+<span class="text-title-lg font-headline-lg text-primary font-bold tracking-tight">SMART EVENT</span>
+<div class="hidden md:flex gap-6">
+<a class="text-on-surface-variant text-label-md font-label-md hover:text-primary transition-colors cursor-pointer active:scale-95 transition-transform" href="#">Discovery</a>
+<a class="text-on-surface-variant text-label-md font-label-md hover:text-primary transition-colors cursor-pointer active:scale-95 transition-transform" href="#">Location</a>
+<a class="text-on-surface-variant text-label-md font-label-md hover:text-primary transition-colors cursor-pointer active:scale-95 transition-transform" href="#">My Tickets</a>
+</div>
+</div>
+<div class="flex items-center">
+<a class="text-on-surface-variant text-label-md font-label-md hover:text-primary transition-colors cursor-pointer active:scale-95 transition-transform flex items-center gap-2" href="#">
+<span class="material-symbols-outlined">person</span> Account
+                </a>
+</div>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="pt-24 pb-32 px-gutter max-w-container-max mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
+<!-- 1. Loading Skeleton (Grid Item 1) -->
+<section class="bg-surface rounded-xl shadow-sm border border-outline-variant p-6 flex flex-col gap-6">
+<div class="border-b border-outline-variant pb-4">
+<h2 class="text-headline-md font-headline-md text-primary">Loading Skeleton</h2>
+<p class="text-body-md font-body-md text-on-surface-variant mt-2">Được sử dụng khi dữ liệu đang được tải về từ máy chủ.</p>
+</div>
+<div class="flex flex-col gap-4">
+<!-- Skeleton Card -->
+<div class="flex items-start gap-4">
+<div class="w-16 h-16 rounded-lg skeleton"></div>
+<div class="flex-1 space-y-3 py-1">
+<div class="h-4 bg-surface-container-high rounded skeleton w-3/4"></div>
+<div class="space-y-2">
+<div class="h-3 bg-surface-container rounded skeleton"></div>
+<div class="h-3 bg-surface-container rounded skeleton w-5/6"></div>
+</div>
+</div>
+</div>
+<!-- Skeleton List Item -->
+<div class="flex items-center justify-between p-4 bg-surface-container-low rounded-lg border border-outline-variant">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full skeleton"></div>
+<div class="space-y-2">
+<div class="h-3 w-24 bg-surface-container-high rounded skeleton"></div>
+<div class="h-2 w-16 bg-surface-container rounded skeleton"></div>
+</div>
+</div>
+<div class="h-8 w-20 bg-surface-container-high rounded skeleton"></div>
+</div>
+</div>
+</section>
+<!-- 2. Empty State (Grid Item 2) -->
+<section class="bg-surface rounded-xl shadow-sm border border-outline-variant p-6 flex flex-col justify-center items-center text-center min-h-[400px]">
+<div class="border-b border-outline-variant w-full pb-4 mb-auto text-left">
+<h2 class="text-headline-md font-headline-md text-primary">Empty State</h2>
+<p class="text-body-md font-body-md text-on-surface-variant mt-2">Hiển thị khi không có dữ liệu (ví dụ: chưa có vé nào).</p>
+</div>
+<div class="w-32 h-32 rounded-full bg-surface-container flex items-center justify-center mb-6">
+<span class="material-symbols-outlined text-[64px] text-primary" data-weight="fill">inbox</span>
+</div>
+<h3 class="text-title-lg font-headline-md text-on-surface mb-2">Chưa có vé nào</h3>
+<p class="text-body-md font-body-md text-on-surface-variant max-w-sm mb-8">Bạn chưa mua vé cho bất kỳ sự kiện nào. Hãy khám phá các sự kiện hấp dẫn đang diễn ra.</p>
+<button class="bg-primary text-on-primary h-12 px-6 rounded-[10px] font-bold text-label-md hover:bg-surface-tint transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
+                Khám phá ngay
+            </button>
+<div class="mt-auto"></div> <!-- Spacer -->
+</section>
+<!-- 3. 404 Not Found (Grid Item 3) -->
+<section class="bg-surface rounded-xl shadow-sm border border-outline-variant p-6 flex flex-col justify-center items-center text-center min-h-[400px]">
+<div class="border-b border-outline-variant w-full pb-4 mb-auto text-left">
+<h2 class="text-headline-md font-headline-md text-primary">404 Not Found</h2>
+<p class="text-body-md font-body-md text-on-surface-variant mt-2">Trang không tồn tại hoặc đã bị gỡ bỏ.</p>
+</div>
+<div class="relative w-full max-w-[240px] h-40 mb-6">
+<div class="absolute inset-0 flex items-center justify-center">
+<span class="text-[120px] font-display-lg font-bold text-surface-container-high select-none">404</span>
+</div>
+<div class="absolute inset-0 flex items-center justify-center">
+<span class="material-symbols-outlined text-[64px] text-primary z-10">search_off</span>
+</div>
+</div>
+<h3 class="text-title-lg font-headline-md text-on-surface mb-2">Không tìm thấy trang</h3>
+<p class="text-body-md font-body-md text-on-surface-variant max-w-sm mb-8">Rất tiếc, đường dẫn bạn đang tìm kiếm không tồn tại hoặc đã được di chuyển.</p>
+<div class="flex gap-4">
+<button class="bg-surface text-primary border border-outline-variant h-12 px-6 rounded-[10px] font-bold text-label-md hover:bg-surface-container-low transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
+                    Quay lại
+                </button>
+<button class="bg-primary text-on-primary h-12 px-6 rounded-[10px] font-bold text-label-md hover:bg-surface-tint transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
+                    Về Trang Chủ
+                </button>
+</div>
+<div class="mt-auto"></div>
+</section>
+<!-- 4. Error / Maintenance (Grid Item 4) -->
+<section class="bg-surface rounded-xl shadow-sm border border-outline-variant p-6 flex flex-col justify-center items-center text-center min-h-[400px]">
+<div class="border-b border-outline-variant w-full pb-4 mb-auto text-left">
+<h2 class="text-headline-md font-headline-md text-primary">Lỗi mạng / Bảo trì</h2>
+<p class="text-body-md font-body-md text-on-surface-variant mt-2">Mất kết nối mạng hoặc hệ thống đang bảo trì.</p>
+</div>
+<div class="w-32 h-32 rounded-full bg-error-container flex items-center justify-center mb-6">
+<span class="material-symbols-outlined text-[64px] text-error" data-weight="fill">wifi_off</span>
+</div>
+<h3 class="text-title-lg font-headline-md text-on-surface mb-2">Mất kết nối</h3>
+<p class="text-body-md font-body-md text-on-surface-variant max-w-sm mb-8">Đã xảy ra lỗi kết nối với máy chủ. Vui lòng kiểm tra lại đường truyền internet của bạn và thử lại.</p>
+<button class="bg-surface border border-outline-variant text-on-surface h-12 px-6 rounded-[10px] font-bold text-label-md hover:bg-surface-container-low transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 flex items-center gap-2">
+<span class="material-symbols-outlined">refresh</span> Thử lại
+            </button>
+<div class="mt-auto"></div>
+</section>
+</main>
+<!-- Bottom Nav Bar (Mobile) -->
+<nav class="md:hidden fixed bottom-0 w-full z-50 bg-surface border-t border-outline-variant shadow-lg flex justify-around items-center h-16 pb-safe">
+<a class="flex flex-col items-center justify-center text-on-surface-variant active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="text-label-sm font-label-sm">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined">explore</span>
+<span class="text-label-sm font-label-sm">Discovery</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined">confirmation_number</span>
+<span class="text-label-sm font-label-sm">Tickets</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="text-label-sm font-label-sm">Account</span>
+</a>
+</nav>
+<!-- Footer -->
+<footer class="w-full py-xxl bg-inverse-surface border-t border-outline-variant flex flex-col md:flex-row justify-between items-start px-gutter max-w-container-max mx-auto mt-12 mb-16 md:mb-0">
+<div class="mb-8 md:mb-0">
+<span class="text-title-lg font-headline-lg text-primary-fixed">SMART EVENT</span>
+<p class="text-body-md font-body-md text-secondary-fixed-dim mt-2">© 2024 SMART EVENT. All rights reserved.</p>
+</div>
+<div class="flex gap-6">
+<a class="text-secondary-fixed-dim text-body-md font-body-md hover:text-white transition-colors" href="#">About Us</a>
+<a class="text-secondary-fixed-dim text-body-md font-body-md hover:text-white transition-colors" href="#">Terms</a>
+<a class="text-secondary-fixed-dim text-body-md font-body-md hover:text-white transition-colors" href="#">Privacy</a>
+<a class="text-secondary-fixed-dim text-body-md font-body-md hover:text-white transition-colors" href="#">Support</a>
+</div>
+</footer>
+</body></html>

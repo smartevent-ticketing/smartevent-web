@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+
+<html lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Không có quyền truy cập camera - SMART EVENT</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-high": "#dfe8ff",
+                    "inverse-on-surface": "#ecf0ff",
+                    "surface-dim": "#d0daf2",
+                    "on-primary-container": "#fefaff",
+                    "on-error": "#ffffff",
+                    "surface-container-highest": "#d9e3fb",
+                    "tertiary-fixed-dim": "#ffb3ac",
+                    "on-tertiary": "#ffffff",
+                    "surface-bright": "#f9f9ff",
+                    "inverse-surface": "#273143",
+                    "secondary-container": "#dee1fb",
+                    "on-tertiary-fixed-variant": "#910913",
+                    "error": "#ba1a1a",
+                    "background": "#f9f9ff",
+                    "on-tertiary-container": "#fffaf9",
+                    "on-secondary": "#ffffff",
+                    "on-error-container": "#93000a",
+                    "on-primary-fixed": "#0f0069",
+                    "tertiary-container": "#d13e3a",
+                    "primary-container": "#635bff",
+                    "on-primary-fixed-variant": "#321ed2",
+                    "secondary-fixed-dim": "#c2c5de",
+                    "primary-fixed-dim": "#c3c0ff",
+                    "primary": "#493ee5",
+                    "on-tertiary-fixed": "#410003",
+                    "surface-variant": "#d9e3fb",
+                    "outline": "#777587",
+                    "outline-variant": "#c7c4d8",
+                    "surface-container-low": "#f0f3ff",
+                    "primary-fixed": "#e2dfff",
+                    "tertiary-fixed": "#ffdad6",
+                    "inverse-primary": "#c3c0ff",
+                    "secondary-fixed": "#dee1fb",
+                    "on-background": "#111c2d",
+                    "surface-container": "#e8eeff",
+                    "on-secondary-fixed": "#171b2d",
+                    "on-secondary-container": "#606379",
+                    "surface-tint": "#4c42e9",
+                    "error-container": "#ffdad6",
+                    "secondary": "#5a5d73",
+                    "surface": "#f9f9ff",
+                    "on-surface-variant": "#464555",
+                    "tertiary": "#ae2424",
+                    "surface-container-lowest": "#ffffff",
+                    "on-primary": "#ffffff",
+                    "on-surface": "#111c2d",
+                    "on-secondary-fixed-variant": "#42465a"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "lg": "24px",
+                    "xs": "4px",
+                    "base": "8px",
+                    "gutter": "24px",
+                    "xl": "32px",
+                    "md": "16px",
+                    "container-max": "1280px",
+                    "xxl": "48px",
+                    "sm": "8px"
+            },
+            "fontFamily": {
+                    "numeric-tabular": [
+                            "Be Vietnam Pro"
+                    ],
+                    "display-lg": [
+                            "Be Vietnam Pro"
+                    ],
+                    "headline-lg": [
+                            "Be Vietnam Pro"
+                    ],
+                    "label-md": [
+                            "Be Vietnam Pro"
+                    ],
+                    "label-sm": [
+                            "Be Vietnam Pro"
+                    ],
+                    "title-lg": [
+                            "Be Vietnam Pro"
+                    ],
+                    "headline-md": [
+                            "Be Vietnam Pro"
+                    ],
+                    "body-md": [
+                            "Be Vietnam Pro"
+                    ],
+                    "body-lg": [
+                            "Be Vietnam Pro"
+                    ]
+            },
+            "fontSize": {
+                    "numeric-tabular": [
+                            "inherit",
+                            {
+                                    "lineHeight": "inherit",
+                                    "fontWeight": "inherit"
+                            }
+                    ],
+                    "display-lg": [
+                            "48px",
+                            {
+                                    "lineHeight": "60px",
+                                    "letterSpacing": "-0.02em",
+                                    "fontWeight": "700"
+                            }
+                    ],
+                    "headline-lg": [
+                            "32px",
+                            {
+                                    "lineHeight": "40px",
+                                    "letterSpacing": "-0.01em",
+                                    "fontWeight": "700"
+                            }
+                    ],
+                    "label-md": [
+                            "14px",
+                            {
+                                    "lineHeight": "20px",
+                                    "fontWeight": "500"
+                            }
+                    ],
+                    "label-sm": [
+                            "12px",
+                            {
+                                    "lineHeight": "16px",
+                                    "letterSpacing": "0.02em",
+                                    "fontWeight": "500"
+                            }
+                    ],
+                    "title-lg": [
+                            "20px",
+                            {
+                                    "lineHeight": "28px",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "headline-md": [
+                            "24px",
+                            {
+                                    "lineHeight": "32px",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "body-md": [
+                            "16px",
+                            {
+                                    "lineHeight": "24px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "body-lg": [
+                            "18px",
+                            {
+                                    "lineHeight": "28px",
+                                    "fontWeight": "400"
+                            }
+                    ]
+            }
+    },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background min-h-screen flex flex-col font-body-md text-body-md text-on-background pb-20 relative">
+<!-- TopNavBar (Shared Component) -->
+<header class="bg-surface flex justify-between items-center px-gutter w-full h-16 sticky top-0 z-50 shadow-sm">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-primary text-[28px]" style="font-variation-settings: 'FILL' 1;">qr_code_scanner</span>
+<h1 class="font-headline-md text-headline-md font-bold text-primary tracking-tight">SMART EVENT</h1>
+</div>
+<div class="flex items-center gap-md text-primary">
+<button class="hover:bg-surface-container-low transition-colors rounded-full p-2 flex items-center justify-center cursor-pointer active:opacity-80">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="hover:bg-surface-container-low transition-colors rounded-full p-2 flex items-center justify-center cursor-pointer active:opacity-80">
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+</button>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-grow flex flex-col items-center justify-center px-md py-xl">
+<div class="w-full max-w-sm flex flex-col items-center bg-surface p-xl rounded-2xl shadow-[0px_12px_32px_rgba(16,20,38,0.12)] border border-surface-container-highest text-center">
+<!-- Error Illustration/Icon -->
+<div class="w-24 h-24 rounded-full bg-error-container flex items-center justify-center mb-lg relative">
+<div class="absolute inset-0 rounded-full bg-error-container animate-ping opacity-20"></div>
+<span class="material-symbols-outlined text-error text-[48px]" style="font-variation-settings: 'FILL' 1;">no_photography</span>
+</div>
+<!-- Error Content -->
+<h2 class="font-title-lg text-title-lg text-on-surface mb-sm">Không có quyền truy cập camera</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mb-xl px-sm">
+                Vui lòng cấp quyền trong cài đặt trình duyệt để tiếp tục quét mã.
+            </p>
+<!-- Actions -->
+<div class="w-full flex flex-col gap-md">
+<button class="w-full h-12 bg-primary text-on-primary font-label-md text-label-md rounded-lg flex items-center justify-center gap-sm hover:bg-surface-tint transition-colors focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-surface active:scale-[0.98]">
+<span class="material-symbols-outlined text-[20px]">refresh</span>
+                    Thử lại
+                </button>
+<button class="w-full h-12 bg-transparent text-primary font-label-md text-label-md border border-outline-variant rounded-lg flex items-center justify-center hover:bg-surface-container-low transition-colors focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-surface active:scale-[0.98]">
+                    Quay lại chọn sự kiện
+                </button>
+</div>
+<!-- Contextual Help -->
+<div class="mt-lg flex items-start gap-sm bg-surface-container-lowest p-md rounded-xl border border-surface-container-high text-left w-full">
+<span class="material-symbols-outlined text-secondary text-[20px] mt-0.5">help</span>
+<p class="font-label-sm text-label-sm text-on-secondary-container">
+                    Làm sao để cấp quyền? Nhấn vào biểu tượng ổ khóa cạnh địa chỉ trang web và cho phép truy cập Camera.
+                </p>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (Shared Component) -->
+<!-- Shell Border Ban: Using shadow instead of top border -->
+<nav class="bg-surface fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-2 pb-safe rounded-t-xl shadow-[0px_-4px_20px_rgba(16,20,38,0.08)]">
+<!-- Active Tab: Scanner -->
+<button class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-2xl p-2 min-w-[64px] active:scale-95 transition-transform duration-200">
+<span class="material-symbols-outlined mb-1" data-icon="qr_code_scanner" style="font-variation-settings: 'FILL' 1;">qr_code_scanner</span>
+<span class="font-label-sm text-label-sm">Scanner</span>
+</button>
+<!-- Inactive Tab: Events -->
+<button class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-high rounded-xl p-2 min-w-[64px] active:scale-95 transition-all duration-200">
+<span class="material-symbols-outlined mb-1" data-icon="confirmation_number">confirmation_number</span>
+<span class="font-label-sm text-label-sm">Events</span>
+</button>
+<!-- Inactive Tab: History -->
+<button class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-high rounded-xl p-2 min-w-[64px] active:scale-95 transition-all duration-200">
+<span class="material-symbols-outlined mb-1" data-icon="history">history</span>
+<span class="font-label-sm text-label-sm">History</span>
+</button>
+<!-- Inactive Tab: Profile -->
+<button class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-high rounded-xl p-2 min-w-[64px] active:scale-95 transition-all duration-200">
+<span class="material-symbols-outlined mb-1" data-icon="person">person</span>
+<span class="font-label-sm text-label-sm">Profile</span>
+</button>
+</nav>
+</body></html>

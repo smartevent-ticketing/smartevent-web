@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+
+<html lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SMART EVENT - Đang xác nhận thanh toán</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-error-container": "#93000a",
+                        "inverse-on-surface": "#ecf0ff",
+                        "secondary-fixed-dim": "#c2c5de",
+                        "on-primary-fixed": "#0f0069",
+                        "tertiary": "#ae2424",
+                        "inverse-primary": "#c3c0ff",
+                        "on-tertiary-fixed-variant": "#910913",
+                        "outline": "#777587",
+                        "on-primary-container": "#fefaff",
+                        "surface-container-highest": "#d9e3fb",
+                        "secondary-fixed": "#dee1fb",
+                        "on-tertiary-fixed": "#410003",
+                        "on-error": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "background": "#f9f9ff",
+                        "tertiary-container": "#d13e3a",
+                        "surface": "#f9f9ff",
+                        "on-surface-variant": "#464555",
+                        "surface-variant": "#d9e3fb",
+                        "on-tertiary-container": "#fffaf9",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary-container": "#606379",
+                        "surface-tint": "#4c42e9",
+                        "on-primary": "#ffffff",
+                        "surface-bright": "#f9f9ff",
+                        "on-surface": "#111c2d",
+                        "on-secondary": "#ffffff",
+                        "surface-container-high": "#dfe8ff",
+                        "on-secondary-fixed-variant": "#42465a",
+                        "secondary-container": "#dee1fb",
+                        "secondary": "#5a5d73",
+                        "primary-container": "#635bff",
+                        "primary-fixed-dim": "#c3c0ff",
+                        "on-tertiary": "#ffffff",
+                        "surface-dim": "#d0daf2",
+                        "inverse-surface": "#273143",
+                        "tertiary-fixed-dim": "#ffb3ac",
+                        "on-background": "#111c2d",
+                        "outline-variant": "#c7c4d8",
+                        "on-secondary-fixed": "#171b2d",
+                        "primary": "#493ee5",
+                        "surface-container-low": "#f0f3ff",
+                        "tertiary-fixed": "#ffdad6",
+                        "primary-fixed": "#e2dfff",
+                        "error": "#ba1a1a",
+                        "surface-container": "#e8eeff",
+                        "on-primary-fixed-variant": "#321ed2"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "base": "8px",
+                        "xs": "4px",
+                        "gutter": "24px",
+                        "md": "16px",
+                        "sm": "8px",
+                        "xxl": "48px",
+                        "xl": "32px",
+                        "container-max": "1280px",
+                        "lg": "24px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Be Vietnam Pro"],
+                        "body-md": ["Be Vietnam Pro"],
+                        "numeric-tabular": ["Be Vietnam Pro"],
+                        "headline-lg": ["Be Vietnam Pro"],
+                        "title-lg": ["Be Vietnam Pro"],
+                        "headline-md": ["Be Vietnam Pro"],
+                        "label-sm": ["Be Vietnam Pro"],
+                        "display-lg": ["Be Vietnam Pro"],
+                        "label-md": ["Be Vietnam Pro"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "numeric-tabular": ["inherit", { "lineHeight": "inherit", "fontWeight": "inherit" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "title-lg": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500" }],
+                        "display-lg": ["48px", { "lineHeight": "60px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "fontWeight": "500" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .pulse-ring {
+            animation: pulse-ring-anim 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+        }
+        @keyframes pulse-ring-anim {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(73, 62, 229, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 16px rgba(73, 62, 229, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(73, 62, 229, 0); }
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col font-body-md antialiased w-full">
+<!-- TopNavBar -->
+<header class="bg-surface dark:bg-surface-dim shadow-sm dark:shadow-none docked full-width top-0 border-b border-outline-variant dark:border-outline z-50">
+<div class="flex justify-between items-center w-full px-gutter max-w-container-max mx-auto h-16">
+<div class="flex items-center gap-gutter">
+<a class="text-title-lg font-title-lg font-bold text-primary dark:text-primary-fixed-dim tracking-tight" href="#">SMART EVENT</a>
+</div>
+<nav class="hidden md:flex items-center gap-lg h-full">
+<a class="text-secondary dark:text-secondary-fixed-dim font-medium hover:text-primary dark:hover:text-primary-fixed-dim transition-colors duration-200 h-full flex items-center px-sm" href="#">Khám phá</a>
+<a class="text-secondary dark:text-secondary-fixed-dim font-medium hover:text-primary dark:hover:text-primary-fixed-dim transition-colors duration-200 h-full flex items-center px-sm" href="#">Địa điểm</a>
+<a class="text-secondary dark:text-secondary-fixed-dim font-medium hover:text-primary dark:hover:text-primary-fixed-dim transition-colors duration-200 h-full flex items-center px-sm" href="#">Vé của tôi</a>
+</nav>
+<div class="flex items-center">
+<button class="text-secondary dark:text-secondary-fixed-dim font-medium hover:text-primary dark:hover:text-primary-fixed-dim transition-colors duration-200 flex items-center gap-xs">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">account_circle</span>
+<span class="hidden md:inline">Tài khoản</span>
+</button>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-grow flex items-center justify-center py-xxl px-gutter w-full">
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl shadow-[0px_12px_32px_rgba(16,20,38,0.12)] max-w-2xl w-full mx-auto overflow-hidden relative isolate">
+<!-- Abstract Graphic Background -->
+<div class="absolute inset-0 z-[-1] opacity-20 pointer-events-none" style="background-image: radial-gradient(circle at top right, var(--tw-colors-primary-container) 0%, transparent 60%), radial-gradient(circle at bottom left, var(--tw-colors-surface-container-highest) 0%, transparent 60%);"></div>
+<div class="p-xl md:p-xxl flex flex-col items-center text-center">
+<!-- Status Indicator (Animation) -->
+<div class="w-24 h-24 mb-lg relative flex items-center justify-center pulse-ring rounded-full bg-primary-fixed">
+<!-- STITCH_THREEJS_START:ANIMATION_96 class="w-16 h-16 text-primary" -->
+<div class="w-16 h-16 text-primary" style="display:block;">
+<script src="https://ajax.googleapis.com/ajax/libs/threejs/r125/three.min.js"></script>
+<div id="threejs-container-ANIMATION_96" style="width:100%;height:100%"></div>
+<script>
+(function() {
+  const container = document.getElementById('threejs-container-ANIMATION_96');
+  const devicePixelRatio = window.devicePixelRatio || 1;
+  
+import React from 'react';
+import { Loader2 } from 'lucide-react';
+
+const PendingAnimation = () => {
+  return (
+    <div className="flex flex-col items-center justify-center space-y-4">
+      <div className="relative">
+        <div className="w-24 h-24 rounded-full border-4 border-primary/20 animate-pulse"></div>
+        <Loader2 className="w-24 h-24 text-primary animate-spin absolute top-0 left-0" strokeWidth={1.5} />
+      </div>
+      <div className="flex space-x-1">
+        <div className="w-2 h-2 bg-primary rounded-full animate-bounce [animation-delay:-0.3s]"></div>
+        <div className="w-2 h-2 bg-primary rounded-full animate-bounce [animation-delay:-0.15s]"></div>
+        <div className="w-2 h-2 bg-primary rounded-full animate-bounce"></div>
+      </div>
+    </div>
+  );
+};
+
+export default PendingAnimation;
+
+})();
+</script>
+</div>
+<!-- STITCH_THREEJS_END:ANIMATION_96 -->
+</div>
+<!-- Headline & Explanation -->
+<h1 class="text-headline-lg font-headline-lg text-primary mb-md">Đang xác nhận thanh toán</h1>
+<p class="text-body-lg font-body-lg text-on-surface-variant max-w-lg mb-xl">
+                    SMART EVENT đang chờ xác nhận từ VNPay. Vui lòng không thực hiện thanh toán lại trong lúc này.
+                </p>
+<!-- Order Details Card -->
+<div class="w-full bg-surface-container rounded-lg p-lg mb-xl border border-outline-variant/50 text-left">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-md">
+<div class="flex flex-col gap-xs">
+<span class="text-label-sm font-label-sm text-secondary uppercase tracking-wider">Mã đơn hàng</span>
+<span class="text-body-md font-body-md font-medium text-on-surface">SE-ORD-2024-A8F21</span>
+</div>
+<div class="flex flex-col gap-xs">
+<span class="text-label-sm font-label-sm text-secondary uppercase tracking-wider">Phương thức</span>
+<div class="flex items-center gap-sm">
+<span class="text-body-md font-body-md font-medium text-on-surface">VNPay</span>
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">account_balance_wallet</span>
+</div>
+</div>
+<div class="flex flex-col gap-xs md:items-end">
+<span class="text-label-sm font-label-sm text-secondary uppercase tracking-wider">Tổng tiền</span>
+<span class="text-title-lg font-title-lg font-bold text-primary font-numeric-tabular">1.500.000 ₫</span>
+</div>
+</div>
+</div>
+<!-- Actions -->
+<div class="flex flex-col sm:flex-row gap-md w-full justify-center items-center">
+<button class="w-full sm:w-auto h-12 px-lg bg-primary text-on-primary rounded-lg font-label-md font-bold hover:bg-primary-container transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 flex items-center justify-center gap-sm">
+<span class="material-symbols-outlined">refresh</span>
+                        Kiểm tra lại trạng thái
+                    </button>
+<button class="w-full sm:w-auto h-12 px-lg bg-surface-container-high text-on-surface rounded-lg font-label-md font-medium hover:bg-secondary-container transition-colors border border-outline-variant focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
+                        Xem đơn hàng
+                    </button>
+</div>
+<a class="mt-lg text-label-md font-label-md text-secondary hover:text-primary hover:underline transition-colors flex items-center gap-xs" href="#">
+<span class="material-symbols-outlined text-sm">arrow_back</span>
+                    Về trang chủ
+                </a>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-surface-container-low dark:bg-inverse-surface border-t border-outline-variant dark:border-outline full-width">
+<div class="w-full py-xl px-gutter flex flex-col md:flex-row justify-between items-center max-w-container-max mx-auto">
+<div class="mb-lg md:mb-0 text-center md:text-left">
+<span class="text-headline-md font-headline-md text-primary dark:text-primary-fixed-dim block mb-sm">SMART EVENT</span>
+<p class="text-label-sm font-label-sm text-on-surface-variant dark:text-secondary-fixed-dim">© 2024 SMART EVENT. All rights reserved.</p>
+</div>
+<nav class="flex flex-wrap justify-center gap-lg">
+<a class="text-body-md font-body-md text-on-surface-variant dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-primary-fixed-dim underline transition-all" href="#">Điều khoản</a>
+<a class="text-body-md font-body-md text-on-surface-variant dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-primary-fixed-dim underline transition-all" href="#">Chính sách bảo mật</a>
+<a class="text-body-md font-body-md text-on-surface-variant dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-primary-fixed-dim underline transition-all" href="#">Liên hệ</a>
+<a class="text-body-md font-body-md text-on-surface-variant dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-primary-fixed-dim underline transition-all" href="#">Hướng dẫn thanh toán</a>
+</nav>
+</div>
+</footer>
+</body></html>

@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+
+<html lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SMART EVENT - Event Detail Mobile</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-lowest": "#ffffff",
+                        "primary": "#493ee5",
+                        "primary-fixed": "#e2dfff",
+                        "tertiary": "#ae2424",
+                        "on-secondary-fixed": "#171b2d",
+                        "tertiary-fixed": "#ffdad6",
+                        "secondary": "#5a5d73",
+                        "on-secondary-container": "#606379",
+                        "on-primary-fixed": "#0f0069",
+                        "on-tertiary-fixed": "#410003",
+                        "on-tertiary-fixed-variant": "#910913",
+                        "secondary-fixed-dim": "#c2c5de",
+                        "secondary-fixed": "#dee1fb",
+                        "on-background": "#111c2d",
+                        "tertiary-fixed-dim": "#ffb3ac",
+                        "outline": "#777587",
+                        "inverse-primary": "#c3c0ff",
+                        "surface-dim": "#d0daf2",
+                        "on-secondary-fixed-variant": "#42465a",
+                        "outline-variant": "#c7c4d8",
+                        "on-error": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "surface": "#f9f9ff",
+                        "inverse-on-surface": "#ecf0ff",
+                        "background": "#f9f9ff",
+                        "error": "#ba1a1a",
+                        "on-primary-container": "#fefaff",
+                        "surface-variant": "#d9e3fb",
+                        "primary-container": "#635bff",
+                        "secondary-container": "#dee1fb",
+                        "on-secondary": "#ffffff",
+                        "surface-tint": "#4c42e9",
+                        "on-tertiary-container": "#fffaf9",
+                        "tertiary-container": "#d13e3a",
+                        "surface-bright": "#f9f9ff",
+                        "on-primary-fixed-variant": "#321ed2",
+                        "on-surface-variant": "#464555",
+                        "surface-container-low": "#f0f3ff",
+                        "surface-container-highest": "#d9e3fb",
+                        "surface-container-high": "#dfe8ff",
+                        "surface-container": "#e8eeff",
+                        "on-error-container": "#93000a",
+                        "on-surface": "#111c2d",
+                        "inverse-surface": "#273143",
+                        "on-tertiary": "#ffffff",
+                        "on-primary": "#ffffff",
+                        "primary-fixed-dim": "#c3c0ff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "24px",
+                        "xl": "32px",
+                        "md": "16px",
+                        "base": "8px",
+                        "lg": "24px",
+                        "sm": "8px",
+                        "xs": "4px",
+                        "container-max": "1280px",
+                        "xxl": "48px"
+                    },
+                    "fontFamily": {
+                        "label-md": ["Be Vietnam Pro"],
+                        "body-md": ["Be Vietnam Pro"],
+                        "label-sm": ["Be Vietnam Pro"],
+                        "body-lg": ["Be Vietnam Pro"],
+                        "headline-lg": ["Be Vietnam Pro"],
+                        "numeric-tabular": ["Be Vietnam Pro"],
+                        "title-lg": ["Be Vietnam Pro"],
+                        "headline-md": ["Be Vietnam Pro"],
+                        "display-lg": ["Be Vietnam Pro"]
+                    },
+                    "fontSize": {
+                        "label-md": ["14px", { "lineHeight": "20px", "fontWeight": "500" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "numeric-tabular": ["inherit", { "lineHeight": "inherit", "fontWeight": "inherit" }],
+                        "title-lg": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "display-lg": ["48px", { "lineHeight": "60px", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Be Vietnam Pro', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .pb-safe { padding-bottom: env(safe-area-inset-bottom); }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="bg-background text-on-surface antialiased overflow-x-hidden md:hidden pb-[88px]"> <!-- Mobile only structure implied by prompt, hiding on md for clarity of intent though not strictly enforced by browser resize without devtools -->
+<!-- Dynamic Header (Becomes opaque on scroll) -->
+<header class="fixed top-0 w-full z-50 flex items-center justify-between px-md h-12 transition-colors duration-300 bg-transparent" id="detail-header">
+<button class="w-10 h-10 rounded-full bg-surface-container-lowest/80 backdrop-blur-sm flex items-center justify-center text-on-surface shadow-sm active:scale-95 transition-transform">
+<span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
+</button>
+<div class="flex gap-sm">
+<button class="w-10 h-10 rounded-full bg-surface-container-lowest/80 backdrop-blur-sm flex items-center justify-center text-on-surface shadow-sm active:scale-95 transition-transform">
+<span class="material-symbols-outlined" data-icon="share">share</span>
+</button>
+<button class="w-10 h-10 rounded-full bg-surface-container-lowest/80 backdrop-blur-sm flex items-center justify-center text-on-surface shadow-sm active:scale-95 transition-transform">
+<span class="material-symbols-outlined" data-icon="favorite_border">favorite_border</span>
+</button>
+</div>
+</header>
+<main class="w-full">
+<!-- Hero Image -->
+<div class="w-full h-[300px] relative">
+<img class="w-full h-full object-cover" data-alt="A wide angle, high energy photograph of an electronic music festival main stage at night. The crowd is a sea of silhouettes illuminated by vibrant, cutting-edge laser lights in electric indigo and magenta. Massive LED screens display abstract geometric patterns. The atmosphere is euphoric, dynamic, and modern, perfectly capturing the peak moment of a live event experience. High contrast, sharp focus, professional concert photography." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC2W8ZcbKZliWxyas8ryU9Qeerw7ghpRbn8TKys1js56hNi5CoQhhHyktYqrQZY_175SMy_9IoN5Z3O-xIIQYhnVNSbdBZxbaUW7Kwi0l8J6hc_ZV3aoiK2fS4v_-eCJlZM9jNvtSRfzANMsQOAssp-mWenpd0bbnBDN-VBI8x8lO5RhRWbJ118KIhPtzOFsJmsSeOTssY34fyOI72w14DOcSv5cZNqpTrafWQ9VCSQbaf9ScSoL7YU"/>
+<!-- Gradient Overlay for readability -->
+<div class="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent"></div>
+</div>
+<!-- Event Core Info -->
+<div class="px-md -mt-md relative z-10">
+<!-- Categories -->
+<div class="flex flex-wrap gap-sm mb-base">
+<span class="px-3 py-1 bg-surface-variant text-on-surface-variant rounded-full font-label-sm text-label-sm">Âm nhạc</span>
+<span class="px-3 py-1 bg-surface-variant text-on-surface-variant rounded-full font-label-sm text-label-sm">Lễ hội</span>
+</div>
+<!-- Title -->
+<h1 class="font-headline-lg text-headline-lg text-on-surface mb-md">Neon Nights Festival 2024</h1>
+<!-- Quick Details Cards (Bento Style Micro) -->
+<div class="grid grid-cols-2 gap-sm mb-lg">
+<div class="bg-surface-container-lowest rounded-xl p-md border border-outline-variant flex items-start gap-sm">
+<div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-on-primary-container text-[20px]" data-icon="calendar_month">calendar_month</span>
+</div>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Thời gian</p>
+<p class="font-label-md text-label-md text-on-surface mt-xs">24 Th10 2024</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">18:00 - 23:30</p>
+</div>
+</div>
+<div class="bg-surface-container-lowest rounded-xl p-md border border-outline-variant flex items-start gap-sm">
+<div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-on-primary-container text-[20px]" data-icon="location_on">location_on</span>
+</div>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Địa điểm</p>
+<p class="font-label-md text-label-md text-on-surface mt-xs line-clamp-2">Sân vận động Quân khu 7</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant mt-xs text-primary">Xem bản đồ</p>
+</div>
+</div>
+</div>
+<!-- Organizer Info -->
+<div class="flex items-center gap-md py-md border-y border-outline-variant mb-lg">
+<div class="w-12 h-12 rounded-full overflow-hidden bg-surface-variant shrink-0">
+<img class="w-full h-full object-cover" data-alt="A clean, modern corporate logo for an event production company named 'Vibe Events'. The logo features a minimalist waveform graphic in electric indigo on a pristine white background. The design is sleek, geometric, and professional, conveying reliability and high-quality entertainment. Vector style, flat design." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDmQlfS6L4A_xzzaezjuXs2fImJ-gPJN3oTY7YeYf9S1Dly-ATvlWEzXzpuzzipTyiTQLzJ1rx_p43FoWK07ET3kO_TXu6QJpT5mYFw_Iu0Kz1Z44V9kaAjKxMpZ0P6yZGxI8vcVgBCuLuCEA-s2sgvzTPu0YhYk5lyS3AZimFwlUW8vW-kkegy9_H0YEqGkwrsMzCrsmFZgO3YnYR-T5gO2D-JpB43m9lPNZ9-ooTjcvc6d_onoxLI"/>
+</div>
+<div class="flex-1">
+<p class="font-label-sm text-label-sm text-on-surface-variant">Ban tổ chức</p>
+<p class="font-title-lg text-title-lg text-on-surface">Vibe Entertainment</p>
+</div>
+<button class="px-4 py-2 rounded-full border border-primary text-primary font-label-md text-label-md active:bg-primary-fixed transition-colors">Theo dõi</button>
+</div>
+<!-- Description Section -->
+<section class="mb-xl">
+<h2 class="font-headline-md text-headline-md text-on-surface mb-sm">Giới thiệu</h2>
+<div class="font-body-md text-body-md text-on-surface-variant space-y-4">
+<p>Chuẩn bị cho một đêm nhạc bùng nổ chưa từng có tại Neon Nights Festival 2024! Với sự góp mặt của các DJ hàng đầu quốc tế và hệ thống âm thanh, ánh sáng đẳng cấp thế giới, sự kiện hứa hẹn mang đến trải nghiệm đa giác quan tuyệt vời nhất.</p>
+<p class="hidden" id="extended-desc">Không chỉ là âm nhạc, Neon Nights còn là nơi hội tụ của nghệ thuật thị giác, ẩm thực đường phố đa dạng và không khí lễ hội sôi động. Đừng bỏ lỡ cơ hội hòa mình vào biển người và tận hưởng những giây phút thăng hoa cùng những người bạn.</p>
+</div>
+<button class="text-primary font-label-md text-label-md mt-sm flex items-center gap-xs" id="read-more-btn">
+                    Đọc thêm <span class="material-symbols-outlined text-[20px]" data-icon="expand_more">expand_more</span>
+</button>
+</section>
+<!-- Ticket Information Preview -->
+<section class="mb-xl bg-surface-container-lowest rounded-xl border border-outline-variant p-md">
+<div class="flex justify-between items-center mb-md">
+<h2 class="font-headline-md text-headline-md text-on-surface">Thông tin vé</h2>
+<span class="px-3 py-1 bg-surface-container-high text-on-surface rounded-full font-label-sm text-label-sm">3 loại vé</span>
+</div>
+<div class="space-y-sm">
+<!-- Ticket Tier 1 -->
+<div class="flex justify-between items-center p-sm rounded-lg hover:bg-surface-container-low transition-colors">
+<div>
+<p class="font-label-md text-label-md text-on-surface">GA - Đứng</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Khu vực chung</p>
+</div>
+<p class="font-title-lg text-title-lg text-primary font-numeric-tabular">699.000 ₫</p>
+</div>
+<!-- Ticket Tier 2 -->
+<div class="flex justify-between items-center p-sm rounded-lg hover:bg-surface-container-low transition-colors border-t border-outline-variant/50">
+<div>
+<p class="font-label-md text-label-md text-on-surface">VIP - Đứng</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Lối đi riêng, khu vực gần sân khấu</p>
+</div>
+<p class="font-title-lg text-title-lg text-primary font-numeric-tabular">1.299.000 ₫</p>
+</div>
+</div>
+</section>
+<!-- Location Map Area -->
+<section class="mb-xl">
+<h2 class="font-headline-md text-headline-md text-on-surface mb-md">Địa điểm</h2>
+<div class="rounded-xl overflow-hidden border border-outline-variant h-[200px] bg-surface-variant relative">
+<img class="w-full h-full object-cover" data-alt="A clean, modern, simplified digital map view centered on a sports stadium in Ho Chi Minh City. The map style is light-mode, matching a high-end UI design system, with soft gray roads, subtle blue water features, and a prominent electric indigo drop-pin marker indicating the venue location. Vector-style, high legibility, professional cartography UI." data-location="Ho Chi Minh City" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCZkm10lNrNYpbINGO2ucl9vlytcjwBOcO6Jg3BXy-V09ku9vj_tdV5RFr6wWQG99DiUVy9nhp81IsETI0C-usatsNPyV7vkIkZi2xILZPGWbo1JRc7NqQp_9KbuPfu3tXnIh_4u5tXGpwbiMQdB1LM8-OhbQFdS2idOpVTueKn-nHe6uYiEYLtzutTIBZZZdNFQBIeCccC0PCyxUimpJ-5LGDkax87b0nbLNlo8_ZSEnyVcBVw91ni"/>
+<div class="absolute bottom-md left-md right-md bg-surface-container-lowest/95 backdrop-blur rounded-lg p-sm shadow-sm flex items-center justify-between">
+<div>
+<p class="font-label-md text-label-md text-on-surface">SVĐ Quân khu 7</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant line-clamp-1">202 Hoàng Văn Thụ, Phường 9, Phú Nhuận</p>
+</div>
+<button class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined" data-icon="directions">directions</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Related Events (Horizontal Scroll) -->
+<section class="mb-xl">
+<div class="flex justify-between items-center mb-md">
+<h2 class="font-headline-md text-headline-md text-on-surface">Sự kiện tương tự</h2>
+<button class="text-primary font-label-sm text-label-sm">Xem tất cả</button>
+</div>
+<div class="flex gap-md overflow-x-auto hide-scrollbar pb-sm -mx-md px-md">
+<!-- Related Card 1 -->
+<div class="w-[240px] shrink-0 bg-surface-container-lowest rounded-xl border border-outline-variant overflow-hidden shadow-sm flex flex-col">
+<div class="h-[120px] relative">
+<img class="w-full h-full object-cover" data-alt="A dynamic stage photo of a live band performing at an indoor arena. Bright spotlights cut through light fog, illuminating the musicians against a dark background. The energy is intense and rock-oriented. High contrast, sharp details, vibrant stage lighting in blues and purples. Modern concert photography." src="https://lh3.googleusercontent.com/aida-public/AB6AXuChS6hQ3xYyd7sFChodVwaRQ9sGPvgSFFa1XHG2taYefxOFlVgffo61NTA0MTc283Zm54qjxhx2H63dB6VZDeTQaPLFg5JaDPXjwy9I90v0NVbX5Ocs0ij1rVJjsVZlPczlO_f7yfTJZbsc5ZhsaY8TAwkopSroe60qzYr7g0Dzen3jOjxyawbjusaRwXb3qLAxG4hoME-KAxTOk1SuN2w2u3BF89HNkezBCc36Ozsdx3nLvO3JraIK"/>
+<div class="absolute top-sm right-sm bg-surface-container-lowest/90 px-2 py-1 rounded font-label-sm text-label-sm text-on-surface">12 Th11</div>
+</div>
+<div class="p-sm flex flex-col flex-1">
+<p class="font-label-sm text-label-sm text-primary mb-xs">Âm nhạc</p>
+<p class="font-title-lg text-title-lg text-on-surface line-clamp-2 mb-sm">Rock Night: Huyền thoại trở lại</p>
+<div class="mt-auto pt-sm border-t border-outline-variant/50">
+<p class="font-label-sm text-label-sm text-on-surface-variant">Từ</p>
+<p class="font-label-md text-label-md text-on-surface font-numeric-tabular font-bold">500.000 ₫</p>
+</div>
+</div>
+</div>
+<!-- Related Card 2 -->
+<div class="w-[240px] shrink-0 bg-surface-container-lowest rounded-xl border border-outline-variant overflow-hidden shadow-sm flex flex-col">
+<div class="h-[120px] relative">
+<img class="w-full h-full object-cover" data-alt="An atmospheric photo of an acoustic indie music gig in an intimate, softly lit venue. Warm amber string lights blur in the background (bokeh effect), while a singer-songwriter with a guitar is in focus in the foreground. The mood is cozy, soulful, and relaxed. Professional event photography, shallow depth of field." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAWHKW57f9rZyGHPd73su-Jd1BM5jUv42M89u7RqHqIwKi5xPBGJzmI0TM4wDwEo7BeY8GozGzG0Z4D7TzoaQhDjIbz5vaKMi8ZHVsLMpVaqUAGCTMXAJlc7lbKR3gUCTpyk6uruBJzJuIvoytLYiRNczrIFnluIto62ns8ZwdfrASUdxyinBKkeDlveq-JotVDiQ9drRa5io7WMUMgLkMdDghnzlD0ovqCgXpmi5SVhuL1Ge17BEse"/>
+<div class="absolute top-sm right-sm bg-surface-container-lowest/90 px-2 py-1 rounded font-label-sm text-label-sm text-on-surface">20 Th11</div>
+</div>
+<div class="p-sm flex flex-col flex-1">
+<p class="font-label-sm text-label-sm text-primary mb-xs">Âm nhạc</p>
+<p class="font-title-lg text-title-lg text-on-surface line-clamp-2 mb-sm">Indie Chill: Acoustic Evening</p>
+<div class="mt-auto pt-sm border-t border-outline-variant/50">
+<p class="font-label-sm text-label-sm text-on-surface-variant">Từ</p>
+<p class="font-label-md text-label-md text-on-surface font-numeric-tabular font-bold">350.000 ₫</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+</div>
+</main>
+<!-- Sticky Bottom Action Bar -->
+<div class="fixed bottom-0 w-full bg-surface-container-lowest border-t border-outline-variant px-md py-sm flex items-center justify-between z-50 pb-safe shadow-[0_-4px_20px_rgba(16,20,38,0.08)]">
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Giá vé từ</p>
+<p class="font-headline-md text-headline-md text-primary font-numeric-tabular">699.000 ₫</p>
+</div>
+<button class="h-[48px] bg-primary text-on-primary font-label-md text-label-md font-bold px-lg rounded-[10px] active:scale-95 transition-transform flex items-center gap-sm shadow-sm">
+            Chọn vé
+            <span class="material-symbols-outlined text-[20px]" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+<script>
+        // Header Scroll Effect
+        const header = document.getElementById('detail-header');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                header.classList.add('bg-surface-container-lowest', 'border-b', 'border-outline-variant');
+                header.classList.remove('bg-transparent');
+            } else {
+                header.classList.remove('bg-surface-container-lowest', 'border-b', 'border-outline-variant');
+                header.classList.add('bg-transparent');
+            }
+        });
+
+        // Read More Toggle
+        const readMoreBtn = document.getElementById('read-more-btn');
+        const extendedDesc = document.getElementById('extended-desc');
+        
+        readMoreBtn.addEventListener('click', () => {
+            extendedDesc.classList.toggle('hidden');
+            if (extendedDesc.classList.contains('hidden')) {
+                readMoreBtn.innerHTML = 'Đọc thêm <span class="material-symbols-outlined text-[20px]" data-icon="expand_more">expand_more</span>';
+            } else {
+                readMoreBtn.innerHTML = 'Thu gọn <span class="material-symbols-outlined text-[20px]" data-icon="expand_less">expand_less</span>';
+            }
+        });
+    </script>
+</body></html>

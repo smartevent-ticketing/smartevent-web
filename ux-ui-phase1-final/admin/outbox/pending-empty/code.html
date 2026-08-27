@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+
+<html lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Hàng chờ xử lý - SMART EVENT Admin</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "tertiary-container": "#d13e3a",
+                        "error": "#ba1a1a",
+                        "on-background": "#111c2d",
+                        "on-tertiary-container": "#fffaf9",
+                        "primary-container": "#635bff",
+                        "on-secondary": "#ffffff",
+                        "surface-container-high": "#dfe8ff",
+                        "secondary-container": "#dee1fb",
+                        "inverse-on-surface": "#ecf0ff",
+                        "tertiary-fixed": "#ffdad6",
+                        "secondary": "#5a5d73",
+                        "primary-fixed": "#e2dfff",
+                        "primary-fixed-dim": "#c3c0ff",
+                        "surface-bright": "#f9f9ff",
+                        "surface-tint": "#4c42e9",
+                        "on-secondary-container": "#606379",
+                        "on-secondary-fixed": "#171b2d",
+                        "outline": "#777587",
+                        "on-primary": "#ffffff",
+                        "surface-container-lowest": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "surface-dim": "#d0daf2",
+                        "inverse-primary": "#c3c0ff",
+                        "surface-variant": "#d9e3fb",
+                        "on-tertiary-fixed-variant": "#910913",
+                        "error-container": "#ffdad6",
+                        "secondary-fixed": "#dee1fb",
+                        "surface-container-low": "#f0f3ff",
+                        "tertiary": "#ae2424",
+                        "background": "#f9f9ff",
+                        "on-primary-fixed": "#0f0069",
+                        "on-secondary-fixed-variant": "#42465a",
+                        "on-tertiary-fixed": "#410003",
+                        "on-error": "#ffffff",
+                        "surface-container-highest": "#d9e3fb",
+                        "tertiary-fixed-dim": "#ffb3ac",
+                        "on-surface": "#111c2d",
+                        "on-primary-fixed-variant": "#321ed2",
+                        "on-tertiary": "#ffffff",
+                        "primary": "#493ee5",
+                        "on-primary-container": "#fefaff",
+                        "inverse-surface": "#273143",
+                        "surface-container": "#e8eeff",
+                        "outline-variant": "#c7c4d8",
+                        "secondary-fixed-dim": "#c2c5de",
+                        "surface": "#f9f9ff",
+                        "on-surface-variant": "#464555"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    spacing: {
+                        "xs": "4px",
+                        "md": "16px",
+                        "lg": "24px",
+                        "gutter": "24px",
+                        "xl": "32px",
+                        "xxl": "48px",
+                        "container-max": "1280px",
+                        "base": "8px",
+                        "sm": "8px"
+                    },
+                    fontFamily: {
+                        "title-lg": ["Be Vietnam Pro"],
+                        "label-md": ["Be Vietnam Pro"],
+                        "label-sm": ["Be Vietnam Pro"],
+                        "numeric-tabular": ["Be Vietnam Pro"],
+                        "headline-md": ["Be Vietnam Pro"],
+                        "headline-lg": ["Be Vietnam Pro"],
+                        "body-md": ["Be Vietnam Pro"],
+                        "display-lg": ["Be Vietnam Pro"],
+                        "body-lg": ["Be Vietnam Pro"]
+                    },
+                    fontSize: {
+                        "title-lg": ["20px", { lineHeight: "28px", fontWeight: "600" }],
+                        "label-md": ["14px", { lineHeight: "20px", fontWeight: "500" }],
+                        "label-sm": ["12px", { lineHeight: "16px", letterSpacing: "0.02em", fontWeight: "500" }],
+                        "numeric-tabular": ["inherit", { lineHeight: "inherit", fontWeight: "inherit" }],
+                        "headline-md": ["24px", { lineHeight: "32px", fontWeight: "600" }],
+                        "headline-lg": ["32px", { lineHeight: "40px", letterSpacing: "-0.01em", fontWeight: "700" }],
+                        "body-md": ["16px", { lineHeight: "24px", fontWeight: "400" }],
+                        "display-lg": ["48px", { lineHeight: "60px", letterSpacing: "-0.02em", fontWeight: "700" }],
+                        "body-lg": ["18px", { lineHeight: "28px", fontWeight: "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { background-color: #f9f9ff; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .icon-filled {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        /* Custom scrollbar for a cleaner look */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #c7c4d8;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #777587;
+        }
+    </style>
+</head>
+<body class="text-on-background font-body-md text-body-md antialiased overflow-hidden flex h-screen">
+<!-- SideNavBar -->
+<aside class="bg-surface-container-lowest h-full w-64 fixed left-0 top-0 border-r border-outline-variant flex flex-col py-md z-50 hidden md:flex">
+<!-- Brand / Header -->
+<div class="px-md mb-xl flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-primary-container flex items-center justify-center text-primary">
+<span class="material-symbols-outlined icon-filled">event</span>
+</div>
+<div>
+<h1 class="font-headline-md text-headline-md font-bold text-primary truncate">SMART EVENT</h1>
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Quản trị viên</p>
+</div>
+</div>
+<!-- Navigation Links -->
+<nav class="flex-1 overflow-y-auto px-sm space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-md text-label-md">Tổng quan hệ thống</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="event_available">event_available</span>
+<span class="font-label-md text-label-md">Phê duyệt sự kiện</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="category">category</span>
+<span class="font-label-md text-label-md">Danh mục</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="location_on">location_on</span>
+<span class="font-label-md text-label-md">Địa điểm</span>
+</a>
+<!-- Active State: Hộp thư đi -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-primary font-bold bg-primary-container/10 border-r-4 border-primary transition-colors cursor-pointer active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined icon-filled" data-icon="outbox">outbox</span>
+<span class="font-label-md text-label-md">Hộp thư đi</span>
+</a>
+</nav>
+<!-- User Profile (Bottom) -->
+<div class="p-md mt-auto border-t border-outline-variant/50">
+<div class="flex items-center gap-3">
+<img alt="Ảnh đại diện admin" class="w-10 h-10 rounded-full object-cover border border-outline-variant" data-alt="A professional headshot portrait of an administrator in a well-lit office setting. The lighting is bright and soft, creating a corporate, trustworthy aesthetic suitable for a high-end web application profile picture." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAtq-ErCDkq7UmncSGWPk5X2vZqD-XCM-Bi-jGPdQ-yCdwVLIIhneMqT31PEWgOcocx2TtpQWUGpFONd1ZFYNMAuKcPJDUXkkHurSjQq4XnmFdg15VtEhOcqd464ObLhDG5fA_LYGywKmRenSVVXZ5nNVARWsUyN0FiDlXn6ydXXQnHM9fAJGMD2g3YckUCWjL-UxO9zgXlSR9b09NCHbUxfwgVuhqt2Qkm6GK00DBG_2SMlAllDchD"/>
+<div class="flex-1 min-w-0">
+<p class="font-label-md text-label-md text-on-surface font-semibold truncate">Admin User</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant truncate">admin@smartevent.vn</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Wrapper -->
+<div class="flex-1 flex flex-col md:ml-64 w-full h-full relative">
+<!-- TopNavBar -->
+<header class="bg-surface text-primary font-label-md text-label-md docked full-width top-0 sticky z-40 border-b border-outline-variant shadow-sm flex justify-between items-center h-16 px-lg transition-all duration-200">
+<!-- Left: Mobile menu & Title -->
+<div class="flex items-center gap-4">
+<button class="md:hidden p-2 -ml-2 text-on-surface-variant rounded-full hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<div class="font-title-lg text-title-lg font-bold text-on-surface hidden sm:block">
+                    SMART EVENT Admin
+                </div>
+</div>
+<!-- Right: Actions -->
+<div class="flex items-center gap-2">
+<div class="relative hidden md:flex items-center mr-2">
+<span class="material-symbols-outlined absolute left-3 text-outline">search</span>
+<input class="h-10 pl-10 pr-4 rounded-full border border-outline-variant bg-surface-container-lowest focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none font-body-md text-body-md w-64 transition-all" placeholder="Tìm kiếm..." type="text"/>
+</div>
+<button class="p-2 text-on-surface-variant rounded-full hover:bg-surface-container transition-colors relative cursor-pointer">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<span class="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-error rounded-full border-2 border-surface"></span>
+</button>
+<button class="p-2 text-on-surface-variant rounded-full hover:bg-surface-container transition-colors cursor-pointer">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+</div>
+</header>
+<!-- Page Content -->
+<main class="flex-1 overflow-y-auto bg-background p-4 md:p-lg">
+<div class="max-w-container-max mx-auto w-full flex flex-col h-full">
+<!-- Page Header -->
+<div class="mb-lg">
+<h2 class="font-headline-lg text-headline-lg text-on-surface">Hàng chờ xử lý</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1">Quản lý và giám sát các email hệ thống đang chờ được gửi đi.</p>
+</div>
+<!-- Tabs -->
+<div class="border-b border-outline-variant mb-6">
+<nav aria-label="Tabs" class="-mb-px flex space-x-8">
+<a aria-current="page" class="border-primary text-primary whitespace-nowrap py-4 px-1 border-b-2 font-label-md text-label-md font-semibold" href="#">
+                            Đang chờ
+                            <span class="ml-2 bg-primary-container text-primary py-0.5 px-2 rounded-full font-label-sm text-label-sm">0</span>
+</a>
+<a class="border-transparent text-on-surface-variant hover:text-on-surface hover:border-outline whitespace-nowrap py-4 px-1 border-b-2 font-label-md text-label-md transition-colors" href="#">
+                            Đã xử lý
+                        </a>
+<a class="border-transparent text-on-surface-variant hover:text-on-surface hover:border-outline whitespace-nowrap py-4 px-1 border-b-2 font-label-md text-label-md transition-colors" href="#">
+                            Lỗi gửi
+                        </a>
+</nav>
+</div>
+<!-- Empty State Container (Bento/Card style) -->
+<div class="flex-1 flex items-center justify-center min-h-[400px]">
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-8 md:p-12 shadow-sm max-w-2xl w-full flex flex-col items-center text-center">
+<!-- Empty Mailbox SVG Illustration -->
+<div class="w-48 h-48 mb-6 relative">
+<!-- Soft glow background -->
+<div class="absolute inset-0 bg-primary/5 rounded-full blur-2xl"></div>
+<svg class="w-full h-full relative z-10" fill="none" viewbox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+<!-- Base/Shadow -->
+<ellipse cx="60" cy="105" fill="#e8eeff" rx="35" ry="5"></ellipse>
+<!-- Mailbox Body -->
+<path d="M25 60 C25 40, 40 25, 60 25 C80 25, 95 40, 95 60 L95 95 C95 97.761, 92.761 100, 90 100 L30 100 C27.239 100, 25 97.761, 25 95 L25 60 Z" fill="#ffffff" stroke="#c7c4d8" stroke-width="2"></path>
+<path d="M25 60 C25 40, 40 25, 60 25 C80 25, 95 40, 95 60 L95 95 C95 97.761, 92.761 100, 90 100 L30 100 C27.239 100, 25 97.761, 25 95 L25 60 Z" fill="url(#gradient-surface)" opacity="0.5"></path>
+<!-- Mailbox Opening/Door (Open) -->
+<path d="M25 60 C25 40, 40 25, 60 25 L60 100 L30 100 C27.239 100, 25 97.761, 25 95 L25 60 Z" fill="#f0f3ff" stroke="#c7c4d8" stroke-width="2"></path>
+<!-- Inside of Mailbox (Empty space) -->
+<path d="M35 55 C35 41.1929, 46.1929 30, 60 30 C73.8071 30, 85 41.1929, 85 55 L85 90 L35 90 L35 55 Z" fill="#f9f9ff" stroke="#e8eeff" stroke-width="1"></path>
+<!-- Mailbox Flag (Down/Inactive) -->
+<rect fill="#d13e3a" height="6" rx="3" width="18" x="90" y="70"></rect>
+<circle cx="95" cy="73" fill="#ba1a1a" r="2"></circle>
+<!-- Decorative subtle elements to emphasize "empty/clean" -->
+<circle cx="45" cy="45" fill="#c2c5de" r="2"></circle>
+<circle cx="75" cy="50" fill="#c2c5de" r="1.5"></circle>
+<circle cx="55" cy="75" fill="#e2dfff" r="2.5"></circle>
+<!-- Paper plane outline (flying away / none present) -->
+<path d="M60 50 L70 40 M70 40 L65 35 M70 40 L75 45" opacity="0.4" stroke="#c3c0ff" stroke-dasharray="2 4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+<defs>
+<lineargradient gradientunits="userSpaceOnUse" id="gradient-surface" x1="60" x2="60" y1="25" y2="100">
+<stop stop-color="white" stop-opacity="0"></stop>
+<stop offset="1" stop-color="#e8eeff" stop-opacity="1"></stop>
+</lineargradient>
+</defs>
+</svg>
+</div>
+<!-- Message -->
+<h3 class="font-headline-md text-headline-md text-on-surface font-semibold mb-2">Không có dữ liệu</h3>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-md">Hiện không có email nào trong hàng chờ xử lý.</p>
+<!-- Action -->
+<div class="mt-8">
+<button class="h-12 px-6 bg-surface-container-high hover:bg-surface-container-highest text-primary font-label-md text-label-md font-semibold rounded-lg flex items-center gap-2 transition-colors border border-outline-variant shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
+<span class="material-symbols-outlined">refresh</span>
+                                Làm mới danh sách
+                            </button>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

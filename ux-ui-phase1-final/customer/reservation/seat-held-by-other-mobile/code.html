@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+
+<html lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Ghế vừa được người khác giữ - SMART EVENT</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary": "#493ee5",
+                        "on-surface-variant": "#464555",
+                        "background": "#f9f9ff",
+                        "surface": "#f9f9ff",
+                        "on-error": "#ffffff",
+                        "inverse-primary": "#c3c0ff",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary-container": "#606379",
+                        "on-secondary-fixed": "#171b2d",
+                        "on-tertiary-container": "#fffaf9",
+                        "on-tertiary-fixed-variant": "#910913",
+                        "tertiary-fixed": "#ffdad6",
+                        "on-primary": "#ffffff",
+                        "on-surface": "#111c2d",
+                        "tertiary-container": "#d13e3a",
+                        "on-primary-container": "#fefaff",
+                        "outline": "#777587",
+                        "surface-container-low": "#f0f3ff",
+                        "outline-variant": "#c7c4d8",
+                        "error-container": "#ffdad6",
+                        "secondary-fixed": "#dee1fb",
+                        "primary-container": "#635bff",
+                        "surface-bright": "#f9f9ff",
+                        "surface-container": "#e8eeff",
+                        "on-secondary-fixed-variant": "#42465a",
+                        "surface-tint": "#4c42e9",
+                        "secondary-fixed-dim": "#c2c5de",
+                        "surface-dim": "#d0daf2",
+                        "surface-container-high": "#dfe8ff",
+                        "on-secondary": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "secondary-container": "#dee1fb",
+                        "on-primary-fixed-variant": "#321ed2",
+                        "surface-variant": "#d9e3fb",
+                        "error": "#ba1a1a",
+                        "tertiary": "#ae2424",
+                        "surface-container-highest": "#d9e3fb",
+                        "inverse-on-surface": "#ecf0ff",
+                        "primary-fixed-dim": "#c3c0ff",
+                        "tertiary-fixed-dim": "#ffb3ac",
+                        "on-background": "#111c2d",
+                        "inverse-surface": "#273143",
+                        "on-tertiary": "#ffffff",
+                        "on-primary-fixed": "#0f0069",
+                        "on-tertiary-fixed": "#410003",
+                        "primary-fixed": "#e2dfff",
+                        "secondary": "#5a5d73"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "24px",
+                        "sm": "8px",
+                        "container-max": "1280px",
+                        "xl": "32px",
+                        "base": "8px",
+                        "lg": "24px",
+                        "xxl": "48px",
+                        "md": "16px",
+                        "xs": "4px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Be Vietnam Pro"],
+                        "numeric-tabular": ["Be Vietnam Pro"],
+                        "title-lg": ["Be Vietnam Pro"],
+                        "label-md": ["Be Vietnam Pro"],
+                        "body-lg": ["Be Vietnam Pro"],
+                        "label-sm": ["Be Vietnam Pro"],
+                        "body-md": ["Be Vietnam Pro"],
+                        "headline-lg": ["Be Vietnam Pro"],
+                        "display-lg": ["Be Vietnam Pro"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "numeric-tabular": ["inherit", { "lineHeight": "inherit", "fontWeight": "inherit" }],
+                        "title-lg": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "fontWeight": "500" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "display-lg": ["48px", { "lineHeight": "60px", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .pulse-ring {
+            animation: pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+        }
+        @keyframes pulse-ring {
+            0% { transform: scale(0.8); opacity: 0.5; }
+            80%, 100% { opacity: 0; }
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col w-full max-w-[390px] mx-auto relative shadow-2xl">
+<!-- Top Navigation Bar -->
+<header class="bg-surface border-b border-outline-variant flex justify-between items-center w-full px-4 h-16 shrink-0 sticky top-0 z-10">
+<div class="flex items-center gap-4">
+<button class="text-on-surface hover:bg-surface-container-low p-2 rounded-full transition-colors active:scale-95">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">arrow_back</span>
+</button>
+</div>
+<div class="font-headline-lg text-headline-lg font-black text-primary">SMART EVENT</div>
+<div class="flex gap-2">
+<!-- Trailing actions -->
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-grow flex flex-col items-center justify-center p-md relative z-0 overflow-hidden pb-32">
+<!-- Background Error Effect (Kinetic Pulse Concept) -->
+<div class="absolute inset-0 pointer-events-none overflow-hidden flex items-center justify-center opacity-30">
+<div class="w-64 h-64 rounded-full bg-error/20 pulse-ring absolute"></div>
+<div class="w-96 h-96 rounded-full bg-error/10 pulse-ring absolute" style="animation-delay: 0.5s"></div>
+</div>
+<div class="relative z-10 flex flex-col items-center text-center w-full max-w-sm">
+<!-- Error Icon Container -->
+<div class="w-24 h-24 bg-error-container rounded-full flex items-center justify-center mb-6 shadow-[0px_12px_32px_rgba(186,26,26,0.2)] relative">
+<span class="material-symbols-outlined text-error text-[48px]" style="font-variation-settings: 'FILL' 1;">event_busy</span>
+<!-- Mini Badge for specific seat -->
+<div class="absolute -bottom-2 -right-2 bg-error text-on-error font-label-md text-label-md px-3 py-1 rounded-full border-2 border-surface shadow-md">
+                    A12
+                </div>
+</div>
+<!-- Error Content -->
+<h1 class="font-headline-md text-headline-md text-on-surface mb-2">Ghế vừa được người khác giữ</h1>
+<p class="font-body-md text-body-md text-on-surface-variant mb-6">
+                Rất tiếc, trong lúc bạn thao tác, ghế <strong class="text-on-surface font-semibold">A12</strong> cho sự kiện <strong class="text-on-surface font-semibold">Đêm Nhạc Hội Indie 2024</strong> đã được một khách hàng khác chọn và giữ chỗ. Không có đơn đặt chỗ nào được tạo cho ghế này.
+            </p>
+<!-- Event Context Card -->
+<div class="w-full bg-surface-container-low rounded-xl p-4 mb-8 border border-outline-variant text-left">
+<div class="flex items-center gap-3 mb-2">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">confirmation_number</span>
+<span class="font-label-md text-label-md text-on-surface font-semibold">Đêm Nhạc Hội Indie 2024</span>
+</div>
+<div class="flex items-center gap-3 text-on-surface-variant">
+<span class="material-symbols-outlined text-sm">chair</span>
+<span class="font-body-md text-body-md">Ghế mong muốn: <span class="text-error font-medium line-through">A12</span></span>
+</div>
+</div>
+<!-- Action Buttons -->
+<div class="w-full flex flex-col gap-4">
+<button class="w-full h-12 bg-primary text-on-primary font-title-lg text-title-lg font-bold rounded-lg flex items-center justify-center gap-2 hover:bg-surface-tint active:scale-[0.98] transition-all shadow-md focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">chair_alt</span>
+                    Chọn ghế khác
+                </button>
+<button class="w-full h-12 bg-surface text-primary border border-outline-variant font-title-lg text-title-lg font-bold rounded-lg flex items-center justify-center gap-2 hover:bg-surface-container-low active:scale-[0.98] transition-all focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
+<span class="material-symbols-outlined text-[20px]">refresh</span>
+                    Tải lại sơ đồ ghế
+                </button>
+<a class="font-label-md text-label-md text-primary mt-2 underline underline-offset-4 hover:text-surface-tint transition-colors text-center p-2 rounded focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2" href="#">
+                    Quay lại sự kiện
+                </a>
+</div>
+</div>
+</main>
+<!-- Bottom Nav Bar - Hidden on Error/Transactional screens based on logic, but requested by prompt -->
+<nav class="fixed bottom-0 w-full max-w-[390px] mx-auto z-50 rounded-t-xl bg-surface shadow-[0px_-4px_20px_rgba(16,20,38,0.08)] flex justify-around items-center px-4 py-2">
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-surface-variant rounded-xl transition-all duration-200 active:scale-90" href="#">
+<span class="material-symbols-outlined">confirmation_number</span>
+<span class="font-label-sm text-label-sm mt-1">Sự kiện</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-surface-variant rounded-xl transition-all duration-200 active:scale-90" href="#">
+<span class="material-symbols-outlined">local_activity</span>
+<span class="font-label-sm text-label-sm mt-1">Vé của tôi</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-surface-variant rounded-xl transition-all duration-200 active:scale-90" href="#">
+<span class="material-symbols-outlined">notifications</span>
+<span class="font-label-sm text-label-sm mt-1">Thông báo</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-surface-variant rounded-xl transition-all duration-200 active:scale-90" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-sm text-label-sm mt-1">Cá nhân</span>
+</a>
+</nav>
+</body></html>

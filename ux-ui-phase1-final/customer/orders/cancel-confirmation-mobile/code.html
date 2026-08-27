@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+
+<html lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/>
+<title>Chi tiết đơn hàng - SMART EVENT</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-primary-fixed-variant": "#321ed2",
+                        "secondary-fixed-dim": "#c2c5de",
+                        "tertiary-fixed-dim": "#ffb3ac",
+                        "secondary-container": "#dee1fb",
+                        "secondary": "#5a5d73",
+                        "on-secondary-fixed": "#171b2d",
+                        "surface-container-lowest": "#ffffff",
+                        "primary-container": "#635bff",
+                        "on-tertiary-fixed": "#410003",
+                        "on-error-container": "#93000a",
+                        "inverse-on-surface": "#ecf0ff",
+                        "on-surface-variant": "#464555",
+                        "on-secondary-fixed-variant": "#42465a",
+                        "secondary-fixed": "#dee1fb",
+                        "tertiary": "#ae2424",
+                        "on-surface": "#111c2d",
+                        "inverse-surface": "#273143",
+                        "on-tertiary-container": "#fffaf9",
+                        "surface": "#f9f9ff",
+                        "background": "#f9f9ff",
+                        "error": "#ba1a1a",
+                        "on-primary-container": "#fefaff",
+                        "on-secondary": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "primary-fixed-dim": "#c3c0ff",
+                        "on-secondary-container": "#606379",
+                        "surface-bright": "#f9f9ff",
+                        "on-tertiary-fixed-variant": "#910913",
+                        "outline": "#777587",
+                        "primary": "#493ee5",
+                        "error-container": "#ffdad6",
+                        "outline-variant": "#c7c4d8",
+                        "surface-tint": "#4c42e9",
+                        "primary-fixed": "#e2dfff",
+                        "tertiary-container": "#d13e3a",
+                        "surface-container-high": "#dfe8ff",
+                        "surface-variant": "#d9e3fb",
+                        "tertiary-fixed": "#ffdad6",
+                        "on-error": "#ffffff",
+                        "surface-dim": "#d0daf2",
+                        "inverse-primary": "#c3c0ff",
+                        "on-primary-fixed": "#0f0069",
+                        "surface-container": "#e8eeff",
+                        "on-primary": "#ffffff",
+                        "surface-container-low": "#f0f3ff",
+                        "surface-container-highest": "#d9e3fb",
+                        "on-background": "#111c2d"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xs": "4px",
+                        "container-max": "1280px",
+                        "lg": "24px",
+                        "xxl": "48px",
+                        "sm": "8px",
+                        "gutter": "24px",
+                        "base": "8px",
+                        "xl": "32px",
+                        "md": "16px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Be Vietnam Pro"],
+                        "body-lg": ["Be Vietnam Pro"],
+                        "headline-lg": ["Be Vietnam Pro"],
+                        "label-sm": ["Be Vietnam Pro"],
+                        "headline-md": ["Be Vietnam Pro"],
+                        "numeric-tabular": ["Be Vietnam Pro"],
+                        "title-lg": ["Be Vietnam Pro"],
+                        "display-lg": ["Be Vietnam Pro"],
+                        "label-md": ["Be Vietnam Pro"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "numeric-tabular": ["inherit", { "lineHeight": "inherit", "fontWeight": "inherit" }],
+                        "title-lg": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "display-lg": ["48px", { "lineHeight": "60px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "fontWeight": "500" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Be Vietnam Pro', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined.filled {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .pb-safe { padding-bottom: env(safe-area-inset-bottom, 24px); }
+        .pt-safe { padding-top: env(safe-area-inset-top, 0px); }
+        
+        /* Backdrop blur for modal */
+        .glass-backdrop {
+            background: rgba(17, 28, 45, 0.4);
+            backdrop-filter: blur(4px);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background h-screen w-screen overflow-hidden flex flex-col pt-safe">
+<!-- Header -->
+<header class="flex items-center h-16 px-md bg-surface border-b border-outline-variant shrink-0 relative z-10 shadow-sm">
+<button class="p-2 -ml-2 rounded-full hover:bg-surface-container-low transition-colors text-on-surface flex items-center justify-center">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<h1 class="font-title-lg text-title-lg flex-1 text-center pr-10 text-on-surface">Chi tiết đơn hàng</h1>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-1 overflow-y-auto px-md py-lg space-y-lg relative z-0">
+<!-- Order Summary Card -->
+<div class="bg-surface-container-lowest rounded-xl p-md border border-outline-variant shadow-[0_4px_20px_rgba(16,20,38,0.08)] flex flex-col gap-md">
+<div class="flex justify-between items-start">
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Mã đơn hàng</p>
+<p class="font-headline-md text-headline-md text-on-surface mt-xs">ORD-8924B</p>
+</div>
+<div class="bg-surface-container-highest px-3 py-1 rounded-full border border-outline-variant">
+<span class="font-label-sm text-label-sm text-secondary">Chờ thanh toán</span>
+</div>
+</div>
+<div class="h-px bg-outline-variant w-full"></div>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant mb-xs">Sự kiện</p>
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-lg bg-surface-container overflow-hidden shrink-0">
+<img alt="Event Cover" class="w-full h-full object-cover" data-alt="A vibrant concert scene with bright stage lights in electric indigo and magenta, silhouettes of a cheering crowd, dynamic energy, modern light mode aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDOADPJfswEtCZiDeh-pFoSFTnTQVrLwXt6OGmmsnExdBFggo-C4TIfgC701av7q4pBuJ0PWJi3aqJhiCxJTWlv89-K-lSV_CRPz6fG1_gCFjPPsIz1VvxkJxbktEgZ3HCRT-YkrkltTBWlODFkj1KYYt9XzzM4j3Yh6B2v48aAsxhx_3AfIZn_Hk831XZ3xvSJT_ilXQUAISD3gDqvaObkpDnG7FKwQItp3pWbETFBSY6WVd6LVXTf"/>
+</div>
+<p class="font-title-lg text-title-lg text-on-surface line-clamp-2">Lễ Hội Âm Nhạc Gió Mùa 2024</p>
+</div>
+</div>
+</div>
+<!-- Timer Card -->
+<div class="bg-error-container rounded-xl p-md border border-tertiary-fixed-dim flex items-center gap-md">
+<div class="w-10 h-10 rounded-full bg-surface-container-lowest flex items-center justify-center text-error shrink-0 shadow-sm">
+<span class="material-symbols-outlined filled">timer</span>
+</div>
+<div class="flex-1">
+<p class="font-label-md text-label-md text-on-error-container">Thời gian giữ chỗ còn lại</p>
+<p class="font-headline-lg text-headline-lg text-error font-numeric-tabular mt-xs">09:45</p>
+</div>
+</div>
+<!-- Payment Details -->
+<div class="bg-surface-container-lowest rounded-xl p-md border border-outline-variant shadow-[0_4px_20px_rgba(16,20,38,0.08)]">
+<h3 class="font-title-lg text-title-lg text-on-surface mb-md">Chi tiết thanh toán</h3>
+<div class="space-y-sm">
+<div class="flex justify-between">
+<span class="font-body-md text-body-md text-on-surface-variant">Vé VIP x2</span>
+<span class="font-body-md text-body-md text-on-surface font-numeric-tabular">5.000.000 ₫</span>
+</div>
+<div class="flex justify-between">
+<span class="font-body-md text-body-md text-on-surface-variant">Phí giao dịch</span>
+<span class="font-body-md text-body-md text-on-surface font-numeric-tabular">50.000 ₫</span>
+</div>
+</div>
+<div class="h-px bg-outline-variant w-full my-md"></div>
+<div class="flex justify-between items-center">
+<span class="font-title-lg text-title-lg text-on-surface">Tổng tiền</span>
+<span class="font-headline-md text-headline-md text-primary font-numeric-tabular">5.050.000 ₫</span>
+</div>
+</div>
+</main>
+<!-- Bottom Action Bar (Behind Modal) -->
+<div class="p-md bg-surface border-t border-outline-variant pb-safe shrink-0 z-0">
+<button class="w-full h-12 bg-primary text-on-primary rounded-lg font-title-lg text-title-lg shadow-sm flex items-center justify-center gap-2 hover:bg-surface-tint transition-colors focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-surface">
+            Thanh toán ngay
+        </button>
+<button class="w-full h-12 mt-sm text-error rounded-lg font-label-md text-label-md flex items-center justify-center gap-2 hover:bg-error-container transition-colors">
+            Hủy đơn hàng
+        </button>
+</div>
+<!-- Modal / Bottom Sheet Overlay -->
+<div class="fixed inset-0 z-50 flex flex-col justify-end">
+<!-- Backdrop -->
+<div class="absolute inset-0 glass-backdrop"></div>
+<!-- Bottom Sheet Content -->
+<div class="relative w-full bg-surface-container-lowest rounded-t-[24px] shadow-[0_-12px_32px_rgba(16,20,38,0.12)] pt-2 px-md pb-safe animate-[slideUp_0.3s_ease-out]">
+<!-- Handle -->
+<div class="w-12 h-1.5 bg-outline-variant rounded-full mx-auto mb-lg"></div>
+<div class="flex flex-col items-center text-center">
+<!-- Warning Icon -->
+<div class="w-16 h-16 rounded-full bg-error-container flex items-center justify-center text-error mb-md shadow-sm border border-tertiary-fixed-dim">
+<span class="material-symbols-outlined text-[32px]">warning</span>
+</div>
+<!-- Text Content -->
+<h2 class="font-headline-md text-headline-md text-on-surface mb-sm">Hủy đơn hàng?</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mb-xl px-4">
+                    Phiên giữ chỗ và các ghế đang giữ sẽ được giải phóng. Bạn không thể hoàn tác hành động này.
+                </p>
+<!-- Actions -->
+<div class="w-full flex gap-sm pb-md">
+<button class="flex-1 h-12 bg-surface border border-outline text-on-surface rounded-lg font-label-md text-label-md hover:bg-surface-container-low transition-colors focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-surface">
+                        Quay lại
+                    </button>
+<button class="flex-1 h-12 bg-error text-on-error rounded-lg font-label-md text-label-md hover:bg-tertiary transition-colors shadow-sm focus:ring-2 focus:ring-error focus:ring-offset-2 focus:ring-offset-surface">
+                        Xác nhận hủy
+                    </button>
+</div>
+</div>
+</div>
+</div>
+<style>
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+    </style>
+</body></html>

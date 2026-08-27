@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Tổng quan Admin</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-container": "#e8eeff",
+                      "on-tertiary-fixed-variant": "#910913",
+                      "on-surface-variant": "#464555",
+                      "surface-bright": "#f9f9ff",
+                      "primary": "#493ee5",
+                      "inverse-primary": "#c3c0ff",
+                      "surface": "#f9f9ff",
+                      "surface-tint": "#4c42e9",
+                      "tertiary-fixed": "#ffdad6",
+                      "on-secondary": "#ffffff",
+                      "secondary-fixed-dim": "#c2c5de",
+                      "primary-fixed-dim": "#c3c0ff",
+                      "outline-variant": "#c7c4d8",
+                      "on-primary-fixed-variant": "#321ed2",
+                      "primary-container": "#635bff",
+                      "tertiary": "#ae2424",
+                      "on-error-container": "#93000a",
+                      "on-secondary-fixed-variant": "#42465a",
+                      "secondary-fixed": "#dee1fb",
+                      "secondary": "#5a5d73",
+                      "tertiary-container": "#d13e3a",
+                      "inverse-surface": "#273143",
+                      "surface-container-highest": "#d9e3fb",
+                      "inverse-on-surface": "#ecf0ff",
+                      "background": "#f9f9ff",
+                      "on-secondary-fixed": "#171b2d",
+                      "secondary-container": "#dee1fb",
+                      "surface-dim": "#d0daf2",
+                      "on-background": "#111c2d",
+                      "outline": "#777587",
+                      "on-tertiary": "#ffffff",
+                      "on-primary-fixed": "#0f0069",
+                      "on-error": "#ffffff",
+                      "on-surface": "#111c2d",
+                      "error-container": "#ffdad6",
+                      "on-primary-container": "#fefaff",
+                      "on-primary": "#ffffff",
+                      "on-secondary-container": "#606379",
+                      "primary-fixed": "#e2dfff",
+                      "on-tertiary-fixed": "#410003",
+                      "error": "#ba1a1a",
+                      "on-tertiary-container": "#fffaf9",
+                      "surface-container-lowest": "#ffffff",
+                      "surface-container-low": "#f0f3ff",
+                      "tertiary-fixed-dim": "#ffb3ac",
+                      "surface-variant": "#d9e3fb",
+                      "surface-container-high": "#dfe8ff"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "xxl": "48px",
+                      "md": "16px",
+                      "gutter": "24px",
+                      "container-max": "1280px",
+                      "xs": "4px",
+                      "xl": "32px",
+                      "lg": "24px",
+                      "base": "8px",
+                      "sm": "8px"
+              },
+              "fontFamily": {
+                      "label-sm": [
+                              "Be Vietnam Pro"
+                      ],
+                      "numeric-tabular": [
+                              "Be Vietnam Pro"
+                      ],
+                      "headline-lg": [
+                              "Be Vietnam Pro"
+                      ],
+                      "body-md": [
+                              "Be Vietnam Pro"
+                      ],
+                      "title-lg": [
+                              "Be Vietnam Pro"
+                      ],
+                      "body-lg": [
+                              "Be Vietnam Pro"
+                      ],
+                      "headline-md": [
+                              "Be Vietnam Pro"
+                      ],
+                      "display-lg": [
+                              "Be Vietnam Pro"
+                      ],
+                      "label-md": [
+                              "Be Vietnam Pro"
+                      ]
+              },
+              "fontSize": {
+                      "label-sm": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.02em",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "numeric-tabular": [
+                              "inherit",
+                              {
+                                      "lineHeight": "inherit",
+                                      "fontWeight": "inherit"
+                              }
+                      ],
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "title-lg": [
+                              "20px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "display-lg": [
+                              "48px",
+                              {
+                                      "lineHeight": "60px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "label-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "500"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+</head>
+<body class="bg-background text-on-background antialiased flex">
+<!-- SideNavBar (Shared Component) -->
+<nav class="h-screen w-64 fixed left-0 top-0 overflow-y-auto bg-surface-container-lowest border-r border-outline-variant flat no shadows">
+<div class="flex flex-col h-full p-md gap-base">
+<div class="mb-lg px-md pt-lg">
+<h1 class="font-headline-md text-headline-md font-bold text-primary">Kinetic Pulse</h1>
+<p class="font-label-sm text-label-sm text-on-surface-variant mt-1">Platform Admin</p>
+</div>
+<a class="flex items-center gap-md px-md py-sm bg-primary-container text-on-primary-container rounded-lg font-bold scale-[0.98] transition-transform duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-md text-label-md">Tổng quan</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container rounded-lg transition-colors hover:bg-surface-container-high" href="#">
+<span class="material-symbols-outlined" data-icon="how_to_reg">how_to_reg</span>
+<span class="font-label-md text-label-md">Duyệt sự kiện</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container rounded-lg transition-colors hover:bg-surface-container-high" href="#">
+<span class="material-symbols-outlined" data-icon="category">category</span>
+<span class="font-label-md text-label-md">Danh mục</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container rounded-lg transition-colors hover:bg-surface-container-high" href="#">
+<span class="material-symbols-outlined" data-icon="location_on">location_on</span>
+<span class="font-label-md text-label-md">Địa điểm</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container rounded-lg transition-colors hover:bg-surface-container-high" href="#">
+<span class="material-symbols-outlined" data-icon="outbox">outbox</span>
+<span class="font-label-md text-label-md">Hộp thư đi</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container rounded-lg transition-colors hover:bg-surface-container-high mt-auto" href="#">
+<span class="material-symbols-outlined" data-icon="health_and_safety">health_and_safety</span>
+<span class="font-label-md text-label-md">Sức khỏe hệ thống</span>
+</a>
+</div>
+</nav>
+<!-- Main Content Area -->
+<div class="flex-1 ml-64 flex flex-col min-h-screen">
+<!-- TopNavBar (Shared Component) -->
+<header class="docked full-width top-0 h-16 bg-surface-bright border-b border-outline-variant shadow-sm z-10 sticky">
+<div class="flex justify-between items-center px-lg h-16">
+<div class="flex items-center gap-md">
+<!-- Search could go here based on "search_bar": "on_left" -->
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant" data-icon="search">search</span>
+<input class="pl-10 pr-4 py-2 bg-surface-container rounded-full border-none focus:ring-2 focus:ring-primary focus:ring-offset-2 text-body-md font-body-md text-on-surface w-64 placeholder-on-surface-variant" placeholder="Tìm kiếm sự kiện..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-lg">
+<button aria-label="Notifications" class="text-on-surface-variant hover:text-primary transition-colors focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-full p-1">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button aria-label="Settings" class="text-on-surface-variant hover:text-primary transition-colors focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-full p-1">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+<div class="w-8 h-8 rounded-full overflow-hidden border border-outline-variant">
+<img alt="Admin User Profile" class="w-full h-full object-cover" data-alt="A small, professional headshot of an administrative user, suitable for a dashboard profile avatar. The lighting is clean and soft, conveying trustworthiness." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCZEbumUmiCJcSDpHLoawyBRObqW3MPgBEtHExN74Aa5DIwtw6JEzovApDKIFX9dId0iiImlUhaUTjVaVj4XH1OXUHw7hjVlJnoQ7Hmtyc_e-5mcdt4SLAcQKCQS9OHHN3gkzLWhP-ibakyZIT1UuMCE6ahtM_rUD7E0ZWv6CDd8sadrBI7Ruu1lhu4t7A_tLZZS1GxhpCjaMaLbxXygLM1HfJl00G3D2J9py36ucrCewK72AhGSYwo"/>
+</div>
+</div>
+</div>
+</header>
+<!-- Dashboard Canvas -->
+<main class="flex-1 p-gutter max-w-container-max mx-auto w-full">
+<div class="mb-lg">
+<h2 class="font-headline-lg text-headline-lg text-on-background">Tổng quan</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1">Key metrics and recent activity across the platform.</p>
+</div>
+<!-- Bento Grid - Metrics -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter mb-xl">
+<!-- Metric Card 1: Pending Approvals -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-lg flex flex-col justify-between hover:shadow-[0px_4px_20px_rgba(16,20,38,0.08)] transition-shadow">
+<div class="flex justify-between items-start mb-md">
+<div class="w-10 h-10 rounded-lg bg-surface-container flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" data-icon="pending_actions">pending_actions</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant bg-surface px-2 py-1 rounded-full border border-outline-variant">Cần xử lý</span>
+</div>
+<div>
+<p class="font-label-md text-label-md text-on-surface-variant mb-1">Đang chờ duyệt</p>
+<p class="font-display-lg text-display-lg text-on-background font-numeric-tabular">24</p>
+</div>
+</div>
+<!-- Metric Card 2: Total Published -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-lg flex flex-col justify-between hover:shadow-[0px_4px_20px_rgba(16,20,38,0.08)] transition-shadow">
+<div class="flex justify-between items-start mb-md">
+<div class="w-10 h-10 rounded-lg bg-surface-container flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" data-icon="event_available">event_available</span>
+</div>
+</div>
+<div>
+<p class="font-label-md text-label-md text-on-surface-variant mb-1">Tổng sự kiện đã đăng</p>
+<p class="font-display-lg text-display-lg text-on-background font-numeric-tabular">1,204</p>
+</div>
+</div>
+<!-- Metric Card 3: Outbox Pending -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-lg flex flex-col justify-between hover:shadow-[0px_4px_20px_rgba(16,20,38,0.08)] transition-shadow">
+<div class="flex justify-between items-start mb-md">
+<div class="w-10 h-10 rounded-lg bg-surface-container flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" data-icon="forward_to_inbox">forward_to_inbox</span>
+</div>
+</div>
+<div>
+<p class="font-label-md text-label-md text-on-surface-variant mb-1">Tin nhắn chờ gửi</p>
+<p class="font-display-lg text-display-lg text-on-background font-numeric-tabular">7</p>
+</div>
+</div>
+<!-- Metric Card 4: System Health -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-lg flex flex-col justify-between hover:shadow-[0px_4px_20px_rgba(16,20,38,0.08)] transition-shadow relative overflow-hidden">
+<div class="absolute right-0 top-0 w-24 h-24 bg-primary/5 rounded-bl-full -z-10"></div>
+<div class="flex justify-between items-start mb-md">
+<div class="w-10 h-10 rounded-lg bg-[#e6f4ea] flex items-center justify-center text-[#137333]">
+<span class="material-symbols-outlined" data-icon="check_circle">check_circle</span>
+</div>
+</div>
+<div>
+<p class="font-label-md text-label-md text-on-surface-variant mb-1">Trạng thái hệ thống</p>
+<p class="font-title-lg text-title-lg text-[#137333] mt-2">Khỏe mạnh</p>
+</div>
+</div>
+</div>
+<!-- Recent Activity List -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden">
+<div class="p-lg border-b border-outline-variant flex justify-between items-center bg-surface">
+<h3 class="font-title-lg text-title-lg text-on-background">Yêu cầu duyệt gần đây</h3>
+<button class="font-label-md text-label-md text-primary hover:text-primary-container transition-colors font-semibold">Xem tất cả</button>
+</div>
+<div class="divide-y divide-outline-variant">
+<!-- List Item 1 -->
+<div class="p-lg flex items-center justify-between hover:bg-surface-container-low transition-colors">
+<div class="flex items-center gap-lg">
+<div class="w-12 h-12 rounded-lg bg-surface-container flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined" data-icon="confirmation_number">confirmation_number</span>
+</div>
+<div>
+<h4 class="font-title-lg text-title-lg text-on-background">Neon Nights Electronic Festival</h4>
+<div class="flex items-center gap-md mt-1 text-on-surface-variant">
+<span class="font-label-sm text-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]" data-icon="person">person</span>
+                                        BeatMaster Prods
+                                    </span>
+<span class="w-1 h-1 bg-outline-variant rounded-full"></span>
+<span class="font-label-sm text-label-sm">Đã nộp 2 giờ trước</span>
+</div>
+</div>
+</div>
+<button class="px-md py-sm bg-surface border border-outline-variant rounded-lg font-label-md text-label-md text-on-surface hover:bg-surface-container transition-colors focus:ring-2 focus:ring-primary focus:ring-offset-2">Xem chi tiết</button>
+</div>
+<!-- List Item 2 -->
+<div class="p-lg flex items-center justify-between hover:bg-surface-container-low transition-colors">
+<div class="flex items-center gap-lg">
+<div class="w-12 h-12 rounded-lg bg-surface-container flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined" data-icon="theater_comedy">theater_comedy</span>
+</div>
+<div>
+<h4 class="font-title-lg text-title-lg text-on-background">Indie Rock Showcase: Local Voices</h4>
+<div class="flex items-center gap-md mt-1 text-on-surface-variant">
+<span class="font-label-sm text-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]" data-icon="person">person</span>
+                                        City Soundscapes
+                                    </span>
+<span class="w-1 h-1 bg-outline-variant rounded-full"></span>
+<span class="font-label-sm text-label-sm">Đã nộp 5 giờ trước</span>
+</div>
+</div>
+</div>
+<button class="px-md py-sm bg-surface border border-outline-variant rounded-lg font-label-md text-label-md text-on-surface hover:bg-surface-container transition-colors focus:ring-2 focus:ring-primary focus:ring-offset-2">Xem chi tiết</button>
+</div>
+<!-- List Item 3 -->
+<div class="p-lg flex items-center justify-between hover:bg-surface-container-low transition-colors">
+<div class="flex items-center gap-lg">
+<div class="w-12 h-12 rounded-lg bg-surface-container flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined" data-icon="stadium">stadium</span>
+</div>
+<div>
+<h4 class="font-title-lg text-title-lg text-on-background">Tech &amp; Future Summit 2024</h4>
+<div class="flex items-center gap-md mt-1 text-on-surface-variant">
+<span class="font-label-sm text-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]" data-icon="person">person</span>
+                                        InnovateNow Inc.
+                                    </span>
+<span class="w-1 h-1 bg-outline-variant rounded-full"></span>
+<span class="font-label-sm text-label-sm">Đã nộp 1 ngày trước</span>
+</div>
+</div>
+</div>
+<button class="px-md py-sm bg-surface border border-outline-variant rounded-lg font-label-md text-label-md text-on-surface hover:bg-surface-container transition-colors focus:ring-2 focus:ring-primary focus:ring-offset-2">Xem chi tiết</button>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

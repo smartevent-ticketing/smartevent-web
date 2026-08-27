@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+
+<html class="light" lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SMART EVENT - Thử lại Outbox</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-primary-fixed-variant": "#321ed2",
+                        "secondary-fixed-dim": "#c2c5de",
+                        "tertiary-fixed-dim": "#ffb3ac",
+                        "secondary-container": "#dee1fb",
+                        "secondary": "#5a5d73",
+                        "on-secondary-fixed": "#171b2d",
+                        "surface-container-lowest": "#ffffff",
+                        "primary-container": "#635bff",
+                        "on-tertiary-fixed": "#410003",
+                        "on-error-container": "#93000a",
+                        "inverse-on-surface": "#ecf0ff",
+                        "on-surface-variant": "#464555",
+                        "on-secondary-fixed-variant": "#42465a",
+                        "secondary-fixed": "#dee1fb",
+                        "tertiary": "#ae2424",
+                        "on-surface": "#111c2d",
+                        "inverse-surface": "#273143",
+                        "on-tertiary-container": "#fffaf9",
+                        "surface": "#f9f9ff",
+                        "background": "#f9f9ff",
+                        "error": "#ba1a1a",
+                        "on-primary-container": "#fefaff",
+                        "on-secondary": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "primary-fixed-dim": "#c3c0ff",
+                        "on-secondary-container": "#606379",
+                        "surface-bright": "#f9f9ff",
+                        "on-tertiary-fixed-variant": "#910913",
+                        "outline": "#777587",
+                        "primary": "#493ee5",
+                        "error-container": "#ffdad6",
+                        "outline-variant": "#c7c4d8",
+                        "surface-tint": "#4c42e9",
+                        "primary-fixed": "#e2dfff",
+                        "tertiary-container": "#d13e3a",
+                        "surface-container-high": "#dfe8ff",
+                        "surface-variant": "#d9e3fb",
+                        "tertiary-fixed": "#ffdad6",
+                        "on-error": "#ffffff",
+                        "surface-dim": "#d0daf2",
+                        "inverse-primary": "#c3c0ff",
+                        "on-primary-fixed": "#0f0069",
+                        "surface-container": "#e8eeff",
+                        "on-primary": "#ffffff",
+                        "surface-container-low": "#f0f3ff",
+                        "surface-container-highest": "#d9e3fb",
+                        "on-background": "#111c2d"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xs": "4px",
+                        "container-max": "1280px",
+                        "lg": "24px",
+                        "xxl": "48px",
+                        "sm": "8px",
+                        "gutter": "24px",
+                        "base": "8px",
+                        "xl": "32px",
+                        "md": "16px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Be Vietnam Pro"],
+                        "body-lg": ["Be Vietnam Pro"],
+                        "headline-lg": ["Be Vietnam Pro"],
+                        "label-sm": ["Be Vietnam Pro"],
+                        "headline-md": ["Be Vietnam Pro"],
+                        "numeric-tabular": ["Be Vietnam Pro"],
+                        "title-lg": ["Be Vietnam Pro"],
+                        "display-lg": ["Be Vietnam Pro"],
+                        "label-md": ["Be Vietnam Pro"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "numeric-tabular": ["inherit", { "lineHeight": "inherit", "fontWeight": "inherit" }],
+                        "title-lg": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "display-lg": ["48px", { "lineHeight": "60px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "fontWeight": "500" }]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Be Vietnam Pro', sans-serif; background-color: #f9f9ff; }
+        .blur-bg { filter: blur(4px); transition: filter 0.3s ease; }
+        .modal-overlay { background-color: rgba(17, 28, 45, 0.4); backdrop-filter: blur(2px); }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+    </style>
+</head>
+<body class="text-on-background h-screen overflow-hidden flex">
+<!-- Blurred Background Content (Simulating App State) -->
+<div aria-hidden="true" class="flex w-full h-full blur-bg">
+<!-- Side NavBar (From JSON) -->
+<nav class="bg-surface-container-lowest h-screen w-64 fixed left-0 top-0 border-r border-outline-variant flex flex-col h-full p-4 gap-2 z-10">
+<div class="mb-8 flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-primary text-on-primary flex items-center justify-center font-bold text-xl">S</div>
+<div>
+<h1 class="text-title-lg font-headline-md text-primary truncate">SMART EVENT</h1>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Quản trị hệ thống</p>
+</div>
+</div>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-primary hover:bg-surface-container-high rounded-lg transition-colors group" href="#">
+<span class="material-symbols-outlined text-[20px]">dashboard</span>
+<span class="font-body-md text-body-md">Tổng quan hệ thống</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-primary hover:bg-surface-container-high rounded-lg transition-colors group" href="#">
+<span class="material-symbols-outlined text-[20px]">fact_check</span>
+<span class="font-body-md text-body-md">Phê duyệt sự kiện</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-primary hover:bg-surface-container-high rounded-lg transition-colors group" href="#">
+<span class="material-symbols-outlined text-[20px]">category</span>
+<span class="font-body-md text-body-md">Danh mục</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-primary hover:bg-surface-container-high rounded-lg transition-colors group" href="#">
+<span class="material-symbols-outlined text-[20px]">location_on</span>
+<span class="font-body-md text-body-md">Địa điểm</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-primary bg-secondary-container rounded-lg font-bold group" href="#">
+<span class="material-symbols-outlined text-[20px]">outbox</span>
+<span class="font-body-md text-body-md">Hộp thư đi</span>
+</a>
+</nav>
+<!-- Main Content Area -->
+<div class="flex-1 ml-64 flex flex-col h-full bg-background">
+<!-- Top NavBar (From JSON) -->
+<header class="bg-surface docked full-width top-0 sticky border-b border-outline-variant shadow-sm flex justify-between items-center h-16 px-gutter w-full z-10">
+<div class="flex items-center gap-4">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[20px]">search</span>
+<input class="pl-10 pr-4 py-2 bg-surface-container-low border border-outline-variant rounded-full text-sm w-64 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent font-body-md text-body-md text-on-surface" disabled="" placeholder="Tìm kiếm outbox..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<button class="text-on-surface-variant hover:bg-surface-container-low rounded-full p-2 transition-colors" disabled="">
+<span class="material-symbols-outlined text-[20px]">notifications</span>
+</button>
+<button class="text-on-surface-variant hover:bg-surface-container-low rounded-full p-2 transition-colors" disabled="">
+<span class="material-symbols-outlined text-[20px]">help</span>
+</button>
+<button class="text-on-surface-variant hover:bg-surface-container-low rounded-full p-2 transition-colors" disabled="">
+<span class="material-symbols-outlined text-[20px]">settings</span>
+</button>
+<div class="ml-4 w-8 h-8 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center font-bold text-sm">
+                        AD
+                    </div>
+</div>
+</header>
+<!-- Dummy Page Content -->
+<main class="flex-1 p-gutter overflow-hidden">
+<div class="flex justify-between items-end mb-6">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface">Quản lý Outbox</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1">Giám sát các sự kiện hàng đợi hệ thống.</p>
+</div>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden shadow-sm">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low border-b border-outline-variant">
+<th class="py-3 px-4 font-label-md text-label-md text-on-surface-variant">ID Sự Kiện</th>
+<th class="py-3 px-4 font-label-md text-label-md text-on-surface-variant">Loại Sự Kiện</th>
+<th class="py-3 px-4 font-label-md text-label-md text-on-surface-variant">Trạng Thái</th>
+<th class="py-3 px-4 font-label-md text-label-md text-on-surface-variant">Thời Gian Tạo</th>
+<th class="py-3 px-4 font-label-md text-label-md text-on-surface-variant text-right">Thao tác</th>
+</tr>
+</thead>
+<tbody>
+<tr class="border-b border-outline-variant hover:bg-surface-container-low transition-colors bg-error-container/10">
+<td class="py-4 px-4 font-body-md text-body-md text-on-surface font-numeric-tabular">EVT-9923</td>
+<td class="py-4 px-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-surface-variant text-on-surface-variant font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[14px]">mail</span>
+                                        Gửi Email Thông báo
+                                    </span>
+</td>
+<td class="py-4 px-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-error-container text-on-error-container font-label-sm text-label-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-error"></span>
+                                        Thất bại
+                                    </span>
+</td>
+<td class="py-4 px-4 font-body-md text-body-md text-on-surface-variant font-numeric-tabular">10:30 - 24/10/2024</td>
+<td class="py-4 px-4 text-right">
+<button class="text-primary hover:text-on-primary-fixed-variant font-label-md text-label-md disabled:opacity-50" disabled="">Thử lại</button>
+</td>
+</tr>
+<tr class="border-b border-outline-variant hover:bg-surface-container-low transition-colors">
+<td class="py-4 px-4 font-body-md text-body-md text-on-surface font-numeric-tabular">EVT-9922</td>
+<td class="py-4 px-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-surface-variant text-on-surface-variant font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[14px]">sync</span>
+                                        Đồng bộ CRM
+                                    </span>
+</td>
+<td class="py-4 px-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-surface-container-high text-on-surface font-label-sm text-label-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+                                        Đang chờ
+                                    </span>
+</td>
+<td class="py-4 px-4 font-body-md text-body-md text-on-surface-variant font-numeric-tabular">10:28 - 24/10/2024</td>
+<td class="py-4 px-4 text-right">
+<button class="text-on-surface-variant hover:text-on-surface font-label-md text-label-md disabled:opacity-50" disabled="">Chi tiết</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</main>
+</div>
+</div>
+<!-- Modal Overlay -->
+<div aria-labelledby="modal-title" aria-modal="true" class="fixed inset-0 z-50 flex items-center justify-center modal-overlay p-4" role="dialog">
+<!-- Modal Container -->
+<div class="bg-surface-container-lowest w-full max-w-[480px] rounded-[16px] shadow-[0px_12px_32px_rgba(16,20,38,0.12)] border border-outline-variant overflow-hidden flex flex-col transform transition-all scale-100 opacity-100">
+<!-- Modal Header -->
+<div class="px-6 pt-6 pb-4 border-b border-outline-variant/50 flex flex-col items-center text-center">
+<div class="w-12 h-12 rounded-full bg-primary-container/20 flex items-center justify-center mb-4 text-primary">
+<span class="material-symbols-outlined text-[28px]">restart_alt</span>
+</div>
+<h3 class="font-title-lg text-title-lg text-on-surface mb-2" id="modal-title">Thử lại sự kiện Outbox?</h3>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-[90%] mx-auto">
+                    Sự kiện sẽ được đưa lại vào hàng chờ xử lý. Thao tác này không đảm bảo tác vụ phía sau đã hoàn thành.
+                </p>
+</div>
+<!-- Modal Content (Event Info) -->
+<div class="px-6 py-5 bg-surface-container-low/50">
+<div class="bg-surface border border-outline-variant rounded-lg p-4 space-y-3">
+<div class="flex justify-between items-center">
+<span class="font-label-md text-label-md text-on-surface-variant">Loại sự kiện</span>
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-surface-variant text-on-surface-variant font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[14px]">mail</span>
+                            Gửi Email Thông báo
+                        </span>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-label-md text-label-md text-on-surface-variant">Thời gian tạo</span>
+<span class="font-body-md text-body-md text-on-surface font-numeric-tabular font-medium">10:30 - 24/10/2024</span>
+</div>
+</div>
+</div>
+<!-- Modal Actions -->
+<div class="px-6 py-5 bg-surface-container-lowest flex justify-end gap-3 border-t border-outline-variant/50">
+<button class="px-5 py-2.5 rounded-[10px] font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-high transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
+                    Hủy
+                </button>
+<button class="px-5 py-2.5 rounded-[10px] bg-primary text-on-primary font-label-md text-label-md font-bold shadow-sm hover:bg-on-primary-fixed-variant transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">autorenew</span>
+                    Xác nhận thử lại
+                </button>
+</div>
+</div>
+</div>
+</body></html>

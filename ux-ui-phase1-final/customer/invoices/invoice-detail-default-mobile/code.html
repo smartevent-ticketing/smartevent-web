@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+
+<html lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SMART EVENT - Chi tiết hóa đơn</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface": "#f9f9ff",
+                      "surface-dim": "#d0daf2",
+                      "background": "#f9f9ff",
+                      "on-secondary": "#ffffff",
+                      "on-surface": "#111c2d",
+                      "surface-bright": "#f9f9ff",
+                      "on-primary-container": "#fefaff",
+                      "on-tertiary-fixed": "#410003",
+                      "on-primary-fixed": "#0f0069",
+                      "secondary-fixed-dim": "#c2c5de",
+                      "on-error-container": "#93000a",
+                      "on-primary": "#ffffff",
+                      "primary": "#493ee5",
+                      "error-container": "#ffdad6",
+                      "on-error": "#ffffff",
+                      "tertiary-fixed-dim": "#ffb3ac",
+                      "secondary": "#5a5d73",
+                      "on-tertiary": "#ffffff",
+                      "primary-container": "#635bff",
+                      "secondary-fixed": "#dee1fb",
+                      "inverse-primary": "#c3c0ff",
+                      "surface-tint": "#4c42e9",
+                      "outline-variant": "#c7c4d8",
+                      "on-secondary-fixed-variant": "#42465a",
+                      "surface-variant": "#d9e3fb",
+                      "on-tertiary-container": "#fffaf9",
+                      "on-secondary-container": "#606379",
+                      "tertiary-container": "#d13e3a",
+                      "inverse-surface": "#273143",
+                      "primary-fixed": "#e2dfff",
+                      "secondary-container": "#dee1fb",
+                      "on-surface-variant": "#464555",
+                      "surface-container-lowest": "#ffffff",
+                      "surface-container": "#e8eeff",
+                      "surface-container-high": "#dfe8ff",
+                      "error": "#ba1a1a",
+                      "surface-container-highest": "#d9e3fb",
+                      "outline": "#777587",
+                      "inverse-on-surface": "#ecf0ff",
+                      "on-background": "#111c2d",
+                      "tertiary": "#ae2424",
+                      "on-secondary-fixed": "#171b2d",
+                      "on-tertiary-fixed-variant": "#910913",
+                      "primary-fixed-dim": "#c3c0ff",
+                      "on-primary-fixed-variant": "#321ed2",
+                      "tertiary-fixed": "#ffdad6",
+                      "surface-container-low": "#f0f3ff"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "gutter": "24px",
+                      "xl": "32px",
+                      "container-max": "1280px",
+                      "xs": "4px",
+                      "md": "16px",
+                      "lg": "24px",
+                      "xxl": "48px",
+                      "base": "8px",
+                      "sm": "8px"
+              },
+              "fontFamily": {
+                      "headline-lg": [
+                              "Be Vietnam Pro"
+                      ],
+                      "body-lg": [
+                              "Be Vietnam Pro"
+                      ],
+                      "numeric-tabular": [
+                              "Be Vietnam Pro"
+                      ],
+                      "display-lg": [
+                              "Be Vietnam Pro"
+                      ],
+                      "title-lg": [
+                              "Be Vietnam Pro"
+                      ],
+                      "headline-md": [
+                              "Be Vietnam Pro"
+                      ],
+                      "body-md": [
+                              "Be Vietnam Pro"
+                      ],
+                      "label-sm": [
+                              "Be Vietnam Pro"
+                      ],
+                      "label-md": [
+                              "Be Vietnam Pro"
+                      ]
+              },
+              "fontSize": {
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "numeric-tabular": [
+                              "inherit",
+                              {
+                                      "lineHeight": "inherit",
+                                      "fontWeight": "inherit"
+                              }
+                      ],
+                      "display-lg": [
+                              "48px",
+                              {
+                                      "lineHeight": "60px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "title-lg": [
+                              "20px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "label-sm": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.02em",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "label-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "500"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body { font-family: 'Be Vietnam Pro', sans-serif; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background antialiased min-h-screen flex flex-col">
+<!-- Top Navigation (Mobile App Header Style) -->
+<header class="bg-surface sticky top-0 z-50 px-4 h-16 flex items-center justify-between border-b border-outline-variant shadow-sm">
+<button aria-label="Quay lại" class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined text-on-surface">arrow_back</span>
+</button>
+<h1 class="font-headline-md text-headline-md font-bold text-on-surface">Chi tiết hóa đơn</h1>
+<div class="w-10 h-10"></div> <!-- Placeholder for balance -->
+</header>
+<!-- Main Content -->
+<main class="flex-grow p-4 space-y-4 pb-24">
+<!-- Status Banner -->
+<div class="bg-primary-container text-on-primary-container p-4 rounded-xl flex items-center gap-3">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<div>
+<p class="font-title-lg text-title-lg">Thanh toán thành công</p>
+<p class="font-label-sm text-label-sm opacity-90">Cảm ơn bạn đã sử dụng SMART EVENT</p>
+</div>
+</div>
+<!-- Invoice Info Card -->
+<section class="bg-surface-container-lowest rounded-xl p-4 shadow-sm border border-outline-variant space-y-4">
+<div class="flex justify-between items-center border-b border-outline-variant pb-3">
+<h2 class="font-title-lg text-title-lg text-on-surface">Thông tin chung</h2>
+<span class="font-label-sm text-label-sm px-2 py-1 bg-surface-container-high rounded-full text-on-surface-variant">#INV-202405-001</span>
+</div>
+<div class="grid grid-cols-2 gap-y-4">
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Ngày tạo</p>
+<p class="font-body-md text-body-md font-medium text-on-surface">24/05/2024</p>
+</div>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Phương thức</p>
+<p class="font-body-md text-body-md font-medium text-on-surface">VNPay</p>
+</div>
+<div class="col-span-2">
+<p class="font-label-sm text-label-sm text-on-surface-variant">Người mua</p>
+<p class="font-body-md text-body-md font-medium text-on-surface">Nguyễn Văn A</p>
+<p class="font-label-md text-label-md text-on-surface-variant">nguyenvana@email.com • 090xxxxxxx</p>
+</div>
+</div>
+</section>
+<!-- Ticket Details Card -->
+<section class="bg-surface-container-lowest rounded-xl p-4 shadow-sm border border-outline-variant space-y-4">
+<h2 class="font-title-lg text-title-lg text-on-surface border-b border-outline-variant pb-3">Chi tiết vé</h2>
+<!-- Event Info -->
+<div class="flex gap-4 items-center">
+<div class="w-16 h-16 rounded-lg bg-surface-container overflow-hidden flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="A close-up shot of a vibrant electronic music festival stage at night. Bright electric indigo and neon pink lights illuminate the stage, with laser beams cutting through the smoke. The atmosphere is high-energy, modern, and exciting, representing a premier live event experience." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCUsUDpuTJZeXIW-hpj8SjXgZXpK2jBfa3z9MUCSXFcDL20ybwmMGAqgnlQ7kG7Ug-_UD0NUoSYAUQnp51byb1_SBw2m8zC3j5nc_qm46JfsepKONshhgrP-NEUb-GJ5iq6u2AFqtYOy0X8rowtjFQSJzvm56cK-G-cSdSb8QpEcpLx4eBsDHbaa6nkLABbWSH2ao5eX1JpLByikr1D8EH5GwTkWAJZMAYqGteOfNBMZm96hwKItYaY"/>
+</div>
+<div>
+<h3 class="font-body-lg text-body-lg font-bold text-on-surface">Vietnam Electronic Weekend 2024</h3>
+<p class="font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">calendar_today</span>
+                        15/06/2024 - 18:00
+                    </p>
+</div>
+</div>
+<!-- Line Items -->
+<div class="space-y-3 pt-2">
+<div class="flex justify-between items-center">
+<div>
+<p class="font-body-md text-body-md text-on-surface">Vé VIP (Early Bird)</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Số lượng: 2</p>
+</div>
+<p class="font-body-md text-body-md font-numeric-tabular font-medium text-on-surface">1.500.000 ₫</p>
+</div>
+<div class="flex justify-between items-center">
+<div>
+<p class="font-body-md text-body-md text-on-surface">Phí dịch vụ</p>
+</div>
+<p class="font-body-md text-body-md font-numeric-tabular font-medium text-on-surface">50.000 ₫</p>
+</div>
+</div>
+</section>
+<!-- Total Summary -->
+<section class="bg-surface-container-lowest rounded-xl p-4 shadow-sm border border-outline-variant">
+<div class="flex justify-between items-center pt-2 border-t-2 border-dashed border-outline-variant">
+<h2 class="font-title-lg text-title-lg font-bold text-on-surface">Tổng cộng</h2>
+<p class="font-headline-md text-headline-md font-bold text-primary font-numeric-tabular">1.550.000 ₫</p>
+</div>
+</section>
+</main>
+<!-- Fixed Bottom Action Bar -->
+<div class="fixed bottom-0 left-0 w-full bg-surface border-t border-outline-variant p-4 shadow-[0_-4px_20px_rgba(16,20,38,0.05)]">
+<button class="w-full h-12 bg-primary text-on-primary rounded-lg font-label-md text-label-md font-bold flex items-center justify-center gap-2 hover:bg-surface-tint transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
+<span class="material-symbols-outlined">download</span>
+            Tải hóa đơn PDF
+        </button>
+</div>
+</body></html>

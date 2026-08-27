@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+
+<html lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Vé của tôi - SMART EVENT</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-primary-fixed-variant": "#321ed2",
+                      "on-background": "#111c2d",
+                      "on-tertiary-container": "#fffaf9",
+                      "tertiary-container": "#d13e3a",
+                      "surface-tint": "#4c42e9",
+                      "on-tertiary-fixed-variant": "#910913",
+                      "surface-container-high": "#dfe8ff",
+                      "secondary-fixed-dim": "#c2c5de",
+                      "primary": "#493ee5",
+                      "primary-fixed": "#e2dfff",
+                      "error": "#ba1a1a",
+                      "surface-variant": "#d9e3fb",
+                      "background": "#f9f9ff",
+                      "outline-variant": "#c7c4d8",
+                      "on-primary": "#ffffff",
+                      "secondary-container": "#dee1fb",
+                      "primary-container": "#635bff",
+                      "surface-container-low": "#f0f3ff",
+                      "on-surface": "#111c2d",
+                      "on-secondary-fixed": "#171b2d",
+                      "surface-bright": "#f9f9ff",
+                      "on-tertiary": "#ffffff",
+                      "surface-container": "#e8eeff",
+                      "on-error-container": "#93000a",
+                      "on-secondary": "#ffffff",
+                      "secondary": "#5a5d73",
+                      "surface-container-highest": "#d9e3fb",
+                      "tertiary-fixed": "#ffdad6",
+                      "on-secondary-container": "#606379",
+                      "on-primary-container": "#fefaff",
+                      "on-primary-fixed": "#0f0069",
+                      "on-surface-variant": "#464555",
+                      "inverse-on-surface": "#ecf0ff",
+                      "inverse-surface": "#273143",
+                      "tertiary-fixed-dim": "#ffb3ac",
+                      "on-error": "#ffffff",
+                      "tertiary": "#ae2424",
+                      "inverse-primary": "#c3c0ff",
+                      "surface-container-lowest": "#ffffff",
+                      "outline": "#777587",
+                      "primary-fixed-dim": "#c3c0ff",
+                      "surface-dim": "#d0daf2",
+                      "error-container": "#ffdad6",
+                      "surface": "#f9f9ff",
+                      "on-tertiary-fixed": "#410003",
+                      "secondary-fixed": "#dee1fb",
+                      "on-secondary-fixed-variant": "#42465a"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "sm": "8px",
+                      "xl": "32px",
+                      "gutter": "24px",
+                      "lg": "24px",
+                      "base": "8px",
+                      "xxl": "48px",
+                      "container-max": "1280px",
+                      "xs": "4px",
+                      "md": "16px"
+              },
+              "fontFamily": {
+                      "title-lg": [
+                              "Be Vietnam Pro"
+                      ],
+                      "label-md": [
+                              "Be Vietnam Pro"
+                      ],
+                      "headline-md": [
+                              "Be Vietnam Pro"
+                      ],
+                      "body-md": [
+                              "Be Vietnam Pro"
+                      ],
+                      "display-lg": [
+                              "Be Vietnam Pro"
+                      ],
+                      "headline-lg": [
+                              "Be Vietnam Pro"
+                      ],
+                      "numeric-tabular": [
+                              "Be Vietnam Pro"
+                      ],
+                      "label-sm": [
+                              "Be Vietnam Pro"
+                      ],
+                      "body-lg": [
+                              "Be Vietnam Pro"
+                      ]
+              },
+              "fontSize": {
+                      "title-lg": [
+                              "20px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "label-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "display-lg": [
+                              "48px",
+                              {
+                                      "lineHeight": "60px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "numeric-tabular": [
+                              "inherit",
+                              {
+                                      "lineHeight": "inherit",
+                                      "fontWeight": "inherit"
+                              }
+                      ],
+                      "label-sm": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.02em",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "400"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+    </script>
+<style>
+        body {
+            background-color: theme('colors.background');
+            color: theme('colors.on-background');
+        }
+        .ticket-card {
+            box-shadow: 0px 4px 20px rgba(16, 20, 38, 0.08);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .ticket-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0px 12px 32px rgba(16, 20, 38, 0.12);
+        }
+        .cutout {
+            position: relative;
+            background: theme('colors.surface-container-lowest');
+        }
+        .cutout::before, .cutout::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 16px;
+            height: 16px;
+            background-color: theme('colors.background');
+            border-radius: 50%;
+            transform: translateY(-50%);
+            z-index: 10;
+        }
+        .cutout::before {
+            left: -8px;
+        }
+        .cutout::after {
+            right: -8px;
+        }
+        .dashed-line {
+            border-top: 1.5px dashed theme('colors.outline-variant');
+        }
+        
+        .qr-gradient {
+            background: linear-gradient(135deg, theme('colors.primary') 0%, theme('colors.primary-container') 100%);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col font-body-md text-body-md antialiased">
+<!-- TopNavBar -->
+<nav class="bg-surface dark:bg-surface-container-low text-primary dark:text-primary-fixed border-b border-outline-variant dark:border-outline shadow-sm dark:shadow-none sticky top-0 z-50">
+<div class="flex justify-between items-center w-full px-lg md:px-xl max-w-container-max mx-auto h-[72px]">
+<div class="flex items-center gap-gutter">
+<a class="text-title-lg font-title-lg font-bold text-primary dark:text-primary-fixed tracking-tight" href="#">SMART EVENT</a>
+<div class="hidden md:flex items-center gap-lg ml-xl">
+<a class="text-on-secondary-container dark:text-on-secondary-fixed-variant font-medium hover:text-primary-container dark:hover:text-primary-fixed-dim transition-colors text-label-md font-label-md" href="#">Discovery</a>
+<a class="text-on-secondary-container dark:text-on-secondary-fixed-variant font-medium hover:text-primary-container dark:hover:text-primary-fixed-dim transition-colors text-label-md font-label-md" href="#">Location</a>
+<a class="text-primary dark:text-primary-fixed border-b-2 border-primary font-bold pb-1 hover:text-primary-container dark:hover:text-primary-fixed-dim transition-colors text-label-md font-label-md" href="#">My Tickets</a>
+</div>
+</div>
+<div class="flex items-center gap-md">
+<button class="hidden md:flex items-center justify-center w-10 h-10 rounded-full bg-surface-container hover:bg-surface-variant transition-colors focus:ring-2 focus:ring-primary focus:ring-offset-2">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+</button>
+<button class="flex items-center justify-center gap-sm px-4 py-2 bg-primary text-on-primary rounded-lg font-label-md text-label-md font-medium hover:opacity-90 transition-opacity focus:ring-2 focus:ring-primary focus:ring-offset-2">
+<img alt="User Avatar" class="w-6 h-6 rounded-full bg-primary-fixed-dim object-cover" data-alt="A small circular avatar placeholder image for a user profile in a modern, light-mode user interface, simple and clean, professional setting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBQ0mlgTKTzEJdVo7xc-4SEJ3JtVrIO2BTba3YUw53byDoQuGtZ1dQOPEruJPNIGg-KbzAPHhYcvN1tKDNyyXKc1BkapFNHFaeiRhF_I3_M6tlFBnDrW7gSVbiN1_1Kt5Y_P-WDWWHsAxwbYC1Cg49bJweIoPLIAdN7mKhJcnwW-ORyPFkj8HZ1wQ4iWApr9he2av-Jv0EU-TCXuf5g-MxtGoNV7n1kR6th2CDowJlR-pBEnF-9gPyi"/>
+<span class="hidden md:inline">Account</span>
+</button>
+</div>
+</div>
+</nav>
+<!-- Main Content -->
+<main class="flex-grow w-full max-w-container-max mx-auto px-md md:px-lg py-xl flex flex-col md:flex-row gap-gutter">
+<!-- Sidebar Navigation (Desktop) -->
+<aside class="hidden md:flex flex-col w-64 shrink-0 gap-sm">
+<div class="px-md py-lg mb-4">
+<h1 class="text-headline-md font-headline-md text-on-background mb-xs">Tài khoản</h1>
+<p class="text-on-surface-variant text-label-md font-label-md">Quản lý vé và thông tin cá nhân</p>
+</div>
+<nav class="flex flex-col gap-xs">
+<a class="flex items-center gap-sm px-md py-3 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-background transition-colors focus:ring-2 focus:ring-primary focus:ring-offset-2" href="#">
+<span class="material-symbols-outlined text-secondary" data-icon="person">person</span>
+<span class="text-label-md font-label-md font-medium">Hồ sơ cá nhân</span>
+</a>
+<a class="flex items-center gap-sm px-md py-3 rounded-lg bg-primary-fixed text-on-primary-fixed font-bold hover:bg-primary-fixed-dim transition-colors focus:ring-2 focus:ring-primary focus:ring-offset-2" href="#">
+<span class="material-symbols-outlined text-primary" data-icon="confirmation_number" style="font-variation-settings: 'FILL' 1;">confirmation_number</span>
+<span class="text-label-md font-label-md font-bold">Vé của tôi</span>
+</a>
+<a class="flex items-center gap-sm px-md py-3 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-background transition-colors focus:ring-2 focus:ring-primary focus:ring-offset-2" href="#">
+<span class="material-symbols-outlined text-secondary" data-icon="favorite">favorite</span>
+<span class="text-label-md font-label-md font-medium">Sự kiện yêu thích</span>
+</a>
+<a class="flex items-center gap-sm px-md py-3 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-background transition-colors focus:ring-2 focus:ring-primary focus:ring-offset-2" href="#">
+<span class="material-symbols-outlined text-secondary" data-icon="settings">settings</span>
+<span class="text-label-md font-label-md font-medium">Cài đặt</span>
+</a>
+</nav>
+</aside>
+<!-- Tickets Canvas -->
+<div class="flex-grow flex flex-col gap-lg">
+<!-- Page Header (Mobile mostly, hidden on desktop if sidebar serves context) -->
+<div class="md:hidden mb-sm">
+<h1 class="text-headline-md font-headline-md text-on-background mb-xs">Vé của tôi</h1>
+<p class="text-on-surface-variant text-label-md font-label-md">Quản lý các vé sự kiện của bạn</p>
+</div>
+<!-- Tabs -->
+<div class="flex border-b border-outline-variant overflow-x-auto no-scrollbar">
+<button class="px-md py-3 text-primary border-b-2 border-primary font-label-md text-label-md font-bold whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
+                    Sắp diễn ra (2)
+                </button>
+<button class="px-md py-3 text-on-surface-variant border-b-2 border-transparent hover:text-on-background font-label-md text-label-md font-medium whitespace-nowrap transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
+                    Đã sử dụng
+                </button>
+<button class="px-md py-3 text-on-surface-variant border-b-2 border-transparent hover:text-on-background font-label-md text-label-md font-medium whitespace-nowrap transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
+                    Đã hủy
+                </button>
+</div>
+<!-- Ticket List (Upcoming) -->
+<div class="flex flex-col gap-lg mt-md">
+<!-- Ticket Card 1 -->
+<div class="ticket-card cutout rounded-xl border border-outline-variant flex flex-col md:flex-row overflow-hidden bg-surface-container-lowest">
+<!-- Event Info Section -->
+<div class="flex-grow p-lg flex flex-col gap-md border-b md:border-b-0 md:border-r border-dashed border-outline-variant">
+<div class="flex justify-between items-start">
+<div class="flex flex-col">
+<span class="inline-block px-3 py-1 bg-primary-fixed text-on-primary-fixed text-label-sm font-label-sm font-bold rounded-full w-max mb-xs">Âm nhạc</span>
+<h3 class="text-title-lg font-title-lg font-bold text-on-background mb-1">HAY Glamping Music Festival 2024</h3>
+<p class="text-on-surface-variant text-body-md font-body-md flex items-center gap-xs">
+<span class="material-symbols-outlined text-[18px]" data-icon="calendar_today">calendar_today</span>
+                                    Thứ 7, 15 Thg 6, 2024 • 15:00
+                                </p>
+</div>
+</div>
+<div class="flex flex-col gap-sm">
+<div class="flex items-start gap-xs text-on-surface-variant text-body-md font-body-md">
+<span class="material-symbols-outlined text-[18px] mt-[2px]" data-icon="location_on">location_on</span>
+<div>
+<span class="font-medium text-on-background block">Công viên Yên Sở</span>
+<span class="text-label-md font-label-md">Hoàng Mai, Hà Nội</span>
+</div>
+</div>
+</div>
+<div class="mt-auto pt-md grid grid-cols-2 gap-sm">
+<div>
+<p class="text-label-sm font-label-sm text-on-surface-variant uppercase tracking-wider mb-xs">Loại vé</p>
+<p class="text-body-md font-body-md font-semibold text-on-background">GA - Early Bird</p>
+</div>
+<div>
+<p class="text-label-sm font-label-sm text-on-surface-variant uppercase tracking-wider mb-xs">Số lượng</p>
+<p class="text-body-md font-body-md font-semibold text-on-background font-numeric-tabular text-numeric-tabular">x2</p>
+</div>
+</div>
+</div>
+<!-- QR / Action Section -->
+<div class="w-full md:w-64 shrink-0 bg-surface flex flex-col items-center justify-center p-lg gap-md relative">
+<div class="text-center w-full">
+<p class="text-label-sm font-label-sm text-on-surface-variant mb-1 uppercase tracking-widest">Mã đặt chỗ</p>
+<p class="text-title-lg font-title-lg font-bold text-primary font-numeric-tabular text-numeric-tabular">HAY-9X8K2M</p>
+</div>
+<div class="w-32 h-32 bg-white rounded-lg p-2 border border-outline-variant flex items-center justify-center qr-gradient relative overflow-hidden group cursor-pointer" tabindex="0">
+<!-- Faux QR representation -->
+<div class="absolute inset-0 bg-white/90 grid grid-cols-5 grid-rows-5 gap-1 p-2">
+<div class="bg-primary rounded-sm col-span-2 row-span-2"></div>
+<div class="bg-primary rounded-sm col-start-4 col-span-2 row-span-2"></div>
+<div class="bg-primary rounded-sm col-span-2 row-start-4 row-span-2"></div>
+<div class="bg-on-background rounded-sm"></div>
+<div class="bg-on-background rounded-sm col-start-3 row-start-3"></div>
+<div class="bg-on-background rounded-sm col-start-5 row-start-5"></div>
+</div>
+<!-- Hover overlay -->
+<div class="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-white text-[32px]" data-icon="fullscreen">fullscreen</span>
+</div>
+</div>
+<button class="w-full py-3 px-4 bg-primary text-on-primary rounded-lg font-label-md text-label-md font-bold hover:bg-surface-tint transition-colors focus:ring-2 focus:ring-primary focus:ring-offset-2 flex items-center justify-center gap-xs">
+<span class="material-symbols-outlined text-[20px]" data-icon="qr_code_scanner">qr_code_scanner</span>
+                            Mở vé QR
+                        </button>
+</div>
+</div>
+<!-- Ticket Card 2 -->
+<div class="ticket-card cutout rounded-xl border border-outline-variant flex flex-col md:flex-row overflow-hidden bg-surface-container-lowest">
+<!-- Event Info Section -->
+<div class="flex-grow p-lg flex flex-col gap-md border-b md:border-b-0 md:border-r border-dashed border-outline-variant">
+<div class="flex justify-between items-start">
+<div class="flex flex-col">
+<span class="inline-block px-3 py-1 bg-tertiary-fixed text-on-tertiary-fixed text-label-sm font-label-sm font-bold rounded-full w-max mb-xs">Hội thảo</span>
+<h3 class="text-title-lg font-title-lg font-bold text-on-background mb-1">Vietnam Tech Summit 2024</h3>
+<p class="text-on-surface-variant text-body-md font-body-md flex items-center gap-xs">
+<span class="material-symbols-outlined text-[18px]" data-icon="calendar_today">calendar_today</span>
+                                    Thứ 4, 20 Thg 6, 2024 • 08:30
+                                </p>
+</div>
+</div>
+<div class="flex flex-col gap-sm">
+<div class="flex items-start gap-xs text-on-surface-variant text-body-md font-body-md">
+<span class="material-symbols-outlined text-[18px] mt-[2px]" data-icon="location_on">location_on</span>
+<div>
+<span class="font-medium text-on-background block">Trung tâm Hội nghị Quốc gia</span>
+<span class="text-label-md font-label-md">Nam Từ Liêm, Hà Nội</span>
+</div>
+</div>
+</div>
+<div class="mt-auto pt-md grid grid-cols-2 gap-sm">
+<div>
+<p class="text-label-sm font-label-sm text-on-surface-variant uppercase tracking-wider mb-xs">Loại vé</p>
+<p class="text-body-md font-body-md font-semibold text-on-background">VIP Pass</p>
+</div>
+<div>
+<p class="text-label-sm font-label-sm text-on-surface-variant uppercase tracking-wider mb-xs">Chỗ ngồi</p>
+<p class="text-body-md font-body-md font-semibold text-on-background font-numeric-tabular text-numeric-tabular">A1-12, A1-13</p>
+</div>
+</div>
+</div>
+<!-- QR / Action Section -->
+<div class="w-full md:w-64 shrink-0 bg-surface flex flex-col items-center justify-center p-lg gap-md relative">
+<div class="text-center w-full">
+<p class="text-label-sm font-label-sm text-on-surface-variant mb-1 uppercase tracking-widest">Mã đặt chỗ</p>
+<p class="text-title-lg font-title-lg font-bold text-primary font-numeric-tabular text-numeric-tabular">VTS-4A7P9</p>
+</div>
+<div class="w-32 h-32 bg-white rounded-lg p-2 border border-outline-variant flex items-center justify-center qr-gradient relative overflow-hidden group cursor-pointer" tabindex="0">
+<!-- Faux QR representation -->
+<div class="absolute inset-0 bg-white/90 grid grid-cols-5 grid-rows-5 gap-1 p-2">
+<div class="bg-primary rounded-sm col-span-2 row-span-2"></div>
+<div class="bg-primary rounded-sm col-start-4 col-span-2 row-span-2"></div>
+<div class="bg-primary rounded-sm col-span-2 row-start-4 row-span-2"></div>
+<div class="bg-on-background rounded-sm"></div>
+<div class="bg-on-background rounded-sm col-start-3 row-start-2"></div>
+<div class="bg-on-background rounded-sm col-start-4 row-start-4"></div>
+</div>
+<!-- Hover overlay -->
+<div class="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-white text-[32px]" data-icon="fullscreen">fullscreen</span>
+</div>
+</div>
+<button class="w-full py-3 px-4 bg-primary text-on-primary rounded-lg font-label-md text-label-md font-bold hover:bg-surface-tint transition-colors focus:ring-2 focus:ring-primary focus:ring-offset-2 flex items-center justify-center gap-xs">
+<span class="material-symbols-outlined text-[20px]" data-icon="qr_code_scanner">qr_code_scanner</span>
+                            Mở vé QR
+                        </button>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-surface-container-highest dark:bg-inverse-surface border-t border-outline-variant dark:border-outline text-on-surface dark:text-inverse-on-surface mt-auto">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-gutter px-lg py-xxl max-w-container-max mx-auto">
+<div class="flex flex-col gap-sm">
+<span class="text-headline-md font-headline-md text-primary dark:text-primary-fixed">SMART EVENT</span>
+<p class="text-body-md font-body-md text-on-surface-variant dark:text-on-secondary-fixed-variant">© 2024 SMART EVENT. All rights reserved.</p>
+</div>
+<div class="flex flex-col gap-sm">
+<a class="text-label-sm font-label-sm text-on-surface-variant dark:text-on-secondary-fixed-variant hover:text-primary dark:hover:text-primary-fixed transition-colors focus:ring-2 focus:ring-primary focus:ring-offset-2" href="#">About Us</a>
+<a class="text-label-sm font-label-sm text-on-surface-variant dark:text-on-secondary-fixed-variant hover:text-primary dark:hover:text-primary-fixed transition-colors focus:ring-2 focus:ring-primary focus:ring-offset-2" href="#">Terms of Service</a>
+</div>
+<div class="flex flex-col gap-sm">
+<a class="text-label-sm font-label-sm text-on-surface-variant dark:text-on-secondary-fixed-variant hover:text-primary dark:hover:text-primary-fixed transition-colors focus:ring-2 focus:ring-primary focus:ring-offset-2" href="#">Privacy Policy</a>
+<a class="text-label-sm font-label-sm text-on-surface-variant dark:text-on-secondary-fixed-variant hover:text-primary dark:hover:text-primary-fixed transition-colors focus:ring-2 focus:ring-primary focus:ring-offset-2" href="#">Contact Support</a>
+</div>
+</div>
+</footer>
+</body></html>

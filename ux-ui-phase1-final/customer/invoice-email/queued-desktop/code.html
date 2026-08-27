@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+
+<html lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SMART EVENT - Đã tiếp nhận yêu cầu gửi hóa đơn</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "inverse-surface": "#273143",
+                        "background": "#f9f9ff",
+                        "surface-tint": "#4c42e9",
+                        "on-primary-container": "#fefaff",
+                        "secondary-fixed-dim": "#c2c5de",
+                        "on-primary-fixed": "#0f0069",
+                        "secondary-fixed": "#dee1fb",
+                        "on-error-container": "#93000a",
+                        "surface-dim": "#d0daf2",
+                        "primary": "#493ee5",
+                        "on-secondary-fixed-variant": "#42465a",
+                        "on-secondary": "#ffffff",
+                        "tertiary-fixed-dim": "#ffb3ac",
+                        "tertiary-container": "#d13e3a",
+                        "on-surface-variant": "#464555",
+                        "secondary-container": "#dee1fb",
+                        "inverse-on-surface": "#ecf0ff",
+                        "on-tertiary-fixed": "#410003",
+                        "inverse-primary": "#c3c0ff",
+                        "on-primary": "#ffffff",
+                        "on-secondary-fixed": "#171b2d",
+                        "surface-container-lowest": "#ffffff",
+                        "outline": "#777587",
+                        "tertiary-fixed": "#ffdad6",
+                        "surface-container": "#e8eeff",
+                        "on-surface": "#111c2d",
+                        "error-container": "#ffdad6",
+                        "tertiary": "#ae2424",
+                        "primary-fixed": "#e2dfff",
+                        "secondary": "#5a5d73",
+                        "surface": "#f9f9ff",
+                        "outline-variant": "#c7c4d8",
+                        "surface-bright": "#f9f9ff",
+                        "on-error": "#ffffff",
+                        "on-tertiary-container": "#fffaf9",
+                        "primary-container": "#635bff",
+                        "on-background": "#111c2d",
+                        "error": "#ba1a1a",
+                        "surface-container-highest": "#d9e3fb",
+                        "primary-fixed-dim": "#c3c0ff",
+                        "surface-container-high": "#dfe8ff",
+                        "on-tertiary": "#ffffff",
+                        "surface-container-low": "#f0f3ff",
+                        "on-tertiary-fixed-variant": "#910913",
+                        "surface-variant": "#d9e3fb",
+                        "on-primary-fixed-variant": "#321ed2",
+                        "on-secondary-container": "#606379"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xs": "4px",
+                        "lg": "24px",
+                        "xl": "32px",
+                        "gutter": "24px",
+                        "xxl": "48px",
+                        "base": "8px",
+                        "sm": "8px",
+                        "container-max": "1280px",
+                        "md": "16px"
+                    },
+                    "fontFamily": {
+                        "display-lg": ["Be Vietnam Pro"],
+                        "label-md": ["Be Vietnam Pro"],
+                        "numeric-tabular": ["Be Vietnam Pro"],
+                        "body-md": ["Be Vietnam Pro"],
+                        "title-lg": ["Be Vietnam Pro"],
+                        "label-sm": ["Be Vietnam Pro"],
+                        "headline-lg": ["Be Vietnam Pro"],
+                        "headline-md": ["Be Vietnam Pro"],
+                        "body-lg": ["Be Vietnam Pro"]
+                    },
+                    "fontSize": {
+                        "display-lg": ["48px", { "lineHeight": "60px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "fontWeight": "500" }],
+                        "numeric-tabular": ["inherit", { "lineHeight": "inherit", "fontWeight": "inherit" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "title-lg": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body { font-family: 'Be Vietnam Pro', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .focus-ring { outline: 2px solid transparent; outline-offset: 2px; }
+        .focus-ring:focus-visible { outline-color: #493ee5; }
+        
+        /* Kinetic Pulse Animation */
+        @keyframes pulse-ring {
+            0% { transform: scale(0.8); opacity: 0.5; }
+            100% { transform: scale(1.5); opacity: 0; }
+        }
+        .animate-pulse-ring {
+            animation: pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+        }
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        .animate-float {
+            animation: float 4s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col">
+<!-- Top Navigation (Transactional/Focused - Suppressed standard nav, showing minimal brand) -->
+<header class="bg-surface border-b border-outline-variant shadow-sm w-full px-lg h-16 flex items-center justify-center">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-2xl" data-weight="fill" style="font-variation-settings: 'FILL' 1;">sell</span>
+<span class="font-title-lg text-title-lg font-extrabold text-primary tracking-tight">SMART EVENT</span>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-grow flex items-center justify-center p-md lg:p-xl relative overflow-hidden">
+<!-- Decorative Background Elements -->
+<div class="absolute top-[-10%] left-[-5%] w-96 h-96 bg-primary-container rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-float" style="animation-delay: 0s;"></div>
+<div class="absolute bottom-[-10%] right-[-5%] w-96 h-96 bg-surface-variant rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-float" style="animation-delay: 2s;"></div>
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl shadow-[0_12px_32px_rgba(16,20,38,0.12)] w-full max-w-2xl p-xl lg:p-xxl relative z-10 text-center flex flex-col items-center">
+<!-- Illustration: Envelope + Clock -->
+<div class="relative w-32 h-32 mb-lg flex items-center justify-center">
+<!-- Pulse rings -->
+<div class="absolute inset-0 bg-primary-container/20 rounded-full animate-pulse-ring"></div>
+<div class="absolute inset-0 bg-primary-container/20 rounded-full animate-pulse-ring" style="animation-delay: 1s;"></div>
+<!-- Main Icon Container -->
+<div class="relative z-10 w-24 h-24 bg-surface-container-high rounded-full flex items-center justify-center shadow-sm">
+<svg class="text-primary" fill="none" height="48" viewbox="0 0 24 24" width="48" xmlns="http://www.w3.org/2000/svg">
+<!-- Envelope Base -->
+<path d="M22 6C22 4.9 21.1 4 20 4H4C2.9 4 2 4.9 2 6V18C2 19.1 2.9 20 4 20H13V18H4V8L12 13L20 8V12H22V6ZM12 11L4 6H20L12 11Z" fill="currentColor"></path>
+<!-- Clock Badge -->
+<path d="M19.5 22C17.567 22 16 20.433 16 18.5C16 16.567 17.567 15 19.5 15C21.433 15 23 16.567 23 18.5C23 20.433 21.433 22 19.5 22ZM19 16V19L21.5 20.5L22.25 19.25L20.5 18.25V16H19Z" fill="currentColor"></path>
+</svg>
+</div>
+</div>
+<!-- Status Badge -->
+<div class="bg-surface-container-high text-on-surface-variant font-label-md text-label-md px-4 py-1.5 rounded-full mb-md flex items-center gap-2 border border-outline-variant/30">
+<span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+                Đang xử lý
+            </div>
+<!-- Title & Message -->
+<h1 class="font-headline-lg text-headline-lg text-on-surface mb-sm">Đã tiếp nhận yêu cầu gửi hóa đơn</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant mb-xl max-w-lg">
+                Yêu cầu gửi hóa đơn <span class="font-numeric-tabular font-semibold text-on-surface">INV-20260822-ABC12345</span> tới <span class="font-semibold text-on-surface">customer@example.com</span> đang được xử lý.
+            </p>
+<!-- Information Notice -->
+<div class="bg-surface-container-low border border-outline-variant/50 rounded-lg p-md mb-xl w-full flex items-start gap-md text-left">
+<span class="material-symbols-outlined text-primary mt-1" style="font-variation-settings: 'FILL' 1;">info</span>
+<p class="font-body-md text-body-md text-on-surface-variant">
+                    Hệ thống sẽ xử lý yêu cầu trong nền. Bạn có thể kiểm tra hộp thư sau.
+                </p>
+</div>
+<!-- Actions -->
+<div class="flex flex-col sm:flex-row gap-4 w-full justify-center">
+<button class="focus-ring h-12 px-lg bg-surface-container border border-outline-variant text-on-surface font-label-md text-label-md font-bold rounded-lg hover:bg-surface-container-high transition-colors flex items-center justify-center gap-2 w-full sm:w-auto">
+<svg fill="none" height="20" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+<path d="M4 6H20V8H4V6ZM4 11H20V13H4V11ZM4 16H14V18H4V16Z" fill="currentColor"></path>
+</svg>
+                    Về danh sách hóa đơn
+                </button>
+<button class="focus-ring h-12 px-lg bg-primary text-on-primary font-label-md text-label-md font-bold rounded-lg hover:bg-primary-container hover:text-on-primary-container transition-colors shadow-[0_4px_20px_rgba(16,20,38,0.08)] flex items-center justify-center gap-2 w-full sm:w-auto">
+<svg fill="none" height="20" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+<path d="M14 2H6C4.9 2 4.01 2.9 4.01 4L4 20C4 21.1 4.89 22 5.99 22H18C19.1 22 20 21.1 20 20V8L14 2ZM18 20H6V4H13V9H18V20Z" fill="currentColor"></path>
+</svg>
+                    Về chi tiết hóa đơn
+                </button>
+</div>
+</div>
+</main>
+</body></html>

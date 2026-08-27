@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+
+<html lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Khám phá sự kiện - SMART EVENT</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "primary-fixed": "#e2dfff",
+                    "on-error-container": "#93000a",
+                    "primary": "#493ee5",
+                    "tertiary-fixed": "#ffdad6",
+                    "on-secondary-container": "#606379",
+                    "surface-container-low": "#f0f3ff",
+                    "secondary": "#5a5d73",
+                    "tertiary-container": "#d13e3a",
+                    "tertiary-fixed-dim": "#ffb3ac",
+                    "on-surface": "#111c2d",
+                    "on-primary-fixed-variant": "#321ed2",
+                    "background": "#f9f9ff",
+                    "surface": "#f9f9ff",
+                    "surface-container": "#e8eeff",
+                    "inverse-on-surface": "#ecf0ff",
+                    "surface-bright": "#f9f9ff",
+                    "on-primary": "#ffffff",
+                    "surface-dim": "#d0daf2",
+                    "secondary-container": "#dee1fb",
+                    "on-primary-container": "#fefaff",
+                    "tertiary": "#ae2424",
+                    "on-tertiary": "#ffffff",
+                    "surface-container-lowest": "#ffffff",
+                    "secondary-fixed": "#dee1fb",
+                    "on-tertiary-fixed-variant": "#910913",
+                    "error": "#ba1a1a",
+                    "on-primary-fixed": "#0f0069",
+                    "surface-container-high": "#dfe8ff",
+                    "outline": "#777587",
+                    "on-secondary": "#ffffff",
+                    "error-container": "#ffdad6",
+                    "surface-variant": "#d9e3fb",
+                    "on-tertiary-fixed": "#410003",
+                    "on-tertiary-container": "#fffaf9",
+                    "surface-container-highest": "#d9e3fb",
+                    "inverse-primary": "#c3c0ff",
+                    "primary-container": "#635bff",
+                    "on-error": "#ffffff",
+                    "inverse-surface": "#273143",
+                    "on-secondary-fixed-variant": "#42465a",
+                    "on-surface-variant": "#464555",
+                    "secondary-fixed-dim": "#c2c5de",
+                    "on-background": "#111c2d",
+                    "outline-variant": "#c7c4d8",
+                    "surface-tint": "#4c42e9",
+                    "on-secondary-fixed": "#171b2d",
+                    "primary-fixed-dim": "#c3c0ff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "lg": "24px",
+                    "xxl": "48px",
+                    "container-max": "1280px",
+                    "xl": "32px",
+                    "sm": "8px",
+                    "base": "8px",
+                    "md": "16px",
+                    "gutter": "24px",
+                    "xs": "4px"
+            },
+            "fontFamily": {
+                    "headline-lg": [
+                            "Be Vietnam Pro"
+                    ],
+                    "label-md": [
+                            "Be Vietnam Pro"
+                    ],
+                    "display-lg": [
+                            "Be Vietnam Pro"
+                    ],
+                    "title-lg": [
+                            "Be Vietnam Pro"
+                    ],
+                    "body-lg": [
+                            "Be Vietnam Pro"
+                    ],
+                    "label-sm": [
+                            "Be Vietnam Pro"
+                    ],
+                    "body-md": [
+                            "Be Vietnam Pro"
+                    ],
+                    "numeric-tabular": [
+                            "Be Vietnam Pro"
+                    ],
+                    "headline-md": [
+                            "Be Vietnam Pro"
+                    ]
+            },
+            "fontSize": {
+                    "headline-lg": [
+                            "32px",
+                            {
+                                    "lineHeight": "40px",
+                                    "letterSpacing": "-0.01em",
+                                    "fontWeight": "700"
+                            }
+                    ],
+                    "label-md": [
+                            "14px",
+                            {
+                                    "lineHeight": "20px",
+                                    "fontWeight": "500"
+                            }
+                    ],
+                    "display-lg": [
+                            "48px",
+                            {
+                                    "lineHeight": "60px",
+                                    "letterSpacing": "-0.02em",
+                                    "fontWeight": "700"
+                            }
+                    ],
+                    "title-lg": [
+                            "20px",
+                            {
+                                    "lineHeight": "28px",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "body-lg": [
+                            "18px",
+                            {
+                                    "lineHeight": "28px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "label-sm": [
+                            "12px",
+                            {
+                                    "lineHeight": "16px",
+                                    "letterSpacing": "0.02em",
+                                    "fontWeight": "500"
+                            }
+                    ],
+                    "body-md": [
+                            "16px",
+                            {
+                                    "lineHeight": "24px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "numeric-tabular": [
+                            "inherit",
+                            {
+                                    "lineHeight": "inherit",
+                                    "fontWeight": "inherit"
+                            }
+                    ],
+                    "headline-md": [
+                            "24px",
+                            {
+                                    "lineHeight": "32px",
+                                    "fontWeight": "600"
+                            }
+                    ]
+            }
+    },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+          font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined.fill {
+            font-variation-settings: 'FILL' 1;
+        }
+        /* Custom scrollbar for horizontal lists */
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md text-body-md antialiased selection:bg-primary selection:text-on-primary min-h-screen flex flex-col">
+<!-- Top Navigation Bar -->
+<header class="bg-surface dark:bg-surface-container-low border-b border-outline-variant dark:border-outline shadow-sm dark:shadow-none sticky top-0 z-50">
+<div class="flex justify-between items-center w-full px-lg md:px-xl max-w-container-max mx-auto h-[72px]">
+<!-- Brand -->
+<a class="text-title-lg font-title-lg font-bold text-primary dark:text-primary-fixed shrink-0" href="#">
+                SMART EVENT
+            </a>
+<!-- Navigation Links -->
+<nav class="hidden md:flex items-center gap-lg">
+<a class="text-primary dark:text-primary-fixed border-b-2 border-primary font-bold pb-1 text-label-md font-label-md hover:text-primary-container dark:hover:text-primary-fixed-dim transition-colors opacity-80 scale-[0.99] transition-all" href="#">
+                    Discovery
+                </a>
+<a class="text-on-secondary-container dark:text-on-secondary-fixed-variant font-medium text-label-md font-label-md hover:text-primary-container dark:hover:text-primary-fixed-dim transition-colors" href="#">
+                    Location
+                </a>
+<a class="text-on-secondary-container dark:text-on-secondary-fixed-variant font-medium text-label-md font-label-md hover:text-primary-container dark:hover:text-primary-fixed-dim transition-colors" href="#">
+                    My Tickets
+                </a>
+</nav>
+<!-- Actions (Search & Login) -->
+<div class="flex items-center gap-md">
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-variant transition-colors text-on-surface">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+</button>
+<button class="hidden md:flex items-center justify-center h-12 px-lg bg-primary text-on-primary rounded-[10px] font-label-md text-label-md font-bold hover:bg-primary-container focus:ring-2 focus:ring-primary focus:ring-offset-2 transition-colors">
+                    Login
+                </button>
+<button class="md:hidden w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-variant transition-colors text-on-surface">
+<span class="material-symbols-outlined" data-icon="menu">menu</span>
+</button>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="flex-grow w-full max-w-container-max mx-auto px-lg md:px-xl py-xl md:py-xxl flex flex-col gap-xl">
+<!-- Page Header -->
+<div class="flex flex-col gap-sm">
+<h1 class="text-display-lg font-display-lg text-on-surface">Khám phá sự kiện</h1>
+<p class="text-body-lg font-body-lg text-on-surface-variant">Tìm kiếm những trải nghiệm tuyệt vời nhất xung quanh bạn.</p>
+</div>
+<!-- Filter & Search Bar -->
+<div class="bg-surface border border-outline-variant rounded-xl p-md shadow-[0px_4px_20px_rgba(16,20,38,0.08)] flex flex-col md:flex-row gap-md items-center sticky top-[88px] z-40">
+<!-- Search Input -->
+<div class="relative w-full md:w-1/3">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline" data-icon="search">search</span>
+<input class="w-full h-12 pl-10 pr-3 rounded-[10px] border border-outline-variant bg-surface focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all text-body-md font-body-md" placeholder="Tìm kiếm sự kiện, nghệ sĩ..." type="text"/>
+</div>
+<!-- Filters -->
+<div class="flex items-center gap-sm w-full md:w-auto overflow-x-auto hide-scrollbar pb-2 md:pb-0">
+<button class="flex items-center gap-xs h-10 px-md rounded-full bg-primary-container text-on-primary-container font-label-md text-label-md shrink-0">
+<span class="material-symbols-outlined text-[18px]" data-icon="music_note">music_note</span>
+                    Âm nhạc
+                </button>
+<button class="flex items-center gap-xs h-10 px-md rounded-full border border-outline-variant hover:bg-surface-variant text-on-surface font-label-md text-label-md transition-colors shrink-0">
+<span class="material-symbols-outlined text-[18px]" data-icon="location_on">location_on</span>
+                    TP.HCM
+                </button>
+<button class="flex items-center gap-xs h-10 px-md rounded-full border border-outline-variant hover:bg-surface-variant text-on-surface font-label-md text-label-md transition-colors shrink-0">
+<span class="material-symbols-outlined text-[18px]" data-icon="calendar_today">calendar_today</span>
+                    Cuối tuần này
+                </button>
+</div>
+<!-- Sort -->
+<div class="flex items-center gap-sm w-full md:w-auto ml-auto">
+<span class="text-label-md font-label-md text-on-surface-variant whitespace-nowrap">Sắp xếp:</span>
+<select class="h-10 px-3 rounded-[10px] border border-outline-variant bg-surface focus:border-primary focus:ring-1 focus:ring-primary outline-none text-body-md font-body-md cursor-pointer">
+<option value="upcoming">Sắp diễn ra</option>
+<option value="price_asc">Giá thấp đến cao</option>
+<option value="popular">Phổ biến nhất</option>
+</select>
+</div>
+</div>
+<!-- Results Grid -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-gutter">
+<!-- Event Card 1 -->
+<article class="bg-surface rounded-xl border border-outline-variant overflow-hidden group hover:shadow-[0px_12px_32px_rgba(16,20,38,0.12)] transition-shadow duration-300 flex flex-col cursor-pointer">
+<div class="relative h-48 w-full overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A vibrant live music concert scene with bright energetic stage lighting illuminating an excited crowd, captured with dynamic angles and vivid electric indigo and neon colors, creating a sense of dynamic live performance energy." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA-f7oxVjHJuRGGJl5Z22dSzl3zcViwx-rN0FVkLuXjG_yBOKmG-RXY1NuKwJjWPLgQC9pbK9JJ2AxVFPBcnD_AOPXI7Y8vtoFo1OFTuI95UpaaWH0JaljR2_TJo-e_tE4zn3SWyrGqaYa_L65Rlu6Y9hKCcpFpSzzP620R7JkAxmT-p4pcyCn1rR7PCSfnDadOCjloW4pSd8OlRXeKnEdtW69pTfO0-EbtSSIhLuF6m1ZtI0wC2c0G"/>
+<div class="absolute top-sm right-sm bg-primary/90 text-on-primary px-2 py-1 rounded-full text-label-sm font-label-sm flex items-center gap-1 backdrop-blur-sm">
+<span class="material-symbols-outlined text-[14px]" data-icon="star">star</span>
+                        Nổi bật
+                    </div>
+</div>
+<div class="p-md flex flex-col flex-grow">
+<div class="flex justify-between items-start mb-2">
+<h3 class="text-title-lg font-title-lg text-on-surface line-clamp-2">Lễ Hội Âm Nhạc Gió Mùa 2024</h3>
+</div>
+<div class="flex flex-col gap-1 mb-4 text-on-surface-variant">
+<div class="flex items-center gap-xs text-label-sm font-label-sm">
+<span class="material-symbols-outlined text-[16px]" data-icon="calendar_month">calendar_month</span>
+<span>T7, 15 Thg 10 • 19:00</span>
+</div>
+<div class="flex items-center gap-xs text-label-sm font-label-sm">
+<span class="material-symbols-outlined text-[16px]" data-icon="location_on">location_on</span>
+<span class="line-clamp-1">Sân vận động Quân khu 7, TP.HCM</span>
+</div>
+</div>
+<div class="mt-auto flex justify-between items-end border-t border-outline-variant pt-sm">
+<span class="text-label-sm font-label-sm text-on-surface-variant">Từ</span>
+<span class="text-title-lg font-title-lg font-bold text-primary font-numeric-tabular">500.000đ</span>
+</div>
+</div>
+</article>
+<!-- Event Card 2 -->
+<article class="bg-surface rounded-xl border border-outline-variant overflow-hidden group hover:shadow-[0px_12px_32px_rgba(16,20,38,0.12)] transition-shadow duration-300 flex flex-col cursor-pointer">
+<div class="relative h-48 w-full overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A modern theatrical performance with dramatic spotlighting casting sharp shadows against a minimalist stage set, characterized by deep blacks, crisp whites, and a single striking electric indigo accent light, conveying structural integrity and high drama." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBxcf7qKGRyKRtxDqbFSrAMlFUefXBnIQQ9zhksqikhJRCSJIP4NjsellVgQmBxn9UbJA_mon0vbXAPAatmGRq_Qrx4ZVAHcsBZUAb8aHjqviY0KMwHOGRfNp38x2f1XhCca-hZ8gZHU55jWIsPOBJpW5FKoEUhPmfjwy0DGqlA2NePzTnQQYnUzTrcn6ESUCIsJot4TBzuxhCW4KLxVEilz-6nDERn45_1bjt1_hqAhKlz2sDV2C7s"/>
+</div>
+<div class="p-md flex flex-col flex-grow">
+<div class="flex justify-between items-start mb-2">
+<h3 class="text-title-lg font-title-lg text-on-surface line-clamp-2">Kịch Nói: Ánh Sáng Phía Sau</h3>
+</div>
+<div class="flex flex-col gap-1 mb-4 text-on-surface-variant">
+<div class="flex items-center gap-xs text-label-sm font-label-sm">
+<span class="material-symbols-outlined text-[16px]" data-icon="calendar_month">calendar_month</span>
+<span>CN, 16 Thg 10 • 20:00</span>
+</div>
+<div class="flex items-center gap-xs text-label-sm font-label-sm">
+<span class="material-symbols-outlined text-[16px]" data-icon="location_on">location_on</span>
+<span class="line-clamp-1">Nhà hát Thành Phố, TP.HCM</span>
+</div>
+</div>
+<div class="mt-auto flex justify-between items-end border-t border-outline-variant pt-sm">
+<span class="text-label-sm font-label-sm text-on-surface-variant">Từ</span>
+<span class="text-title-lg font-title-lg font-bold text-primary font-numeric-tabular">300.000đ</span>
+</div>
+</div>
+</article>
+<!-- Event Card 3 -->
+<article class="bg-surface rounded-xl border border-outline-variant overflow-hidden group hover:shadow-[0px_12px_32px_rgba(16,20,38,0.12)] transition-shadow duration-300 flex flex-col cursor-pointer">
+<div class="relative h-48 w-full overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A bustling outdoor food and art market during sunset, featuring warm glowing string lights crisscrossing above diverse stalls, captured with a slightly shallow depth of field to emphasize the lively, reliable community atmosphere." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBA49WGE27JZyCmEoDb1HN09VgL_V7AnynavNmgvB8qM86vwHulVyNUJS2UGjyk1JzoJ14WuOQYmIQN89p0_PxpJU0miDZ7k8W_MpUqiQh6_l7k33GEE1hsDWFldheFnYoYfE_qInHcATujgG8O8SArYqF1yjBu2VuETlMZgdtChfsZKDB_oBTAtCHWavhSCWNHKYahWgjV4twrXpEv2fRMKKqd_K_L6qvV-mRrGfpA6niGouNwoJWr"/>
+<div class="absolute top-sm right-sm bg-error/10 text-error px-2 py-1 rounded-full text-label-sm font-label-sm font-bold flex items-center gap-1 backdrop-blur-sm border border-error/20">
+<span class="material-symbols-outlined text-[14px]" data-icon="local_fire_department">local_fire_department</span>
+                        Sắp hết vé
+                    </div>
+</div>
+<div class="p-md flex flex-col flex-grow">
+<div class="flex justify-between items-start mb-2">
+<h3 class="text-title-lg font-title-lg text-on-surface line-clamp-2">Lễ Hội Văn Hóa Ẩm Thực Đường Phố</h3>
+</div>
+<div class="flex flex-col gap-1 mb-4 text-on-surface-variant">
+<div class="flex items-center gap-xs text-label-sm font-label-sm">
+<span class="material-symbols-outlined text-[16px]" data-icon="calendar_month">calendar_month</span>
+<span>T6, 21 Thg 10 • 16:00</span>
+</div>
+<div class="flex items-center gap-xs text-label-sm font-label-sm">
+<span class="material-symbols-outlined text-[16px]" data-icon="location_on">location_on</span>
+<span class="line-clamp-1">Khu Sala, Thủ Thiêm, TP.HCM</span>
+</div>
+</div>
+<div class="mt-auto flex justify-between items-end border-t border-outline-variant pt-sm">
+<span class="text-label-sm font-label-sm text-on-surface-variant">Từ</span>
+<span class="text-title-lg font-title-lg font-bold text-primary font-numeric-tabular">150.000đ</span>
+</div>
+</div>
+</article>
+<!-- Event Card 4 -->
+<article class="bg-surface rounded-xl border border-outline-variant overflow-hidden group hover:shadow-[0px_12px_32px_rgba(16,20,38,0.12)] transition-shadow duration-300 flex flex-col cursor-pointer">
+<div class="relative h-48 w-full overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A sleek corporate tech conference setup showing a large glowing screen displaying clean data visualizations on a modern stage, bathed in professional cool tones and electric indigo accents to highlight frictionless innovation." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBZbYCI2vj0rsiRKenMHcJlOBarM8oBPV7ULjOlX6UsMQVZz1KjqEljDMGd2ht8BYa9g68dhcfT0FEPiL020VyPdImSCKM4RvSU40hSCvgQAH3dFIC7wKxJAC9SVjiQ7SnHHo6L8d3mapNO0_Byvu8eqUjQT37z1PYHF--JXkaJAUg9pNxfbWNuhnZZZuMlmHIFr8TiKC-uSCLq-3DrJfH_ivNEH_zVkTao8UkZEl0RRiuSouG1Jeos"/>
+</div>
+<div class="p-md flex flex-col flex-grow">
+<div class="flex justify-between items-start mb-2">
+<h3 class="text-title-lg font-title-lg text-on-surface line-clamp-2">Hội Nghị Công Nghệ: Future Now 2024</h3>
+</div>
+<div class="flex flex-col gap-1 mb-4 text-on-surface-variant">
+<div class="flex items-center gap-xs text-label-sm font-label-sm">
+<span class="material-symbols-outlined text-[16px]" data-icon="calendar_month">calendar_month</span>
+<span>T5, 27 Thg 10 • 08:30</span>
+</div>
+<div class="flex items-center gap-xs text-label-sm font-label-sm">
+<span class="material-symbols-outlined text-[16px]" data-icon="location_on">location_on</span>
+<span class="line-clamp-1">GEM Center, Quận 1, TP.HCM</span>
+</div>
+</div>
+<div class="mt-auto flex justify-between items-end border-t border-outline-variant pt-sm">
+<span class="text-label-sm font-label-sm text-on-surface-variant">Từ</span>
+<span class="text-title-lg font-title-lg font-bold text-primary font-numeric-tabular">1.200.000đ</span>
+</div>
+</div>
+</article>
+</div>
+<!-- Pagination -->
+<div class="flex justify-center items-center gap-sm mt-xl">
+<button class="w-10 h-10 flex items-center justify-center rounded-lg border border-outline-variant text-on-surface hover:bg-surface-variant disabled:opacity-50 disabled:cursor-not-allowed">
+<span class="material-symbols-outlined text-[20px]" data-icon="chevron_left">chevron_left</span>
+</button>
+<button class="w-10 h-10 flex items-center justify-center rounded-lg bg-primary text-on-primary font-label-md text-label-md font-bold">1</button>
+<button class="w-10 h-10 flex items-center justify-center rounded-lg border border-outline-variant text-on-surface hover:bg-surface-variant font-label-md text-label-md">2</button>
+<button class="w-10 h-10 flex items-center justify-center rounded-lg border border-outline-variant text-on-surface hover:bg-surface-variant font-label-md text-label-md">3</button>
+<span class="text-on-surface-variant">...</span>
+<button class="w-10 h-10 flex items-center justify-center rounded-lg border border-outline-variant text-on-surface hover:bg-surface-variant font-label-md text-label-md">8</button>
+<button class="w-10 h-10 flex items-center justify-center rounded-lg border border-outline-variant text-on-surface hover:bg-surface-variant">
+<span class="material-symbols-outlined text-[20px]" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-surface-container-highest dark:bg-inverse-surface border-t border-outline-variant dark:border-outline flat no shadows mt-auto">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-gutter px-lg py-xxl max-w-container-max mx-auto">
+<!-- Brand Column -->
+<div class="flex flex-col gap-md col-span-1 md:col-span-1">
+<h2 class="text-headline-md font-headline-md text-primary dark:text-primary-fixed">SMART EVENT</h2>
+<p class="text-body-md font-body-md text-on-surface dark:text-inverse-on-surface">© 2024 SMART EVENT. All rights reserved.</p>
+</div>
+<!-- Links Columns -->
+<div class="flex flex-col gap-sm col-span-1 md:col-span-3">
+<nav class="flex flex-wrap gap-md md:gap-xl">
+<a class="text-on-surface-variant dark:text-on-secondary-fixed-variant text-label-sm font-label-sm hover:text-primary dark:hover:text-primary-fixed transition-colors focus:ring-2 focus:ring-primary focus:ring-offset-2" href="#">About Us</a>
+<a class="text-on-surface-variant dark:text-on-secondary-fixed-variant text-label-sm font-label-sm hover:text-primary dark:hover:text-primary-fixed transition-colors focus:ring-2 focus:ring-primary focus:ring-offset-2" href="#">Terms of Service</a>
+<a class="text-on-surface-variant dark:text-on-secondary-fixed-variant text-label-sm font-label-sm hover:text-primary dark:hover:text-primary-fixed transition-colors focus:ring-2 focus:ring-primary focus:ring-offset-2" href="#">Privacy Policy</a>
+<a class="text-on-surface-variant dark:text-on-secondary-fixed-variant text-label-sm font-label-sm hover:text-primary dark:hover:text-primary-fixed transition-colors focus:ring-2 focus:ring-primary focus:ring-offset-2" href="#">Contact Support</a>
+</nav>
+</div>
+</div>
+</footer>
+</body></html>

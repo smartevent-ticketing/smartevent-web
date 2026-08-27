@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+
+<html class="light" lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SMART EVENT - Create Event</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-high": "#dfe8ff",
+                        "inverse-on-surface": "#ecf0ff",
+                        "surface-dim": "#d0daf2",
+                        "on-primary-container": "#fefaff",
+                        "on-error": "#ffffff",
+                        "surface-container-highest": "#d9e3fb",
+                        "tertiary-fixed-dim": "#ffb3ac",
+                        "on-tertiary": "#ffffff",
+                        "surface-bright": "#f9f9ff",
+                        "inverse-surface": "#273143",
+                        "secondary-container": "#dee1fb",
+                        "on-tertiary-fixed-variant": "#910913",
+                        "error": "#ba1a1a",
+                        "background": "#f9f9ff",
+                        "on-tertiary-container": "#fffaf9",
+                        "on-secondary": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "on-primary-fixed": "#0f0069",
+                        "tertiary-container": "#d13e3a",
+                        "primary-container": "#635bff",
+                        "on-primary-fixed-variant": "#321ed2",
+                        "secondary-fixed-dim": "#c2c5de",
+                        "primary-fixed-dim": "#c3c0ff",
+                        "primary": "#493ee5",
+                        "on-tertiary-fixed": "#410003",
+                        "surface-variant": "#d9e3fb",
+                        "outline": "#777587",
+                        "outline-variant": "#c7c4d8",
+                        "surface-container-low": "#f0f3ff",
+                        "primary-fixed": "#e2dfff",
+                        "tertiary-fixed": "#ffdad6",
+                        "inverse-primary": "#c3c0ff",
+                        "secondary-fixed": "#dee1fb",
+                        "on-background": "#111c2d",
+                        "surface-container": "#e8eeff",
+                        "on-secondary-fixed": "#171b2d",
+                        "on-secondary-container": "#606379",
+                        "surface-tint": "#4c42e9",
+                        "error-container": "#ffdad6",
+                        "secondary": "#5a5d73",
+                        "surface": "#f9f9ff",
+                        "on-surface-variant": "#464555",
+                        "tertiary": "#ae2424",
+                        "surface-container-lowest": "#ffffff",
+                        "on-primary": "#ffffff",
+                        "on-surface": "#111c2d",
+                        "on-secondary-fixed-variant": "#42465a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "lg": "24px",
+                        "xs": "4px",
+                        "base": "8px",
+                        "gutter": "24px",
+                        "xl": "32px",
+                        "md": "16px",
+                        "container-max": "1280px",
+                        "xxl": "48px",
+                        "sm": "8px"
+                    },
+                    "fontFamily": {
+                        "numeric-tabular": ["Be Vietnam Pro"],
+                        "display-lg": ["Be Vietnam Pro"],
+                        "headline-lg": ["Be Vietnam Pro"],
+                        "label-md": ["Be Vietnam Pro"],
+                        "label-sm": ["Be Vietnam Pro"],
+                        "title-lg": ["Be Vietnam Pro"],
+                        "headline-md": ["Be Vietnam Pro"],
+                        "body-md": ["Be Vietnam Pro"],
+                        "body-lg": ["Be Vietnam Pro"]
+                    },
+                    "fontSize": {
+                        "numeric-tabular": ["inherit", { "lineHeight": "inherit", "fontWeight": "inherit" }],
+                        "display-lg": ["48px", { "lineHeight": "60px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "fontWeight": "500" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500" }],
+                        "title-lg": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Be Vietnam Pro', sans-serif; background-color: theme('colors.background'); color: theme('colors.on-background'); }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .material-symbols-outlined.fill { font-variation-settings: 'FILL' 1; }
+        .focus-ring:focus-visible { outline: 2px solid theme('colors.primary'); outline-offset: 2px; }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex w-full">
+<!-- TopNavBar for transactional context -->
+<header class="bg-surface dark:bg-inverse-surface border-b border-outline-variant dark:border-outline flex justify-between items-center px-gutter w-full h-16 sticky top-0 z-50 fixed w-full top-0 left-0">
+<div class="flex items-center gap-md">
+<span class="font-headline-md text-headline-md font-bold text-primary dark:text-inverse-primary">SMART EVENT</span>
+<div class="h-6 w-px bg-outline-variant mx-sm"></div>
+<span class="font-title-lg text-title-lg text-on-surface">Tạo sự kiện mới</span>
+</div>
+<div class="flex items-center gap-sm">
+<button class="font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-low px-4 py-2 rounded-lg transition-colors focus-ring">Lưu bản nháp</button>
+<button class="font-label-md text-label-md text-error hover:bg-error-container px-4 py-2 rounded-lg transition-colors focus-ring flex items-center gap-xs">
+<span class="material-symbols-outlined text-[20px]">close</span> Hủy
+             </button>
+</div>
+</header>
+<main class="flex-1 max-w-[container-max] mx-auto w-full pt-24 pb-xxl px-gutter">
+<!-- Progress Stepper -->
+<div class="mb-xl max-w-3xl mx-auto">
+<div class="flex items-center justify-between relative">
+<div class="absolute left-0 top-1/2 -translate-y-1/2 w-full h-1 bg-surface-container-highest -z-10 rounded-full"></div>
+<div class="absolute left-0 top-1/2 -translate-y-1/2 w-2/5 h-1 bg-primary -z-10 rounded-full"></div>
+<div class="flex flex-col items-center gap-xs bg-background px-2">
+<div class="w-8 h-8 rounded-full bg-primary text-on-primary flex items-center justify-center font-label-md text-label-md">
+<span class="material-symbols-outlined text-[16px]">check</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant hidden md:block">Thông tin</span>
+</div>
+<div class="flex flex-col items-center gap-xs bg-background px-2">
+<div class="w-8 h-8 rounded-full bg-primary text-on-primary flex items-center justify-center font-label-md text-label-md">
+<span class="material-symbols-outlined text-[16px]">check</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant hidden md:block">Thời gian</span>
+</div>
+<div class="flex flex-col items-center gap-xs bg-background px-2">
+<div class="w-8 h-8 rounded-full bg-primary text-on-primary flex items-center justify-center font-label-md text-label-md ring-4 ring-primary-container">3</div>
+<span class="font-label-sm text-label-sm text-primary font-bold hidden md:block">Địa điểm</span>
+</div>
+<div class="flex flex-col items-center gap-xs bg-background px-2 opacity-50">
+<div class="w-8 h-8 rounded-full bg-surface-container-highest text-on-surface-variant flex items-center justify-center font-label-md text-label-md">4</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant hidden md:block">Vé</span>
+</div>
+<div class="flex flex-col items-center gap-xs bg-background px-2 opacity-50">
+<div class="w-8 h-8 rounded-full bg-surface-container-highest text-on-surface-variant flex items-center justify-center font-label-md text-label-md">5</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant hidden md:block">Cài đặt</span>
+</div>
+<div class="flex flex-col items-center gap-xs bg-background px-2 opacity-50">
+<div class="w-8 h-8 rounded-full bg-surface-container-highest text-on-surface-variant flex items-center justify-center font-label-md text-label-md">6</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant hidden md:block">Xuất bản</span>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-xl">
+<!-- Left Column: Search & List -->
+<div class="lg:col-span-7 flex flex-col gap-lg">
+<div>
+<h1 class="font-headline-lg text-headline-lg text-on-background mb-xs">Địa điểm tổ chức</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">Tìm kiếm địa điểm đã có sẵn hoặc tạo một địa điểm mới cho sự kiện của bạn.</p>
+</div>
+<!-- Search Controls -->
+<div class="bg-surface border border-outline-variant rounded-xl p-md flex flex-col sm:flex-row gap-md shadow-sm">
+<div class="relative flex-1">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="w-full pl-10 pr-3 py-3 rounded-lg border border-outline-variant bg-surface-bright focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none transition-all font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant focus-ring" placeholder="Tìm tên địa điểm, nhà thi đấu..." type="text"/>
+</div>
+<div class="flex gap-sm">
+<select class="px-4 py-3 rounded-lg border border-outline-variant bg-surface-bright focus:border-primary focus:outline-none font-body-md text-body-md text-on-surface appearance-none pr-8 relative bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23464555%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_8px_center]">
+<option value="">Tất cả Thành phố</option>
+<option value="hcm">Hồ Chí Minh</option>
+<option value="hn">Hà Nội</option>
+<option value="dn">Đà Nẵng</option>
+</select>
+<button class="bg-surface-container-high text-on-surface hover:bg-surface-container-highest p-3 rounded-lg transition-colors flex items-center justify-center focus-ring" title="Bộ lọc nâng cao">
+<span class="material-symbols-outlined">tune</span>
+</button>
+</div>
+</div>
+<!-- Venue List -->
+<div class="flex flex-col gap-base h-[500px] overflow-y-auto pr-2 hide-scrollbar">
+<!-- Selected Venue Card -->
+<div class="bg-primary-container/10 border-2 border-primary rounded-xl p-md flex gap-md cursor-pointer transition-all relative overflow-hidden group">
+<div class="absolute top-2 right-2 w-6 h-6 rounded-full bg-primary text-on-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-[16px] fill">check_circle</span>
+</div>
+<div class="w-24 h-24 rounded-lg overflow-hidden shrink-0">
+<img class="w-full h-full object-cover" data-alt="A modern, large indoor sports arena empty of people, bright stadium lighting, clean professional photography, vibrant colors, clear view of the court and seating." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDMQy34NJzjspUSg8H0QGkGwRRm2PMWpfAJOOWvr2yufPmfzM01bVUEOhoxIJS9QwABrQ2mym4aLfbXKD56BatPW29itN-hEcMW1tB-w0EKsU3atRdOCyr_P8Z0Jrgv8-a4-cJxpiNBeSQhkRWRuB9pXdKO4ExGYYfogK5hYYXJFZSI9Mf58CkPOb9toAFsmTApwjKhjQOQOLDlWM5ZxILF-dbTD2lZXDzcGl2QVSx6dTvYTFOiVz81"/>
+</div>
+<div class="flex-1 flex flex-col justify-center">
+<h3 class="font-title-lg text-title-lg text-on-surface mb-xs">Nhà thi đấu Quân Khu 7</h3>
+<div class="flex items-center gap-xs text-on-surface-variant font-label-sm text-label-sm mb-xs">
+<span class="material-symbols-outlined text-[16px]">location_on</span>
+<span>202 Hoàng Văn Thụ, Phường 9, Phú Nhuận, Hồ Chí Minh</span>
+</div>
+<div class="flex gap-md mt-auto">
+<div class="bg-surface-container px-2 py-1 rounded text-on-surface-variant font-label-sm text-label-sm flex items-center gap-xs">
+<span class="material-symbols-outlined text-[14px]">groups</span> Sức chứa: 5000
+                                </div>
+<div class="bg-surface-container px-2 py-1 rounded text-on-surface-variant font-label-sm text-label-sm flex items-center gap-xs">
+<span class="material-symbols-outlined text-[14px]">local_parking</span> Bãi xe lớn
+                                </div>
+</div>
+</div>
+</div>
+<!-- Unselected Venue Card 1 -->
+<div class="bg-surface border border-outline-variant hover:border-primary/50 hover:shadow-md rounded-xl p-md flex gap-md cursor-pointer transition-all group">
+<div class="w-24 h-24 rounded-lg overflow-hidden shrink-0">
+<img class="w-full h-full object-cover grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100 transition-all" data-alt="An elegant, large concert hall stage view, dark moody lighting with dramatic spotlights, plush seating, professional high-end event space." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCUZAR1xouDxsgAcCqip-OTII82BcJiR4JjiWP_tKC8nEhG83QUdDCxQxqS0bfPXUECcMnEYmXGserNvv_TIzhpbUuTozEN2T0r-J9BpechM606BSnEhWnxWtr_j8PTXWnt8d1o_xfj4B2p-ziSWlMmIOp8Dayty-QNCX4cHhvjx8tMRNhbzn3ra-V95qn-VxIF8teNrwyIOaacAOVh9OdOrPWJISQytQSKGLSCT3rVJjKMxV87Pe7q"/>
+</div>
+<div class="flex-1 flex flex-col justify-center">
+<h3 class="font-title-lg text-title-lg text-on-surface mb-xs group-hover:text-primary transition-colors">Trung tâm Hội nghị Quốc gia</h3>
+<div class="flex items-center gap-xs text-on-surface-variant font-label-sm text-label-sm mb-xs">
+<span class="material-symbols-outlined text-[16px]">location_on</span>
+<span>Phạm Hùng, Mễ Trì, Nam Từ Liêm, Hà Nội</span>
+</div>
+<div class="flex gap-md mt-auto">
+<div class="bg-surface-container-low px-2 py-1 rounded text-on-surface-variant font-label-sm text-label-sm flex items-center gap-xs">
+<span class="material-symbols-outlined text-[14px]">groups</span> Sức chứa: 3500
+                                </div>
+</div>
+</div>
+</div>
+<!-- Unselected Venue Card 2 -->
+<div class="bg-surface border border-outline-variant hover:border-primary/50 hover:shadow-md rounded-xl p-md flex gap-md cursor-pointer transition-all group">
+<div class="w-24 h-24 rounded-lg overflow-hidden shrink-0">
+<img class="w-full h-full object-cover grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100 transition-all" data-alt="A trendy, industrial-style warehouse event space, exposed brick walls, modern lighting rig, empty floor ready for a party or exhibition." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAb3jSkalLkK6I_36RSCCi4ENMAoHbdM0af1vMvalsmuA91HsIbauJrqGfn3NeR-vNlFuyIrgpuujXZ3Qhq5RVpGRcwTOqmrEGUPBE4h97wuzOE9WAo-7dvpZg2w6dh0Hnaz_qVgvpoELetIYCusGfuFKGEBAaN27STGwZRK8AYrUQJvezAyrDxcsjbYEBE82fwbYNgxoCtnv7s7ZPK_IpEc_GGNbuneep_Z901-BYccny4ZFyJb8dg"/>
+</div>
+<div class="flex-1 flex flex-col justify-center">
+<h3 class="font-title-lg text-title-lg text-on-surface mb-xs group-hover:text-primary transition-colors">SECC - Saigon Exhibition and Convention Center</h3>
+<div class="flex items-center gap-xs text-on-surface-variant font-label-sm text-label-sm mb-xs">
+<span class="material-symbols-outlined text-[16px]">location_on</span>
+<span>799 Nguyễn Văn Linh, Tân Phú, Quận 7, Hồ Chí Minh</span>
+</div>
+<div class="flex gap-md mt-auto">
+<div class="bg-surface-container-low px-2 py-1 rounded text-on-surface-variant font-label-sm text-label-sm flex items-center gap-xs">
+<span class="material-symbols-outlined text-[14px]">groups</span> Sức chứa: 10000+
+                                </div>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-4 flex justify-center">
+<button class="font-label-md text-label-md text-primary flex items-center gap-xs hover:bg-primary-container/50 px-4 py-2 rounded-lg transition-colors focus-ring">
+<span class="material-symbols-outlined">add_location</span>
+                        Tạo địa điểm mới
+                    </button>
+</div>
+</div>
+<!-- Right Column: Detail Preview -->
+<div class="lg:col-span-5 hidden lg:block">
+<div class="sticky top-[104px] bg-surface rounded-xl border border-outline-variant shadow-sm overflow-hidden flex flex-col h-[700px]">
+<!-- Preview Image/Map -->
+<div class="h-48 bg-surface-container-highest relative">
+<img class="w-full h-full object-cover" data-alt="A detailed, modern map graphic centered on a specific building with a prominent pin marker, clean cartography style, light mode aesthetic, urban surroundings." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA-nbp69WA-KRuam3obw2qjLy_FzgLbVyB66wPq4MxG2aZB0yylILrZm9ahsQ8ROZ73GGZfUHPep7jGqZ6TnhkDsVXE5UEOWn1ZvjgtmnFyYyEowG5Aa7s3nnYQp3LsdSNo4cAlLUEsxq0LN6G2PrWSELXCjd_VaVsEeopcVUzfTwkiL4QNYOt5jCS4W1Lf54Ah1-E6FtW3ukL4fxfNEmRvUg97XsbuzW-FIuMVzEylKXE5Egdw_On9"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface to-transparent"></div>
+</div>
+<div class="p-lg flex-1 flex flex-col -mt-12 relative z-10">
+<div class="w-20 h-20 bg-surface rounded-xl border border-outline-variant p-2 mb-4 shadow-sm">
+<img class="w-full h-full object-contain" data-alt="A clean, abstract architectural logo or venue icon, modern corporate design, simple geometric shapes." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDiI5vz4bZDAc0ql77RezWWD0XXHLVfYqAE0c2pJ-aIXDn8pdkF-nH7SstwEqyrt8FAyo3NHA8Ur9x23pYMNJdXzNHEbRAKS0Uk6dAbXAxivf6U-47vkZgvu7uChmdnT0JCmMPwI173yXI4jP7xplBHZbVAB1rKkMp8PJVu95__rz5__kPXRjQe72lidaw18hhrU3BPfSP57lzb3ql8SfN4FYQgLrhUNZ5V_MmaBOUzRmvqwU8eLm6r"/>
+</div>
+<h2 class="font-headline-md text-headline-md text-on-surface mb-2">Nhà thi đấu Quân Khu 7</h2>
+<div class="flex items-start gap-sm mb-6 text-on-surface-variant">
+<span class="material-symbols-outlined text-primary mt-1 shrink-0">location_on</span>
+<span class="font-body-md text-body-md">202 Hoàng Văn Thụ, Phường 9, Phú Nhuận, Thành phố Hồ Chí Minh, Việt Nam</span>
+</div>
+<div class="grid grid-cols-2 gap-4 mb-6">
+<div class="bg-surface-container-low p-3 rounded-lg border border-outline-variant/50">
+<div class="text-on-surface-variant font-label-sm text-label-sm mb-1 flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">groups</span> Sức chứa
+                                </div>
+<div class="font-title-lg text-title-lg text-on-surface font-numeric-tabular">5,000</div>
+</div>
+<div class="bg-surface-container-low p-3 rounded-lg border border-outline-variant/50">
+<div class="text-on-surface-variant font-label-sm text-label-sm mb-1 flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">map</span> Diện tích
+                                </div>
+<div class="font-title-lg text-title-lg text-on-surface font-numeric-tabular">15,000 m²</div>
+</div>
+</div>
+<div class="mb-6">
+<h4 class="font-label-md text-label-md text-on-surface mb-2">Tiện ích</h4>
+<div class="flex flex-wrap gap-2">
+<span class="px-3 py-1 bg-surface-container rounded-full text-on-surface-variant font-label-sm text-label-sm border border-outline-variant/30">Điều hòa trung tâm</span>
+<span class="px-3 py-1 bg-surface-container rounded-full text-on-surface-variant font-label-sm text-label-sm border border-outline-variant/30">Bãi đỗ xe ô tô</span>
+<span class="px-3 py-1 bg-surface-container rounded-full text-on-surface-variant font-label-sm text-label-sm border border-outline-variant/30">Wifi tốc độ cao</span>
+<span class="px-3 py-1 bg-surface-container rounded-full text-on-surface-variant font-label-sm text-label-sm border border-outline-variant/30">Lối đi cho người khuyết tật</span>
+</div>
+</div>
+<div class="mt-auto pt-4 border-t border-outline-variant">
+<a class="font-label-md text-label-md text-primary hover:underline flex items-center gap-xs w-fit" href="#">
+                                 Xem chi tiết địa điểm <span class="material-symbols-outlined text-[16px]">open_in_new</span>
+</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Actions Sticky Footer -->
+<footer class="fixed bottom-0 left-0 w-full bg-surface border-t border-outline-variant px-gutter py-4 z-40">
+<div class="max-w-[container-max] mx-auto flex justify-between items-center w-full">
+<button class="font-label-md text-label-md text-on-surface px-6 py-3 border border-outline-variant rounded-lg hover:bg-surface-container-low transition-colors focus-ring">Quay lại</button>
+<button class="font-label-md text-label-md text-on-primary bg-primary px-8 py-3 rounded-lg hover:bg-surface-tint shadow-[0px_4px_20px_rgba(16,20,38,0.08)] transition-all focus-ring">Tiếp tục</button>
+</div>
+</footer>
+</body></html>

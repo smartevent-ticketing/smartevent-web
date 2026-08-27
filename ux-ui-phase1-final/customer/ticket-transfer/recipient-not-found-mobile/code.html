@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+
+<html lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Chuyển vé cho người khác</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container": "#e8eeff",
+                        "tertiary-container": "#d13e3a",
+                        "secondary-fixed": "#dee1fb",
+                        "surface": "#f9f9ff",
+                        "outline-variant": "#c7c4d8",
+                        "on-primary": "#ffffff",
+                        "primary-fixed": "#e2dfff",
+                        "surface-container-highest": "#d9e3fb",
+                        "on-error-container": "#93000a",
+                        "secondary-fixed-dim": "#c2c5de",
+                        "on-secondary-fixed": "#171b2d",
+                        "outline": "#777587",
+                        "error-container": "#ffdad6",
+                        "inverse-on-surface": "#ecf0ff",
+                        "on-tertiary-container": "#fffaf9",
+                        "surface-tint": "#4c42e9",
+                        "tertiary-fixed": "#ffdad6",
+                        "background": "#f9f9ff",
+                        "on-primary-fixed-variant": "#321ed2",
+                        "on-tertiary-fixed": "#410003",
+                        "on-primary-fixed": "#0f0069",
+                        "on-secondary": "#ffffff",
+                        "error": "#ba1a1a",
+                        "tertiary-fixed-dim": "#ffb3ac",
+                        "on-secondary-fixed-variant": "#42465a",
+                        "primary-container": "#635bff",
+                        "inverse-surface": "#273143",
+                        "on-surface": "#111c2d",
+                        "on-background": "#111c2d",
+                        "secondary": "#5a5d73",
+                        "surface-container-high": "#dfe8ff",
+                        "on-primary-container": "#fefaff",
+                        "secondary-container": "#dee1fb",
+                        "surface-variant": "#d9e3fb",
+                        "inverse-primary": "#c3c0ff",
+                        "surface-container-low": "#f0f3ff",
+                        "tertiary": "#ae2424",
+                        "on-error": "#ffffff",
+                        "primary": "#493ee5",
+                        "on-tertiary-fixed-variant": "#910913",
+                        "on-secondary-container": "#606379",
+                        "surface-container-lowest": "#ffffff",
+                        "on-surface-variant": "#464555",
+                        "primary-fixed-dim": "#c3c0ff",
+                        "on-tertiary": "#ffffff",
+                        "surface-bright": "#f9f9ff",
+                        "surface-dim": "#d0daf2"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "container-max": "1280px",
+                        "gutter": "24px",
+                        "base": "8px",
+                        "xl": "32px",
+                        "md": "16px",
+                        "xxl": "48px",
+                        "sm": "8px",
+                        "xs": "4px",
+                        "lg": "24px"
+                    },
+                    "fontFamily": {
+                        "label-md": ["Be Vietnam Pro"],
+                        "body-md": ["Be Vietnam Pro"],
+                        "headline-md": ["Be Vietnam Pro"],
+                        "title-lg": ["Be Vietnam Pro"],
+                        "display-lg": ["Be Vietnam Pro"],
+                        "label-sm": ["Be Vietnam Pro"],
+                        "body-lg": ["Be Vietnam Pro"],
+                        "numeric-tabular": ["Be Vietnam Pro"],
+                        "headline-lg": ["Be Vietnam Pro"]
+                    },
+                    "fontSize": {
+                        "label-md": ["14px", { "lineHeight": "20px", "fontWeight": "500" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "title-lg": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "display-lg": ["48px", { "lineHeight": "60px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "numeric-tabular": ["inherit", { "lineHeight": "inherit", "fontWeight": "inherit" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Be Vietnam Pro', sans-serif; }
+        .mobile-container {
+            width: 390px;
+            height: 844px;
+            margin: 0 auto;
+            position: relative;
+            overflow: hidden;
+            background-color: #f9f9ff; /* background */
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+        /* Hide scrollbar for Chrome, Safari and Opera */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        /* Hide scrollbar for IE, Edge and Firefox */
+        .no-scrollbar {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+<div class="mobile-container flex flex-col bg-background">
+<!-- Header: Linear flow, transactional -->
+<header class="flex justify-between items-center h-[64px] px-md border-b border-outline-variant bg-surface sticky top-0 z-10">
+<button aria-label="Close" class="w-10 h-10 flex items-center justify-center text-on-surface hover:bg-surface-container-low rounded-full transition-colors duration-200">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">close</span>
+</button>
+<h1 class="font-title-lg text-title-lg text-on-surface">Chuyển vé</h1>
+<div class="w-10"></div> <!-- Placeholder for balance -->
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-1 overflow-y-auto no-scrollbar px-md py-lg flex flex-col gap-lg pb-24">
+<!-- Page Title & Description -->
+<div class="flex flex-col gap-sm">
+<h2 class="font-headline-md text-headline-md text-on-surface">Chuyển vé cho người khác</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Nhập email tài khoản SMART EVENT của người sẽ nhận vé.</p>
+</div>
+<!-- Ticket Summary Card (Glassmorphism/Card style) -->
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant p-md flex flex-col gap-sm shadow-sm">
+<div class="flex justify-between items-start">
+<div class="flex flex-col">
+<h3 class="font-title-lg text-title-lg text-on-surface">Đêm Nhạc Hội Indie 2024</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Khu A · A12</p>
+</div>
+<span class="px-2 py-1 bg-surface-container-high text-secondary rounded-full font-label-sm text-label-sm">Đã phát hành</span>
+</div>
+<div class="flex flex-wrap gap-md pt-2 border-t border-outline-variant/30">
+<div class="flex flex-col">
+<span class="text-label-sm text-on-surface-variant/60 uppercase">Loại vé</span>
+<span class="font-label-md text-label-md text-primary">VIP</span>
+</div>
+<div class="flex flex-col">
+<span class="text-label-sm text-on-surface-variant/60 uppercase">Đợt bán</span>
+<span class="font-label-md text-label-md text-on-surface">Early Bird</span>
+</div>
+<div class="flex flex-col ml-auto">
+<span class="text-label-sm text-on-surface-variant/60 uppercase">Mã vé</span>
+<span class="font-label-md text-label-md font-numeric-tabular text-on-surface">TKT-INDIE-A12</span>
+</div>
+</div>
+</div>
+<!-- Email Input Area -->
+<div class="flex flex-col gap-base">
+<label class="font-label-md text-label-md text-on-surface" for="recipient-email">Email người nhận</label>
+<div class="relative">
+<svg class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-error" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<input aria-describedby="email-error" aria-invalid="true" class="w-full h-[48px] pl-10 pr-4 rounded-[10px] border-2 border-error bg-surface text-on-surface font-body-md text-body-md focus:outline-none focus:ring-2 focus:ring-error focus:ring-offset-2 focus:ring-offset-surface transition-all" id="recipient-email" type="email" value="khongtontai@example.com"/>
+</div>
+<!-- Error Callout -->
+<div class="bg-error-container rounded-lg p-md flex items-start gap-sm border border-error/20 mt-xs" id="email-error">
+<svg class="w-5 h-5 text-error shrink-0 mt-[2px]" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path clip-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" fill-rule="evenodd"></path></svg>
+<div class="flex flex-col gap-xs">
+<h4 class="font-label-md text-label-md text-on-error-container font-bold">Không tìm thấy tài khoản người nhận</h4>
+<p class="font-body-md text-body-md text-on-error-container">Không tìm thấy tài khoản SMART EVENT phù hợp với email khongtontai@example.com.</p>
+<p class="font-label-sm text-label-sm text-on-error-container/80 mt-1 italic">Hãy kiểm tra lại địa chỉ email trước khi tiếp tục.</p>
+</div>
+</div>
+</div>
+<!-- Spacer to push buttons to bottom if needed, though scroll handles it -->
+<div class="flex-1"></div>
+<!-- Security Notice -->
+<div class="flex flex-col gap-base"><label class="font-label-md text-label-md text-on-surface">Lời nhắn (không bắt buộc)</label><div class="p-md bg-surface-container-low rounded-lg border border-outline-variant"><p class="font-body-md text-body-md text-on-surface">Chúc bạn có một đêm nhạc thật vui!</p></div></div><div class="bg-surface-container-low rounded-lg p-sm flex items-center gap-sm mt-lg">
+<svg class="w-5 h-5 text-secondary shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Vì lý do bảo mật, mã QR của vé không được hiển thị trong quá trình chuyển.</p>
+</div>
+</main>
+<!-- Bottom Action Area (Sticky) -->
+<div class="p-md bg-surface border-t border-outline-variant flex flex-col gap-sm pb-8">
+<button class="w-full h-[48px] bg-primary text-on-primary rounded-[10px] font-label-md text-label-md font-bold flex items-center justify-center hover:bg-primary-container active:scale-[0.98] transition-all focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
+                Kiểm tra lại
+            </button>
+<button class="w-full h-[48px] bg-transparent text-primary rounded-[10px] font-label-md text-label-md font-bold flex items-center justify-center border border-primary hover:bg-primary/5 active:scale-[0.98] transition-all focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
+                Hủy
+            </button>
+</div>
+</div>
+</body></html>

@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+
+<html class="light" lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Hóa đơn của tôi - SMART EVENT</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary-fixed": "#171b2d",
+                        "primary": "#493ee5",
+                        "outline": "#777587",
+                        "surface": "#f9f9ff",
+                        "error-container": "#ffdad6",
+                        "on-error-container": "#93000a",
+                        "on-background": "#111c2d",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary-fixed-variant": "#910913",
+                        "on-secondary-container": "#606379",
+                        "on-tertiary-container": "#fffaf9",
+                        "on-tertiary-fixed": "#410003",
+                        "inverse-surface": "#273143",
+                        "secondary-fixed": "#dee1fb",
+                        "surface-dim": "#d0daf2",
+                        "secondary-fixed-dim": "#c2c5de",
+                        "tertiary-fixed-dim": "#ffb3ac",
+                        "on-secondary": "#ffffff",
+                        "background": "#f9f9ff",
+                        "secondary-container": "#dee1fb",
+                        "on-secondary-fixed-variant": "#42465a",
+                        "secondary": "#5a5d73",
+                        "on-tertiary": "#ffffff",
+                        "surface-container-high": "#dfe8ff",
+                        "outline-variant": "#c7c4d8",
+                        "error": "#ba1a1a",
+                        "surface-variant": "#d9e3fb",
+                        "surface-bright": "#f9f9ff",
+                        "on-primary-fixed": "#0f0069",
+                        "primary-fixed-dim": "#c3c0ff",
+                        "surface-tint": "#4c42e9",
+                        "on-primary": "#ffffff",
+                        "surface-container-low": "#f0f3ff",
+                        "on-error": "#ffffff",
+                        "tertiary-container": "#d13e3a",
+                        "primary-container": "#635bff",
+                        "surface-container-highest": "#d9e3fb",
+                        "surface-container": "#e8eeff",
+                        "tertiary": "#ae2424",
+                        "on-primary-container": "#fefaff",
+                        "inverse-primary": "#c3c0ff",
+                        "on-surface-variant": "#464555",
+                        "inverse-on-surface": "#ecf0ff",
+                        "on-primary-fixed-variant": "#321ed2",
+                        "on-surface": "#111c2d",
+                        "tertiary-fixed": "#ffdad6",
+                        "primary-fixed": "#e2dfff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "base": "8px",
+                        "md": "16px",
+                        "container-max": "1280px",
+                        "lg": "24px",
+                        "xl": "32px",
+                        "xxl": "48px",
+                        "gutter": "24px",
+                        "sm": "8px",
+                        "xs": "4px"
+                    },
+                    "fontFamily": {
+                        "numeric-tabular": ["Be Vietnam Pro"],
+                        "display-lg": ["Be Vietnam Pro"],
+                        "body-lg": ["Be Vietnam Pro"],
+                        "title-lg": ["Be Vietnam Pro"],
+                        "headline-lg": ["Be Vietnam Pro"],
+                        "label-sm": ["Be Vietnam Pro"],
+                        "headline-md": ["Be Vietnam Pro"],
+                        "body-md": ["Be Vietnam Pro"],
+                        "label-md": ["Be Vietnam Pro"]
+                    },
+                    "fontSize": {
+                        "numeric-tabular": ["inherit", { "lineHeight": "inherit", "fontWeight": "inherit" }],
+                        "display-lg": ["48px", { "lineHeight": "60px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "title-lg": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "fontWeight": "500" }]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .kinetic-pulse {
+            animation: pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+        }
+        @keyframes pulse-ring {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(186, 26, 26, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(186, 26, 26, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(186, 26, 26, 0); }
+        }
+        .spinner {
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md h-screen w-full flex overflow-hidden">
+<!-- TopNavBar (Hidden on md, shown on small if needed, but per spec this is a desktop view) -->
+<header class="hidden md:flex justify-between items-center px-gutter h-16 w-full max-w-container-max mx-auto bg-surface border-b border-outline-variant shadow-sm fixed top-0 w-full z-40">
+<div class="flex items-center gap-md">
+<span class="text-title-lg font-headline-lg text-primary">SMART EVENT</span>
+<nav class="hidden md:flex items-center gap-lg ml-xl">
+<a class="text-label-md font-label-md text-on-surface-variant hover:text-primary transition-colors cursor-pointer active:scale-95 transition-transform" href="#">Khám phá</a>
+<a class="text-label-md font-label-md text-on-surface-variant hover:text-primary transition-colors cursor-pointer active:scale-95 transition-transform" href="#">Địa điểm</a>
+<a class="text-label-md font-label-md text-on-surface-variant hover:text-primary transition-colors cursor-pointer active:scale-95 transition-transform" href="#">Vé của tôi</a>
+</nav>
+</div>
+<div>
+<button class="text-label-md font-label-md text-on-surface-variant hover:text-primary transition-colors cursor-pointer active:scale-95 transition-transform">Cá nhân</button>
+</div>
+</header>
+<div class="flex flex-1 pt-16 md:pt-16 w-full max-w-container-max mx-auto">
+<!-- SideNavBar -->
+<aside class="hidden md:flex flex-col gap-sm p-md h-[calc(100vh-64px)] w-64 bg-surface-container bg-surface-container-low shadow-md flex-shrink-0 z-30">
+<div class="mb-xl px-sm">
+<h2 class="text-headline-md font-headline-md text-primary mb-xs">Tài khoản của tôi</h2>
+<p class="text-label-sm font-label-sm text-on-surface-variant">Quản lý thông tin và vé của bạn</p>
+</div>
+<nav class="flex flex-col gap-xs">
+<a class="flex items-center gap-md text-on-surface-variant px-md py-sm rounded-lg hover:bg-surface-container-highest transition-colors active:opacity-80 transition-opacity" href="#">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="text-label-md font-label-md">Hồ sơ cá nhân</span>
+</a>
+<a class="flex items-center gap-md text-on-surface-variant px-md py-sm rounded-lg hover:bg-surface-container-highest transition-colors active:opacity-80 transition-opacity" href="#">
+<span class="material-symbols-outlined" data-icon="confirmation_number">confirmation_number</span>
+<span class="text-label-md font-label-md">Vé của tôi</span>
+</a>
+<a class="flex items-center gap-md text-on-surface-variant px-md py-sm rounded-lg hover:bg-surface-container-highest transition-colors active:opacity-80 transition-opacity" href="#">
+<span class="material-symbols-outlined" data-icon="receipt_long">receipt_long</span>
+<span class="text-label-md font-label-md">Đơn hàng</span>
+</a>
+<!-- Active Item -->
+<a class="flex items-center gap-md bg-primary-container text-on-primary-container rounded-lg px-md py-sm active:opacity-80 transition-opacity" href="#">
+<span class="material-symbols-outlined" data-icon="description">description</span>
+<span class="text-label-md font-label-md">Hóa đơn</span>
+</a>
+<a class="flex items-center gap-md text-on-surface-variant px-md py-sm rounded-lg hover:bg-surface-container-highest transition-colors active:opacity-80 transition-opacity" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="text-label-md font-label-md">Cài đặt</span>
+</a>
+</nav>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 p-gutter bg-background overflow-y-auto relative flex flex-col">
+<div class="mb-xl">
+<h1 class="text-headline-lg font-headline-lg text-on-surface">Hóa đơn của tôi</h1>
+</div>
+<div class="flex-1 flex flex-col items-center justify-center max-w-2xl mx-auto w-full text-center">
+<!-- Kinetic Pulse Error Icon -->
+<div class="mb-lg kinetic-pulse rounded-full bg-error-container p-md inline-flex items-center justify-center w-24 h-24">
+<svg class="w-12 h-12 text-error" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+<h2 class="text-title-lg font-title-lg text-on-surface mb-sm">Không thể tải danh sách hóa đơn</h2>
+<p class="text-body-md font-body-md text-on-surface-variant mb-md max-w-md">Đã xảy ra sự cố khi tải dữ liệu hóa đơn. Vui lòng thử lại.</p>
+<div class="bg-surface-container-low px-md py-sm rounded-lg border border-outline-variant mb-xl inline-flex items-center gap-sm">
+<span class="material-symbols-outlined text-outline text-[18px]">security</span>
+<span class="text-label-md font-label-md text-on-surface-variant">Thông tin của bạn không bị thay đổi.</span>
+</div>
+<div class="flex flex-col sm:flex-row gap-md items-center justify-center w-full">
+<button class="w-full sm:w-auto h-[48px] px-xl bg-primary text-on-primary rounded-[10px] text-label-md font-label-md font-bold focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 transition-all hover:bg-on-primary-fixed-variant flex items-center justify-center gap-sm" id="retryBtn" onclick="handleRetry()">
+<span id="retryText">Thử lại</span>
+<svg class="hidden spinner w-5 h-5 text-on-primary" fill="none" id="retrySpinner" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+<path class="opacity-75" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" fill="currentColor"></path>
+</svg>
+</button>
+<button class="w-full sm:w-auto h-[48px] px-xl bg-surface border border-outline text-on-surface rounded-[10px] text-label-md font-label-md font-bold focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 transition-all hover:bg-surface-variant">
+                        Về trang cá nhân
+                    </button>
+</div>
+</div>
+</main>
+</div>
+<script>
+        function handleRetry() {
+            const btn = document.getElementById('retryBtn');
+            const text = document.getElementById('retryText');
+            const spinner = document.getElementById('retrySpinner');
+
+            // Set loading state
+            btn.disabled = true;
+            btn.classList.add('opacity-80', 'cursor-not-allowed');
+            text.textContent = 'Đang tải...';
+            spinner.classList.remove('hidden');
+
+            // Simulate network request
+            setTimeout(() => {
+                // Reset state (in real app, handle success/fail)
+                btn.disabled = false;
+                btn.classList.remove('opacity-80', 'cursor-not-allowed');
+                text.textContent = 'Thử lại';
+                spinner.classList.add('hidden');
+            }, 2000);
+        }
+    </script>
+</body></html>

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+
+<html class="light" lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Chuyển vé thành công</title>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "on-primary": "#ffffff",
+                        "on-secondary-fixed-variant": "#42465a",
+                        "on-tertiary-fixed-variant": "#910913",
+                        "on-tertiary-container": "#fffaf9",
+                        "error": "#ba1a1a",
+                        "on-secondary-container": "#606379",
+                        "on-tertiary": "#ffffff",
+                        "inverse-surface": "#273143",
+                        "on-primary-container": "#fefaff",
+                        "surface-bright": "#f9f9ff",
+                        "secondary": "#5a5d73",
+                        "inverse-primary": "#c3c0ff",
+                        "surface": "#f9f9ff",
+                        "primary-fixed": "#e2dfff",
+                        "outline-variant": "#c7c4d8",
+                        "on-surface": "#111c2d",
+                        "surface-tint": "#4c42e9",
+                        "on-secondary": "#ffffff",
+                        "tertiary": "#ae2424",
+                        "on-tertiary-fixed": "#410003",
+                        "on-primary-fixed": "#0f0069",
+                        "secondary-fixed": "#dee1fb",
+                        "surface-variant": "#d9e3fb",
+                        "surface-container": "#e8eeff",
+                        "secondary-container": "#dee1fb",
+                        "on-background": "#111c2d",
+                        "tertiary-container": "#d13e3a",
+                        "background": "#f9f9ff",
+                        "tertiary-fixed": "#ffdad6",
+                        "surface-dim": "#d0daf2",
+                        "primary": "#493ee5",
+                        "tertiary-fixed-dim": "#ffb3ac",
+                        "surface-container-highest": "#d9e3fb",
+                        "secondary-fixed-dim": "#c2c5de",
+                        "inverse-on-surface": "#ecf0ff",
+                        "outline": "#777587",
+                        "primary-fixed-dim": "#c3c0ff",
+                        "surface-container-low": "#f0f3ff",
+                        "error-container": "#ffdad6",
+                        "on-error-container": "#93000a",
+                        "on-primary-fixed-variant": "#321ed2",
+                        "surface-container-lowest": "#ffffff",
+                        "on-surface-variant": "#464555",
+                        "on-secondary-fixed": "#171b2d",
+                        "on-error": "#ffffff",
+                        "surface-container-high": "#dfe8ff",
+                        "primary-container": "#635bff"
+                    },
+                    borderRadius: {
+                        DEFAULT: "0.25rem",
+                        lg: "0.5rem",
+                        xl: "0.75rem",
+                        full: "9999px"
+                    },
+                    spacing: {
+                        lg: "24px",
+                        xs: "4px",
+                        base: "8px",
+                        sm: "8px",
+                        md: "16px",
+                        gutter: "24px",
+                        "container-max": "1280px",
+                        xl: "32px",
+                        xxl: "48px"
+                    },
+                    fontFamily: {
+                        "label-md": ["Be Vietnam Pro"],
+                        "label-sm": ["Be Vietnam Pro"],
+                        "title-lg": ["Be Vietnam Pro"],
+                        "numeric-tabular": ["Be Vietnam Pro"],
+                        "display-lg": ["Be Vietnam Pro"],
+                        "body-md": ["Be Vietnam Pro"],
+                        "body-lg": ["Be Vietnam Pro"],
+                        "headline-lg": ["Be Vietnam Pro"],
+                        "headline-md": ["Be Vietnam Pro"]
+                    },
+                    fontSize: {
+                        "label-md": ["14px", { lineHeight: "20px", fontWeight: "500" }],
+                        "label-sm": ["12px", { lineHeight: "16px", letterSpacing: "0.02em", fontWeight: "500" }],
+                        "title-lg": ["20px", { lineHeight: "28px", fontWeight: "600" }],
+                        "numeric-tabular": ["inherit", { lineHeight: "inherit", fontWeight: "inherit" }],
+                        "display-lg": ["48px", { lineHeight: "60px", letterSpacing: "-0.02em", fontWeight: "700" }],
+                        "body-md": ["16px", { lineHeight: "24px", fontWeight: "400" }],
+                        "body-lg": ["18px", { lineHeight: "28px", fontWeight: "400" }],
+                        "headline-lg": ["32px", { lineHeight: "40px", letterSpacing: "-0.01em", fontWeight: "700" }],
+                        "headline-md": ["24px", { lineHeight: "32px", fontWeight: "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .pulse-ring {
+            animation: pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+        }
+        @keyframes pulse-ring {
+            0% { transform: scale(0.8); opacity: 0.5; }
+            80%, 100% { opacity: 0; }
+        }
+        .success-icon-container {
+            position: relative;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+        }
+        .success-icon-container::before {
+            content: '';
+            position: absolute;
+            left: 0; top: 0; right: 0; bottom: 0;
+            border-radius: 50%;
+            background-color: #e2dfff;
+            z-index: 0;
+        }
+        .success-icon-container::after {
+            content: '';
+            position: absolute;
+            left: -20px; top: -20px; right: -20px; bottom: -20px;
+            border-radius: 50%;
+            border: 2px solid #e2dfff;
+            z-index: -1;
+            animation: pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col justify-center max-w-[390px] mx-auto overflow-x-hidden p-md">
+<!-- Success Icon & Header -->
+<div class="flex flex-col items-center text-center mt-xl mb-lg">
+<div class="success-icon-container mb-md">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1; font-size: 40px; z-index: 1;">
+                check_circle
+            </span>
+</div>
+<h1 class="font-headline-md text-headline-md text-on-surface mb-xs">Chuyển vé thành công</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">Vé TKT-INDIE-A12 đã được chuyển tới minh.nguyen@example.com.</p>
+</div>
+<!-- Summary Box -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-md mb-lg shadow-sm">
+<div class="flex items-center gap-sm mb-md border-b border-outline-variant pb-sm">
+<span class="material-symbols-outlined text-primary text-xl">confirmation_number</span>
+<span class="font-title-lg text-title-lg text-on-surface">Đêm Nhạc Hội Indie 2024</span>
+</div>
+<div class="space-y-sm">
+<div class="flex justify-between items-center">
+<span class="font-label-md text-label-md text-on-surface-variant">Vị trí</span>
+<span class="font-body-md text-body-md font-medium text-on-surface">Khu A · A12</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-label-md text-label-md text-on-surface-variant">Người nhận</span>
+<span class="font-body-md text-body-md font-medium text-on-surface">minh.nguyen@example.com</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-label-md text-label-md text-on-surface-variant">Trạng thái</span>
+<span class="bg-surface-container-high text-primary font-label-sm text-label-sm px-2 py-1 rounded-full">Đã chuyển</span>
+</div>
+</div>
+</div>
+<!-- Info Notice -->
+<div class="bg-surface-container-low rounded-lg p-sm mb-xl flex items-start gap-sm">
+<span class="material-symbols-outlined text-on-surface-variant mt-1" style="font-size: 20px;">info</span>
+<p class="font-label-md text-label-md text-on-surface-variant leading-tight">Vé này đã được cập nhật trạng thái và không còn thuộc quyền sử dụng của bạn.</p>
+</div>
+<!-- Actions -->
+<div class="mt-auto space-y-md pb-md">
+<button class="w-full h-12 bg-primary text-on-primary font-label-md text-label-md font-bold rounded-lg hover:bg-primary-container transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
+            Xem vé của tôi
+        </button>
+<button class="w-full h-12 bg-transparent border border-outline text-primary font-label-md text-label-md font-bold rounded-lg hover:bg-surface-container-highest transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
+            Về trang sự kiện
+        </button>
+</div>
+</body></html>

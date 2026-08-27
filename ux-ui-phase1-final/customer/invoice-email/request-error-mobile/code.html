@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+
+<html lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Gửi hóa đơn qua email - Error</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "inverse-surface": "#273143",
+                    "background": "#f9f9ff",
+                    "surface-tint": "#4c42e9",
+                    "on-primary-container": "#fefaff",
+                    "secondary-fixed-dim": "#c2c5de",
+                    "on-primary-fixed": "#0f0069",
+                    "secondary-fixed": "#dee1fb",
+                    "on-error-container": "#93000a",
+                    "surface-dim": "#d0daf2",
+                    "primary": "#493ee5",
+                    "on-secondary-fixed-variant": "#42465a",
+                    "on-secondary": "#ffffff",
+                    "tertiary-fixed-dim": "#ffb3ac",
+                    "tertiary-container": "#d13e3a",
+                    "on-surface-variant": "#464555",
+                    "secondary-container": "#dee1fb",
+                    "inverse-on-surface": "#ecf0ff",
+                    "on-tertiary-fixed": "#410003",
+                    "inverse-primary": "#c3c0ff",
+                    "on-primary": "#ffffff",
+                    "on-secondary-fixed": "#171b2d",
+                    "surface-container-lowest": "#ffffff",
+                    "outline": "#777587",
+                    "tertiary-fixed": "#ffdad6",
+                    "surface-container": "#e8eeff",
+                    "on-surface": "#111c2d",
+                    "error-container": "#ffdad6",
+                    "tertiary": "#ae2424",
+                    "primary-fixed": "#e2dfff",
+                    "secondary": "#5a5d73",
+                    "surface": "#f9f9ff",
+                    "outline-variant": "#c7c4d8",
+                    "surface-bright": "#f9f9ff",
+                    "on-error": "#ffffff",
+                    "on-tertiary-container": "#fffaf9",
+                    "primary-container": "#635bff",
+                    "on-background": "#111c2d",
+                    "error": "#ba1a1a",
+                    "surface-container-highest": "#d9e3fb",
+                    "primary-fixed-dim": "#c3c0ff",
+                    "surface-container-high": "#dfe8ff",
+                    "on-tertiary": "#ffffff",
+                    "surface-container-low": "#f0f3ff",
+                    "on-tertiary-fixed-variant": "#910913",
+                    "surface-variant": "#d9e3fb",
+                    "on-primary-fixed-variant": "#321ed2",
+                    "on-secondary-container": "#606379"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "xs": "4px",
+                    "lg": "24px",
+                    "xl": "32px",
+                    "gutter": "24px",
+                    "xxl": "48px",
+                    "base": "8px",
+                    "sm": "8px",
+                    "container-max": "1280px",
+                    "md": "16px"
+            },
+            "fontFamily": {
+                    "display-lg": [
+                            "Be Vietnam Pro"
+                    ],
+                    "label-md": [
+                            "Be Vietnam Pro"
+                    ],
+                    "numeric-tabular": [
+                            "Be Vietnam Pro"
+                    ],
+                    "body-md": [
+                            "Be Vietnam Pro"
+                    ],
+                    "title-lg": [
+                            "Be Vietnam Pro"
+                    ],
+                    "label-sm": [
+                            "Be Vietnam Pro"
+                    ],
+                    "headline-lg": [
+                            "Be Vietnam Pro"
+                    ],
+                    "headline-md": [
+                            "Be Vietnam Pro"
+                    ],
+                    "body-lg": [
+                            "Be Vietnam Pro"
+                    ]
+            },
+            "fontSize": {
+                    "display-lg": [
+                            "48px",
+                            {
+                                    "lineHeight": "60px",
+                                    "letterSpacing": "-0.02em",
+                                    "fontWeight": "700"
+                            }
+                    ],
+                    "label-md": [
+                            "14px",
+                            {
+                                    "lineHeight": "20px",
+                                    "fontWeight": "500"
+                            }
+                    ],
+                    "numeric-tabular": [
+                            "inherit",
+                            {
+                                    "lineHeight": "inherit",
+                                    "fontWeight": "inherit"
+                            }
+                    ],
+                    "body-md": [
+                            "16px",
+                            {
+                                    "lineHeight": "24px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "title-lg": [
+                            "20px",
+                            {
+                                    "lineHeight": "28px",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "label-sm": [
+                            "12px",
+                            {
+                                    "lineHeight": "16px",
+                                    "letterSpacing": "0.02em",
+                                    "fontWeight": "500"
+                            }
+                    ],
+                    "headline-lg": [
+                            "32px",
+                            {
+                                    "lineHeight": "40px",
+                                    "letterSpacing": "-0.01em",
+                                    "fontWeight": "700"
+                            }
+                    ],
+                    "headline-md": [
+                            "24px",
+                            {
+                                    "lineHeight": "32px",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "body-lg": [
+                            "18px",
+                            {
+                                    "lineHeight": "28px",
+                                    "fontWeight": "400"
+                            }
+                    ]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        body {
+            font-family: 'Be Vietnam Pro', sans-serif;
+            background-color: #f9f9ff;
+            color: #111c2d;
+        }
+        .kinetic-pulse {
+            animation: pulse-bg 3s infinite alternate;
+        }
+        @keyframes pulse-bg {
+            0% { background-color: rgba(186, 26, 26, 0.02); }
+            100% { background-color: rgba(186, 26, 26, 0.08); }
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="antialiased min-h-screen flex flex-col items-center justify-center bg-background md:py-8">
+<!-- Mobile Container (Viewport 390x844 simulation) -->
+<div class="w-full max-w-[390px] h-[844px] max-h-screen bg-surface overflow-hidden relative shadow-2xl flex flex-col border border-outline-variant md:rounded-[32px]">
+<!-- TopAppBar (Shared Component styling mapped) -->
+<header class="flex items-center w-full px-md h-[64px] sticky top-0 z-50 bg-surface border-b border-outline-variant">
+<button aria-label="Go back" class="p-2 -ml-2 rounded-full hover:bg-surface-container-low transition-colors active:scale-95 transition-transform text-primary">
+<span class="material-symbols-outlined font-title-lg text-title-lg">arrow_back</span>
+</button>
+<h1 class="ml-2 font-headline-md text-headline-md font-bold text-on-surface">Gửi hóa đơn qua email</h1>
+</header>
+<!-- Main Content Area -->
+<main class="flex-1 overflow-y-auto flex flex-col p-lg pt-xl pb-xxl relative">
+<!-- Error Illustration & Kinetic Pulse Effect -->
+<div class="w-full flex justify-center mb-xl relative">
+<div class="absolute inset-0 kinetic-pulse rounded-full blur-2xl z-0 w-32 h-32 mx-auto mt-4"></div>
+<div class="relative z-10 w-[112px] h-[112px] bg-error-container rounded-full flex items-center justify-center border-4 border-surface shadow-[0px_12px_32px_rgba(186,26,26,0.12)]">
+<svg class="text-error" fill="none" height="48" viewbox="0 0 24 24" width="48" xmlns="http://www.w3.org/2000/svg">
+<path d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm-1-7v2h2v-2h-2zm0-8v6h2V7h-2z" fill="currentColor"></path>
+</svg>
+</div>
+</div>
+<!-- Error Messaging -->
+<div class="text-center mb-xl">
+<h2 class="font-headline-md text-headline-md font-bold text-on-surface mb-sm">Không thể tạo yêu cầu gửi hóa đơn</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mb-md">
+                    Hệ thống chưa ghi nhận yêu cầu gửi hóa đơn. Vui lòng thử lại.
+                </p>
+<div class="bg-surface-container-low p-sm rounded-lg border border-outline-variant inline-block">
+<p class="font-label-md text-label-md text-secondary flex items-start gap-2 text-left">
+<span class="material-symbols-outlined text-[16px] mt-0.5">info</span>
+<span>Thông tin hóa đơn và nội dung bạn đã nhập không bị thay đổi.</span>
+</p>
+</div>
+</div>
+<!-- Data Summary Bento-style Card -->
+<div class="bg-surface-container rounded-xl p-md mb-xl shadow-[0px_4px_20px_rgba(16,20,38,0.08)] border border-outline-variant">
+<h3 class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant mb-md font-bold">Chi tiết yêu cầu</h3>
+<div class="flex flex-col gap-md">
+<div class="flex justify-between items-start gap-4 border-b border-outline-variant pb-md">
+<span class="font-label-md text-label-md text-secondary shrink-0">Mã hóa đơn</span>
+<span class="font-numeric-tabular font-body-md text-body-md text-on-surface font-bold text-right break-all">INV-20260822-ABC12345</span>
+</div>
+<div class="flex justify-between items-start gap-4">
+<span class="font-label-md text-label-md text-secondary shrink-0">Email nhận</span>
+<span class="font-body-md text-body-md text-on-surface font-medium text-right break-words max-w-[200px]">customer@example.com</span>
+</div>
+</div>
+</div>
+<!-- Bottom Actions -->
+<div class="mt-auto flex flex-col gap-sm w-full pt-lg">
+<button class="w-full h-[48px] bg-primary text-on-primary font-title-lg text-title-lg font-bold rounded-[10px] hover:bg-surface-tint active:scale-95 transition-all shadow-[0px_4px_20px_rgba(73,62,229,0.2)] focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
+                    Thử lại
+                </button>
+<button class="w-full h-[48px] bg-surface-container text-primary font-title-lg text-title-lg font-bold rounded-[10px] hover:bg-surface-container-high active:scale-95 transition-all focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
+                    Về chi tiết hóa đơn
+                </button>
+</div>
+</main>
+</div>
+</body></html>

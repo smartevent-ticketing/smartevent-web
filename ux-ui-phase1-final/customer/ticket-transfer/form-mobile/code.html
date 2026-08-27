@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+
+<html class="light" lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Chuyển vé cho người khác</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-primary": "#ffffff",
+                        "on-secondary-fixed-variant": "#42465a",
+                        "on-tertiary-fixed-variant": "#910913",
+                        "on-tertiary-container": "#fffaf9",
+                        "error": "#ba1a1a",
+                        "on-secondary-container": "#606379",
+                        "on-tertiary": "#ffffff",
+                        "inverse-surface": "#273143",
+                        "on-primary-container": "#fefaff",
+                        "surface-bright": "#f9f9ff",
+                        "secondary": "#5a5d73",
+                        "inverse-primary": "#c3c0ff",
+                        "surface": "#f9f9ff",
+                        "primary-fixed": "#e2dfff",
+                        "outline-variant": "#c7c4d8",
+                        "on-surface": "#111c2d",
+                        "surface-tint": "#4c42e9",
+                        "on-secondary": "#ffffff",
+                        "tertiary": "#ae2424",
+                        "on-tertiary-fixed": "#410003",
+                        "on-primary-fixed": "#0f0069",
+                        "secondary-fixed": "#dee1fb",
+                        "surface-variant": "#d9e3fb",
+                        "surface-container": "#e8eeff",
+                        "secondary-container": "#dee1fb",
+                        "on-background": "#111c2d",
+                        "tertiary-container": "#d13e3a",
+                        "background": "#f9f9ff",
+                        "tertiary-fixed": "#ffdad6",
+                        "surface-dim": "#d0daf2",
+                        "primary": "#493ee5",
+                        "tertiary-fixed-dim": "#ffb3ac",
+                        "surface-container-highest": "#d9e3fb",
+                        "secondary-fixed-dim": "#c2c5de",
+                        "inverse-on-surface": "#ecf0ff",
+                        "outline": "#777587",
+                        "primary-fixed-dim": "#c3c0ff",
+                        "surface-container-low": "#f0f3ff",
+                        "error-container": "#ffdad6",
+                        "on-error-container": "#93000a",
+                        "on-primary-fixed-variant": "#321ed2",
+                        "surface-container-lowest": "#ffffff",
+                        "on-surface-variant": "#464555",
+                        "on-secondary-fixed": "#171b2d",
+                        "on-error": "#ffffff",
+                        "surface-container-high": "#dfe8ff",
+                        "primary-container": "#635bff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "lg": "24px",
+                        "xs": "4px",
+                        "base": "8px",
+                        "sm": "8px",
+                        "md": "16px",
+                        "gutter": "24px",
+                        "container-max": "1280px",
+                        "xl": "32px",
+                        "xxl": "48px"
+                    },
+                    "fontFamily": {
+                        "label-md": ["Be Vietnam Pro"],
+                        "label-sm": ["Be Vietnam Pro"],
+                        "title-lg": ["Be Vietnam Pro"],
+                        "numeric-tabular": ["Be Vietnam Pro"],
+                        "display-lg": ["Be Vietnam Pro"],
+                        "body-md": ["Be Vietnam Pro"],
+                        "body-lg": ["Be Vietnam Pro"],
+                        "headline-lg": ["Be Vietnam Pro"],
+                        "headline-md": ["Be Vietnam Pro"]
+                    },
+                    "fontSize": {
+                        "label-md": ["14px", { "lineHeight": "20px", "fontWeight": "500" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500" }],
+                        "title-lg": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "numeric-tabular": ["inherit", { "lineHeight": "inherit", "fontWeight": "inherit" }],
+                        "display-lg": ["48px", { "lineHeight": "60px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Be Vietnam Pro', sans-serif; }
+        .kinetic-pulse {
+            animation: pulse-border 2s infinite alternate cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        @keyframes pulse-border {
+            0% { border-color: rgba(73, 62, 229, 0.2); box-shadow: 0 0 0 0 rgba(73, 62, 229, 0.1); }
+            100% { border-color: rgba(73, 62, 229, 0.6); box-shadow: 0 0 0 4px rgba(73, 62, 229, 0.05); }
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background antialiased flex flex-col items-center min-h-screen">
+<!-- Mobile Container (390px wide constraint as requested for the task) -->
+<main class="w-full max-w-[390px] mx-auto bg-surface flex flex-col min-h-screen relative overflow-hidden">
+<!-- App Bar -->
+<header class="flex items-center px-md py-lg border-b border-outline-variant bg-surface sticky top-0 z-10">
+<button aria-label="Go back" class="text-on-surface-variant hover:text-primary transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-full p-1">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<h1 class="font-headline-md text-headline-md ml-md flex-1">Chuyển vé cho người khác</h1>
+</header>
+<!-- Content Area -->
+<div class="flex-1 overflow-y-auto pb-32">
+<div class="px-md py-lg">
+<p class="font-body-md text-body-md text-on-surface-variant mb-lg">
+                    Nhập email tài khoản SMART EVENT của người sẽ nhận vé.
+                </p>
+<!-- Ticket Summary Card -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-md mb-xl shadow-sm relative overflow-hidden group">
+<!-- Subtle decorative accent -->
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-primary"></div>
+<h2 class="font-title-lg text-title-lg text-on-surface mb-sm">Đêm Nhạc Hội Indie 2024</h2>
+<div class="flex flex-wrap gap-sm mb-md">
+<span class="inline-flex items-center px-2 py-1 rounded-full bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm">Khu A</span>
+<span class="inline-flex items-center px-2 py-1 rounded-full bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm">Ghế A12</span>
+<span class="inline-flex items-center px-2 py-1 rounded-full bg-primary-container text-on-primary-container font-label-sm text-label-sm">VIP</span>
+<span class="inline-flex items-center px-2 py-1 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-label-sm">Early Bird</span>
+</div>
+<div class="flex justify-between items-end border-t border-outline-variant pt-sm mt-sm">
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Mã vé</p>
+<p class="font-numeric-tabular font-bold text-on-surface">TKT-INDIE-A12</p>
+</div>
+<span class="inline-flex items-center px-2 py-1 rounded-full bg-surface-variant text-on-surface-variant font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[14px] mr-1">check_circle</span>
+                            Đã phát hành
+                        </span>
+</div>
+</div>
+<!-- Form -->
+<form class="space-y-lg" id="transferForm">
+<!-- Email Input -->
+<div>
+<label class="block font-label-md text-label-md text-on-surface mb-xs" for="recipientEmail">
+                            Email người nhận <span class="text-error">*</span>
+</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">mail</span>
+<input class="w-full pl-10 pr-3 py-3 border border-outline-variant rounded-lg bg-surface-container-lowest text-on-surface placeholder:text-on-surface-variant focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary kinetic-pulse transition-all font-body-md text-body-md" id="recipientEmail" name="recipientEmail" placeholder="name@example.com" required="" type="email"/>
+</div>
+<p class="mt-2 font-label-sm text-label-sm text-on-surface-variant flex items-start gap-1">
+<span class="material-symbols-outlined text-[16px]">info</span>
+                            Hãy kiểm tra chính xác email trước khi tiếp tục.
+                        </p>
+</div>
+<!-- Message Input -->
+<div>
+<label class="block font-label-md text-label-md text-on-surface mb-xs" for="transferMessage">
+                            Lời nhắn (Không bắt buộc)
+                        </label>
+<textarea class="w-full p-3 border border-outline-variant rounded-lg bg-surface-container-lowest text-on-surface placeholder:text-on-surface-variant focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all font-body-md text-body-md resize-none" id="transferMessage" name="transferMessage" placeholder="Nhập lời nhắn dành cho người nhận..." rows="3"></textarea>
+</div>
+</form>
+<!-- Security Notice -->
+<div class="mt-xl p-md bg-surface-container rounded-lg border border-surface-variant flex items-start gap-md">
+<span class="material-symbols-outlined text-on-surface-variant">lock</span>
+<p class="font-label-sm text-label-sm text-on-surface-variant">
+                        Vì lý do bảo mật, mã QR của vé không được hiển thị trong quá trình chuyển.
+                    </p>
+</div>
+</div>
+</div>
+<!-- Bottom Action Bar -->
+<div class="absolute bottom-0 left-0 right-0 bg-surface border-t border-outline-variant p-md flex flex-col gap-sm">
+<button class="w-full h-12 bg-primary text-on-primary rounded-lg font-label-md text-label-md font-bold flex items-center justify-center hover:bg-on-primary-fixed-variant transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2" form="transferForm" type="submit">
+                Tiếp tục
+            </button>
+<button class="w-full h-12 bg-transparent text-primary rounded-lg font-label-md text-label-md font-bold flex items-center justify-center hover:bg-surface-container-low transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2" type="button">
+                Hủy
+            </button>
+</div>
+</main>
+</body></html>

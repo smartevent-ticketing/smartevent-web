@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+
+<html lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Phiên giữ vé đã hết hạn - SMART EVENT</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary": "#493ee5",
+                        "on-surface-variant": "#464555",
+                        "background": "#f9f9ff",
+                        "surface": "#f9f9ff",
+                        "on-error": "#ffffff",
+                        "inverse-primary": "#c3c0ff",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary-container": "#606379",
+                        "on-secondary-fixed": "#171b2d",
+                        "on-tertiary-container": "#fffaf9",
+                        "on-tertiary-fixed-variant": "#910913",
+                        "tertiary-fixed": "#ffdad6",
+                        "on-primary": "#ffffff",
+                        "on-surface": "#111c2d",
+                        "tertiary-container": "#d13e3a",
+                        "on-primary-container": "#fefaff",
+                        "outline": "#777587",
+                        "surface-container-low": "#f0f3ff",
+                        "outline-variant": "#c7c4d8",
+                        "error-container": "#ffdad6",
+                        "secondary-fixed": "#dee1fb",
+                        "primary-container": "#635bff",
+                        "surface-bright": "#f9f9ff",
+                        "surface-container": "#e8eeff",
+                        "on-secondary-fixed-variant": "#42465a",
+                        "surface-tint": "#4c42e9",
+                        "secondary-fixed-dim": "#c2c5de",
+                        "surface-dim": "#d0daf2",
+                        "surface-container-high": "#dfe8ff",
+                        "on-secondary": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "secondary-container": "#dee1fb",
+                        "on-primary-fixed-variant": "#321ed2",
+                        "surface-variant": "#d9e3fb",
+                        "error": "#ba1a1a",
+                        "tertiary": "#ae2424",
+                        "surface-container-highest": "#d9e3fb",
+                        "inverse-on-surface": "#ecf0ff",
+                        "primary-fixed-dim": "#c3c0ff",
+                        "tertiary-fixed-dim": "#ffb3ac",
+                        "on-background": "#111c2d",
+                        "inverse-surface": "#273143",
+                        "on-tertiary": "#ffffff",
+                        "on-primary-fixed": "#0f0069",
+                        "on-tertiary-fixed": "#410003",
+                        "primary-fixed": "#e2dfff",
+                        "secondary": "#5a5d73"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "24px",
+                        "sm": "8px",
+                        "container-max": "1280px",
+                        "xl": "32px",
+                        "base": "8px",
+                        "lg": "24px",
+                        "xxl": "48px",
+                        "md": "16px",
+                        "xs": "4px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Be Vietnam Pro"],
+                        "numeric-tabular": ["Be Vietnam Pro"],
+                        "title-lg": ["Be Vietnam Pro"],
+                        "label-md": ["Be Vietnam Pro"],
+                        "body-lg": ["Be Vietnam Pro"],
+                        "label-sm": ["Be Vietnam Pro"],
+                        "body-md": ["Be Vietnam Pro"],
+                        "headline-lg": ["Be Vietnam Pro"],
+                        "display-lg": ["Be Vietnam Pro"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "numeric-tabular": ["inherit", { "lineHeight": "inherit", "fontWeight": "inherit" }],
+                        "title-lg": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "fontWeight": "500" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "display-lg": ["48px", { "lineHeight": "60px", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+                    }
+                },
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Be Vietnam Pro', sans-serif; background-color: #f9f9ff; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .fill-icon { font-variation-settings: 'FILL' 1; }
+        
+        /* Kinetic Pulse Animation for the background */
+        @keyframes pulse-ring {
+            0% { transform: scale(0.8); opacity: 0.5; }
+            50% { transform: scale(1.2); opacity: 0.1; }
+            100% { transform: scale(0.8); opacity: 0.5; }
+        }
+        .kinetic-bg {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100vw;
+            height: 100vw;
+            max-width: 1200px;
+            max-height: 1200px;
+            background: radial-gradient(circle, rgba(73,62,229,0.1) 0%, rgba(249,249,255,0) 70%);
+            z-index: 0;
+            pointer-events: none;
+            animation: pulse-ring 8s infinite ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface min-h-screen flex flex-col overflow-x-hidden relative">
+<!-- Kinetic Background Effect -->
+<div class="kinetic-bg"></div>
+<!-- TopNavBar (Transactional/Linear flow, but requested in style guidance to use TopNavBar for header with SMART EVENT logo if TopAppBar is needed, though JSON dictates TopNavBar. However, this is a transactional error screen, usually shell is suppressed. I will render a simplified TopNavBar acting as just a brand header as per instructions 'Header with SMART EVENT logo') -->
+<header class="bg-surface border-b border-outline-variant flex justify-between items-center w-full px-gutter h-16 max-w-container-max mx-auto relative z-10">
+<div class="font-headline-lg text-headline-lg font-black text-primary">SMART EVENT</div>
+<div class="hidden">
+<!-- Hidden Search Bar & Trailing Icons as this is a transactional screen -->
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+<span class="material-symbols-outlined" data-icon="language">language</span>
+</div>
+</header>
+<!-- Main Content Area (Canvas) -->
+<main class="flex-grow flex items-center justify-center p-md md:p-gutter relative z-10">
+<!-- Error Card - High-end Glassmorphism/Bento style but clean -->
+<div class="bg-surface-container-lowest rounded-xl shadow-[0px_12px_32px_rgba(16,20,38,0.12)] border border-outline-variant p-xl max-w-2xl w-full flex flex-col items-center text-center">
+<!-- Icon -->
+<div class="w-24 h-24 rounded-full bg-error-container flex items-center justify-center mb-lg relative">
+<!-- Pulse effect around icon -->
+<div class="absolute inset-0 rounded-full bg-error-container animate-ping opacity-25"></div>
+<span class="material-symbols-outlined text-error fill-icon text-[48px]" data-icon="timer_off" data-weight="fill">timer_off</span>
+</div>
+<!-- Headline -->
+<h1 class="font-display-lg text-display-lg text-on-surface mb-sm">Phiên giữ vé đã hết hạn</h1>
+<!-- Explanation -->
+<p class="font-body-lg text-body-lg text-on-surface-variant mb-lg max-w-md mx-auto">
+                Thời gian 10 phút để hoàn tất giao dịch đã kết thúc. Rất tiếc, hệ thống chưa ghi nhận thanh toán của bạn và các ghế đã chọn đã được giải phóng.
+            </p>
+<!-- Event Details Bento Block -->
+<div class="bg-surface-container-low rounded-lg p-md w-full flex flex-col md:flex-row items-center justify-between border border-outline-variant mb-xl text-left">
+<div class="flex items-center mb-sm md:mb-0">
+<div class="w-12 h-12 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center mr-md">
+<span class="material-symbols-outlined" data-icon="local_activity">local_activity</span>
+</div>
+<div>
+<div class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider mb-xs">Sự kiện</div>
+<div class="font-title-lg text-title-lg text-on-surface">Đêm Nhạc Hội Indie 2024</div>
+</div>
+</div>
+<div class="flex flex-col items-start md:items-end w-full md:w-auto mt-sm md:mt-0 pt-sm md:pt-0 border-t border-outline-variant md:border-t-0 md:border-l md:pl-md">
+<div class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider mb-xs">Ghế đã chọn</div>
+<div class="flex gap-sm">
+<span class="bg-surface text-on-surface font-label-md text-label-md py-1 px-3 border border-outline-variant rounded shadow-sm">A12</span>
+<span class="bg-surface text-on-surface font-label-md text-label-md py-1 px-3 border border-outline-variant rounded shadow-sm">A13</span>
+</div>
+</div>
+</div>
+<!-- Actions -->
+<div class="flex flex-col md:flex-row gap-md w-full md:w-auto">
+<button class="bg-primary text-on-primary font-label-md text-label-md font-bold py-3 px-xl rounded-lg h-12 shadow-[0px_4px_20px_rgba(16,20,38,0.08)] hover:bg-surface-tint active:scale-95 transition-all focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 flex-1 md:flex-none">
+                    Chọn lại ghế
+                </button>
+<button class="bg-surface text-on-surface border border-outline font-label-md text-label-md font-bold py-3 px-xl rounded-lg h-12 hover:bg-surface-container-low active:scale-95 transition-all focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 flex-1 md:flex-none">
+                    Quay lại sự kiện
+                </button>
+</div>
+</div>
+</main>
+<!-- Suppress Navigation Shells for Transactional/Error Screens per guidelines -->
+</body></html>

@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+
+<html lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SMART EVENT - Khám phá những sự kiện tuyệt vời nhất</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-fixed": "#e2dfff",
+                        "on-error-container": "#93000a",
+                        "primary": "#493ee5",
+                        "tertiary-fixed": "#ffdad6",
+                        "on-secondary-container": "#606379",
+                        "surface-container-low": "#f0f3ff",
+                        "secondary": "#5a5d73",
+                        "tertiary-container": "#d13e3a",
+                        "tertiary-fixed-dim": "#ffb3ac",
+                        "on-surface": "#111c2d",
+                        "on-primary-fixed-variant": "#321ed2",
+                        "background": "#f9f9ff",
+                        "surface": "#f9f9ff",
+                        "surface-container": "#e8eeff",
+                        "inverse-on-surface": "#ecf0ff",
+                        "surface-bright": "#f9f9ff",
+                        "on-primary": "#ffffff",
+                        "surface-dim": "#d0daf2",
+                        "secondary-container": "#dee1fb",
+                        "on-primary-container": "#fefaff",
+                        "tertiary": "#ae2424",
+                        "on-tertiary": "#ffffff",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary-fixed": "#dee1fb",
+                        "on-tertiary-fixed-variant": "#910913",
+                        "error": "#ba1a1a",
+                        "on-primary-fixed": "#0f0069",
+                        "surface-container-high": "#dfe8ff",
+                        "outline": "#777587",
+                        "on-secondary": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "surface-variant": "#d9e3fb",
+                        "on-tertiary-fixed": "#410003",
+                        "on-tertiary-container": "#fffaf9",
+                        "surface-container-highest": "#d9e3fb",
+                        "inverse-primary": "#c3c0ff",
+                        "primary-container": "#635bff",
+                        "on-error": "#ffffff",
+                        "inverse-surface": "#273143",
+                        "on-secondary-fixed-variant": "#42465a",
+                        "on-surface-variant": "#464555",
+                        "secondary-fixed-dim": "#c2c5de",
+                        "on-background": "#111c2d",
+                        "outline-variant": "#c7c4d8",
+                        "surface-tint": "#4c42e9",
+                        "on-secondary-fixed": "#171b2d",
+                        "primary-fixed-dim": "#c3c0ff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "lg": "24px",
+                        "xxl": "48px",
+                        "container-max": "1280px",
+                        "xl": "32px",
+                        "sm": "8px",
+                        "base": "8px",
+                        "md": "16px",
+                        "gutter": "24px",
+                        "xs": "4px"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Be Vietnam Pro"],
+                        "label-md": ["Be Vietnam Pro"],
+                        "display-lg": ["Be Vietnam Pro"],
+                        "title-lg": ["Be Vietnam Pro"],
+                        "body-lg": ["Be Vietnam Pro"],
+                        "label-sm": ["Be Vietnam Pro"],
+                        "body-md": ["Be Vietnam Pro"],
+                        "numeric-tabular": ["Be Vietnam Pro"],
+                        "headline-md": ["Be Vietnam Pro"]
+                    },
+                    "fontSize": {
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "fontWeight": "500" }],
+                        "display-lg": ["48px", { "lineHeight": "60px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "title-lg": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "numeric-tabular": ["inherit", { "lineHeight": "inherit", "fontWeight": "inherit" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .event-card-shadow {
+            box-shadow: 0px 4px 20px rgba(16, 20, 38, 0.08);
+        }
+        .focus-ring:focus-visible {
+            outline: 2px solid #493ee5;
+            outline-offset: 2px;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md antialiased selection:bg-primary selection:text-on-primary">
+<!-- TopNavBar (Shared Component) -->
+<header class="bg-surface dark:bg-surface-container-low docked full-width top-0 border-b border-outline-variant dark:border-outline shadow-sm dark:shadow-none sticky z-50">
+<div class="flex justify-between items-center w-full px-lg md:px-xl max-w-container-max mx-auto h-[72px]">
+<!-- Brand Logo -->
+<a class="text-title-lg font-title-lg font-bold text-primary dark:text-primary-fixed focus-ring rounded-DEFAULT px-2 py-1" href="#">
+                SMART EVENT
+            </a>
+<!-- Navigation Links (Desktop) -->
+<nav class="hidden md:flex gap-lg items-center">
+<a class="text-primary dark:text-primary-fixed border-b-2 border-primary font-bold pb-1 focus-ring" href="#">Discovery</a>
+<a class="text-on-secondary-container dark:text-on-secondary-fixed-variant font-medium hover:text-primary-container dark:hover:text-primary-fixed-dim transition-colors focus-ring px-2 py-1" href="#">Location</a>
+<a class="text-on-secondary-container dark:text-on-secondary-fixed-variant font-medium hover:text-primary-container dark:hover:text-primary-fixed-dim transition-colors focus-ring px-2 py-1" href="#">My Tickets</a>
+</nav>
+<!-- Actions -->
+<div class="flex items-center gap-md">
+<!-- Search Icon (Mobile) / Search Bar Placeholder (Desktop) -->
+<button aria-label="Search" class="md:hidden text-on-surface hover:text-primary transition-colors focus-ring p-2 rounded-full">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+</button>
+<div class="hidden md:flex items-center relative">
+<span class="material-symbols-outlined absolute left-3 text-on-surface-variant pointer-events-none" data-icon="search">search</span>
+<input class="pl-10 pr-4 py-2 bg-surface-container-low border border-outline-variant rounded-full text-body-md font-body-md focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none transition-all w-64" placeholder="Tìm kiếm sự kiện..." type="text"/>
+</div>
+<!-- Trailing Primary Action -->
+<a class="text-label-md font-label-md text-on-primary bg-primary hover:bg-primary-container transition-colors rounded-lg px-4 py-2 focus-ring shadow-sm font-bold flex items-center justify-center h-[40px]" href="#">
+                    Login
+                </a>
+</div>
+</div>
+</header>
+<!-- Hero Section with Search Bar Integration -->
+<section class="relative h-[600px] w-full flex flex-col items-center justify-center overflow-hidden">
+<!-- Background Image Placeholder -->
+<div class="absolute inset-0 z-0">
+<div class="bg-cover bg-center w-full h-full" data-alt="A massive, high-energy live concert viewed from behind an ecstatic crowd. Vibrant, dynamic laser lights in electric indigo and pure white sweep across a massive stage. The atmosphere is electric, buzzing with the raw energy of live performance. High contrast, modern aesthetic with deep black shadows and intense, vivid light beams illuminating silhouetted fans raising their hands." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDts4JP5Fczl7RASPy3bAnMRTiaL6eEIhT1Av94zOC3i0jJ3UyIEkuR10J5FQnRccz91Z4fVeVVee_VZQni_-o2E2X6zrLu6Zf53Px0c8kT8vehRJQREo1N_MPWx1SgKLYV0oHyLvenCABR78Jo89Wk1vylJEuiGjTQ4FCqWE2_7SZExSlsXgFEpKwu2NqtJEHiE5PYku0i8Pa4TzRwIGGBGoAF4IiHUfLrgrjGhvDLqpsJxQ80lWO_')"></div>
+<div class="absolute inset-0 bg-inverse-surface/60"></div> <!-- Overlay for text readability -->
+</div>
+<div class="relative z-10 w-full max-w-container-max mx-auto px-lg md:px-xl text-center flex flex-col items-center">
+<h1 class="text-display-lg font-display-lg text-on-primary mb-xl drop-shadow-lg max-w-4xl mx-auto">
+                Khám phá những sự kiện tuyệt vời nhất
+            </h1>
+<!-- Search Bar Integration (Hero) -->
+<div class="w-full max-w-4xl bg-surface rounded-xl p-md shadow-lg event-card-shadow flex flex-col md:flex-row gap-sm md:gap-md items-center">
+<div class="flex-1 w-full relative flex items-center border border-outline-variant rounded-lg bg-surface-container-lowest focus-within:border-primary focus-within:ring-1 focus-within:ring-primary transition-all">
+<span class="material-symbols-outlined pl-3 text-on-surface-variant pointer-events-none" data-icon="search">search</span>
+<input class="w-full pl-2 pr-4 py-3 bg-transparent border-none text-body-md font-body-md focus:ring-0 text-on-surface placeholder:text-on-surface-variant rounded-lg" placeholder="Tên sự kiện, ca sĩ, ban nhạc..." type="text"/>
+</div>
+<div class="flex-1 w-full relative flex items-center border border-outline-variant rounded-lg bg-surface-container-lowest focus-within:border-primary focus-within:ring-1 focus-within:ring-primary transition-all">
+<span class="material-symbols-outlined pl-3 text-on-surface-variant pointer-events-none" data-icon="location_on">location_on</span>
+<select class="w-full pl-2 pr-4 py-3 bg-transparent border-none text-body-md font-body-md focus:ring-0 text-on-surface appearance-none rounded-lg cursor-pointer">
+<option class="text-on-surface-variant" disabled="" selected="" value="">Tất cả địa điểm</option>
+<option value="hcm">TP. Hồ Chí Minh</option>
+<option value="hn">Hà Nội</option>
+<option value="dn">Đà Nẵng</option>
+</select>
+</div>
+<div class="flex-1 w-full relative flex items-center border border-outline-variant rounded-lg bg-surface-container-lowest focus-within:border-primary focus-within:ring-1 focus-within:ring-primary transition-all">
+<span class="material-symbols-outlined pl-3 text-on-surface-variant pointer-events-none" data-icon="calendar_month">calendar_month</span>
+<input class="w-full pl-2 pr-4 py-3 bg-transparent border-none text-body-md font-body-md focus:ring-0 text-on-surface rounded-lg cursor-pointer" type="date"/>
+</div>
+<button class="w-full md:w-auto px-lg py-3 bg-primary text-on-primary font-bold text-label-md font-label-md rounded-lg hover:bg-primary-container transition-colors focus-ring whitespace-nowrap h-[48px] flex items-center justify-center">
+                    Tìm kiếm
+                </button>
+</div>
+</div>
+</section>
+<!-- Main Content Canvas -->
+<main class="w-full max-w-container-max mx-auto px-lg md:px-xl py-xxl flex flex-col gap-xxl">
+<!-- Categories Section -->
+<section>
+<div class="flex items-center justify-between mb-lg">
+<h2 class="text-headline-lg font-headline-lg text-on-surface">Danh mục sự kiện</h2>
+<a class="text-label-md font-label-md text-primary hover:text-primary-container font-medium focus-ring rounded-DEFAULT px-2 py-1 flex items-center" href="#">
+                    Xem tất cả <span class="material-symbols-outlined ml-1 text-[18px]" data-icon="chevron_right">chevron_right</span>
+</a>
+</div>
+<div class="flex gap-md overflow-x-auto pb-4 snap-x no-scrollbar">
+<!-- Category 1 -->
+<a class="flex flex-col items-center gap-sm min-w-[100px] snap-start group focus-ring rounded-lg p-2" href="#">
+<div class="w-16 h-16 rounded-full bg-surface-container-high flex items-center justify-center group-hover:bg-primary group-hover:text-on-primary transition-colors text-on-surface-variant">
+<span class="material-symbols-outlined text-[32px]" data-icon="music_note">music_note</span>
+</div>
+<span class="text-label-md font-label-md text-on-surface text-center group-hover:text-primary transition-colors font-medium">Âm nhạc</span>
+</a>
+<!-- Category 2 -->
+<a class="flex flex-col items-center gap-sm min-w-[100px] snap-start group focus-ring rounded-lg p-2" href="#">
+<div class="w-16 h-16 rounded-full bg-surface-container-high flex items-center justify-center group-hover:bg-primary group-hover:text-on-primary transition-colors text-on-surface-variant">
+<span class="material-symbols-outlined text-[32px]" data-icon="theater_comedy">theater_comedy</span>
+</div>
+<span class="text-label-md font-label-md text-on-surface text-center group-hover:text-primary transition-colors font-medium">Sân khấu</span>
+</a>
+<!-- Category 3 -->
+<a class="flex flex-col items-center gap-sm min-w-[100px] snap-start group focus-ring rounded-lg p-2" href="#">
+<div class="w-16 h-16 rounded-full bg-surface-container-high flex items-center justify-center group-hover:bg-primary group-hover:text-on-primary transition-colors text-on-surface-variant">
+<span class="material-symbols-outlined text-[32px]" data-icon="sports_soccer">sports_soccer</span>
+</div>
+<span class="text-label-md font-label-md text-on-surface text-center group-hover:text-primary transition-colors font-medium">Thể thao</span>
+</a>
+<!-- Category 4 -->
+<a class="flex flex-col items-center gap-sm min-w-[100px] snap-start group focus-ring rounded-lg p-2" href="#">
+<div class="w-16 h-16 rounded-full bg-surface-container-high flex items-center justify-center group-hover:bg-primary group-hover:text-on-primary transition-colors text-on-surface-variant">
+<span class="material-symbols-outlined text-[32px]" data-icon="school">school</span>
+</div>
+<span class="text-label-md font-label-md text-on-surface text-center group-hover:text-primary transition-colors font-medium">Workshops</span>
+</a>
+<!-- Category 5 -->
+<a class="flex flex-col items-center gap-sm min-w-[100px] snap-start group focus-ring rounded-lg p-2" href="#">
+<div class="w-16 h-16 rounded-full bg-surface-container-high flex items-center justify-center group-hover:bg-primary group-hover:text-on-primary transition-colors text-on-surface-variant">
+<span class="material-symbols-outlined text-[32px]" data-icon="celebration">celebration</span>
+</div>
+<span class="text-label-md font-label-md text-on-surface text-center group-hover:text-primary transition-colors font-medium">Lễ hội</span>
+</a>
+</div>
+<style>
+                .no-scrollbar::-webkit-scrollbar { display: none; }
+                .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+            </style>
+</section>
+<!-- Featured Events Grid -->
+<section>
+<div class="flex items-center justify-between mb-lg">
+<h2 class="text-headline-lg font-headline-lg text-on-surface">Sự kiện nổi bật</h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter">
+<!-- Card 1 -->
+<a class="group flex flex-col bg-surface border border-outline-variant rounded-xl overflow-hidden event-card-shadow hover:border-primary transition-all focus-ring relative" href="#">
+<div class="relative h-[200px] w-full overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A dynamic stage view of an electronic music concert. The scene is bathed in deep electric indigo and vibrant pink lights. A silhouetted DJ stands at the booth, surrounded by high-tech LED panels displaying abstract geometric patterns. The mood is energetic, modern, and pulsating with intense club lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBfGTpinnBLv0C9XHzCM9asY5-Nn9e97QJLpPLS2S8kFPGZNF2n6rTar6e2kEyF7o7GRse8eMG-nym5DRmhTS9eWQWgMiB4OO4qgsw1Bhusy70ijbgRXvm71tXK4ePZgPiIq4RNb9jJ7pfrl1IQLpPkmBqQF4_Hfge3r_D46qxXosE708LXyuloD9XVDO7hO8IqdV8kXInMN6eZWHg2E2ETzV4oPbbB5g5dXuVGJ2Qm3wG3nct2nqqP"/>
+<div class="absolute top-2 right-2 bg-surface/90 text-on-surface text-label-sm font-label-sm font-bold px-2 py-1 rounded-DEFAULT">HOT</div>
+</div>
+<div class="p-md flex flex-col flex-grow">
+<h3 class="text-title-lg font-title-lg text-on-surface mb-xs line-clamp-2 group-hover:text-primary transition-colors">Hòa nhạc Midnight Pulse</h3>
+<div class="flex items-center gap-xs text-on-surface-variant text-label-md font-label-md mt-sm">
+<span class="material-symbols-outlined text-[16px]" data-icon="calendar_today">calendar_today</span>
+<span>24 Tháng 10, 2024</span>
+</div>
+<div class="flex items-center gap-xs text-on-surface-variant text-label-md font-label-md mt-xs">
+<span class="material-symbols-outlined text-[16px]" data-icon="location_on">location_on</span>
+<span class="truncate">Sân vận động Quân khu 7, TP.HCM</span>
+</div>
+<div class="mt-auto pt-md flex items-end justify-between">
+<div class="flex flex-col">
+<span class="text-label-sm font-label-sm text-on-surface-variant">Giá từ</span>
+<span class="text-title-lg font-numeric-tabular font-bold text-primary">500.000 ₫</span>
+</div>
+</div>
+</div>
+</a>
+<!-- Card 2 -->
+<a class="group flex flex-col bg-surface border border-outline-variant rounded-xl overflow-hidden event-card-shadow hover:border-primary transition-all focus-ring relative" href="#">
+<div class="relative h-[200px] w-full overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A sprawling outdoor light festival at night. Intricate, large-scale luminous sculptures in glowing white and electric indigo illuminate a dark park setting. Families and young adults wander among the glowing structures. The aesthetic is magical, high-contrast, and deeply saturated with modern LED lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCToY_2TtDCfTIqM3ZsyNXSm_9YXhk-6-qsCo0D3dp0F-mEb8Xeu4Ygko0n61vi0Fk_Uwujczp4iI-3cG4wrPjMqDunXkQ7_MFeKcsiCW6Lnsy3gcEspM32Ve3nHKtq6g5_yf9scXS-nnHT9u4lAjdbhfl9UQZaSydWq_RcUb4ZyjxVLymi16TOJnQUYB8EtGBRa_1PP62mp_KyIeWTe0GzaHj0eobtnaD4NZjy2lrGQqzH0bSeP2NA"/>
+</div>
+<div class="p-md flex flex-col flex-grow">
+<h3 class="text-title-lg font-title-lg text-on-surface mb-xs line-clamp-2 group-hover:text-primary transition-colors">Lễ hội Ánh sáng 2024</h3>
+<div class="flex items-center gap-xs text-on-surface-variant text-label-md font-label-md mt-sm">
+<span class="material-symbols-outlined text-[16px]" data-icon="calendar_today">calendar_today</span>
+<span>15 - 20 Tháng 11, 2024</span>
+</div>
+<div class="flex items-center gap-xs text-on-surface-variant text-label-md font-label-md mt-xs">
+<span class="material-symbols-outlined text-[16px]" data-icon="location_on">location_on</span>
+<span class="truncate">Công viên Yên Sở, Hà Nội</span>
+</div>
+<div class="mt-auto pt-md flex items-end justify-between">
+<div class="flex flex-col">
+<span class="text-label-sm font-label-sm text-on-surface-variant">Giá từ</span>
+<span class="text-title-lg font-numeric-tabular font-bold text-primary">150.000 ₫</span>
+</div>
+</div>
+</div>
+</a>
+<!-- Card 3 -->
+<a class="group flex flex-col bg-surface border border-outline-variant rounded-xl overflow-hidden event-card-shadow hover:border-primary transition-all focus-ring relative" href="#">
+<div class="relative h-[200px] w-full overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A sleek, modern theater stage setting. A contemporary dance performance is captured mid-motion, illuminated by sharp, minimalist white and indigo spotlights against a pitch-black background. The mood is sophisticated, dramatic, and focused on fluid human movement in a premium venue." src="https://lh3.googleusercontent.com/aida-public/AB6AXuABVoIj_WseBHEQciNRCyw2plhC3WTIX3i74pd2cQGLPBi4ZR9soDiFLS0MXiQXbylID1d7zBG6BlAbLMwK1XMYETb_EECJjlp_0WBYlkURK96m8K-gfo7yJsYgt3m2UfVCvJl6DOamVCMOMDBDgfnu1j5JpQMNhV6dHE8sLIWruiWr7UwfZ-5iB45p9BbSkFs_zIEzhdztxuKG1J4x-aPuRQiNusueoSqyc6LTpXpcjTD0i_AuKsOP"/>
+</div>
+<div class="p-md flex flex-col flex-grow">
+<h3 class="text-title-lg font-title-lg text-on-surface mb-xs line-clamp-2 group-hover:text-primary transition-colors">Vở múa đương đại "Dòng Chảy"</h3>
+<div class="flex items-center gap-xs text-on-surface-variant text-label-md font-label-md mt-sm">
+<span class="material-symbols-outlined text-[16px]" data-icon="calendar_today">calendar_today</span>
+<span>05 Tháng 12, 2024</span>
+</div>
+<div class="flex items-center gap-xs text-on-surface-variant text-label-md font-label-md mt-xs">
+<span class="material-symbols-outlined text-[16px]" data-icon="location_on">location_on</span>
+<span class="truncate">Nhà hát Lớn, Hà Nội</span>
+</div>
+<div class="mt-auto pt-md flex items-end justify-between">
+<div class="flex flex-col">
+<span class="text-label-sm font-label-sm text-on-surface-variant">Giá từ</span>
+<span class="text-title-lg font-numeric-tabular font-bold text-primary">800.000 ₫</span>
+</div>
+</div>
+</div>
+</a>
+<!-- Card 4 -->
+<a class="group flex flex-col bg-surface border border-outline-variant rounded-xl overflow-hidden event-card-shadow hover:border-primary transition-all focus-ring relative" href="#">
+<div class="relative h-[200px] w-full overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A high-end tech conference workshop environment. Bright, modern light-mode lighting fills a spacious room with sleek white tables and indigo accent chairs. Professionals are engaged in a seminar, looking toward a bright, crisp presentation screen. The aesthetic is clean, corporate, and innovative." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAjEQH-QHBaS6Omt1ORfrG0mJyzvvEkuh15B1H2W30HFK8azhnuSR551kmnRykNFbrfaalcjPo2TA1p8IIrSgVjwH9WLKiXlQtRP-2AwxcFMJOYGgAzI2XHkXkdxTe0VbeFFX21BnnhS2EcL_keGGyLZ2VOG0kD3473uJNcee6IGO1lk7W5-ZWA9l9zAw_X6vDWEim5BYKr9FAfXSkY3g9PY3JTWUh4oNFYBhP9_PCRsMAa2-xoUXKq"/>
+</div>
+<div class="p-md flex flex-col flex-grow">
+<h3 class="text-title-lg font-title-lg text-on-surface mb-xs line-clamp-2 group-hover:text-primary transition-colors">Tech Innovators Summit 2024</h3>
+<div class="flex items-center gap-xs text-on-surface-variant text-label-md font-label-md mt-sm">
+<span class="material-symbols-outlined text-[16px]" data-icon="calendar_today">calendar_today</span>
+<span>10 - 11 Tháng 1, 2025</span>
+</div>
+<div class="flex items-center gap-xs text-on-surface-variant text-label-md font-label-md mt-xs">
+<span class="material-symbols-outlined text-[16px]" data-icon="location_on">location_on</span>
+<span class="truncate">SECC, Quận 7, TP.HCM</span>
+</div>
+<div class="mt-auto pt-md flex items-end justify-between">
+<div class="flex flex-col">
+<span class="text-label-sm font-label-sm text-on-surface-variant">Giá từ</span>
+<span class="text-title-lg font-numeric-tabular font-bold text-primary">1.200.000 ₫</span>
+</div>
+</div>
+</div>
+</a>
+</div>
+</section>
+</main>
+<!-- Footer (Shared Component) -->
+<footer class="bg-surface-container-highest dark:bg-inverse-surface border-t border-outline-variant dark:border-outline full-width bottom flat no shadows mt-xxl">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-gutter px-lg py-xxl max-w-container-max mx-auto">
+<!-- Brand & Copyright -->
+<div class="flex flex-col gap-sm md:col-span-1">
+<span class="text-headline-md font-headline-md text-primary dark:text-primary-fixed font-bold">SMART EVENT</span>
+<p class="text-body-md font-body-md text-on-surface dark:text-inverse-on-surface mt-sm">
+                    Nền tảng đặt vé sự kiện thông minh, nhanh chóng và an toàn hàng đầu.
+                </p>
+<p class="text-label-sm font-label-sm text-on-surface-variant dark:text-on-secondary-fixed-variant mt-auto pt-md">
+                    © 2024 SMART EVENT. All rights reserved.
+                </p>
+</div>
+<!-- Links (simulated structure based on shared component array) -->
+<div class="flex flex-col gap-sm">
+<h4 class="text-title-lg font-title-lg text-on-surface dark:text-inverse-on-surface mb-xs">Về chúng tôi</h4>
+<a class="text-body-md font-body-md text-on-surface-variant dark:text-on-secondary-fixed-variant hover:text-primary dark:hover:text-primary-fixed transition-colors focus-ring w-fit px-1 py-0.5 rounded-DEFAULT" href="#">About Us</a>
+<a class="text-body-md font-body-md text-on-surface-variant dark:text-on-secondary-fixed-variant hover:text-primary dark:hover:text-primary-fixed transition-colors focus-ring w-fit px-1 py-0.5 rounded-DEFAULT" href="#">Terms of Service</a>
+<a class="text-body-md font-body-md text-on-surface-variant dark:text-on-secondary-fixed-variant hover:text-primary dark:hover:text-primary-fixed transition-colors focus-ring w-fit px-1 py-0.5 rounded-DEFAULT" href="#">Privacy Policy</a>
+<a class="text-body-md font-body-md text-on-surface-variant dark:text-on-secondary-fixed-variant hover:text-primary dark:hover:text-primary-fixed transition-colors focus-ring w-fit px-1 py-0.5 rounded-DEFAULT" href="#">Contact Support</a>
+</div>
+<div class="flex flex-col gap-sm">
+<h4 class="text-title-lg font-title-lg text-on-surface dark:text-inverse-on-surface mb-xs">Dành cho Nhà Tổ Chức</h4>
+<a class="text-body-md font-body-md text-on-surface-variant dark:text-on-secondary-fixed-variant hover:text-primary dark:hover:text-primary-fixed transition-colors focus-ring w-fit px-1 py-0.5 rounded-DEFAULT" href="#">Tạo sự kiện</a>
+<a class="text-body-md font-body-md text-on-surface-variant dark:text-on-secondary-fixed-variant hover:text-primary dark:hover:text-primary-fixed transition-colors focus-ring w-fit px-1 py-0.5 rounded-DEFAULT" href="#">Bảng giá dịch vụ</a>
+<a class="text-body-md font-body-md text-on-surface-variant dark:text-on-secondary-fixed-variant hover:text-primary dark:hover:text-primary-fixed transition-colors focus-ring w-fit px-1 py-0.5 rounded-DEFAULT" href="#">Trung tâm trợ giúp</a>
+</div>
+<div class="flex flex-col gap-sm">
+<h4 class="text-title-lg font-title-lg text-on-surface dark:text-inverse-on-surface mb-xs">Kết nối với chúng tôi</h4>
+<div class="flex gap-md">
+<a aria-label="Facebook" class="text-on-surface-variant hover:text-primary transition-colors focus-ring rounded-full p-1" href="#">
+<span class="material-symbols-outlined text-[24px]" data-icon="public">public</span>
+</a>
+<a aria-label="Instagram" class="text-on-surface-variant hover:text-primary transition-colors focus-ring rounded-full p-1" href="#">
+<span class="material-symbols-outlined text-[24px]" data-icon="photo_camera">photo_camera</span>
+</a>
+<a aria-label="Twitter" class="text-on-surface-variant hover:text-primary transition-colors focus-ring rounded-full p-1" href="#">
+<span class="material-symbols-outlined text-[24px]" data-icon="chat">chat</span>
+</a>
+</div>
+</div>
+</div>
+</footer>
+</body></html>

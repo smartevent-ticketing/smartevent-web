@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+
+<html lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SMART EVENT - Access Forbidden</title>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Config from Guidelines -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+                "surface-container-high": "#dfe8ff",
+                "inverse-on-surface": "#ecf0ff",
+                "surface-dim": "#d0daf2",
+                "on-primary-container": "#fefaff",
+                "on-error": "#ffffff",
+                "surface-container-highest": "#d9e3fb",
+                "tertiary-fixed-dim": "#ffb3ac",
+                "on-tertiary": "#ffffff",
+                "surface-bright": "#f9f9ff",
+                "inverse-surface": "#273143",
+                "secondary-container": "#dee1fb",
+                "on-tertiary-fixed-variant": "#910913",
+                "error": "#ba1a1a",
+                "background": "#f9f9ff",
+                "on-tertiary-container": "#fffaf9",
+                "on-secondary": "#ffffff",
+                "on-error-container": "#93000a",
+                "on-primary-fixed": "#0f0069",
+                "tertiary-container": "#d13e3a",
+                "primary-container": "#635bff",
+                "on-primary-fixed-variant": "#321ed2",
+                "secondary-fixed-dim": "#c2c5de",
+                "primary-fixed-dim": "#c3c0ff",
+                "primary": "#493ee5",
+                "on-tertiary-fixed": "#410003",
+                "surface-variant": "#d9e3fb",
+                "outline": "#777587",
+                "outline-variant": "#c7c4d8",
+                "surface-container-low": "#f0f3ff",
+                "primary-fixed": "#e2dfff",
+                "tertiary-fixed": "#ffdad6",
+                "inverse-primary": "#c3c0ff",
+                "secondary-fixed": "#dee1fb",
+                "on-background": "#111c2d",
+                "surface-container": "#e8eeff",
+                "on-secondary-fixed": "#171b2d",
+                "on-secondary-container": "#606379",
+                "surface-tint": "#4c42e9",
+                "error-container": "#ffdad6",
+                "secondary": "#5a5d73",
+                "surface": "#f9f9ff",
+                "on-surface-variant": "#464555",
+                "tertiary": "#ae2424",
+                "surface-container-lowest": "#ffffff",
+                "on-primary": "#ffffff",
+                "on-surface": "#111c2d",
+                "on-secondary-fixed-variant": "#42465a"
+            },
+            borderRadius: {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+            },
+            spacing: {
+                "lg": "24px",
+                "xs": "4px",
+                "base": "8px",
+                "gutter": "24px",
+                "xl": "32px",
+                "md": "16px",
+                "container-max": "1280px",
+                "xxl": "48px",
+                "sm": "8px"
+            },
+            fontFamily: {
+                "numeric-tabular": ["Be Vietnam Pro", "sans-serif"],
+                "display-lg": ["Be Vietnam Pro", "sans-serif"],
+                "headline-lg": ["Be Vietnam Pro", "sans-serif"],
+                "label-md": ["Be Vietnam Pro", "sans-serif"],
+                "label-sm": ["Be Vietnam Pro", "sans-serif"],
+                "title-lg": ["Be Vietnam Pro", "sans-serif"],
+                "headline-md": ["Be Vietnam Pro", "sans-serif"],
+                "body-md": ["Be Vietnam Pro", "sans-serif"],
+                "body-lg": ["Be Vietnam Pro", "sans-serif"]
+            },
+            fontSize: {
+                "numeric-tabular": ["inherit", { "lineHeight": "inherit", "fontWeight": "inherit" }],
+                "display-lg": ["48px", { "lineHeight": "60px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                "label-md": ["14px", { "lineHeight": "20px", "fontWeight": "500" }],
+                "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500" }],
+                "title-lg": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }]
+            },
+            animation: {
+                'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                'shake': 'shake 0.82s cubic-bezier(.36,.07,.19,.97) both',
+            },
+            keyframes: {
+                shake: {
+                    '10%, 90%': { transform: 'translate3d(-1px, 0, 0)' },
+                    '20%, 80%': { transform: 'translate3d(2px, 0, 0)' },
+                    '30%, 50%, 70%': { transform: 'translate3d(-4px, 0, 0)' },
+                    '40%, 60%': { transform: 'translate3d(4px, 0, 0)' }
+                }
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        @import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap');
+        body { font-family: 'Be Vietnam Pro', sans-serif; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface h-screen w-full flex flex-col overflow-hidden antialiased selection:bg-primary-container selection:text-on-primary-container">
+<!-- Top Navigation (Modified for task-focused context, hiding unnecessary global actions) -->
+<header class="flex justify-between items-center px-gutter w-full h-16 sticky top-0 z-50 bg-surface dark:bg-inverse-surface">
+<div class="flex items-center gap-md">
+<button aria-label="Go back" class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container-low active:opacity-80 transition-colors">
+<span class="material-symbols-outlined text-on-surface">arrow_back</span>
+</button>
+<span class="font-headline-md text-headline-md font-bold text-primary dark:text-inverse-primary">SMART EVENT</span>
+</div>
+<!-- Search and global trailing actions suppressed for focused error state -->
+</header>
+<!-- Main Content Area: Forbidden State -->
+<main class="flex-1 flex flex-col items-center justify-center px-gutter pb-xxl relative">
+<!-- Background decorative element for depth -->
+<div class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-20">
+<div class="w-64 h-64 bg-error-container rounded-full blur-[80px] animate-pulse-slow"></div>
+</div>
+<!-- Error Card / Container -->
+<div class="w-full max-w-sm flex flex-col items-center text-center z-10 animate-shake">
+<!-- Icon -->
+<div class="w-24 h-24 mb-lg rounded-full bg-error-container flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-error" style="font-size: 48px; font-variation-settings: 'FILL' 1;">
+                    gpp_bad
+                </span>
+</div>
+<!-- Title -->
+<h1 class="font-headline-lg text-headline-lg text-on-surface mb-sm">
+                Không có quyền truy cập
+            </h1>
+<!-- Message -->
+<p class="font-body-md text-body-md text-on-surface-variant mb-xl px-xs">
+                Bạn không có quyền check-in cho sự kiện này. Vui lòng kiểm tra tài khoản hoặc sự kiện đã chọn.
+            </p>
+<!-- Primary Action -->
+<button class="w-full h-12 bg-primary hover:bg-surface-tint text-on-primary font-label-md text-label-md font-bold rounded-lg flex items-center justify-center transition-all shadow-[0px_4px_20px_rgba(16,20,38,0.08)] active:scale-95 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-surface">
+<span class="material-symbols-outlined mr-sm" style="font-size: 20px;">event_list</span>
+                Quay lại chọn sự kiện
+            </button>
+<!-- Secondary Action / Help (Optional, added for professional UX) -->
+<button class="mt-md text-secondary hover:text-on-surface font-label-sm text-label-sm flex items-center transition-colors">
+<span class="material-symbols-outlined mr-xs" style="font-size: 16px;">help</span>
+                Cần hỗ trợ?
+            </button>
+</div>
+</main>
+<!-- 
+      BottomNavBar is INTENTIONALLY SUPPRESSED based on the logic mandate:
+      "Automatic Suppression: You MUST exclude the navigation shell if the page intent is: Linear/Transactional... Task-Focused"
+      This is a terminal error state in a scanning workflow requiring a "Back" action.
+    -->
+</body></html>

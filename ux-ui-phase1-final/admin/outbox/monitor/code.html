@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Giám sát Outbox - Kinetic Pulse Admin</title>
+<!-- Fonts & Icons -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Configuration -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container": "#e8eeff",
+                        "on-tertiary-fixed-variant": "#910913",
+                        "on-surface-variant": "#464555",
+                        "surface-bright": "#f9f9ff",
+                        "primary": "#493ee5",
+                        "inverse-primary": "#c3c0ff",
+                        "surface": "#f9f9ff",
+                        "surface-tint": "#4c42e9",
+                        "tertiary-fixed": "#ffdad6",
+                        "on-secondary": "#ffffff",
+                        "secondary-fixed-dim": "#c2c5de",
+                        "primary-fixed-dim": "#c3c0ff",
+                        "outline-variant": "#c7c4d8",
+                        "on-primary-fixed-variant": "#321ed2",
+                        "primary-container": "#635bff",
+                        "tertiary": "#ae2424",
+                        "on-error-container": "#93000a",
+                        "on-secondary-fixed-variant": "#42465a",
+                        "secondary-fixed": "#dee1fb",
+                        "secondary": "#5a5d73",
+                        "tertiary-container": "#d13e3a",
+                        "inverse-surface": "#273143",
+                        "surface-container-highest": "#d9e3fb",
+                        "inverse-on-surface": "#ecf0ff",
+                        "background": "#f9f9ff",
+                        "on-secondary-fixed": "#171b2d",
+                        "secondary-container": "#dee1fb",
+                        "surface-dim": "#d0daf2",
+                        "on-background": "#111c2d",
+                        "outline": "#777587",
+                        "on-tertiary": "#ffffff",
+                        "on-primary-fixed": "#0f0069",
+                        "on-error": "#ffffff",
+                        "on-surface": "#111c2d",
+                        "error-container": "#ffdad6",
+                        "on-primary-container": "#fefaff",
+                        "on-primary": "#ffffff",
+                        "on-secondary-container": "#606379",
+                        "primary-fixed": "#e2dfff",
+                        "on-tertiary-fixed": "#410003",
+                        "error": "#ba1a1a",
+                        "on-tertiary-container": "#fffaf9",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-low": "#f0f3ff",
+                        "tertiary-fixed-dim": "#ffb3ac",
+                        "surface-variant": "#d9e3fb",
+                        "surface-container-high": "#dfe8ff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xxl": "48px",
+                        "md": "16px",
+                        "gutter": "24px",
+                        "container-max": "1280px",
+                        "xs": "4px",
+                        "xl": "32px",
+                        "lg": "24px",
+                        "base": "8px",
+                        "sm": "8px"
+                    },
+                    "fontFamily": {
+                        "label-sm": ["Be Vietnam Pro"],
+                        "numeric-tabular": ["Be Vietnam Pro"],
+                        "headline-lg": ["Be Vietnam Pro"],
+                        "body-md": ["Be Vietnam Pro"],
+                        "title-lg": ["Be Vietnam Pro"],
+                        "body-lg": ["Be Vietnam Pro"],
+                        "headline-md": ["Be Vietnam Pro"],
+                        "display-lg": ["Be Vietnam Pro"],
+                        "label-md": ["Be Vietnam Pro"]
+                    },
+                    "fontSize": {
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500" }],
+                        "numeric-tabular": ["inherit", { "lineHeight": "inherit", "fontWeight": "inherit", "fontVariantNumeric": "tabular-nums" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "title-lg": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "display-lg": ["48px", { "lineHeight": "60px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "fontWeight": "500" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        /* Custom scrollbar for data tables and side panels */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #c7c4d8; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #777587; }
+        
+        /* Drawer Transition */
+        #payload-drawer { transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .drawer-open { transform: translateX(0) !important; }
+        .overlay-open { opacity: 1 !important; pointer-events: auto !important; }
+    </style>
+</head>
+<body class="bg-surface-container-low text-on-surface font-body-md antialiased overflow-hidden">
+<!-- App Container -->
+<div class="flex h-screen w-full relative">
+<!-- ========================================== -->
+<!-- SHARED COMPONENT: SideNavBar               -->
+<!-- ========================================== -->
+<nav class="h-screen w-64 fixed left-0 top-0 overflow-y-auto bg-surface-container-lowest border-r border-outline-variant z-20">
+<div class="flex flex-col h-full p-md gap-base">
+<!-- Header Brand Area -->
+<div class="px-md py-lg mb-md">
+<div class="flex items-center gap-md mb-sm">
+<div class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center border border-outline-variant overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A professional headshot of a platform administrator in a modern, brightly lit office environment, serving as an avatar. The style is clean, corporate, and trustworthy." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCIFb4Fe-ENWpLFy8ug-H_RFb8yT2uarAx01AepPHNDRoxG5WlU2HoIX2lW0jtC_Q44i3h7rHuV5OQwsZFSo84iBhQf0sDbCqf0kJCT_PBWBORL6VQWouHKPSsHLEkt30ox2z4-NVYgAzuZ8lh9UVktR-ltB09C1QlRReSGToVwF-mxEWv1fkYQTp32eq-ditPrjWXVi7KMgdNOrOYYDSwpxZh0JFy7uhCjdxfhPw2PzceP_6sIGbQC"/>
+</div>
+<div>
+<div class="font-headline-md text-headline-md font-bold text-primary truncate">Kinetic Pulse</div>
+<div class="font-label-sm text-label-sm text-on-surface-variant">Platform Admin</div>
+</div>
+</div>
+</div>
+<!-- Navigation Links -->
+<ul class="flex flex-col gap-xs font-label-md text-label-md">
+<!-- Inactive Tab -->
+<li class="">
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container rounded-lg transition-colors focus:ring-2 focus:ring-primary focus:ring-offset-2" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="">Bảng điều khiển</span>
+</a>
+</li>
+<!-- Inactive Tab -->
+<li class="">
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container rounded-lg transition-colors focus:ring-2 focus:ring-primary focus:ring-offset-2" href="#">
+<span class="material-symbols-outlined">how_to_reg</span>
+<span class="">Phê duyệt sự kiện</span>
+</a>
+</li>
+<!-- Inactive Tab -->
+<li class="">
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container rounded-lg transition-colors focus:ring-2 focus:ring-primary focus:ring-offset-2" href="#">
+<span class="material-symbols-outlined">category</span>
+<span class="">Danh mục</span>
+</a>
+</li>
+<!-- Inactive Tab -->
+<li class="">
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container rounded-lg transition-colors focus:ring-2 focus:ring-primary focus:ring-offset-2" href="#">
+<span class="material-symbols-outlined">location_on</span>
+<span class="">Địa điểm</span>
+</a>
+</li>
+<!-- ACTIVE TAB: Outbox -->
+<li class="">
+<a class="flex items-center gap-md px-md py-sm bg-primary-container text-on-primary-container rounded-lg font-bold scale-[0.98] transition-transform duration-150 focus:ring-2 focus:ring-primary focus:ring-offset-2" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">outbox</span>
+<span class="">Outbox</span>
+</a>
+</li>
+<!-- Inactive Tab -->
+<li class="">
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container rounded-lg transition-colors focus:ring-2 focus:ring-primary focus:ring-offset-2" href="#">
+<span class="material-symbols-outlined">health_and_safety</span>
+<span class="">Tình trạng hệ thống</span>
+</a>
+</li>
+</ul>
+</div>
+</nav>
+<!-- ========================================== -->
+<!-- MAIN CANVAS AREA                           -->
+<!-- ========================================== -->
+<div class="flex-1 flex flex-col min-w-0 ml-64 relative">
+<!-- ========================================== -->
+<!-- SHARED COMPONENT: TopNavBar                -->
+<!-- ========================================== -->
+<header class="docked full-width top-0 h-16 bg-surface-bright border-b border-outline-variant shadow-sm z-10 flex justify-between items-center px-lg shrink-0">
+<!-- Left: Search & Brand Context -->
+<div class="flex items-center gap-lg flex-1">
+<span class="font-title-lg text-title-lg font-black text-primary hidden lg:block">Kinetic Pulse Admin</span>
+<div class="relative w-64 max-w-sm hidden md:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm">search</span>
+<input class="w-full h-10 pl-10 pr-4 bg-surface-container-low border border-outline-variant rounded-full text-label-md font-label-md focus:border-primary focus:ring-2 focus:ring-primary focus:ring-opacity-50 transition-all outline-none" placeholder="Tìm kiếm nhật ký..." type="text"/>
+</div>
+</div>
+<!-- Right: Actions -->
+<div class="flex items-center gap-md">
+<button class="w-10 h-10 rounded-full flex items-center justify-center text-on-surface-variant hover:text-primary hover:bg-surface-container transition-colors focus:ring-2 focus:ring-primary focus:ring-offset-2">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="w-10 h-10 rounded-full flex items-center justify-center text-on-surface-variant hover:text-primary hover:bg-surface-container transition-colors focus:ring-2 focus:ring-primary focus:ring-offset-2">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<div class="w-9 h-9 rounded-full ml-sm bg-surface-container border border-outline-variant overflow-hidden cursor-pointer focus-within:ring-2 focus-within:ring-primary focus-within:ring-offset-2" tabindex="0">
+<img class="w-full h-full object-cover" data-alt="A smaller version of the platform administrator's headshot used for the top navigation bar profile menu. Clean and professional." src="https://lh3.googleusercontent.com/aida-public/AB6AXuATPev5GICDAZTo-xsv_w1tNOZNBNYCQzj1jtkqoiii_gC-myG1b21PULr5736OZ4PPJHsCQhWIUE14vcBt0B6iOJBWIgF0Z78YMXfwaKaQ7IM8zN17aVAknZFFEAEH6vfiwsoQS9e3vPiT2jIHQIlxUohMYyrOgchWml5pKWHjFiR1Kg8WWdkN8Dd-49BQQ6OKIggUbplMM5urn3GIvHKrLeT4Lrq12G2j4NqaIkZNbwU_AAVfp_QB"/>
+</div>
+</div>
+</header>
+<!-- ========================================== -->
+<!-- SCROLLABLE PAGE CONTENT: Outbox Monitoring -->
+<!-- ========================================== -->
+<main class="flex-1 overflow-y-auto p-lg lg:p-xl flex flex-col gap-lg">
+<!-- Page Header -->
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-md">
+<div>
+<h1 class="font-headline-lg text-headline-lg text-on-surface">Giám sát Outbox</h1>
+<p class="font-body-md text-body-md text-on-surface-variant mt-xs">Đo từ xa theo thời gian thực cho thông tin liên lạc gửi đi (Email/SMS).</p>
+</div>
+<div class="flex items-center gap-sm">
+<button class="flex items-center gap-sm h-10 px-4 rounded-lg border border-outline-variant bg-surface-container-lowest text-on-surface hover:bg-surface-container transition-colors font-label-md text-label-md focus:ring-2 focus:ring-primary focus:ring-offset-2">
+<span class="material-symbols-outlined text-sm">filter_list</span>
+                            Lọc
+                        </button>
+<button class="flex items-center gap-sm h-10 px-4 rounded-lg bg-surface-container-highest text-on-surface hover:bg-surface-variant transition-colors font-label-md text-label-md focus:ring-2 focus:ring-primary focus:ring-offset-2">
+<span class="material-symbols-outlined text-sm">refresh</span>
+                            Đồng bộ
+                        </button>
+</div>
+</div>
+<!-- Bento Grid: Key Statistics -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-md">
+<!-- Stat Card 1 -->
+<div class="bg-surface-container-lowest rounded-xl p-lg border border-outline-variant shadow-sm flex flex-col justify-between">
+<div class="flex justify-between items-start mb-lg">
+<div class="w-10 h-10 rounded-lg bg-primary-container/20 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">send</span>
+</div>
+<span class="bg-surface-container px-2 py-1 rounded text-label-sm font-label-sm text-on-surface-variant">Hôm nay</span>
+</div>
+<div>
+<div class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider mb-xs">Tổng tin nhắn đã gửi</div>
+<div class="font-display-lg text-display-lg text-on-surface font-numeric-tabular">14,293</div>
+<div class="flex items-center gap-xs text-sm mt-1 text-[#1e8e3e]">
+<span class="material-symbols-outlined text-[16px]">trending_up</span>
+<span class="font-label-md text-label-md">+12% vs hôm qua</span>
+</div>
+</div>
+</div>
+<!-- Stat Card 2 -->
+<div class="bg-surface-container-lowest rounded-xl p-lg border border-outline-variant shadow-sm flex flex-col justify-between">
+<div class="flex justify-between items-start mb-lg">
+<div class="w-10 h-10 rounded-lg bg-surface-container-highest flex items-center justify-center text-on-surface">
+<span class="material-symbols-outlined">mark_email_read</span>
+</div>
+</div>
+<div>
+<div class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider mb-xs">Tỷ lệ gửi thành công</div>
+<div class="font-display-lg text-display-lg text-on-surface font-numeric-tabular">99.8%</div>
+<div class="w-full bg-surface-container h-2 rounded-full mt-3 overflow-hidden">
+<div class="bg-primary h-full rounded-full" style="width: 99.8%"></div>
+</div>
+</div>
+</div>
+<!-- Stat Card 3 -->
+<div class="bg-surface-container-lowest rounded-xl p-lg border border-error-container shadow-sm flex flex-col justify-between relative overflow-hidden">
+<div class="absolute right-0 top-0 w-24 h-24 bg-error-container/20 rounded-bl-full -z-10"></div>
+<div class="flex justify-between items-start mb-lg">
+<div class="w-10 h-10 rounded-lg bg-error-container flex items-center justify-center text-on-error-container">
+<span class="material-symbols-outlined">error</span>
+</div>
+</div>
+<div>
+<div class="font-label-sm text-label-sm text-on-error-container uppercase tracking-wider mb-xs">Hàng đợi lỗi</div>
+<div class="font-display-lg text-display-lg text-on-error-container font-numeric-tabular">24</div>
+<button class="mt-2 text-sm font-label-md text-label-md text-on-surface underline hover:text-primary focus:outline-none">Cần xem xét</button>
+</div>
+</div>
+<!-- Stat Card 4 -->
+<div class="bg-surface-container-lowest rounded-xl p-lg border border-outline-variant shadow-sm flex flex-col justify-between">
+<div class="flex justify-between items-start mb-lg">
+<div class="w-10 h-10 rounded-lg bg-surface-container-highest flex items-center justify-center text-on-surface">
+<span class="material-symbols-outlined">hourglass_empty</span>
+</div>
+</div>
+<div>
+<div class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider mb-xs">Đang chờ xử lý</div>
+<div class="font-display-lg text-display-lg text-on-surface font-numeric-tabular">156</div>
+<div class="text-sm font-body-md text-on-surface-variant mt-1">Dự kiến tải bình thường</div>
+</div>
+</div>
+</div>
+<!-- Main Data Table Panel -->
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm overflow-hidden flex flex-col flex-1">
+<!-- Table Header/Tabs -->
+<div class="flex items-center justify-between border-b border-outline-variant px-lg py-sm bg-surface-bright">
+<div class="flex gap-lg font-label-md text-label-md">
+<button class="py-2 text-primary font-bold border-b-2 border-primary -mb-[9px] focus:outline-none">Tất cả</button>
+<button class="py-2 text-on-surface-variant hover:text-primary transition-colors focus:outline-none">Chỉ Email</button>
+<button class="py-2 text-on-surface-variant hover:text-primary transition-colors focus:outline-none">Chỉ SMS</button>
+</div>
+<div class="text-sm text-on-surface-variant font-body-md">Hiển thị 50 bản ghi mới nhất</div>
+</div>
+<!-- Table Container -->
+<div class="overflow-x-auto flex-1">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-lowest border-b border-outline-variant font-label-sm text-label-sm text-on-surface-variant">
+<th class="py-md px-lg font-medium whitespace-nowrap">ID Tin nhắn / Thời gian</th>
+<th class="py-md px-lg font-medium">Loại</th>
+<th class="py-md px-lg font-medium">Người nhận</th>
+<th class="py-md px-lg font-medium">Trạng thái</th>
+<th class="py-md px-lg font-medium text-right">Hành động</th>
+</tr>
+</thead>
+<tbody class="font-body-md text-body-md text-on-surface divide-y divide-outline-variant">
+<!-- Row 1: FAILED -->
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="py-sm px-lg">
+<div class="font-label-md text-label-md font-numeric-tabular">MSG-99482A</div>
+<div class="text-sm text-on-surface-variant font-numeric-tabular">10:42:15 SA (UTC)</div>
+</td>
+<td class="py-sm px-lg">
+<div class="flex items-center gap-xs">
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant">mail</span>
+<span class="font-label-md text-label-md">Email</span>
+</div>
+</td>
+<td class="py-sm px-lg truncate max-w-[200px]" title="user.name@complexdomain.com">
+                                        user.name@complexdomain.com
+                                    </td>
+<td class="py-sm px-lg">
+<span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-bold bg-error-container text-on-error-container font-label-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary mr-1.5"></span> Lỗi
+                                        </span>
+</td>
+<td class="py-sm px-lg text-right">
+<div class="flex items-center justify-end gap-sm">
+<!-- View Details Button -->
+<button aria-label="Xem chi tiết" class="w-8 h-8 rounded hover:bg-surface-container flex items-center justify-center text-on-surface-variant transition-colors focus:ring-2 focus:ring-primary focus:ring-offset-1" onclick="openDrawer('MSG-99482A')">
+<span class="material-symbols-outlined text-[20px]">visibility</span>
+</button>
+<!-- Retry Button (Primary Action for Failed) -->
+<button class="h-8 px-3 bg-primary text-on-primary rounded font-label-md text-label-md hover:bg-surface-tint transition-colors focus:ring-2 focus:ring-primary focus:ring-offset-1 flex items-center gap-xs">
+<span class="material-symbols-outlined text-[16px]">refresh</span> Thử lại
+                                            </button>
+</div>
+</td>
+</tr>
+<!-- Row 2: SENT -->
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="py-sm px-lg">
+<div class="font-label-md text-label-md font-numeric-tabular">MSG-99481B</div>
+<div class="text-sm text-on-surface-variant font-numeric-tabular">10:41:02 SA (UTC)</div>
+</td>
+<td class="py-sm px-lg">
+<div class="flex items-center gap-xs">
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant">sms</span>
+<span class="font-label-md text-label-md">SMS</span>
+</div>
+</td>
+<td class="py-sm px-lg font-numeric-tabular">
+                                        +84 90 123 4567
+                                    </td>
+<td class="py-sm px-lg">
+<!-- Custom Success Chip styling based on generic safe colors for corporate -->
+<span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-bold bg-[#e6f4ea] text-[#1e8e3e] font-label-sm border border-[#ceead6]">
+                                            Đã gửi
+                                        </span>
+</td>
+<td class="py-sm px-lg text-right">
+<div class="flex items-center justify-end gap-sm">
+<button aria-label="Xem chi tiết" class="w-8 h-8 rounded hover:bg-surface-container flex items-center justify-center text-on-surface-variant transition-colors focus:ring-2 focus:ring-primary focus:ring-offset-1" onclick="openDrawer('MSG-99481B')">
+<span class="material-symbols-outlined text-[20px]">visibility</span>
+</button>
+<!-- Ghost space to align with retry buttons above -->
+<div class="w-[84px]"></div>
+</div>
+</td>
+</tr>
+<!-- Row 3: PENDING -->
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="py-sm px-lg">
+<div class="font-label-md text-label-md font-numeric-tabular">MSG-99480C</div>
+<div class="text-sm text-on-surface-variant font-numeric-tabular">10:40:55 SA (UTC)</div>
+</td>
+<td class="py-sm px-lg">
+<div class="flex items-center gap-xs">
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant">mail</span>
+<span class="font-label-md text-label-md">Email</span>
+</div>
+</td>
+<td class="py-sm px-lg truncate max-w-[200px]" title="admin@kineticpulse.io">
+                                        admin@kineticpulse.io
+                                    </td>
+<td class="py-sm px-lg">
+<span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-bold bg-surface-container-highest text-on-surface font-label-sm">
+<span class="material-symbols-outlined text-[14px] mr-1 animate-spin" style="font-size: 14px;">sync</span> Đang chờ
+                                        </span>
+</td>
+<td class="py-sm px-lg text-right">
+<div class="flex items-center justify-end gap-sm">
+<button aria-label="Xem chi tiết" class="w-8 h-8 rounded hover:bg-surface-container flex items-center justify-center text-on-surface-variant transition-colors focus:ring-2 focus:ring-primary focus:ring-offset-1" onclick="openDrawer('MSG-99480C')">
+<span class="material-symbols-outlined text-[20px]">visibility</span>
+</button>
+<div class="w-[84px]"></div>
+</div>
+</td>
+</tr>
+<!-- Add more rows for realistic feel, defaulting to sent -->
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="py-sm px-lg">
+<div class="font-label-md text-label-md font-numeric-tabular">MSG-99479D</div>
+<div class="text-sm text-on-surface-variant font-numeric-tabular">10:38:12 SA (UTC)</div>
+</td>
+<td class="py-sm px-lg">
+<div class="flex items-center gap-xs">
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant">mail</span>
+<span class="font-label-md text-label-md">Email</span>
+</div>
+</td>
+<td class="py-sm px-lg">fan.support@domain.net</td>
+<td class="py-sm px-lg">
+<span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-bold bg-[#e6f4ea] text-[#1e8e3e] font-label-sm border border-[#ceead6]">Đã gửi</span>
+</td>
+<td class="py-sm px-lg text-right">
+<div class="flex items-center justify-end gap-sm">
+<button class="w-8 h-8 rounded hover:bg-surface-container flex items-center justify-center text-on-surface-variant transition-colors" onclick="openDrawer('MSG-99479D')"><span class="material-symbols-outlined text-[20px]">visibility</span></button>
+<div class="w-[84px]"></div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Table Pagination -->
+<div class="border-t border-outline-variant px-lg py-sm bg-surface-bright flex items-center justify-between">
+<div class="text-sm text-on-surface-variant font-body-md">Hiển thị 1-4 trong số 14,293</div>
+<div class="flex gap-xs">
+<button class="w-8 h-8 rounded border border-outline-variant flex items-center justify-center text-on-surface-variant hover:bg-surface-container disabled:opacity-50" disabled=""><span class="material-symbols-outlined text-[20px]">chevron_left</span></button>
+<button class="w-8 h-8 rounded border border-outline-variant flex items-center justify-center text-on-surface-variant hover:bg-surface-container"><span class="material-symbols-outlined text-[20px]">chevron_right</span></button>
+</div>
+</div>
+</div>
+</main>
+</div>
+<!-- ========================================== -->
+<!-- SIDE DRAWER: Payload Details               -->
+<!-- ========================================== -->
+<!-- Overlay -->
+<div class="fixed inset-0 bg-inverse-surface/40 z-40 opacity-0 pointer-events-none transition-opacity duration-300 backdrop-blur-sm" id="drawer-overlay" onclick="closeDrawer()"></div>
+<!-- Drawer Panel -->
+<aside class="fixed right-0 top-0 h-screen w-full max-w-lg bg-surface-container-lowest shadow-[0px_12px_32px_rgba(16,20,38,0.12)] z-50 translate-x-full flex flex-col border-l border-outline-variant overflow-hidden" id="payload-drawer">
+<!-- Drawer Header -->
+<div class="px-lg py-md border-b border-outline-variant flex items-center justify-between bg-surface-bright">
+<div>
+<h2 class="font-headline-md text-headline-md text-on-surface">Chi tiết tin nhắn</h2>
+<p class="font-label-sm text-label-sm text-on-surface-variant font-numeric-tabular mt-xs" id="drawer-msg-id">MSG-ID</p>
+</div>
+<button class="w-10 h-10 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors focus:ring-2 focus:ring-primary focus:ring-offset-2" onclick="closeDrawer()">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<!-- Drawer Content (Scrollable) -->
+<div class="flex-1 overflow-y-auto p-lg flex flex-col gap-lg">
+<!-- Status Banner (Dynamic) -->
+<div class="bg-error-container/20 border border-error-container rounded-lg p-md flex gap-md items-start">
+<span class="material-symbols-outlined text-tertiary">warning</span>
+<div>
+<div class="font-title-lg text-title-lg text-on-surface mb-xs">Giao hàng thất bại</div>
+<div class="font-body-md text-body-md text-on-surface-variant text-sm">Lỗi SMTP: 550 5.1.1 Tài khoản email bạn cố tiếp cận không tồn tại. Vui lòng thử kiểm tra lại địa chỉ email của người nhận xem có lỗi chính tả hoặc dấu cách thừa không.</div>
+</div>
+</div>
+<!-- Meta Data Grid -->
+<div class="grid grid-cols-2 gap-y-md gap-x-lg border-b border-outline-variant pb-lg">
+<div>
+<div class="font-label-sm text-label-sm text-on-surface-variant mb-1">Nhà cung cấp</div>
+<div class="font-body-md text-body-md font-medium">SendGrid (Giao dịch)</div>
+</div>
+<div>
+<div class="font-label-sm text-label-sm text-on-surface-variant mb-1">Dấu thời gian</div>
+<div class="font-body-md text-body-md font-numeric-tabular">2023-10-27T10:42:15Z</div>
+</div>
+<div class="col-span-2">
+<div class="font-label-sm text-label-sm text-on-surface-variant mb-1">Chủ đề / Mẫu</div>
+<div class="font-body-md text-body-md font-medium">Xác nhận vé: Sự kiện #88392</div>
+</div>
+</div>
+<!-- Payload JSON Display -->
+<div class="flex flex-col flex-1 min-h-[300px]">
+<div class="flex items-center justify-between mb-sm">
+<h3 class="font-title-lg text-title-lg text-on-surface">Khối lượng thô</h3>
+<button class="text-primary font-label-sm text-label-sm hover:underline focus:outline-none flex items-center gap-xs">
+<span class="material-symbols-outlined text-[16px]">content_copy</span> Sao chép
+                        </button>
+</div>
+<div class="bg-inverse-surface rounded-lg p-md overflow-x-auto flex-1 text-sm font-mono text-on-secondary shadow-inner">
+<pre class="leading-relaxed"><code>{
+  "personalizations": [
+    {
+      "to": [
+        {
+          "email": "user.name@complexdomain.com"
+        }
+      ],
+      "dynamic_template_data": {
+        "event_name": "Kinetic Beats Festival 2024",
+        "ticket_tier": "VIP Access",
+        "order_number": "ORD-109283",
+        "barcode_value": "839201948572"
+      }
+    }
+  ],
+  "from": {
+    "email": "tickets@kineticpulse.io",
+    "name": "Kinetic Pulse Box Office"
+  },
+  "template_id": "d-8f7a6b5c4d3e2f1a0b9c8d7e6f5a4b3c",
+  "tracking_settings": {
+    "click_tracking": {
+      "enable": true
+    }
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+<!-- Drawer Footer -->
+<div class="p-lg border-t border-outline-variant bg-surface-bright flex justify-end gap-md">
+<button class="h-12 px-lg rounded-lg border border-outline-variant text-on-surface font-label-md text-label-md hover:bg-surface-container transition-colors focus:ring-2 focus:ring-primary focus:ring-offset-2" onclick="closeDrawer()">
+                    Bỏ qua
+                </button>
+<button class="h-12 px-lg rounded-lg bg-primary text-on-primary font-label-md text-label-md font-bold hover:bg-surface-tint transition-colors focus:ring-2 focus:ring-primary focus:ring-offset-2 flex items-center gap-sm shadow-sm">
+<span class="material-symbols-outlined text-[20px]">refresh</span> Buộc thử lại
+                </button>
+</div>
+</aside>
+</div>
+<!-- Minimal Scripts for Interactivity -->
+<script>
+        function openDrawer(msgId) {
+            document.getElementById('drawer-msg-id').textContent = msgId;
+            document.getElementById('payload-drawer').classList.add('drawer-open');
+            document.getElementById('drawer-overlay').classList.add('overlay-open');
+        }
+
+        function closeDrawer() {
+            document.getElementById('payload-drawer').classList.remove('drawer-open');
+            document.getElementById('drawer-overlay').classList.remove('overlay-open');
+        }
+
+        // Close drawer on escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === "Escape") {
+                closeDrawer();
+            }
+        });
+    </script>
+</body></html>

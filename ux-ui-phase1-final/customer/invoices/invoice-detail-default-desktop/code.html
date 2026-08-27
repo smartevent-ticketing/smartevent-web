@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+
+<html class="light" lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SMART EVENT - Hóa đơn điện tử</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface": "#f9f9ff",
+                    "surface-dim": "#d0daf2",
+                    "background": "#f9f9ff",
+                    "on-secondary": "#ffffff",
+                    "on-surface": "#111c2d",
+                    "surface-bright": "#f9f9ff",
+                    "on-primary-container": "#fefaff",
+                    "on-tertiary-fixed": "#410003",
+                    "on-primary-fixed": "#0f0069",
+                    "secondary-fixed-dim": "#c2c5de",
+                    "on-error-container": "#93000a",
+                    "on-primary": "#ffffff",
+                    "primary": "#493ee5",
+                    "error-container": "#ffdad6",
+                    "on-error": "#ffffff",
+                    "tertiary-fixed-dim": "#ffb3ac",
+                    "secondary": "#5a5d73",
+                    "on-tertiary": "#ffffff",
+                    "primary-container": "#635bff",
+                    "secondary-fixed": "#dee1fb",
+                    "inverse-primary": "#c3c0ff",
+                    "surface-tint": "#4c42e9",
+                    "outline-variant": "#c7c4d8",
+                    "on-secondary-fixed-variant": "#42465a",
+                    "surface-variant": "#d9e3fb",
+                    "on-tertiary-container": "#fffaf9",
+                    "on-secondary-container": "#606379",
+                    "tertiary-container": "#d13e3a",
+                    "inverse-surface": "#273143",
+                    "primary-fixed": "#e2dfff",
+                    "secondary-container": "#dee1fb",
+                    "on-surface-variant": "#464555",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-container": "#e8eeff",
+                    "surface-container-high": "#dfe8ff",
+                    "error": "#ba1a1a",
+                    "surface-container-highest": "#d9e3fb",
+                    "outline": "#777587",
+                    "inverse-on-surface": "#ecf0ff",
+                    "on-background": "#111c2d",
+                    "tertiary": "#ae2424",
+                    "on-secondary-fixed": "#171b2d",
+                    "on-tertiary-fixed-variant": "#910913",
+                    "primary-fixed-dim": "#c3c0ff",
+                    "on-primary-fixed-variant": "#321ed2",
+                    "tertiary-fixed": "#ffdad6",
+                    "surface-container-low": "#f0f3ff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "gutter": "24px",
+                    "xl": "32px",
+                    "container-max": "1280px",
+                    "xs": "4px",
+                    "md": "16px",
+                    "lg": "24px",
+                    "xxl": "48px",
+                    "base": "8px",
+                    "sm": "8px"
+            },
+            "fontFamily": {
+                    "headline-lg": [
+                            "Be Vietnam Pro"
+                    ],
+                    "body-lg": [
+                            "Be Vietnam Pro"
+                    ],
+                    "numeric-tabular": [
+                            "Be Vietnam Pro"
+                    ],
+                    "display-lg": [
+                            "Be Vietnam Pro"
+                    ],
+                    "title-lg": [
+                            "Be Vietnam Pro"
+                    ],
+                    "headline-md": [
+                            "Be Vietnam Pro"
+                    ],
+                    "body-md": [
+                            "Be Vietnam Pro"
+                    ],
+                    "label-sm": [
+                            "Be Vietnam Pro"
+                    ],
+                    "label-md": [
+                            "Be Vietnam Pro"
+                    ]
+            },
+            "fontSize": {
+                    "headline-lg": [
+                            "32px",
+                            {
+                                    "lineHeight": "40px",
+                                    "letterSpacing": "-0.01em",
+                                    "fontWeight": "700"
+                            }
+                    ],
+                    "body-lg": [
+                            "18px",
+                            {
+                                    "lineHeight": "28px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "numeric-tabular": [
+                            "inherit",
+                            {
+                                    "lineHeight": "inherit",
+                                    "fontWeight": "inherit"
+                            }
+                    ],
+                    "display-lg": [
+                            "48px",
+                            {
+                                    "lineHeight": "60px",
+                                    "letterSpacing": "-0.02em",
+                                    "fontWeight": "700"
+                            }
+                    ],
+                    "title-lg": [
+                            "20px",
+                            {
+                                    "lineHeight": "28px",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "headline-md": [
+                            "24px",
+                            {
+                                    "lineHeight": "32px",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "body-md": [
+                            "16px",
+                            {
+                                    "lineHeight": "24px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "label-sm": [
+                            "12px",
+                            {
+                                    "lineHeight": "16px",
+                                    "letterSpacing": "0.02em",
+                                    "fontWeight": "500"
+                            }
+                    ],
+                    "label-md": [
+                            "14px",
+                            {
+                                    "lineHeight": "20px",
+                                    "fontWeight": "500"
+                            }
+                    ]
+            }
+    },
+        },
+      }
+    </script>
+<style>
+        body {
+            font-family: 'Be Vietnam Pro', sans-serif;
+        }
+        .tabular-nums {
+            font-variant-numeric: tabular-nums;
+        }
+        .bg-invoice-pattern {
+            background-image: radial-gradient(#e4e7ec 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col">
+<!-- TopNavBar (Nav Shell Suppressed for Detailed/Transactional View, simplified for header) -->
+<header class="bg-surface shadow-sm sticky top-0 z-50">
+<div class="flex justify-between items-center w-full px-4 md:px-8 max-w-[1280px] mx-auto h-16">
+<a class="font-headline-md text-headline-md font-bold text-primary flex items-center gap-2" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">confirmation_number</span>
+                SMART EVENT
+            </a>
+<div class="flex items-center gap-4 text-on-surface-variant">
+<button aria-label="Đóng chi tiết" class="hover:text-primary transition-colors p-2 rounded-full focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+</div>
+</header>
+<main class="flex-grow py-8 px-4 md:px-gutter bg-invoice-pattern">
+<div class="max-w-4xl mx-auto">
+<!-- Breadcrumbs / Back -->
+<div class="mb-lg">
+<a class="inline-flex items-center gap-xs font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">arrow_back</span>
+                    Quay lại danh sách hóa đơn
+                </a>
+</div>
+<!-- Invoice Card -->
+<div class="bg-surface-container-lowest rounded-2xl shadow-[0px_12px_32px_rgba(16,20,38,0.12)] border border-outline-variant overflow-hidden">
+<!-- Invoice Header Section -->
+<div class="p-lg md:p-xl border-b border-outline-variant bg-surface">
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-md">
+<div>
+<div class="font-headline-lg text-headline-lg text-primary mb-xs">HÓA ĐƠN ĐIỆN TỬ</div>
+<div class="font-body-md text-body-md text-on-surface-variant flex items-center gap-2">
+<span class="material-symbols-outlined text-[20px] text-surface-tint">check_circle</span>
+                                Trạng thái: <span class="font-bold text-[#20a144]">Đã thanh toán</span>
+</div>
+</div>
+<div class="text-left md:text-right w-full md:w-auto p-md bg-surface-container rounded-lg border border-outline-variant">
+<div class="font-label-sm text-label-sm text-on-surface-variant mb-1">Mã tra cứu hóa đơn</div>
+<div class="font-title-lg text-title-lg tabular-nums tracking-wider text-on-surface">INV-2024-89A4B2</div>
+</div>
+</div>
+</div>
+<!-- Invoice Details Section -->
+<div class="p-lg md:p-xl grid grid-cols-1 md:grid-cols-2 gap-xl">
+<!-- Provider Info -->
+<div class="space-y-4">
+<h3 class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Thông tin đơn vị bán</h3>
+<div class="font-body-md text-body-md text-on-surface space-y-1">
+<div class="font-bold">CÔNG TY CỔ PHẦN SMART EVENT</div>
+<div>Mã số thuế: 0123456789</div>
+<div>Địa chỉ: Tầng 15, Tòa nhà Landmark, Quận 1, TP. Hồ Chí Minh</div>
+<div>SĐT: 1900 1234 - Email: cskh@smartevent.vn</div>
+</div>
+</div>
+<!-- Buyer Info -->
+<div class="space-y-4">
+<h3 class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Thông tin người mua</h3>
+<div class="font-body-md text-body-md text-on-surface space-y-1 bg-surface p-md rounded-lg border border-outline-variant">
+<div class="font-bold">Nguyễn Văn A</div>
+<div>Mã số thuế: (Không có)</div>
+<div>Địa chỉ: 123 Đường Nguyễn Thị Minh Khai, Phường 6, Quận 3, TP.HCM</div>
+<div>SĐT: 0901 234 567</div>
+<div>Email: nguyenvana@email.com</div>
+</div>
+</div>
+</div>
+<!-- Transaction Meta Info -->
+<div class="px-lg md:px-xl py-md bg-surface-container-low flex flex-wrap gap-x-8 gap-y-4 border-y border-outline-variant">
+<div>
+<div class="font-label-sm text-label-sm text-on-surface-variant">Ngày lập hóa đơn</div>
+<div class="font-body-md text-body-md tabular-nums text-on-surface font-medium">24/10/2024 14:30:22</div>
+</div>
+<div>
+<div class="font-label-sm text-label-sm text-on-surface-variant">Mã đơn hàng gốc</div>
+<div class="font-body-md text-body-md tabular-nums text-on-surface font-medium">SE-ORD-99812</div>
+</div>
+<div>
+<div class="font-label-sm text-label-sm text-on-surface-variant">Phương thức thanh toán</div>
+<div class="font-body-md text-body-md text-on-surface font-medium">Thẻ tín dụng / VNPAY</div>
+</div>
+</div>
+<!-- Items Table -->
+<div class="p-lg md:p-xl overflow-x-auto">
+<table class="w-full text-left border-collapse min-w-[600px]">
+<thead>
+<tr class="border-b-2 border-outline-variant">
+<th class="py-sm px-4 font-label-md text-label-md text-on-surface-variant uppercase">STT</th>
+<th class="py-sm px-4 font-label-md text-label-md text-on-surface-variant uppercase w-1/2">Tên hàng hóa, dịch vụ</th>
+<th class="py-sm px-4 font-label-md text-label-md text-on-surface-variant uppercase text-right">Số lượng</th>
+<th class="py-sm px-4 font-label-md text-label-md text-on-surface-variant uppercase text-right">Đơn giá (VND)</th>
+<th class="py-sm px-4 font-label-md text-label-md text-on-surface-variant uppercase text-right">Thành tiền (VND)</th>
+</tr>
+</thead>
+<tbody class="font-body-md text-body-md">
+<tr class="border-b border-outline-variant/50 hover:bg-surface-container-low transition-colors">
+<td class="py-4 px-4 tabular-nums text-on-surface-variant text-center">1</td>
+<td class="py-4 px-4">
+<div class="font-medium text-on-surface">Vé V.I.P - BORN PINK WORLD TOUR HANOI</div>
+<div class="font-label-sm text-label-sm text-on-surface-variant mt-1">Ngày diễn: 30/11/2024 - Khán đài A</div>
+</td>
+<td class="py-4 px-4 tabular-nums text-right text-on-surface">2</td>
+<td class="py-4 px-4 tabular-nums text-right text-on-surface">5,000,000</td>
+<td class="py-4 px-4 tabular-nums text-right font-medium text-on-surface">10,000,000</td>
+</tr>
+<tr class="border-b border-outline-variant/50 hover:bg-surface-container-low transition-colors">
+<td class="py-4 px-4 tabular-nums text-on-surface-variant text-center">2</td>
+<td class="py-4 px-4">
+<div class="font-medium text-on-surface">Phí dịch vụ xử lý vé</div>
+<div class="font-label-sm text-label-sm text-on-surface-variant mt-1">Giao dịch trực tuyến</div>
+</td>
+<td class="py-4 px-4 tabular-nums text-right text-on-surface">1</td>
+<td class="py-4 px-4 tabular-nums text-right text-on-surface">50,000</td>
+<td class="py-4 px-4 tabular-nums text-right font-medium text-on-surface">50,000</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Totals Section -->
+<div class="p-lg md:p-xl bg-surface-container-lowest flex flex-col md:flex-row justify-between items-end border-t border-outline-variant gap-xl">
+<!-- Text Amount -->
+<div class="w-full md:w-1/2 order-2 md:order-1 space-y-2">
+<div class="font-label-sm text-label-sm text-on-surface-variant">Số tiền viết bằng chữ:</div>
+<div class="font-body-md text-body-md font-medium text-on-surface italic bg-surface p-md rounded-lg border border-outline-variant">
+                            Mười triệu không trăm năm mươi nghìn đồng chẵn.
+                        </div>
+</div>
+<!-- Number Totals -->
+<div class="w-full md:w-96 order-1 md:order-2 space-y-3 font-body-md text-body-md text-on-surface">
+<div class="flex justify-between items-center">
+<span class="text-on-surface-variant">Cộng tiền hàng:</span>
+<span class="tabular-nums">10,050,000</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-on-surface-variant">Thuế GTGT (10%):</span>
+<span class="tabular-nums">1,005,000</span>
+</div>
+<div class="flex justify-between items-center pt-3 border-t border-outline-variant">
+<span class="font-headline-md text-headline-md text-primary">Tổng cộng:</span>
+<span class="font-headline-md text-headline-md font-bold text-primary tabular-nums">11,055,000 <span class="font-title-lg text-title-lg">VND</span></span>
+</div>
+</div>
+</div>
+<!-- Action Bar -->
+<div class="p-lg bg-surface-container flex flex-col sm:flex-row justify-end items-center gap-md rounded-b-2xl border-t border-outline-variant">
+<button class="w-full sm:w-auto h-[48px] px-6 rounded-[10px] border border-outline-variant bg-surface text-on-surface font-label-md text-label-md font-bold hover:bg-surface-variant transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[20px]">mail</span>
+                        Gửi lại qua email
+                    </button>
+<button class="w-full sm:w-auto h-[48px] px-6 rounded-[10px] bg-primary text-on-primary font-label-md text-label-md font-bold hover:bg-surface-tint transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 shadow-[0px_4px_20px_rgba(16,20,38,0.08)] flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[20px]">download</span>
+                        Tải PDF
+                    </button>
+</div>
+</div>
+<!-- Footer Note -->
+<div class="mt-lg text-center font-label-sm text-label-sm text-on-surface-variant">
+<p>Hóa đơn điện tử được cung cấp bởi hệ thống SMART EVENT.</p>
+<p>Cần hỗ trợ? Vui lòng liên hệ Hotline: 1900 1234.</p>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-surface-container-highest border-t border-outline-variant">
+<div class="w-full py-12 px-4 md:px-8 max-w-[1280px] mx-auto flex flex-col md:flex-row justify-between items-center">
+<div class="font-headline-sm text-headline-sm font-bold text-primary mb-4 md:mb-0">
+                SMART EVENT
+            </div>
+<div class="flex gap-4">
+<a class="font-body-md text-body-md text-on-surface-variant hover:underline decoration-primary opacity-80 hover:opacity-100 transition-opacity" href="#">Về chúng tôi</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:underline decoration-primary opacity-80 hover:opacity-100 transition-opacity" href="#">Điều khoản</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:underline decoration-primary opacity-80 hover:opacity-100 transition-opacity" href="#">Bảo mật</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:underline decoration-primary opacity-80 hover:opacity-100 transition-opacity" href="#">Liên hệ</a>
+</div>
+<div class="font-label-sm text-label-sm text-on-surface-variant mt-4 md:mt-0">
+                © 2024 SMART EVENT. All rights reserved.
+            </div>
+</div>
+</footer>
+</body></html>

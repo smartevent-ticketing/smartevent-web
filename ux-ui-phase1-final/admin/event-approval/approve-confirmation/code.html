@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+
+<html lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Xác nhận phê duyệt sự kiện - SMART EVENT</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-container": "#d13e3a",
+                        "error": "#ba1a1a",
+                        "on-background": "#111c2d",
+                        "on-tertiary-container": "#fffaf9",
+                        "primary-container": "#635bff",
+                        "on-secondary": "#ffffff",
+                        "surface-container-high": "#dfe8ff",
+                        "secondary-container": "#dee1fb",
+                        "inverse-on-surface": "#ecf0ff",
+                        "tertiary-fixed": "#ffdad6",
+                        "secondary": "#5a5d73",
+                        "primary-fixed": "#e2dfff",
+                        "primary-fixed-dim": "#c3c0ff",
+                        "surface-bright": "#f9f9ff",
+                        "surface-tint": "#4c42e9",
+                        "on-secondary-container": "#606379",
+                        "on-secondary-fixed": "#171b2d",
+                        "outline": "#777587",
+                        "on-primary": "#ffffff",
+                        "surface-container-lowest": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "surface-dim": "#d0daf2",
+                        "inverse-primary": "#c3c0ff",
+                        "surface-variant": "#d9e3fb",
+                        "on-tertiary-fixed-variant": "#910913",
+                        "error-container": "#ffdad6",
+                        "secondary-fixed": "#dee1fb",
+                        "surface-container-low": "#f0f3ff",
+                        "tertiary": "#ae2424",
+                        "background": "#f9f9ff",
+                        "on-primary-fixed": "#0f0069",
+                        "on-secondary-fixed-variant": "#42465a",
+                        "on-tertiary-fixed": "#410003",
+                        "on-error": "#ffffff",
+                        "surface-container-highest": "#d9e3fb",
+                        "tertiary-fixed-dim": "#ffb3ac",
+                        "on-surface": "#111c2d",
+                        "on-primary-fixed-variant": "#321ed2",
+                        "on-tertiary": "#ffffff",
+                        "primary": "#493ee5",
+                        "on-primary-container": "#fefaff",
+                        "inverse-surface": "#273143",
+                        "surface-container": "#e8eeff",
+                        "outline-variant": "#c7c4d8",
+                        "secondary-fixed-dim": "#c2c5de",
+                        "surface": "#f9f9ff",
+                        "on-surface-variant": "#464555"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xs": "4px",
+                        "md": "16px",
+                        "lg": "24px",
+                        "gutter": "24px",
+                        "xl": "32px",
+                        "xxl": "48px",
+                        "container-max": "1280px",
+                        "base": "8px",
+                        "sm": "8px"
+                    },
+                    "fontFamily": {
+                        "title-lg": ["Be Vietnam Pro"],
+                        "label-md": ["Be Vietnam Pro"],
+                        "label-sm": ["Be Vietnam Pro"],
+                        "numeric-tabular": ["Be Vietnam Pro"],
+                        "headline-md": ["Be Vietnam Pro"],
+                        "headline-lg": ["Be Vietnam Pro"],
+                        "body-md": ["Be Vietnam Pro"],
+                        "display-lg": ["Be Vietnam Pro"],
+                        "body-lg": ["Be Vietnam Pro"]
+                    },
+                    "fontSize": {
+                        "title-lg": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "fontWeight": "500" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500" }],
+                        "numeric-tabular": ["inherit", { "lineHeight": "inherit", "fontWeight": "inherit" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "display-lg": ["48px", { "lineHeight": "60px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-surface font-body-md text-on-surface antialiased h-screen flex flex-col overflow-hidden">
+<!-- Top Navigation Bar -->
+<header class="bg-surface dark:bg-on-background font-label-md text-label-md docked full-width top-0 sticky z-40 border-b border-outline-variant dark:border-outline shadow-sm flex justify-between items-center h-16 px-lg ml-64">
+<div class="flex items-center gap-md cursor-pointer transition-all duration-200">
+<span class="font-title-lg text-title-lg font-bold text-on-surface">SMART EVENT Admin</span>
+</div>
+<div class="flex items-center gap-md flex-1 px-xl max-w-2xl">
+<div class="relative w-full">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="w-full h-10 pl-10 pr-4 rounded-full border border-outline-variant bg-surface-container-lowest focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all font-body-md text-body-md placeholder:text-on-surface-variant" placeholder="Tìm kiếm sự kiện, người dùng..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-md">
+<button class="p-2 rounded-full hover:bg-surface-container dark:hover:bg-inverse-surface text-on-surface-variant transition-colors relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full"></span>
+</button>
+<button class="p-2 rounded-full hover:bg-surface-container dark:hover:bg-inverse-surface text-on-surface-variant transition-colors">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<div class="w-10 h-10 rounded-full bg-primary-container/20 overflow-hidden ml-sm cursor-pointer border border-outline-variant">
+<img alt="Ảnh đại diện admin" class="w-full h-full object-cover" data-alt="A professional headshot of a corporate admin or event manager. The lighting is soft and studio-quality, ensuring clear visibility. They are smiling slightly and look approachable yet authoritative. The background is a blurred, light modern office space. This aligns with the modern/corporate hybrid style, avoiding overly generic stock looks." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCYFPvM9ceKUDUWy8x7neU5wi6IRDAUJCe8BuN-2PBWg1rCtd1dN9qO-eNBV4R4IVabf1jJlfaNiUq9EEotuq-Givhgju3jH0E5sbvHn0F55Mo8v_oRwr1D8GidkxHXvjB1J86q0hw65MyHzyDQJbhbl7W5SQsDRDjfDaq7NqzQysBvbI7p-1kmLfBgAE_H21YcZSPsZSJ_WbYoNBAqCEz2mVkbpnJ_x_4kFk5KKEgYzZLCG73hpdCS"/>
+</div>
+</div>
+</header>
+<!-- Side Navigation -->
+<nav class="bg-surface-container-lowest dark:bg-inverse-surface font-body-md text-body-md h-full w-64 fixed left-0 top-0 border-r border-outline-variant dark:border-outline flex flex-col h-screen py-md z-50">
+<div class="px-lg pb-xl pt-sm flex items-center gap-md">
+<div class="w-10 h-10 bg-primary rounded-lg flex items-center justify-center text-on-primary shadow-sm">
+<span class="material-symbols-outlined">stadium</span>
+</div>
+<div>
+<h1 class="font-headline-md text-headline-md font-bold text-primary dark:text-inverse-primary truncate">SMART EVENT</h1>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Quản trị viên</p>
+</div>
+</div>
+<ul class="flex flex-col gap-xs px-md flex-1 overflow-y-auto">
+<li>
+<a class="flex items-center gap-md px-md py-3 rounded-lg text-on-surface-variant dark:text-surface-variant hover:bg-surface-container-high dark:hover:bg-secondary-container/20 transition-colors" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-md text-label-md">Tổng quan hệ thống</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-md px-md py-3 rounded-lg text-primary font-bold bg-primary-container/10 border-r-4 border-primary Active: scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">event_available</span>
+<span class="font-label-md text-label-md">Phê duyệt sự kiện</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-md px-md py-3 rounded-lg text-on-surface-variant dark:text-surface-variant hover:bg-surface-container-high dark:hover:bg-secondary-container/20 transition-colors" href="#">
+<span class="material-symbols-outlined">category</span>
+<span class="font-label-md text-label-md">Danh mục</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-md px-md py-3 rounded-lg text-on-surface-variant dark:text-surface-variant hover:bg-surface-container-high dark:hover:bg-secondary-container/20 transition-colors" href="#">
+<span class="material-symbols-outlined">location_on</span>
+<span class="font-label-md text-label-md">Địa điểm</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-md px-md py-3 rounded-lg text-on-surface-variant dark:text-surface-variant hover:bg-surface-container-high dark:hover:bg-secondary-container/20 transition-colors" href="#">
+<span class="material-symbols-outlined">outbox</span>
+<span class="font-label-md text-label-md">Hộp thư đi</span>
+</a>
+</li>
+</ul>
+</nav>
+<!-- Main Content Canvas (Behind Modal Overlay) -->
+<main class="ml-64 flex-1 p-lg bg-background overflow-y-auto relative">
+<!-- Abstract background pattern for visual depth -->
+<div class="absolute inset-0 opacity-20 pointer-events-none" style="background-image: radial-gradient(#c7c4d8 1px, transparent 1px); background-size: 24px 24px;"></div>
+<div class="max-w-container-max mx-auto relative z-10 filter blur-sm">
+<div class="flex justify-between items-center mb-xl">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface mb-2">Phê duyệt sự kiện</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Quản lý và xét duyệt các sự kiện đang chờ xuất bản.</p>
+</div>
+</div>
+<!-- Dummy Data Table to show context -->
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm overflow-hidden">
+<table class="w-full text-left">
+<thead class="bg-surface-container-low font-label-md text-label-md text-on-surface-variant">
+<tr>
+<th class="px-md py-3 border-b border-outline-variant">Tên sự kiện</th>
+<th class="px-md py-3 border-b border-outline-variant">Nhà tổ chức</th>
+<th class="px-md py-3 border-b border-outline-variant">Trạng thái</th>
+<th class="px-md py-3 border-b border-outline-variant text-right">Hành động</th>
+</tr>
+</thead>
+<tbody class="font-body-md text-body-md">
+<tr class="hover:bg-surface-container transition-colors bg-primary-container/5">
+<td class="px-md py-4 border-b border-outline-variant font-medium">Monsoon Music Festival</td>
+<td class="px-md py-4 border-b border-outline-variant text-on-surface-variant">Vibe Ent</td>
+<td class="px-md py-4 border-b border-outline-variant">
+<span class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-label-sm">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+                                    CHỜ DUYỆT
+                                </span>
+</td>
+<td class="px-md py-4 border-b border-outline-variant text-right">
+<button class="text-primary font-label-md text-label-md hover:underline">Xét duyệt</button>
+</td>
+</tr>
+<tr>
+<td class="px-md py-4 border-b border-outline-variant font-medium">Lazada Super Show</td>
+<td class="px-md py-4 border-b border-outline-variant text-on-surface-variant">Lazada Group</td>
+<td class="px-md py-4 border-b border-outline-variant">
+<span class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-primary-container/20 text-primary font-label-sm text-label-sm">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+                                    ĐÃ XUẤT BẢN
+                                </span>
+</td>
+<td class="px-md py-4 border-b border-outline-variant text-right text-on-surface-variant">
+                                Đã xử lý
+                            </td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</main>
+<!-- Overlay & Modal -->
+<div class="fixed inset-0 bg-on-surface/40 backdrop-blur-sm z-[100] flex items-center justify-center p-md">
+<!-- Modal Card (Level 3 Elevation) -->
+<div class="bg-surface-container-lowest rounded-xl w-full max-w-lg shadow-[0px_12px_32px_rgba(16,20,38,0.12)] border border-outline-variant flex flex-col overflow-hidden animate-[modalPop_0.3s_ease-out]">
+<!-- Modal Header -->
+<div class="px-lg py-md border-b border-outline-variant flex justify-between items-center bg-surface-container-low">
+<h3 class="font-title-lg text-title-lg text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">gavel</span>
+                    Xác nhận phê duyệt
+                </h3>
+<button class="text-on-surface-variant hover:text-on-surface transition-colors rounded-full p-1 hover:bg-surface-container">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<!-- Modal Body -->
+<div class="p-lg flex flex-col gap-lg">
+<div class="bg-surface-container rounded-lg p-md flex items-start gap-md border border-outline-variant/50">
+<div class="w-12 h-12 bg-primary-container/20 rounded-md flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">festival</span>
+</div>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant mb-1 uppercase tracking-wider">Thông tin sự kiện</p>
+<h4 class="font-title-lg text-title-lg text-on-surface">Monsoon Music Festival</h4>
+<p class="font-body-md text-body-md text-on-surface-variant flex items-center gap-1 mt-1">
+<span class="material-symbols-outlined text-[16px]">business</span> Vibe Ent
+                        </p>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-md">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-outline mt-0.5">calendar_month</span>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Thời gian</p>
+<p class="font-body-md text-body-md text-on-surface font-medium">20:00 - 15/10/2024</p>
+</div>
+</div>
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-outline mt-0.5">location_on</span>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Địa điểm</p>
+<p class="font-body-md text-body-md text-on-surface font-medium">Hoàng Thành Thăng Long, Hà Nội</p>
+</div>
+</div>
+</div>
+<!-- Status Transition Indicator -->
+<div class="flex items-center justify-center gap-4 py-4 border-y border-outline-variant border-dashed">
+<div class="flex flex-col items-center">
+<span class="px-3 py-1 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-label-sm mb-2">CHỜ DUYỆT</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Hiện tại</span>
+</div>
+<span class="material-symbols-outlined text-outline">arrow_forward</span>
+<div class="flex flex-col items-center">
+<span class="px-3 py-1 rounded-full bg-primary-container text-on-primary-container font-label-sm text-label-sm mb-2 font-bold shadow-sm ring-2 ring-primary/20">ĐÃ XUẤT BẢN</span>
+<span class="font-label-sm text-label-sm text-primary">Mới</span>
+</div>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant text-center px-4">
+                    Sau khi phê duyệt, sự kiện sẽ được hiển thị công khai trên nền tảng và người dùng có thể bắt đầu mua vé.
+                </p>
+</div>
+<!-- Modal Footer -->
+<div class="px-lg py-md border-t border-outline-variant bg-surface-container-lowest flex justify-end gap-md">
+<button class="h-12 px-6 rounded-[10px] font-label-md text-label-md font-bold text-on-surface border border-outline-variant hover:bg-surface-container transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
+                    Hủy
+                </button>
+<button class="h-12 px-6 rounded-[10px] font-label-md text-label-md font-bold text-on-primary bg-primary hover:bg-surface-tint transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 shadow-[0px_4px_20px_rgba(16,20,38,0.08)] flex items-center gap-2">
+<span class="material-symbols-outlined text-[20px]">check_circle</span>
+                    Xác nhận phê duyệt
+                </button>
+</div>
+</div>
+</div>
+<style>
+        @keyframes modalPop {
+            0% { transform: scale(0.95) translateY(10px); opacity: 0; }
+            100% { transform: scale(1) translateY(0); opacity: 1; }
+        }
+    </style>
+</body></html>

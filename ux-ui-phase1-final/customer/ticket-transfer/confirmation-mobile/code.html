@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+
+<html lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Xác nhận chuyển vé - SMART EVENT</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-primary": "#ffffff",
+                        "on-secondary-fixed-variant": "#42465a",
+                        "on-tertiary-fixed-variant": "#910913",
+                        "on-tertiary-container": "#fffaf9",
+                        "error": "#ba1a1a",
+                        "on-secondary-container": "#606379",
+                        "on-tertiary": "#ffffff",
+                        "inverse-surface": "#273143",
+                        "on-primary-container": "#fefaff",
+                        "surface-bright": "#f9f9ff",
+                        "secondary": "#5a5d73",
+                        "inverse-primary": "#c3c0ff",
+                        "surface": "#f9f9ff",
+                        "primary-fixed": "#e2dfff",
+                        "outline-variant": "#c7c4d8",
+                        "on-surface": "#111c2d",
+                        "surface-tint": "#4c42e9",
+                        "on-secondary": "#ffffff",
+                        "tertiary": "#ae2424",
+                        "on-tertiary-fixed": "#410003",
+                        "on-primary-fixed": "#0f0069",
+                        "secondary-fixed": "#dee1fb",
+                        "surface-variant": "#d9e3fb",
+                        "surface-container": "#e8eeff",
+                        "secondary-container": "#dee1fb",
+                        "on-background": "#111c2d",
+                        "tertiary-container": "#d13e3a",
+                        "background": "#f9f9ff",
+                        "tertiary-fixed": "#ffdad6",
+                        "surface-dim": "#d0daf2",
+                        "primary": "#493ee5",
+                        "tertiary-fixed-dim": "#ffb3ac",
+                        "surface-container-highest": "#d9e3fb",
+                        "secondary-fixed-dim": "#c2c5de",
+                        "inverse-on-surface": "#ecf0ff",
+                        "outline": "#777587",
+                        "primary-fixed-dim": "#c3c0ff",
+                        "surface-container-low": "#f0f3ff",
+                        "error-container": "#ffdad6",
+                        "on-error-container": "#93000a",
+                        "on-primary-fixed-variant": "#321ed2",
+                        "surface-container-lowest": "#ffffff",
+                        "on-surface-variant": "#464555",
+                        "on-secondary-fixed": "#171b2d",
+                        "on-error": "#ffffff",
+                        "surface-container-high": "#dfe8ff",
+                        "primary-container": "#635bff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "lg": "24px",
+                        "xs": "4px",
+                        "base": "8px",
+                        "sm": "8px",
+                        "md": "16px",
+                        "gutter": "24px",
+                        "container-max": "1280px",
+                        "xl": "32px",
+                        "xxl": "48px"
+                    },
+                    "fontFamily": {
+                        "label-md": ["Be Vietnam Pro"],
+                        "label-sm": ["Be Vietnam Pro"],
+                        "title-lg": ["Be Vietnam Pro"],
+                        "numeric-tabular": ["Be Vietnam Pro"],
+                        "display-lg": ["Be Vietnam Pro"],
+                        "body-md": ["Be Vietnam Pro"],
+                        "body-lg": ["Be Vietnam Pro"],
+                        "headline-lg": ["Be Vietnam Pro"],
+                        "headline-md": ["Be Vietnam Pro"]
+                    },
+                    "fontSize": {
+                        "label-md": ["14px", { "lineHeight": "20px", "fontWeight": "500" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500" }],
+                        "title-lg": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "numeric-tabular": ["inherit", { "lineHeight": "inherit", "fontWeight": "inherit" }],
+                        "display-lg": ["48px", { "lineHeight": "60px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .kinetic-pulse {
+            animation: pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+        }
+        @keyframes pulse-ring {
+            0% { transform: scale(0.8); opacity: 0.5; }
+            100% { transform: scale(1.5); opacity: 0; }
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex items-center justify-center">
+<!-- Mobile Container -->
+<div class="w-full max-w-[390px] h-screen md:h-[844px] bg-surface relative overflow-hidden flex flex-col md:rounded-3xl md:shadow-2xl">
+<!-- Header (Transactional - No global nav) -->
+<header class="flex items-center justify-between px-md py-md bg-surface border-b border-outline-variant shrink-0">
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container-low text-on-surface transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><line x1="18" x2="6" y1="6" y2="18"></line><line x1="6" x2="18" y1="6" y2="18"></line></svg>
+</button>
+<h1 class="font-headline-md text-headline-md text-on-surface text-center flex-1 pr-10">Xác nhận chuyển vé</h1>
+</header>
+<!-- Scrollable Content -->
+<main class="flex-1 overflow-y-auto p-md space-y-lg pb-32">
+<p class="font-body-md text-body-md text-on-surface-variant text-center">
+                Vui lòng kiểm tra kỹ thông tin trước khi xác nhận.
+            </p>
+<!-- Transfer Direction Graphic -->
+<div class="flex items-center justify-between px-sm py-md relative">
+<!-- Sender -->
+<div class="flex flex-col items-center gap-sm z-10 w-1/3">
+<div class="w-14 h-14 rounded-full bg-surface-container-high border-2 border-surface flex items-center justify-center shadow-sm relative"><svg class="w-8 h-8 text-on-surface" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></div>
+<span class="font-label-md text-label-md text-on-surface truncate w-full text-center">Bạn</span>
+</div>
+<!-- Animated Connection -->
+<div class="flex-1 flex items-center justify-center px-sm z-0">
+<div class="w-full h-[2px] bg-outline-variant relative flex items-center justify-center">
+<div class="absolute w-8 h-8 rounded-full bg-primary-container flex items-center justify-center"><svg class="w-4 h-4 text-primary" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><line x1="5" x2="19" y1="12" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+<div class="absolute inset-0 rounded-full border-2 border-primary kinetic-pulse"></div></div>
+</div>
+</div>
+<!-- Recipient -->
+<div class="flex flex-col items-center gap-xs z-10 flex-1 min-w-0">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Đến</span>
+<div class="w-14 h-14 rounded-full bg-primary-container border-2 border-surface flex items-center justify-center shadow-sm text-primary font-title-lg font-bold">
+<svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+</div>
+<span class="font-label-md text-label-md text-on-surface text-center break-all px-2">minh.nguyen@example.com</span>
+</div>
+</div>
+<!-- Ticket Details Card -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-md shadow-sm relative overflow-hidden">
+<div class="absolute top-0 left-0 w-2 h-full bg-primary"></div>
+<div class="pl-sm">
+<div class="flex justify-between items-start mb-sm">
+<h3 class="font-title-lg text-title-lg text-on-surface">Đêm Nhạc Hội Indie 2024</h3>
+<div class="bg-primary-container text-primary font-label-sm text-label-sm px-2 py-1 rounded-full">VIP</div>
+</div>
+<div class="flex flex-col gap-xs mb-md"><div class="flex items-center gap-xs text-on-surface-variant font-label-md text-label-md">
+<svg class="w-[18px] h-[18px]" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M19 18v2a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-2"></path><path d="M4 13v7"></path><path d="M20 13v7"></path><path d="M5 15h14"></path><path d="M5 10h14a2 2 0 0 1 2 2v3H3v-3a2 2 0 0 1 2-2z"></path></svg>
+<span>Khu A · A12</span>
+</div>
+<div class="flex items-center gap-xs text-on-surface-variant font-label-md text-label-md">
+<svg class="w-[18px] h-[18px]" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" x2="7.01" y1="7" y2="7"></line></svg>
+<span>Early Bird</span>
+</div></div>
+<!-- Note Block -->
+<div class="bg-surface-container rounded-lg p-sm flex items-start gap-sm"><svg class="w-5 h-5 text-primary mt-[2px] shrink-0" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"></path><path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c1 0 1.25.25 1.25 1.25V15c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"></path></svg>
+<p class="font-body-md text-body-md text-on-surface-variant italic">
+  "Chúc bạn có một đêm nhạc thật vui!"
+</p></div>
+</div>
+</div>
+<!-- Warning Callout -->
+<div class="bg-error-container/20 border border-error/30 rounded-xl p-md flex gap-sm"><svg class="w-6 h-6 text-error shrink-0" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" x2="12" y1="9" y2="13"></line><line x1="12" x2="12.01" y1="17" y2="17"></line></svg>
+<p class="font-label-sm text-label-sm text-error">
+  Sau khi chuyển thành công, vé này sẽ không còn thuộc quyền sử dụng của bạn và mã QR hiện tại không thể dùng để check-in.
+</p></div>
+<!-- Confirmation Checkbox -->
+<label class="flex items-start gap-sm p-sm cursor-pointer group">
+<div class="relative flex items-center justify-center shrink-0 mt-[2px]">
+<input class="peer sr-only" type="checkbox"/>
+<div class="w-5 h-5 border-2 border-outline rounded bg-surface transition-colors peer-checked:bg-primary peer-checked:border-primary group-hover:border-primary focus:ring-2 focus:ring-primary focus:ring-offset-2"></div>
+<svg class="w-4 h-4 text-on-primary absolute opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" viewbox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+</div>
+<span class="font-label-md text-label-md text-on-surface select-none">Tôi đã kiểm tra đúng email người nhận.</span>
+</label>
+</main>
+<!-- Fixed Bottom Actions -->
+<div class="absolute bottom-0 left-0 w-full bg-surface border-t border-outline-variant p-md flex flex-col gap-sm shadow-[0_-4px_20px_rgba(16,20,38,0.08)]">
+<button class="w-full h-12 bg-primary text-on-primary font-title-lg text-title-lg font-bold rounded-lg hover:bg-on-primary-fixed-variant transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed" disabled="true">
+                Xác nhận chuyển vé
+            </button>
+<div class="flex justify-between items-center w-full mt-2">
+<button class="flex-1 h-10 flex items-center justify-center text-primary font-label-md text-label-md rounded-lg hover:bg-surface-container-low transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2" disabled="true">
+                    Hủy
+                </button>
+<div class="w-[1px] h-6 bg-outline-variant mx-2"></div>
+<button class="flex-1 h-10 flex items-center justify-center text-primary font-label-md text-label-md rounded-lg hover:bg-surface-container-low transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
+                    Quay lại chỉnh sửa
+                </button>
+</div>
+</div>
+</div>
+</body></html>

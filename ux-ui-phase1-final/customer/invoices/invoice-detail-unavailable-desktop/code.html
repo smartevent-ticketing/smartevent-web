@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+
+<html class="light" lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SMART EVENT - Không thể truy cập hóa đơn</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-primary-container": "#fefaff",
+                        "on-surface": "#111c2d",
+                        "surface-variant": "#d9e3fb",
+                        "on-error": "#ffffff",
+                        "inverse-surface": "#273143",
+                        "tertiary": "#ae2424",
+                        "secondary-fixed-dim": "#c2c5de",
+                        "on-tertiary": "#ffffff",
+                        "inverse-on-surface": "#ecf0ff",
+                        "secondary-container": "#dee1fb",
+                        "on-primary": "#ffffff",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "tertiary-fixed": "#ffdad6",
+                        "outline-variant": "#c7c4d8",
+                        "error-container": "#ffdad6",
+                        "on-tertiary-fixed": "#410003",
+                        "secondary-fixed": "#dee1fb",
+                        "on-background": "#111c2d",
+                        "surface-container-low": "#f0f3ff",
+                        "on-secondary-fixed": "#171b2d",
+                        "error": "#ba1a1a",
+                        "tertiary-container": "#d13e3a",
+                        "surface-tint": "#4c42e9",
+                        "primary-container": "#635bff",
+                        "outline": "#777587",
+                        "on-tertiary-container": "#fffaf9",
+                        "primary-fixed": "#e2dfff",
+                        "tertiary-fixed-dim": "#ffb3ac",
+                        "surface-container-highest": "#d9e3fb",
+                        "surface-dim": "#d0daf2",
+                        "on-error-container": "#93000a",
+                        "on-secondary-fixed-variant": "#42465a",
+                        "on-tertiary-fixed-variant": "#910913",
+                        "primary-fixed-dim": "#c3c0ff",
+                        "on-primary-fixed-variant": "#321ed2",
+                        "surface-container-high": "#dfe8ff",
+                        "inverse-primary": "#c3c0ff",
+                        "secondary": "#5a5d73",
+                        "on-primary-fixed": "#0f0069",
+                        "on-secondary-container": "#606379",
+                        "on-surface-variant": "#464555",
+                        "surface-bright": "#f9f9ff",
+                        "surface": "#f9f9ff",
+                        "surface-container": "#e8eeff",
+                        "background": "#f9f9ff",
+                        "primary": "#493ee5"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "md": "16px",
+                        "base": "8px",
+                        "lg": "24px",
+                        "xl": "32px",
+                        "xs": "4px",
+                        "sm": "8px",
+                        "xxl": "48px",
+                        "container-max": "1280px",
+                        "gutter": "24px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Be Vietnam Pro"],
+                        "label-md": ["Be Vietnam Pro"],
+                        "body-md": ["Be Vietnam Pro"],
+                        "title-lg": ["Be Vietnam Pro"],
+                        "display-lg": ["Be Vietnam Pro"],
+                        "headline-md": ["Be Vietnam Pro"],
+                        "numeric-tabular": ["Be Vietnam Pro"],
+                        "headline-lg": ["Be Vietnam Pro"],
+                        "label-sm": ["Be Vietnam Pro"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "fontWeight": "500" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "title-lg": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "display-lg": ["48px", { "lineHeight": "60px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "numeric-tabular": ["inherit", { "lineHeight": "inherit", "fontWeight": "inherit" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500" }]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col md:flex-row overflow-hidden">
+<!-- Desktop Side Navigation -->
+<aside class="hidden md:flex flex-col h-screen w-64 docked left-0 bg-surface-container-low border-r border-outline-variant py-lg px-md gap-sm shrink-0">
+<div class="mb-lg">
+<h1 class="font-headline-md text-headline-md font-bold text-on-surface">SMART EVENT</h1>
+</div>
+<div class="flex items-center gap-md mb-lg p-md rounded-lg bg-surface-container">
+<div class="w-12 h-12 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container">
+<span class="material-symbols-outlined">person</span>
+</div>
+<div>
+<p class="font-label-md text-label-md font-bold text-on-surface">Quản lý tài khoản</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Người dùng SMART EVENT</p>
+</div>
+</div>
+<nav class="flex-1 flex flex-col gap-sm">
+<a class="text-on-surface-variant px-4 py-3 flex items-center gap-3 hover:bg-surface-container-high rounded-lg transition-all duration-200" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-md text-label-md">Hồ sơ cá nhân</span>
+</a>
+<a class="text-on-surface-variant px-4 py-3 flex items-center gap-3 hover:bg-surface-container-high rounded-lg transition-all duration-200" href="#">
+<span class="material-symbols-outlined">confirmation_number</span>
+<span class="font-label-md text-label-md">Vé của tôi</span>
+</a>
+<a class="text-on-surface-variant px-4 py-3 flex items-center gap-3 hover:bg-surface-container-high rounded-lg transition-all duration-200" href="#">
+<span class="material-symbols-outlined">receipt_long</span>
+<span class="font-label-md text-label-md">Đơn hàng</span>
+</a>
+<a class="bg-primary-container text-on-primary-container font-bold rounded-lg px-4 py-3 flex items-center gap-3 active:scale-[0.97] transition-transform" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">description</span>
+<span class="font-label-md text-label-md">Hóa đơn</span>
+</a>
+<a class="text-on-surface-variant px-4 py-3 flex items-center gap-3 hover:bg-surface-container-high rounded-lg transition-all duration-200" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-md text-label-md">Cài đặt</span>
+</a>
+</nav>
+<div class="mt-auto">
+<a class="text-on-surface-variant px-4 py-3 flex items-center gap-3 hover:bg-surface-container-high rounded-lg transition-all duration-200" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span class="font-label-md text-label-md">Đăng xuất</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Area -->
+<div class="flex-1 flex flex-col min-w-0">
+<!-- Top App Bar (Mobile & Desktop) -->
+<header class="bg-surface docked full-width top-0 border-b border-outline-variant shadow-sm z-10 shrink-0">
+<div class="flex justify-between items-center w-full px-lg md:px-xl h-16 max-w-container-max mx-auto">
+<div class="flex items-center gap-md md:hidden">
+<button class="text-on-surface-variant p-2 rounded-full hover:bg-surface-container-high">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<span class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-primary tracking-tight">SMART EVENT</span>
+</div>
+<!-- Desktop Top Nav Links (Hidden on mobile) -->
+<nav class="hidden md:flex gap-lg h-full">
+<a class="text-on-secondary-container hover:text-primary transition-colors duration-200 flex items-center h-full px-2 font-label-md text-label-md" href="#">Khám phá</a>
+<a class="text-on-secondary-container hover:text-primary transition-colors duration-200 flex items-center h-full px-2 font-label-md text-label-md" href="#">Địa điểm</a>
+<a class="text-on-secondary-container hover:text-primary transition-colors duration-200 flex items-center h-full px-2 font-label-md text-label-md" href="#">Vé của tôi</a>
+</nav>
+<div class="flex items-center gap-md">
+<button class="text-on-surface-variant p-2 rounded-full hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="text-on-surface-variant p-2 rounded-full hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined">shopping_cart</span>
+</button>
+<button class="hidden md:flex items-center gap-2 bg-surface-container-high px-4 py-2 rounded-full hover:bg-surface-container-highest transition-colors font-label-md text-label-md text-on-surface">
+<span class="material-symbols-outlined">person</span>
+                        Tài khoản
+                    </button>
+</div>
+</div>
+</header>
+<!-- Canvas -->
+<main class="flex-1 overflow-y-auto p-md md:p-lg lg:p-xl bg-background flex flex-col">
+<div class="max-w-4xl mx-auto w-full flex-1 flex flex-col">
+<!-- Breadcrumb & Header -->
+<div class="mb-lg md:mb-xl">
+<nav aria-label="Breadcrumb" class="flex text-on-surface-variant font-label-md text-label-md mb-md">
+<ol class="inline-flex items-center space-x-1 md:space-x-3">
+<li class="inline-flex items-center hover:text-primary transition-colors cursor-pointer">
+                                Hóa đơn của tôi
+                            </li>
+<li>
+<div class="flex items-center">
+<span class="material-symbols-outlined mx-1 text-sm">chevron_right</span>
+<span aria-current="page" class="text-on-surface">Chi tiết hóa đơn</span>
+</div>
+</li>
+</ol>
+</nav>
+<h1 class="font-display-lg text-display-lg text-on-surface">Chi tiết hóa đơn</h1>
+</div>
+<!-- Empty State Panel -->
+<div class="flex-1 flex flex-col items-center justify-center bg-surface rounded-xl border border-outline-variant shadow-sm p-xl text-center">
+<!-- Illustration -->
+<div class="mb-lg w-48 h-48 rounded-full bg-surface-container-low flex items-center justify-center relative">
+<svg class="text-outline" fill="none" height="120" viewbox="0 0 24 24" width="120" xmlns="http://www.w3.org/2000/svg">
+<path d="M14 2H6C4.89543 2 4 2.89543 4 4V20C4 21.1046 4.89543 22 6 22H18C19.1046 22 20 21.1046 20 20V8L14 2Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path>
+<path d="M14 2V8H20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path>
+<path d="M12 18C13.6569 18 15 16.6569 15 15C15 13.3431 13.6569 12 12 12C10.3431 12 9 13.3431 9 15C9 16.6569 10.3431 18 12 18Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path>
+<path d="M10.5 13.5L13.5 16.5" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"></path>
+</svg>
+<!-- Decorative lock element -->
+<div class="absolute bottom-4 right-4 bg-surface rounded-full p-2 border border-outline-variant shadow-sm text-error">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">lock</span>
+</div>
+</div>
+<h2 class="font-headline-md text-headline-md text-on-surface mb-md">Không thể truy cập hóa đơn</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-md mx-auto mb-lg">
+                        Hóa đơn không tồn tại hoặc bạn không có quyền xem thông tin này.
+                    </p>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-md mx-auto mb-xl">
+                        Vui lòng kiểm tra lại liên kết hoặc quay về danh sách hóa đơn của bạn.
+                    </p>
+<div class="flex flex-col sm:flex-row gap-md justify-center w-full max-w-md">
+<button class="h-12 bg-primary text-on-primary font-label-md text-label-md font-bold px-lg rounded-lg hover:opacity-90 transition-opacity active:scale-[0.98] w-full sm:w-auto focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
+                            Về danh sách hóa đơn
+                        </button>
+<button class="h-12 bg-surface text-primary border border-primary font-label-md text-label-md font-bold px-lg rounded-lg hover:bg-surface-container-low transition-colors active:scale-[0.98] w-full sm:w-auto focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
+                            Về trang cá nhân
+                        </button>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

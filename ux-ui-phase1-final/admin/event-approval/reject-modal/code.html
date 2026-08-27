@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+
+<html lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SMART EVENT - Từ chối duyệt sự kiện</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-container": "#d13e3a",
+                        "error": "#ba1a1a",
+                        "on-background": "#111c2d",
+                        "on-tertiary-container": "#fffaf9",
+                        "primary-container": "#635bff",
+                        "on-secondary": "#ffffff",
+                        "surface-container-high": "#dfe8ff",
+                        "secondary-container": "#dee1fb",
+                        "inverse-on-surface": "#ecf0ff",
+                        "tertiary-fixed": "#ffdad6",
+                        "secondary": "#5a5d73",
+                        "primary-fixed": "#e2dfff",
+                        "primary-fixed-dim": "#c3c0ff",
+                        "surface-bright": "#f9f9ff",
+                        "surface-tint": "#4c42e9",
+                        "on-secondary-container": "#606379",
+                        "on-secondary-fixed": "#171b2d",
+                        "outline": "#777587",
+                        "on-primary": "#ffffff",
+                        "surface-container-lowest": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "surface-dim": "#d0daf2",
+                        "inverse-primary": "#c3c0ff",
+                        "surface-variant": "#d9e3fb",
+                        "on-tertiary-fixed-variant": "#910913",
+                        "error-container": "#ffdad6",
+                        "secondary-fixed": "#dee1fb",
+                        "surface-container-low": "#f0f3ff",
+                        "tertiary": "#ae2424",
+                        "background": "#f9f9ff",
+                        "on-primary-fixed": "#0f0069",
+                        "on-secondary-fixed-variant": "#42465a",
+                        "on-tertiary-fixed": "#410003",
+                        "on-error": "#ffffff",
+                        "surface-container-highest": "#d9e3fb",
+                        "tertiary-fixed-dim": "#ffb3ac",
+                        "on-surface": "#111c2d",
+                        "on-primary-fixed-variant": "#321ed2",
+                        "on-tertiary": "#ffffff",
+                        "primary": "#493ee5",
+                        "on-primary-container": "#fefaff",
+                        "inverse-surface": "#273143",
+                        "surface-container": "#e8eeff",
+                        "outline-variant": "#c7c4d8",
+                        "secondary-fixed-dim": "#c2c5de",
+                        "surface": "#f9f9ff",
+                        "on-surface-variant": "#464555"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xs": "4px",
+                        "md": "16px",
+                        "lg": "24px",
+                        "gutter": "24px",
+                        "xl": "32px",
+                        "xxl": "48px",
+                        "container-max": "1280px",
+                        "base": "8px",
+                        "sm": "8px"
+                    },
+                    "fontFamily": {
+                        "title-lg": ["Be Vietnam Pro"],
+                        "label-md": ["Be Vietnam Pro"],
+                        "label-sm": ["Be Vietnam Pro"],
+                        "numeric-tabular": ["Be Vietnam Pro"],
+                        "headline-md": ["Be Vietnam Pro"],
+                        "headline-lg": ["Be Vietnam Pro"],
+                        "body-md": ["Be Vietnam Pro"],
+                        "display-lg": ["Be Vietnam Pro"],
+                        "body-lg": ["Be Vietnam Pro"]
+                    },
+                    "fontSize": {
+                        "title-lg": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "fontWeight": "500" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500" }],
+                        "numeric-tabular": ["inherit", { "lineHeight": "inherit", "fontWeight": "inherit" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "display-lg": ["48px", { "lineHeight": "60px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .kinetic-bg {
+            background: linear-gradient(135deg, rgba(73,62,229,0.05) 0%, rgba(209,62,58,0.05) 100%);
+            background-size: 400% 400%;
+            animation: kineticPulse 15s ease infinite;
+        }
+        @keyframes kineticPulse {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .modal-overlay {
+            background-color: rgba(17, 28, 45, 0.4);
+            backdrop-filter: blur(4px);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f0f3ff;
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #c7c4d8;
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #777587;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body-md h-screen w-full overflow-hidden flex items-center justify-center kinetic-bg">
+<div aria-labelledby="modal-title" aria-modal="true" class="fixed inset-0 modal-overlay z-50 flex items-center justify-center p-md sm:p-lg" role="dialog">
+<div class="bg-surface-container-lowest w-full max-w-lg rounded-xl shadow-[0px_12px_32px_rgba(16,20,38,0.12)] border border-outline-variant flex flex-col transform transition-all duration-300 scale-100 opacity-100">
+<div class="flex items-center justify-between p-lg border-b border-outline-variant">
+<div class="flex items-center gap-sm text-error">
+<span class="material-symbols-outlined font-[FILL_1]" style="font-variation-settings: 'FILL' 1;">warning</span>
+<h2 class="font-title-lg text-title-lg text-on-surface" id="modal-title">Từ chối duyệt sự kiện</h2>
+</div>
+<button class="text-on-surface-variant hover:text-on-surface hover:bg-surface-container rounded-full p-sm transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<div class="p-lg flex-1 overflow-y-auto custom-scrollbar">
+<div class="mb-md">
+<p class="font-body-md text-body-md text-on-surface-variant mb-xs">Bạn đang thao tác từ chối sự kiện:</p>
+<p class="font-label-md text-label-md text-on-surface font-bold bg-surface-container-low p-sm rounded-lg border border-outline-variant">Lễ Hội Âm Nhạc Mùa Hè 2024</p>
+</div>
+<div class="mb-sm">
+<label class="block font-label-md text-label-md text-on-surface mb-xs" for="reject-reason">Lý do từ chối <span class="text-error">*</span></label>
+<textarea class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg p-md font-body-md text-body-md text-on-surface focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all resize-none placeholder:text-outline" id="reject-reason" placeholder="Nhập lý do chi tiết để thông báo cho ban tổ chức..." required="" rows="4"></textarea>
+</div>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Lý do này sẽ được gửi email trực tiếp đến ban tổ chức sự kiện.</p>
+</div>
+<div class="p-lg border-t border-outline-variant bg-surface-container-low flex items-center justify-end gap-md rounded-b-xl">
+<button class="px-lg py-sm h-[48px] font-label-md text-label-md font-bold text-on-surface bg-surface-container-lowest border border-outline-variant rounded-lg hover:bg-surface-container hover:border-outline transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
+                    Hủy
+                </button>
+<button class="px-lg py-sm h-[48px] font-label-md text-label-md font-bold text-on-error bg-error rounded-lg hover:bg-on-error-container transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-error focus:ring-offset-2 flex items-center gap-xs">
+<span class="material-symbols-outlined" style="font-size: 18px;">block</span>
+                    Từ chối duyệt
+                </button>
+</div>
+</div>
+</div>
+</body></html>

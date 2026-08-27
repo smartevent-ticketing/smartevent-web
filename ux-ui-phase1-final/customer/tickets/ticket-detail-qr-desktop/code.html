@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+
+<html lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SMART EVENT - Chi tiết vé điện tử</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-surface": "#111c2d",
+                      "on-primary-fixed": "#0f0069",
+                      "on-error": "#ffffff",
+                      "surface-container-low": "#f0f3ff",
+                      "surface-container-high": "#dfe8ff",
+                      "primary-fixed": "#e2dfff",
+                      "on-surface-variant": "#464555",
+                      "primary": "#493ee5",
+                      "on-background": "#111c2d",
+                      "primary-fixed-dim": "#c3c0ff",
+                      "inverse-primary": "#c3c0ff",
+                      "surface-dim": "#d0daf2",
+                      "surface-tint": "#4c42e9",
+                      "on-secondary-fixed": "#171b2d",
+                      "inverse-on-surface": "#ecf0ff",
+                      "surface-container-lowest": "#ffffff",
+                      "tertiary-fixed": "#ffdad6",
+                      "on-tertiary-fixed": "#410003",
+                      "on-secondary-container": "#606379",
+                      "outline-variant": "#c7c4d8",
+                      "outline": "#777587",
+                      "on-tertiary-fixed-variant": "#910913",
+                      "surface": "#f9f9ff",
+                      "on-secondary": "#ffffff",
+                      "on-secondary-fixed-variant": "#42465a",
+                      "surface-container": "#e8eeff",
+                      "secondary-fixed": "#dee1fb",
+                      "primary-container": "#635bff",
+                      "on-error-container": "#93000a",
+                      "secondary-container": "#dee1fb",
+                      "on-primary-fixed-variant": "#321ed2",
+                      "error-container": "#ffdad6",
+                      "inverse-surface": "#273143",
+                      "on-tertiary": "#ffffff",
+                      "secondary": "#5a5d73",
+                      "tertiary-fixed-dim": "#ffb3ac",
+                      "on-primary": "#ffffff",
+                      "tertiary": "#ae2424",
+                      "error": "#ba1a1a",
+                      "surface-variant": "#d9e3fb",
+                      "background": "#f9f9ff",
+                      "on-tertiary-container": "#fffaf9",
+                      "secondary-fixed-dim": "#c2c5de",
+                      "surface-bright": "#f9f9ff",
+                      "on-primary-container": "#fefaff",
+                      "surface-container-highest": "#d9e3fb",
+                      "tertiary-container": "#d13e3a"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "lg": "24px",
+                      "xl": "32px",
+                      "gutter": "24px",
+                      "xxl": "48px",
+                      "sm": "8px",
+                      "xs": "4px",
+                      "container-max": "1280px",
+                      "md": "16px",
+                      "base": "8px"
+              },
+              "fontFamily": {
+                      "numeric-tabular": [
+                              "Be Vietnam Pro"
+                      ],
+                      "headline-md": [
+                              "Be Vietnam Pro"
+                      ],
+                      "label-sm": [
+                              "Be Vietnam Pro"
+                      ],
+                      "title-lg": [
+                              "Be Vietnam Pro"
+                      ],
+                      "label-md": [
+                              "Be Vietnam Pro"
+                      ],
+                      "body-lg": [
+                              "Be Vietnam Pro"
+                      ],
+                      "body-md": [
+                              "Be Vietnam Pro"
+                      ],
+                      "display-lg": [
+                              "Be Vietnam Pro"
+                      ],
+                      "headline-lg": [
+                              "Be Vietnam Pro"
+                      ]
+              },
+              "fontSize": {
+                      "numeric-tabular": [
+                              "inherit",
+                              {
+                                      "lineHeight": "inherit",
+                                      "fontWeight": "inherit"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "label-sm": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.02em",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "title-lg": [
+                              "20px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "label-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "display-lg": [
+                              "48px",
+                              {
+                                      "lineHeight": "60px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "700"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background antialiased min-h-screen flex flex-col font-body-md">
+<!-- TopNavBar -->
+<header class="bg-surface docked full-width top-0 border-b border-outline-variant shadow-sm z-50">
+<div class="flex justify-between items-center w-full px-lg md:px-xl h-16 max-w-container-max mx-auto">
+<div class="flex items-center gap-xl">
+<a class="font-headline-lg text-headline-lg font-bold text-primary tracking-tight" href="#">SMART EVENT</a>
+<nav class="hidden md:flex gap-lg">
+<a class="text-on-secondary-container hover:text-primary transition-colors duration-200" href="#">Khám phá</a>
+<a class="text-on-secondary-container hover:text-primary transition-colors duration-200" href="#">Địa điểm</a>
+<a class="text-primary border-b-2 border-primary pb-1 font-bold hover:text-primary transition-colors duration-200" href="#">Vé của tôi</a>
+</nav>
+</div>
+<div class="flex items-center gap-md">
+<button aria-label="Notifications" class="text-on-secondary-container hover:text-primary transition-colors duration-200 p-2">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button aria-label="Shopping Cart" class="text-on-secondary-container hover:text-primary transition-colors duration-200 p-2">
+<span class="material-symbols-outlined" data-icon="shopping_cart">shopping_cart</span>
+</button>
+<div class="h-8 w-8 rounded-full overflow-hidden border border-outline-variant ml-sm">
+<img alt="Ảnh đại diện người dùng" class="w-full h-full object-cover" data-alt="A small, circular avatar portrait of a modern user in a brightly lit studio setting. The user has a friendly expression and is dressed in casual, stylish clothing. The lighting is soft and even, highlighting a clean and approachable corporate-hybrid aesthetic with vibrant, high-energy undertones typical of a digital-first ticketing platform." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCDL5ebOuELOQfmiZTiS73cMzTWEEQTqZHs9WBk8YIFVMKFNYfxAAXeRLPH_z8VtNkxiE-x5NqnfhcJ9yNYr4SJQA7n9OwmhxfqtUMlKp-YbGHmBVimyNIHeumCk30LXei1Au-WK78b5Tl9kKVcopS1XGCuvfDAjRAh1LaY0LdhIF0XoZ2Vor2e81FlZBw6FNeQL8IYySKRPY1BHtGsViP9QCBv537pWp7-2HahvI0sWVx3Rvvy_cUb"/>
+</div>
+<span class="hidden md:block font-label-md text-label-md font-medium">Tài khoản</span>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-grow flex justify-center py-xxl px-lg md:px-xl bg-surface-container-lowest">
+<div class="max-w-4xl w-full flex gap-xl flex-col lg:flex-row">
+<!-- Left Column: Navigation / Actions (Optional context for Desktop) -->
+<div class="hidden lg:flex flex-col gap-md w-64 flex-shrink-0">
+<a class="flex items-center gap-sm text-on-surface-variant hover:text-primary transition-colors font-label-md text-label-md py-2" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="arrow_back">arrow_back</span>
+                    Quay lại danh sách vé
+                </a>
+</div>
+<!-- Right Column: Ticket Card Structure -->
+<div class="flex-grow flex flex-col items-center">
+<!-- The Ticket Card (Bento/Glassmorphism hybrid structural approach) -->
+<div class="bg-surface w-full max-w-2xl rounded-xl border border-outline-variant overflow-hidden shadow-[0px_12px_32px_rgba(16,20,38,0.12)] relative">
+<!-- Decorative Top Edge (Ticket perforation suggestion) -->
+<div class="absolute top-0 left-0 w-full h-2 bg-primary"></div>
+<!-- Event Banner -->
+<div class="h-48 w-full relative bg-surface-container-high border-b border-outline-variant">
+<img alt="Banner HAY Glamping Music Festival 2024" class="w-full h-full object-cover" data-alt="A dynamic and vibrant wide-angle shot of an outdoor glamping music festival during golden hour. The scene features large festival tents, a lively crowd, and a glowing stage setup under a beautiful sky. The image should capture the high-energy, electric indigo branded aesthetic of a premium music event, emphasizing excitement and scale." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAz4fh3pluwlLUzPRn8O3xJPj8kMgyrAdlKwMz6LXYa1o4dtsOI0x4rVUDvH49Av8VHCjyOpBvOGyPHCdTw-o35pEZhsJi_-ig0liwyQyBYnBY_n-tw5sMfF7GEAuRSfCzmjp6RMm5ySdV6XfPm8azf5MHc8OyUJrbRsx5oIK2JHUBFJdnY1QLSleuump8zIpMzD7n-ONvaBjzsMl8zXqD03xsLbcTPP2LHOz0JOub9DbZUrxQ329oU"/>
+<!-- Status Badge Overlay -->
+<div class="absolute top-md right-md bg-white/90 backdrop-blur-sm border border-outline-variant rounded-full px-3 py-1 flex items-center gap-2 shadow-sm">
+<div class="w-2 h-2 rounded-full bg-[#10B981]"></div>
+<span class="font-label-sm text-label-sm font-bold text-[#10B981] tracking-wide uppercase">CÓ HIỆU LỰC</span>
+</div>
+</div>
+<div class="flex flex-col md:flex-row">
+<!-- QR Code Section (Left side on desktop) -->
+<div class="p-lg flex flex-col items-center justify-center border-b md:border-b-0 md:border-r border-outline-variant border-dashed w-full md:w-1/3 bg-surface-container-low/50">
+<div class="bg-white p-4 rounded-lg shadow-sm border border-outline-variant mb-md">
+<img alt="Mã QR Vé" class="w-32 h-32 object-contain" data-alt="A crisp, high-contrast, black and white square QR code centered perfectly on a pure white background. The QR code must appear clean, scannable, and free of any distortions or decorative elements, representing a standard digital entry ticket code." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD8ZOiJVNAi5SVAb2mM_7xg6bM8-xQJkZlGk7zWiGz67XynEPLUR2FtvAM-p7HmgShq3Z51Okh9ca1ran5jA7wUeN6KCo6eI4epdm3sP-4OVkeXwQcEfMijhtgomKQCI7jjeUDFeWPmej1U8LYMXmJzmrU7MpopJMDYxSziRw35K4CtP6XUEvy3dwfmRiNYIKEKixokzsntRtvIVB0Zx-t9cD1vaQmtvgz7npv1hHjIdEucmKSfS4B3"/>
+</div>
+<span class="font-numeric-tabular text-title-lg font-bold text-on-surface tracking-wider mb-sm">TK-8942-XCV1</span>
+<button class="flex items-center gap-2 text-primary hover:text-on-primary-fixed transition-colors font-label-md text-label-md mt-sm group">
+<span class="material-symbols-outlined text-[18px] group-hover:rotate-180 transition-transform duration-300" data-icon="refresh">refresh</span>
+                                Làm mới mã QR
+                            </button>
+</div>
+<!-- Ticket Details Section (Right side on desktop) -->
+<div class="p-lg flex-grow flex flex-col">
+<!-- Event Title -->
+<h1 class="font-headline-md text-headline-md font-bold text-on-surface mb-md">HAY Glamping Music Festival 2024</h1>
+<!-- Key Event Info Grid -->
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-y-md gap-x-lg mb-lg border-b border-outline-variant pb-lg">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-outline mt-0.5" data-icon="calendar_month" style="font-variation-settings: 'FILL' 1;">calendar_month</span>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider mb-0.5">Thời gian</p>
+<p class="font-body-md text-body-md font-medium text-on-surface">25/11/2024<br/><span class="text-on-secondary-container">15:00 - 23:00</span></p>
+</div>
+</div>
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-outline mt-0.5" data-icon="location_on" style="font-variation-settings: 'FILL' 1;">location_on</span>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider mb-0.5">Địa điểm</p>
+<p class="font-body-md text-body-md font-medium text-on-surface">Công viên Yên Sở<br/><span class="text-on-secondary-container">Hoàng Mai, Hà Nội</span></p>
+</div>
+</div>
+</div>
+<!-- Ticket Specifics Grid -->
+<div class="grid grid-cols-2 sm:grid-cols-3 gap-md mb-lg">
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant mb-1">Khách hàng</p>
+<p class="font-body-md text-body-md font-semibold text-on-surface">Nguyễn Văn A</p>
+</div>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant mb-1">Loại vé</p>
+<div class="inline-block bg-primary-container/20 text-primary-container px-2 py-0.5 rounded text-sm font-semibold border border-primary-container/30">VIP Standing</div>
+</div>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant mb-1">Khu vực</p>
+<p class="font-body-md text-body-md font-semibold text-on-surface">Khu A1</p>
+</div>
+</div>
+<div class="mt-auto pt-md border-t border-outline-variant flex justify-between items-center text-on-surface-variant">
+<span class="font-label-sm text-label-sm">Phát hành: 10/11/2024</span>
+<span class="font-label-sm text-label-sm opacity-60">ID: 10938475</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Primary Action Button -->
+<div class="w-full max-w-2xl mt-xl flex justify-end">
+<button class="bg-primary hover:bg-surface-tint text-on-primary h-12 px-xl rounded-lg font-title-lg text-title-lg shadow-sm hover:shadow-[0px_4px_20px_rgba(16,20,38,0.08)] transition-all flex items-center justify-center gap-2 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
+<span class="material-symbols-outlined text-[20px]" data-icon="send">send</span>
+                        Chuyển vé
+                    </button>
+</div>
+</div>
+</div>
+</main>
+</body></html>

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+
+<html lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Không thể tạo phiên giữ chỗ</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-primary-fixed": "#0f0069",
+                        "on-background": "#111c2d",
+                        "surface-tint": "#4c42e9",
+                        "primary-container": "#635bff",
+                        "primary-fixed-dim": "#c3c0ff",
+                        "surface-container": "#e8eeff",
+                        "secondary-container": "#dee1fb",
+                        "on-primary-container": "#fefaff",
+                        "outline": "#777587",
+                        "surface-container-lowest": "#ffffff",
+                        "on-surface": "#111c2d",
+                        "surface-dim": "#d0daf2",
+                        "outline-variant": "#c7c4d8",
+                        "tertiary-container": "#d13e3a",
+                        "on-primary": "#ffffff",
+                        "on-tertiary-fixed-variant": "#910913",
+                        "error-container": "#ffdad6",
+                        "on-error-container": "#93000a",
+                        "surface-bright": "#f9f9ff",
+                        "on-tertiary": "#ffffff",
+                        "inverse-on-surface": "#ecf0ff",
+                        "on-secondary-fixed-variant": "#42465a",
+                        "secondary-fixed-dim": "#c2c5de",
+                        "on-tertiary-fixed": "#410003",
+                        "surface-variant": "#d9e3fb",
+                        "on-secondary-fixed": "#171b2d",
+                        "surface": "#f9f9ff",
+                        "primary-fixed": "#e2dfff",
+                        "surface-container-high": "#dfe8ff",
+                        "on-surface-variant": "#464555",
+                        "tertiary": "#ae2424",
+                        "on-secondary-container": "#606379",
+                        "tertiary-fixed-dim": "#ffb3ac",
+                        "surface-container-highest": "#d9e3fb",
+                        "on-primary-fixed-variant": "#321ed2",
+                        "on-secondary": "#ffffff",
+                        "inverse-primary": "#c3c0ff",
+                        "on-error": "#ffffff",
+                        "tertiary-fixed": "#ffdad6",
+                        "error": "#ba1a1a",
+                        "secondary": "#5a5d73",
+                        "background": "#f9f9ff",
+                        "secondary-fixed": "#dee1fb",
+                        "on-tertiary-container": "#fffaf9",
+                        "inverse-surface": "#273143",
+                        "primary": "#493ee5",
+                        "surface-container-low": "#f0f3ff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xxl": "48px",
+                        "lg": "24px",
+                        "sm": "8px",
+                        "xl": "32px",
+                        "gutter": "24px",
+                        "xs": "4px",
+                        "base": "8px",
+                        "container-max": "1280px",
+                        "md": "16px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Be Vietnam Pro"],
+                        "display-lg": ["Be Vietnam Pro"],
+                        "body-md": ["Be Vietnam Pro"],
+                        "body-lg": ["Be Vietnam Pro"],
+                        "label-md": ["Be Vietnam Pro"],
+                        "label-sm": ["Be Vietnam Pro"],
+                        "headline-lg": ["Be Vietnam Pro"],
+                        "numeric-tabular": ["Be Vietnam Pro"],
+                        "title-lg": ["Be Vietnam Pro"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "display-lg": ["48px", { "lineHeight": "60px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "fontWeight": "500" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "numeric-tabular": ["inherit", { "lineHeight": "inherit", "fontWeight": "inherit" }],
+                        "title-lg": ["20px", { "lineHeight": "28px", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 1;
+        }
+        .glow-effect {
+            box-shadow: 0 0 20px rgba(73, 62, 229, 0.2);
+        }
+        body {
+            background-color: #F7F8FC;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center font-body-md text-on-background bg-background p-lg">
+<div class="w-full max-w-2xl bg-surface-container-lowest rounded-xl shadow-[0px_12px_32px_rgba(16,20,38,0.12)] border border-outline-variant p-xl flex flex-col items-center text-center">
+<!-- Error Icon -->
+<div class="w-24 h-24 rounded-full bg-error-container flex items-center justify-center mb-lg">
+<span class="material-symbols-outlined text-[48px] text-error" data-icon="error">error</span>
+</div>
+<!-- Headline -->
+<h1 class="text-headline-lg font-headline-lg text-on-surface mb-sm">Không thể tạo phiên giữ chỗ</h1>
+<!-- Main Message -->
+<p class="text-body-lg font-body-lg text-on-surface-variant mb-lg">Hệ thống chưa thể giữ ghế <span class="font-bold">A12, A13</span> cho sự kiện <span class="font-bold">Đêm Nhạc Hội Indie 2024</span>.</p>
+<!-- Safety Notice -->
+<div class="bg-surface-container-low rounded-lg p-md mb-xl flex items-start gap-sm text-left w-full border border-outline-variant">
+<span class="material-symbols-outlined text-primary mt-[2px]" data-icon="security">security</span>
+<p class="text-body-md font-body-md text-on-surface">Không có phiên giữ chỗ nào được tạo và bạn chưa bị tính phí.</p>
+</div>
+<!-- Details Grid -->
+<div class="w-full bg-surface rounded-lg p-md mb-xl grid grid-cols-1 sm:grid-cols-3 gap-md text-left border border-outline-variant">
+<div>
+<p class="text-label-sm font-label-sm text-on-surface-variant mb-xs">Sự kiện</p>
+<p class="text-body-md font-body-md font-medium text-on-surface">Đêm Nhạc Hội Indie 2024</p>
+</div>
+<div>
+<p class="text-label-sm font-label-sm text-on-surface-variant mb-xs">Ghế đã chọn</p>
+<p class="text-body-md font-body-md font-medium text-on-surface">A12, A13</p>
+</div>
+<div>
+<p class="text-label-sm font-label-sm text-on-surface-variant mb-xs">Trạng thái</p>
+<span class="inline-flex items-center px-2 py-1 rounded-full bg-error-container text-on-error-container text-label-sm font-label-sm">
+                    Chưa được giữ
+                </span>
+</div>
+</div>
+<!-- Suggestion -->
+<p class="text-body-md font-body-md text-on-surface-variant mb-xl">Gợi ý: Bạn có thể thử lại hoặc chọn những ghế khác.</p>
+<!-- Actions -->
+<div class="flex flex-col sm:flex-row gap-md w-full justify-center">
+<button class="h-[48px] px-lg rounded-[10px] bg-primary text-on-primary text-label-md font-label-md font-bold flex items-center justify-center hover:bg-primary-container transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
+<span class="material-symbols-outlined mr-sm text-[20px]" data-icon="refresh">refresh</span>
+                Thử giữ ghế lại
+            </button>
+<button class="h-[48px] px-lg rounded-[10px] bg-surface text-primary border border-outline-variant text-label-md font-label-md font-bold flex items-center justify-center hover:bg-surface-container transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
+                Chọn ghế khác
+            </button>
+<button class="h-[48px] px-lg rounded-[10px] bg-transparent text-on-surface-variant text-label-md font-label-md font-bold flex items-center justify-center hover:text-on-surface hover:bg-surface-container-low transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
+                Quay lại sự kiện
+            </button>
+</div>
+</div>
+</body></html>

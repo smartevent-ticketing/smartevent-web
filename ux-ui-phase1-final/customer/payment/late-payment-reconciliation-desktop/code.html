@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+
+<html lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SMART EVENT - Thanh toán sau khi phiên giữ vé hết hạn</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-error-container": "#93000a",
+                        "inverse-on-surface": "#ecf0ff",
+                        "secondary-fixed-dim": "#c2c5de",
+                        "on-primary-fixed": "#0f0069",
+                        "tertiary": "#ae2424",
+                        "inverse-primary": "#c3c0ff",
+                        "on-tertiary-fixed-variant": "#910913",
+                        "outline": "#777587",
+                        "on-primary-container": "#fefaff",
+                        "surface-container-highest": "#d9e3fb",
+                        "secondary-fixed": "#dee1fb",
+                        "on-tertiary-fixed": "#410003",
+                        "on-error": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "background": "#f9f9ff",
+                        "tertiary-container": "#d13e3a",
+                        "surface": "#f9f9ff",
+                        "on-surface-variant": "#464555",
+                        "surface-variant": "#d9e3fb",
+                        "on-tertiary-container": "#fffaf9",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary-container": "#606379",
+                        "surface-tint": "#4c42e9",
+                        "on-primary": "#ffffff",
+                        "surface-bright": "#f9f9ff",
+                        "on-surface": "#111c2d",
+                        "on-secondary": "#ffffff",
+                        "surface-container-high": "#dfe8ff",
+                        "on-secondary-fixed-variant": "#42465a",
+                        "secondary-container": "#dee1fb",
+                        "secondary": "#5a5d73",
+                        "primary-container": "#635bff",
+                        "primary-fixed-dim": "#c3c0ff",
+                        "on-tertiary": "#ffffff",
+                        "surface-dim": "#d0daf2",
+                        "inverse-surface": "#273143",
+                        "tertiary-fixed-dim": "#ffb3ac",
+                        "on-background": "#111c2d",
+                        "outline-variant": "#c7c4d8",
+                        "on-secondary-fixed": "#171b2d",
+                        "primary": "#493ee5",
+                        "surface-container-low": "#f0f3ff",
+                        "tertiary-fixed": "#ffdad6",
+                        "primary-fixed": "#e2dfff",
+                        "error": "#ba1a1a",
+                        "surface-container": "#e8eeff",
+                        "on-primary-fixed-variant": "#321ed2"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "base": "8px",
+                        "xs": "4px",
+                        "gutter": "24px",
+                        "md": "16px",
+                        "sm": "8px",
+                        "xxl": "48px",
+                        "xl": "32px",
+                        "container-max": "1280px",
+                        "lg": "24px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Be Vietnam Pro", "sans-serif"],
+                        "body-md": ["Be Vietnam Pro", "sans-serif"],
+                        "numeric-tabular": ["Be Vietnam Pro", "sans-serif"],
+                        "headline-lg": ["Be Vietnam Pro", "sans-serif"],
+                        "title-lg": ["Be Vietnam Pro", "sans-serif"],
+                        "headline-md": ["Be Vietnam Pro", "sans-serif"],
+                        "label-sm": ["Be Vietnam Pro", "sans-serif"],
+                        "display-lg": ["Be Vietnam Pro", "sans-serif"],
+                        "label-md": ["Be Vietnam Pro", "sans-serif"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "numeric-tabular": ["inherit", { "lineHeight": "inherit", "fontWeight": "inherit", "fontVariantNumeric": "tabular-nums" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "title-lg": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500" }],
+                        "display-lg": ["48px", { "lineHeight": "60px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "fontWeight": "500" }]
+                    },
+                    "boxShadow": {
+                        "level-1": "0px 1px 2px rgba(16, 20, 38, 0.05)",
+                        "level-2": "0px 4px 20px rgba(16, 20, 38, 0.08)",
+                        "level-3": "0px 12px 32px rgba(16, 20, 38, 0.12)"
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .kinetic-pulse {
+            animation: pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+        }
+        @keyframes pulse-ring {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(209, 62, 58, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 16px rgba(209, 62, 58, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(209, 62, 58, 0); }
+        }
+        .focus-ring:focus-visible {
+            outline: 2px solid #493ee5;
+            outline-offset: 2px;
+        }
+        .numeric-tabular {
+            font-variant-numeric: tabular-nums;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md min-h-screen flex flex-col items-center justify-center w-full max-w-[1440px] mx-auto selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopNavBar Omitted as per instructions for linear/transactional/success screens -->
+<main class="w-full max-w-[600px] mx-auto px-gutter py-xl md:py-xxl flex-grow flex flex-col items-center justify-center">
+<div class="bg-surface-container-lowest rounded-xl shadow-level-2 border border-outline-variant w-full overflow-hidden flex flex-col relative z-10">
+<!-- Warning Header Area -->
+<div class="bg-error-container bg-opacity-30 p-xl flex flex-col items-center text-center border-b border-error-container relative overflow-hidden">
+<!-- Abstract background pattern for kinetic pulse feel -->
+<div class="absolute inset-0 opacity-10 pointer-events-none" style="background-image: radial-gradient(circle at center, #ba1a1a 1px, transparent 1px); background-size: 16px 16px;"></div>
+<div class="w-24 h-24 rounded-full bg-error-container flex items-center justify-center mb-md kinetic-pulse relative z-10">
+<span class="material-symbols-outlined text-[48px] text-error" style="font-variation-settings: 'FILL' 1;">warning</span>
+</div>
+<h1 class="text-headline-lg font-headline-lg text-on-surface mb-sm relative z-10">Thanh toán sau khi phiên giữ vé hết hạn</h1>
+<div class="inline-flex items-center bg-tertiary-fixed-dim bg-opacity-20 text-on-tertiary-fixed px-md py-xs rounded-full border border-tertiary-fixed-dim relative z-10">
+<span class="w-2 h-2 rounded-full bg-error mr-sm animate-pulse"></span>
+<span class="text-label-md font-label-md">Đang đối soát hoàn tiền</span>
+</div>
+</div>
+<!-- Content Area -->
+<div class="p-xl flex flex-col gap-lg">
+<div class="bg-surface-container-low rounded-lg p-md border border-outline-variant">
+<p class="text-body-md font-body-md text-on-surface-variant mb-sm">
+<strong class="text-on-surface font-semibold">Ngân hàng đã ghi nhận thanh toán thành công</strong> nhưng phiên giữ vé của bạn đã hết hạn trước đó. Không có vé nào được phát hành.
+                    </p>
+<p class="text-body-md font-body-md text-on-surface-variant">
+                        Giao dịch của bạn đã được ghi nhận và đang được hệ thống đối soát để thực hiện hoàn tiền.
+                    </p>
+</div>
+<hr class="border-outline-variant border-t"/>
+<div class="flex flex-col gap-sm">
+<h3 class="text-title-lg font-title-lg text-on-surface mb-xs">Thông tin giao dịch</h3>
+<div class="flex justify-between items-center py-sm">
+<span class="text-body-md font-body-md text-secondary">Mã đơn hàng</span>
+<span class="text-body-md font-body-md text-on-surface font-medium select-all">SE-ORD-2024-A8F21</span>
+</div>
+<div class="flex justify-between items-center py-sm">
+<span class="text-body-md font-body-md text-secondary">Mã giao dịch VNPay</span>
+<span class="text-body-md font-body-md text-on-surface font-medium select-all">VNPAY-1092837465</span>
+</div>
+<div class="flex justify-between items-center py-sm border-t border-outline-variant border-dashed mt-xs pt-md">
+<span class="text-title-lg font-title-lg text-on-surface">Tổng tiền hoàn</span>
+<span class="text-headline-md font-headline-md text-primary font-numeric-tabular tabular-nums">1.500.000 ₫</span>
+</div>
+</div>
+</div>
+<!-- Action Area -->
+<div class="p-xl bg-surface-bright border-t border-outline-variant flex flex-col gap-md">
+<button class="w-full h-12 bg-primary hover:bg-primary-container text-on-primary text-label-md font-label-md rounded-lg transition-colors duration-200 flex items-center justify-center gap-sm focus-ring shadow-sm">
+<span class="material-symbols-outlined text-[20px]">receipt_long</span>
+                    Xem đơn hàng
+                </button>
+<div class="flex flex-col md:flex-row gap-md w-full">
+<button class="flex-1 h-12 bg-surface hover:bg-surface-container-low text-on-surface border border-outline-variant text-label-md font-label-md rounded-lg transition-colors duration-200 flex items-center justify-center gap-sm focus-ring">
+<span class="material-symbols-outlined text-[20px]">support_agent</span>
+                        Liên hệ hỗ trợ
+                    </button>
+<a class="flex-1 h-12 bg-transparent hover:bg-surface-container-low text-primary text-label-md font-label-md rounded-lg transition-colors duration-200 flex items-center justify-center gap-sm focus-ring" href="#">
+                        Về trang chủ
+                    </a>
+</div>
+</div>
+</div>
+<p class="mt-lg text-label-sm font-label-sm text-secondary text-center max-w-md">
+            Quá trình hoàn tiền thường mất từ 3-5 ngày làm việc tùy thuộc vào ngân hàng phát hành thẻ của bạn.
+        </p>
+</main>
+<!-- Footer Omitted as per instruction to prioritize transactional canvas -->
+</body></html>

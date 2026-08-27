@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+
+<html lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SMART EVENT - Ghế không còn khả dụng</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary-fixed": "#dee1fb",
+                    "inverse-on-surface": "#ecf0ff",
+                    "on-secondary-container": "#606379",
+                    "on-tertiary": "#ffffff",
+                    "on-tertiary-fixed": "#410003",
+                    "on-secondary-fixed-variant": "#42465a",
+                    "background": "#f9f9ff",
+                    "on-error-container": "#93000a",
+                    "tertiary": "#ae2424",
+                    "error": "#ba1a1a",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-variant": "#d9e3fb",
+                    "outline-variant": "#c7c4d8",
+                    "on-error": "#ffffff",
+                    "error-container": "#ffdad6",
+                    "on-secondary": "#ffffff",
+                    "on-secondary-fixed": "#171b2d",
+                    "surface-container": "#e8eeff",
+                    "on-primary": "#ffffff",
+                    "surface-container-high": "#dfe8ff",
+                    "inverse-surface": "#273143",
+                    "tertiary-container": "#d13e3a",
+                    "on-surface-variant": "#464555",
+                    "primary-container": "#635bff",
+                    "surface-dim": "#d0daf2",
+                    "surface-container-highest": "#d9e3fb",
+                    "primary": "#493ee5",
+                    "on-tertiary-container": "#fffaf9",
+                    "secondary-container": "#dee1fb",
+                    "inverse-primary": "#c3c0ff",
+                    "on-primary-fixed-variant": "#321ed2",
+                    "surface-container-low": "#f0f3ff",
+                    "tertiary-fixed-dim": "#ffb3ac",
+                    "surface-bright": "#f9f9ff",
+                    "surface": "#f9f9ff",
+                    "secondary": "#5a5d73",
+                    "outline": "#777587",
+                    "on-primary-fixed": "#0f0069",
+                    "primary-fixed": "#e2dfff",
+                    "on-primary-container": "#fefaff",
+                    "surface-tint": "#4c42e9",
+                    "tertiary-fixed": "#ffdad6",
+                    "on-background": "#111c2d",
+                    "on-tertiary-fixed-variant": "#910913",
+                    "secondary-fixed-dim": "#c2c5de",
+                    "primary-fixed-dim": "#c3c0ff",
+                    "on-surface": "#111c2d"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "md": "16px",
+                    "base": "8px",
+                    "lg": "24px",
+                    "sm": "8px",
+                    "xxl": "48px",
+                    "xl": "32px",
+                    "xs": "4px",
+                    "container-max": "1280px",
+                    "gutter": "24px"
+            },
+            "fontFamily": {
+                    "headline-md": ["Be Vietnam Pro"],
+                    "body-md": ["Be Vietnam Pro"],
+                    "title-lg": ["Be Vietnam Pro"],
+                    "body-lg": ["Be Vietnam Pro"],
+                    "label-sm": ["Be Vietnam Pro"],
+                    "display-lg": ["Be Vietnam Pro"],
+                    "headline-lg": ["Be Vietnam Pro"],
+                    "numeric-tabular": ["Be Vietnam Pro"],
+                    "label-md": ["Be Vietnam Pro"]
+            },
+            "fontSize": {
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "title-lg": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500"}],
+                    "display-lg": ["48px", {"lineHeight": "60px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                    "numeric-tabular": ["inherit", {"lineHeight": "inherit", "fontWeight": "inherit"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "fontWeight": "500"}]
+            }
+          }
+        }
+      }
+    </script>
+<style type="text/tailwindcss">
+        @layer utilities {
+            .pb-safe { padding-bottom: env(safe-area-inset-bottom); }
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md antialiased w-[390px] mx-auto min-h-screen relative flex flex-col">
+<!-- Header -->
+<header class="flex justify-between items-center h-16 px-md w-full top-0 sticky bg-surface border-b border-outline-variant shadow-sm z-40">
+<button aria-label="Go back" class="p-2 -ml-2 text-primary active:scale-95 duration-100 transition-transform rounded-full hover:bg-surface-container-low">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<div class="font-headline-md text-headline-md font-bold text-primary">SMART EVENT</div>
+<div class="w-10"></div> <!-- Placeholder for balance -->
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-1 flex flex-col items-center px-md pt-xl pb-[180px]">
+<!-- Icon -->
+<div class="mb-lg flex items-center justify-center w-24 h-24 rounded-full bg-error-container text-error">
+<span class="material-symbols-outlined text-[64px]" style="font-variation-settings: 'FILL' 1;">event_seat</span>
+<div class="absolute w-24 h-24 flex items-center justify-center">
+<span class="material-symbols-outlined text-[64px] text-error font-bold" style="font-variation-settings: 'FILL' 1;">block</span>
+</div>
+</div>
+<!-- Title -->
+<h1 class="font-headline-md text-headline-md text-center text-on-surface mb-md">Ghế không còn khả dụng</h1>
+<!-- Message -->
+<p class="font-body-md text-body-md text-center text-on-surface-variant mb-xl px-sm">
+            Rất tiếc, ghế A13 cho sự kiện Đêm Nhạc Hội Indie 2024 vừa được khách hàng khác chọn hoặc không còn trống.
+        </p>
+<!-- Event Info Card -->
+<div class="w-full bg-surface-container-lowest rounded-xl border border-outline-variant p-md shadow-[0_4px_20px_rgba(16,20,38,0.08)]">
+<div class="flex flex-col gap-md">
+<div class="flex justify-between items-start border-b border-outline-variant pb-sm">
+<span class="font-label-md text-label-md text-secondary">Sự kiện</span>
+<span class="font-body-md text-body-md font-semibold text-on-surface text-right">Đêm Nhạc Hội Indie 2024</span>
+</div>
+<div class="flex justify-between items-center border-b border-outline-variant pb-sm">
+<span class="font-label-md text-label-md text-secondary">Ghế đã chọn</span>
+<span class="font-numeric-tabular text-title-lg font-bold text-primary">A13</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-label-md text-label-md text-secondary">Trạng thái</span>
+<span class="px-3 py-1 rounded-full bg-error/10 text-error font-label-sm text-label-sm font-bold uppercase tracking-wider">Đã khóa</span>
+</div>
+</div>
+</div>
+</main>
+<!-- Fixed Actions -->
+<div class="fixed bottom-[72px] left-0 w-full px-md pb-md pt-lg bg-gradient-to-t from-background via-background to-transparent z-30">
+<div class="flex flex-col gap-sm">
+<button class="w-full h-[48px] bg-primary text-on-primary rounded-lg font-title-lg text-title-lg flex items-center justify-center active:scale-95 transition-transform duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
+                Chọn ghế khác
+            </button>
+<button class="w-full h-[48px] bg-transparent border border-outline text-secondary rounded-lg font-body-md text-body-md font-semibold flex items-center justify-center active:scale-95 transition-transform duration-200 hover:bg-surface-container-low focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
+                Quay lại sự kiện
+            </button>
+</div>
+</div>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-2 pb-safe py-2 bg-surface shadow-[0_-4px_20px_rgba(16,20,38,0.08)] md:hidden">
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-xl px-4 py-1 active:scale-90 transition-transform duration-200 hover:bg-secondary-container/50" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">event</span>
+<span class="font-label-sm text-label-sm mt-1">Sự kiện</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary p-2 active:scale-90 transition-transform duration-200 hover:bg-secondary-container/50" href="#">
+<span class="material-symbols-outlined">confirmation_number</span>
+<span class="font-label-sm text-label-sm mt-1">Vé của tôi</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary p-2 active:scale-90 transition-transform duration-200 hover:bg-secondary-container/50" href="#">
+<span class="material-symbols-outlined">notifications</span>
+<span class="font-label-sm text-label-sm mt-1">Thông báo</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary p-2 active:scale-90 transition-transform duration-200 hover:bg-secondary-container/50" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-sm text-label-sm mt-1">Cá nhân</span>
+</a>
+</nav>
+</body></html>

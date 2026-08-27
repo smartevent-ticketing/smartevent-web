@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+
+<html lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Hủy thanh toán</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+                "surface-container-low": "#f0f3ff",
+                "tertiary": "#ae2424",
+                "on-surface": "#111c2d",
+                "inverse-on-surface": "#ecf0ff",
+                "on-secondary-fixed": "#171b2d",
+                "surface-variant": "#d9e3fb",
+                "error-container": "#ffdad6",
+                "on-primary-fixed-variant": "#321ed2",
+                "on-background": "#111c2d",
+                "outline": "#777587",
+                "on-secondary": "#ffffff",
+                "surface": "#f9f9ff",
+                "on-error": "#ffffff",
+                "primary-fixed-dim": "#c3c0ff",
+                "primary-fixed": "#e2dfff",
+                "background": "#f9f9ff",
+                "inverse-primary": "#c3c0ff",
+                "surface-container-lowest": "#ffffff",
+                "on-secondary-container": "#606379",
+                "tertiary-fixed": "#ffdad6",
+                "error": "#ba1a1a",
+                "primary-container": "#635bff",
+                "surface-tint": "#4c42e9",
+                "surface-dim": "#d0daf2",
+                "on-tertiary-fixed": "#410003",
+                "secondary-fixed-dim": "#c2c5de",
+                "primary": "#493ee5",
+                "tertiary-container": "#d13e3a",
+                "surface-container-highest": "#d9e3fb",
+                "surface-container": "#e8eeff",
+                "on-primary-fixed": "#0f0069",
+                "on-secondary-fixed-variant": "#42465a",
+                "on-tertiary": "#ffffff",
+                "on-tertiary-container": "#fffaf9",
+                "surface-container-high": "#dfe8ff",
+                "surface-bright": "#f9f9ff",
+                "on-tertiary-fixed-variant": "#910913",
+                "on-primary-container": "#fefaff",
+                "tertiary-fixed-dim": "#ffb3ac",
+                "on-surface-variant": "#464555",
+                "secondary-container": "#dee1fb",
+                "on-primary": "#ffffff",
+                "secondary": "#5a5d73",
+                "on-error-container": "#93000a",
+                "outline-variant": "#c7c4d8",
+                "inverse-surface": "#273143",
+                "secondary-fixed": "#dee1fb"
+        },
+        "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+        },
+        "spacing": {
+                "sm": "8px",
+                "xs": "4px",
+                "container-max": "1280px",
+                "xl": "32px",
+                "lg": "24px",
+                "base": "8px",
+                "md": "16px",
+                "gutter": "24px",
+                "xxl": "48px"
+        },
+        "fontFamily": {
+                "headline-md": [
+                        "Be Vietnam Pro"
+                ],
+                "label-sm": [
+                        "Be Vietnam Pro"
+                ],
+                "label-md": [
+                        "Be Vietnam Pro"
+                ],
+                "numeric-tabular": [
+                        "Be Vietnam Pro"
+                ],
+                "headline-lg": [
+                        "Be Vietnam Pro"
+                ],
+                "title-lg": [
+                        "Be Vietnam Pro"
+                ],
+                "body-md": [
+                        "Be Vietnam Pro"
+                ],
+                "body-lg": [
+                        "Be Vietnam Pro"
+                ],
+                "display-lg": [
+                        "Be Vietnam Pro"
+                ]
+        },
+        "fontSize": {
+                "headline-md": [
+                        "24px",
+                        {
+                                "lineHeight": "32px",
+                                "fontWeight": "600"
+                        }
+                ],
+                "label-sm": [
+                        "12px",
+                        {
+                                "lineHeight": "16px",
+                                "letterSpacing": "0.02em",
+                                "fontWeight": "500"
+                        }
+                ],
+                "label-md": [
+                        "14px",
+                        {
+                                "lineHeight": "20px",
+                                "fontWeight": "500"
+                        }
+                ],
+                "numeric-tabular": [
+                        "inherit",
+                        {
+                                "lineHeight": "inherit",
+                                "fontWeight": "inherit"
+                        }
+                ],
+                "headline-lg": [
+                        "32px",
+                        {
+                                "lineHeight": "40px",
+                                "letterSpacing": "-0.01em",
+                                "fontWeight": "700"
+                        }
+                ],
+                "title-lg": [
+                        "20px",
+                        {
+                                "lineHeight": "28px",
+                                "fontWeight": "600"
+                        }
+                ],
+                "body-md": [
+                        "16px",
+                        {
+                                "lineHeight": "24px",
+                                "fontWeight": "400"
+                        }
+                ],
+                "body-lg": [
+                        "18px",
+                        {
+                                "lineHeight": "28px",
+                                "fontWeight": "400"
+                        }
+                ],
+                "display-lg": [
+                        "48px",
+                        {
+                                "lineHeight": "60px",
+                                "letterSpacing": "-0.02em",
+                                "fontWeight": "700"
+                        }
+                ]
+        }
+},
+    },
+  }
+</script>
+<style>
+  /* Ensure full height for layout */
+  html, body {
+    height: 100%;
+    margin: 0;
+  }
+</style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col items-center justify-center p-md max-w-[390px] mx-auto antialiased">
+<!-- Content Container -->
+<main class="w-full flex flex-col items-center flex-1 justify-center gap-xl">
+<!-- Status Icon & Message -->
+<div class="flex flex-col items-center text-center gap-md w-full">
+<div class="w-[72px] h-[72px] rounded-full bg-surface-container-high flex items-center justify-center mb-sm shadow-sm">
+<span class="material-symbols-outlined text-[40px] text-secondary" style="font-variation-settings: 'FILL' 1;">
+          error
+        </span>
+</div>
+<h1 class="text-headline-md font-headline-md text-on-surface">Bạn đã hủy thanh toán</h1>
+<p class="text-body-md font-body-md text-on-surface-variant max-w-[320px]">
+        Hệ thống chưa ghi nhận thanh toán. Đơn hàng vẫn được giữ chỗ đến khi hết hạn.
+      </p>
+</div>
+<!-- Order Info Card -->
+<div class="w-full bg-surface-container-lowest rounded-lg border border-outline-variant p-md shadow-sm flex flex-col gap-sm">
+<div class="flex justify-between items-center py-xs border-b border-surface-container">
+<span class="text-label-md font-label-md text-on-surface-variant">Mã đơn hàng</span>
+<span class="text-label-md font-label-md text-on-surface font-semibold">SE-ORD-2024-A8F21</span>
+</div>
+<div class="flex justify-between items-center py-xs">
+<span class="text-label-md font-label-md text-on-surface-variant">Tổng tiền</span>
+<span class="text-title-lg font-title-lg text-primary font-numeric-tabular font-bold">1.500.000 ₫</span>
+</div>
+</div>
+</main>
+<!-- Action Buttons - Fixed at bottom for mobile feel -->
+<div class="w-full mt-auto pt-lg pb-md flex flex-col gap-sm bg-background">
+<button class="w-full h-[48px] bg-primary text-on-primary rounded-[10px] text-label-md font-label-md font-bold hover:bg-surface-tint focus:ring-2 focus:ring-primary focus:ring-offset-2 transition-colors flex items-center justify-center">
+      Tiếp tục thanh toán
+    </button>
+<button class="w-full h-[48px] bg-surface-container text-on-surface rounded-[10px] text-label-md font-label-md font-bold hover:bg-surface-container-high focus:ring-2 focus:ring-primary focus:ring-offset-2 transition-colors flex items-center justify-center border border-outline-variant">
+      Xem đơn hàng
+    </button>
+<button class="w-full h-[48px] bg-transparent text-secondary rounded-[10px] text-label-md font-label-md font-semibold hover:text-on-surface focus:ring-2 focus:ring-primary focus:ring-offset-2 transition-colors flex items-center justify-center">
+      Về trang chủ
+    </button>
+</div>
+</body></html>

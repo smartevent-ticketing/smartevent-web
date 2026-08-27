@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Create Event - Step 1</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-container-highest": "#d9e3fb",
+                      "surface": "#f9f9ff",
+                      "on-error-container": "#93000a",
+                      "surface-bright": "#f9f9ff",
+                      "inverse-surface": "#273143",
+                      "primary-fixed-dim": "#c3c0ff",
+                      "background": "#f9f9ff",
+                      "on-tertiary": "#ffffff",
+                      "secondary-fixed-dim": "#c2c5de",
+                      "inverse-on-surface": "#ecf0ff",
+                      "surface-container-low": "#f0f3ff",
+                      "on-tertiary-fixed-variant": "#910913",
+                      "tertiary-fixed-dim": "#ffb3ac",
+                      "on-secondary-fixed": "#171b2d",
+                      "surface-dim": "#d0daf2",
+                      "surface-container-lowest": "#ffffff",
+                      "surface-tint": "#4c42e9",
+                      "outline-variant": "#c7c4d8",
+                      "secondary-fixed": "#dee1fb",
+                      "tertiary-container": "#d13e3a",
+                      "on-primary-fixed-variant": "#321ed2",
+                      "primary-fixed": "#e2dfff",
+                      "on-error": "#ffffff",
+                      "secondary-container": "#dee1fb",
+                      "surface-variant": "#d9e3fb",
+                      "surface-container": "#e8eeff",
+                      "on-primary-fixed": "#0f0069",
+                      "error-container": "#ffdad6",
+                      "surface-container-high": "#dfe8ff",
+                      "tertiary": "#ae2424",
+                      "outline": "#777587",
+                      "inverse-primary": "#c3c0ff",
+                      "on-secondary-container": "#606379",
+                      "on-primary": "#ffffff",
+                      "on-secondary-fixed-variant": "#42465a",
+                      "on-surface": "#111c2d",
+                      "on-primary-container": "#fefaff",
+                      "on-tertiary-container": "#fffaf9",
+                      "secondary": "#5a5d73",
+                      "on-surface-variant": "#464555",
+                      "on-background": "#111c2d",
+                      "primary-container": "#635bff",
+                      "error": "#ba1a1a",
+                      "tertiary-fixed": "#ffdad6",
+                      "on-secondary": "#ffffff",
+                      "primary": "#493ee5",
+                      "on-tertiary-fixed": "#410003"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "base": "8px",
+                      "xxl": "48px",
+                      "sm": "8px",
+                      "md": "16px",
+                      "xl": "32px",
+                      "lg": "24px",
+                      "gutter": "24px",
+                      "xs": "4px",
+                      "container-max": "1280px"
+              },
+              "fontFamily": {
+                      "headline-md": ["Be Vietnam Pro"],
+                      "numeric-tabular": ["Be Vietnam Pro"],
+                      "title-lg": ["Be Vietnam Pro"],
+                      "body-md": ["Be Vietnam Pro"],
+                      "display-lg": ["Be Vietnam Pro"],
+                      "label-sm": ["Be Vietnam Pro"],
+                      "headline-lg": ["Be Vietnam Pro"],
+                      "body-lg": ["Be Vietnam Pro"],
+                      "label-md": ["Be Vietnam Pro"]
+              },
+              "fontSize": {
+                      "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                      "numeric-tabular": ["inherit", {"lineHeight": "inherit", "fontWeight": "inherit"}],
+                      "title-lg": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "display-lg": ["48px", {"lineHeight": "60px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500"}],
+                      "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                      "label-md": ["14px", {"lineHeight": "20px", "fontWeight": "500"}]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+        body { font-family: 'Be Vietnam Pro', sans-serif; }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col">
+<!-- Top Navigation Bar (Suppressed due to Linear/Transactional intent, but we'll include a simple header for branding and context) -->
+<header class="bg-surface border-b border-outline-variant shadow-sm w-full sticky top-0 z-50 h-[72px] flex items-center justify-between px-lg md:px-xl max-w-container-max mx-auto">
+<div class="flex items-center gap-md">
+<span class="material-symbols-outlined text-on-surface cursor-pointer hover:text-primary transition-colors" data-icon="arrow_back">arrow_back</span>
+<span class="text-title-lg font-title-lg font-bold text-primary">SMART EVENT</span>
+<span class="text-label-md font-label-md text-on-surface-variant hidden md:inline ml-sm border-l border-outline-variant pl-md">Tạo sự kiện mới</span>
+</div>
+<div>
+<button class="text-label-md font-label-md text-on-surface-variant hover:text-primary transition-colors">Hủy</button>
+</div>
+</header>
+<main class="flex-grow max-w-container-max mx-auto w-full px-md md:px-lg py-xl flex flex-col md:flex-row gap-gutter">
+<!-- Sidebar Stepper (Desktop) -->
+<aside class="w-full md:w-64 flex-shrink-0 hidden md:block">
+<nav aria-label="Progress">
+<ol class="overflow-hidden" role="list">
+<li class="relative pb-10">
+<div aria-hidden="true" class="absolute top-4 left-4 -ml-px h-full w-0.5 bg-primary"></div>
+<a class="relative flex items-center group" href="#">
+<span class="h-9 flex items-center">
+<span class="relative z-10 w-8 h-8 flex items-center justify-center bg-primary rounded-full group-hover:bg-primary-container transition-colors">
+<span class="material-symbols-outlined text-on-primary text-sm" data-icon="edit">edit</span>
+</span>
+</span>
+<span class="ml-4 min-w-0 flex flex-col">
+<span class="text-label-sm font-label-sm text-primary tracking-wide">Bước 1</span>
+<span class="text-label-md font-label-md text-on-surface font-semibold">Thông tin cơ bản</span>
+</span>
+</a>
+</li>
+<li class="relative pb-10">
+<div aria-hidden="true" class="absolute top-4 left-4 -ml-px h-full w-0.5 bg-outline-variant"></div>
+<a class="relative flex items-center group" href="#">
+<span class="h-9 flex items-center">
+<span class="relative z-10 w-8 h-8 flex items-center justify-center bg-surface border-2 border-outline-variant rounded-full group-hover:border-outline transition-colors">
+<span class="text-on-surface-variant text-label-sm font-label-sm">2</span>
+</span>
+</span>
+<span class="ml-4 min-w-0 flex flex-col">
+<span class="text-label-sm font-label-sm text-on-surface-variant tracking-wide">Bước 2</span>
+<span class="text-label-md font-label-md text-on-surface-variant">Thời gian</span>
+</span>
+</a>
+</li>
+<li class="relative pb-10">
+<div aria-hidden="true" class="absolute top-4 left-4 -ml-px h-full w-0.5 bg-outline-variant"></div>
+<a class="relative flex items-center group" href="#">
+<span class="h-9 flex items-center">
+<span class="relative z-10 w-8 h-8 flex items-center justify-center bg-surface border-2 border-outline-variant rounded-full group-hover:border-outline transition-colors">
+<span class="text-on-surface-variant text-label-sm font-label-sm">3</span>
+</span>
+</span>
+<span class="ml-4 min-w-0 flex flex-col">
+<span class="text-label-sm font-label-sm text-on-surface-variant tracking-wide">Bước 3</span>
+<span class="text-label-md font-label-md text-on-surface-variant">Địa điểm</span>
+</span>
+</a>
+</li>
+<li class="relative pb-10">
+<div aria-hidden="true" class="absolute top-4 left-4 -ml-px h-full w-0.5 bg-outline-variant"></div>
+<a class="relative flex items-center group" href="#">
+<span class="h-9 flex items-center">
+<span class="relative z-10 w-8 h-8 flex items-center justify-center bg-surface border-2 border-outline-variant rounded-full group-hover:border-outline transition-colors">
+<span class="text-on-surface-variant text-label-sm font-label-sm">4</span>
+</span>
+</span>
+<span class="ml-4 min-w-0 flex flex-col">
+<span class="text-label-sm font-label-sm text-on-surface-variant tracking-wide">Bước 4</span>
+<span class="text-label-md font-label-md text-on-surface-variant">Hình ảnh</span>
+</span>
+</a>
+</li>
+<li class="relative pb-10">
+<div aria-hidden="true" class="absolute top-4 left-4 -ml-px h-full w-0.5 bg-outline-variant"></div>
+<a class="relative flex items-center group" href="#">
+<span class="h-9 flex items-center">
+<span class="relative z-10 w-8 h-8 flex items-center justify-center bg-surface border-2 border-outline-variant rounded-full group-hover:border-outline transition-colors">
+<span class="text-on-surface-variant text-label-sm font-label-sm">5</span>
+</span>
+</span>
+<span class="ml-4 min-w-0 flex flex-col">
+<span class="text-label-sm font-label-sm text-on-surface-variant tracking-wide">Bước 5</span>
+<span class="text-label-md font-label-md text-on-surface-variant">Vé</span>
+</span>
+</a>
+</li>
+<li class="relative">
+<a class="relative flex items-center group" href="#">
+<span class="h-9 flex items-center">
+<span class="relative z-10 w-8 h-8 flex items-center justify-center bg-surface border-2 border-outline-variant rounded-full group-hover:border-outline transition-colors">
+<span class="text-on-surface-variant text-label-sm font-label-sm">6</span>
+</span>
+</span>
+<span class="ml-4 min-w-0 flex flex-col">
+<span class="text-label-sm font-label-sm text-on-surface-variant tracking-wide">Bước 6</span>
+<span class="text-label-md font-label-md text-on-surface-variant">Hoàn tất</span>
+</span>
+</a>
+</li>
+</ol>
+</nav>
+</aside>
+<!-- Horizontal Stepper (Mobile) -->
+<div class="md:hidden w-full mb-lg overflow-x-auto pb-sm">
+<ol class="flex items-center gap-4 min-w-max" role="list">
+<li class="flex items-center gap-2">
+<span class="w-6 h-6 flex items-center justify-center bg-primary rounded-full">
+<span class="material-symbols-outlined text-on-primary text-[12px]" data-icon="edit">edit</span>
+</span>
+<span class="text-label-sm font-label-sm text-on-surface font-bold whitespace-nowrap">Thông tin cơ bản</span>
+</li>
+<li class="h-px w-8 bg-outline-variant"></li>
+<li class="flex items-center gap-2 opacity-60">
+<span class="w-6 h-6 flex items-center justify-center bg-surface border border-outline-variant rounded-full text-[10px] text-on-surface-variant">2</span>
+</li>
+<li class="h-px w-8 bg-outline-variant"></li>
+<li class="flex items-center gap-2 opacity-60">
+<span class="w-6 h-6 flex items-center justify-center bg-surface border border-outline-variant rounded-full text-[10px] text-on-surface-variant">3</span>
+</li>
+</ol>
+</div>
+<!-- Form Content -->
+<section class="flex-grow bg-surface border border-outline-variant rounded-lg p-lg md:p-xl shadow-[0px_4px_20px_rgba(16,20,38,0.08)]">
+<div class="mb-xl border-b border-outline-variant pb-md">
+<h1 class="text-headline-lg font-headline-lg text-on-surface">Thông tin cơ bản</h1>
+<p class="text-body-md font-body-md text-on-surface-variant mt-sm">Hãy cung cấp những thông tin tổng quan nhất về sự kiện của bạn để thu hút người tham dự.</p>
+</div>
+<form class="space-y-lg flex flex-col min-h-full justify-between">
+<div class="space-y-lg">
+<!-- Event Title -->
+<div>
+<label class="block text-label-md font-label-md text-on-surface mb-xs" for="event-title">Tên sự kiện <span class="text-error">*</span></label>
+<input class="w-full h-[48px] px-md border border-outline-variant rounded focus:border-primary focus:ring-2 focus:ring-primary focus:ring-offset-0 focus:outline-none bg-surface transition-all text-body-md font-body-md text-on-surface placeholder:text-on-surface-variant/50" id="event-title" name="event-title" placeholder="VD: Lễ hội âm nhạc mùa hè 2024" type="text"/>
+</div>
+<!-- Category -->
+<div>
+<label class="block text-label-md font-label-md text-on-surface mb-xs" for="event-category">Danh mục sự kiện <span class="text-error">*</span></label>
+<div class="relative">
+<select class="w-full h-[48px] px-md appearance-none border border-outline-variant rounded focus:border-primary focus:ring-2 focus:ring-primary focus:ring-offset-0 focus:outline-none bg-surface transition-all text-body-md font-body-md text-on-surface" id="event-category" name="event-category">
+<option disabled="" selected="" value="">Chọn danh mục phù hợp</option>
+<option value="music">Âm nhạc &amp; Nghệ thuật</option>
+<option value="tech">Công nghệ &amp; Đổi mới</option>
+<option value="business">Kinh doanh &amp; Khởi nghiệp</option>
+<option value="sports">Thể thao &amp; Sức khỏe</option>
+<option value="education">Giáo dục &amp; Đào tạo</option>
+</select>
+<span class="material-symbols-outlined absolute right-md top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none" data-icon="expand_more">expand_more</span>
+</div>
+</div>
+<!-- Short Description -->
+<div>
+<label class="block text-label-md font-label-md text-on-surface mb-xs" for="short-desc">Mô tả ngắn <span class="text-on-surface-variant font-normal">(Tùy chọn)</span></label>
+<textarea class="w-full p-md border border-outline-variant rounded focus:border-primary focus:ring-2 focus:ring-primary focus:ring-offset-0 focus:outline-none bg-surface transition-all text-body-md font-body-md text-on-surface placeholder:text-on-surface-variant/50 resize-y" id="short-desc" name="short-desc" placeholder="Viết một đoạn ngắn gọn (khoảng 1-2 câu) tóm tắt sự kiện của bạn..." rows="4"></textarea>
+<p class="text-label-sm font-label-sm text-on-surface-variant mt-xs text-right">0/150 ký tự</p>
+</div>
+</div>
+<!-- Action Buttons -->
+<div class="mt-xxl pt-lg border-t border-outline-variant flex flex-col sm:flex-row justify-end gap-md">
+<button class="h-[48px] px-xl border border-outline-variant rounded-lg text-label-md font-label-md text-on-surface font-semibold hover:bg-surface-container transition-colors focus:ring-2 focus:ring-primary focus:ring-offset-2" type="button">
+                        Lưu nháp
+                    </button>
+<button class="h-[48px] px-xl bg-primary text-on-primary rounded-lg text-label-md font-label-md font-bold hover:bg-primary-container hover:text-on-primary-container transition-colors focus:ring-2 focus:ring-primary focus:ring-offset-2 shadow-[0px_4px_20px_rgba(16,20,38,0.08)] flex items-center justify-center gap-sm" type="submit">
+                        Tiếp tục
+                        <span class="material-symbols-outlined text-[18px]" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</form>
+</section>
+</main>
+</body></html>

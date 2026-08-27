@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+
+<html lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Khám phá sự kiện</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "surface-container-lowest": "#ffffff",
+                        "primary": "#493ee5",
+                        "primary-fixed": "#e2dfff",
+                        "tertiary": "#ae2424",
+                        "on-secondary-fixed": "#171b2d",
+                        "tertiary-fixed": "#ffdad6",
+                        "secondary": "#5a5d73",
+                        "on-secondary-container": "#606379",
+                        "on-primary-fixed": "#0f0069",
+                        "on-tertiary-fixed": "#410003",
+                        "on-tertiary-fixed-variant": "#910913",
+                        "secondary-fixed-dim": "#c2c5de",
+                        "secondary-fixed": "#dee1fb",
+                        "on-background": "#111c2d",
+                        "tertiary-fixed-dim": "#ffb3ac",
+                        "outline": "#777587",
+                        "inverse-primary": "#c3c0ff",
+                        "surface-dim": "#d0daf2",
+                        "on-secondary-fixed-variant": "#42465a",
+                        "outline-variant": "#c7c4d8",
+                        "on-error": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "surface": "#f9f9ff",
+                        "inverse-on-surface": "#ecf0ff",
+                        "background": "#f9f9ff",
+                        "error": "#ba1a1a",
+                        "on-primary-container": "#fefaff",
+                        "surface-variant": "#d9e3fb",
+                        "primary-container": "#635bff",
+                        "secondary-container": "#dee1fb",
+                        "on-secondary": "#ffffff",
+                        "surface-tint": "#4c42e9",
+                        "on-tertiary-container": "#fffaf9",
+                        "tertiary-container": "#d13e3a",
+                        "surface-bright": "#f9f9ff",
+                        "on-primary-fixed-variant": "#321ed2",
+                        "on-surface-variant": "#464555",
+                        "surface-container-low": "#f0f3ff",
+                        "surface-container-highest": "#d9e3fb",
+                        "surface-container-high": "#dfe8ff",
+                        "surface-container": "#e8eeff",
+                        "on-error-container": "#93000a",
+                        "on-surface": "#111c2d",
+                        "inverse-surface": "#273143",
+                        "on-tertiary": "#ffffff",
+                        "on-primary": "#ffffff",
+                        "primary-fixed-dim": "#c3c0ff"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    spacing: {
+                        "gutter": "24px",
+                        "xl": "32px",
+                        "md": "16px",
+                        "base": "8px",
+                        "lg": "24px",
+                        "sm": "8px",
+                        "xs": "4px",
+                        "container-max": "1280px",
+                        "xxl": "48px"
+                    },
+                    fontFamily: {
+                        "label-md": ["Be Vietnam Pro"],
+                        "body-md": ["Be Vietnam Pro"],
+                        "label-sm": ["Be Vietnam Pro"],
+                        "body-lg": ["Be Vietnam Pro"],
+                        "headline-lg": ["Be Vietnam Pro"],
+                        "numeric-tabular": ["Be Vietnam Pro"],
+                        "title-lg": ["Be Vietnam Pro"],
+                        "headline-md": ["Be Vietnam Pro"],
+                        "display-lg": ["Be Vietnam Pro"]
+                    },
+                    fontSize: {
+                        "label-md": ["14px", { lineHeight: "20px", fontWeight: "500" }],
+                        "body-md": ["16px", { lineHeight: "24px", fontWeight: "400" }],
+                        "label-sm": ["12px", { lineHeight: "16px", letterSpacing: "0.02em", fontWeight: "500" }],
+                        "body-lg": ["18px", { lineHeight: "28px", fontWeight: "400" }],
+                        "headline-lg": ["32px", { lineHeight: "40px", letterSpacing: "-0.01em", fontWeight: "700" }],
+                        "numeric-tabular": ["inherit", { lineHeight: "inherit", fontWeight: "inherit" }],
+                        "title-lg": ["20px", { lineHeight: "28px", fontWeight: "600" }],
+                        "headline-md": ["24px", { lineHeight: "32px", fontWeight: "600" }],
+                        "display-lg": ["48px", { lineHeight: "60px", letterSpacing: "-0.02em", fontWeight: "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Be Vietnam Pro', sans-serif; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen pb-xxl md:pb-0">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-surface dark:bg-surface-dim border-b border-outline-variant dark:border-outline shadow-sm dark:shadow-none transition-transform">
+<div class="flex items-center justify-between px-md h-12 w-full max-w-container-max mx-auto">
+<button class="text-secondary dark:text-secondary-fixed-dim hover:bg-surface-container-high transition-colors active:scale-95 transition-transform p-2 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">search</span>
+</button>
+<h1 class="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed tracking-tight truncate">SMART EVENT</h1>
+<button class="text-secondary dark:text-secondary-fixed-dim hover:bg-surface-container-high transition-colors active:scale-95 transition-transform p-2 rounded-full flex items-center justify-center">
+<div class="w-8 h-8 rounded-full overflow-hidden bg-surface-variant flex items-center justify-center">
+<img alt="User profile avatar" class="w-full h-full object-cover" data-alt="A small, circular avatar portrait of a modern user in a vibrant, well-lit studio setting. The lighting is soft and flattering, typical of a professional profile picture. The style is contemporary and aligned with a sleek, light-mode digital interface aesthetic, avoiding heavy shadows." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB0B_jX4_0fFbFb29u329WzO2-S16EFtCkz0ErVl66OQBGHlQM0GdLqC1OC-qVi14zLuqkv_wLuNVPwropn6q4OvXh9j9h-OvUqvhJ5k2BrsouYS8DJjytNrOuSbmXFi3yb-4v5m7rKUg8S7pGFuoSZQ-eTO9TqTfr3K8HjOsj_MEOC3y-T4kIjM6dZSMixAGiWCN32vNrGPas2CFbGgYphHNnxv08gWyTbVpJHyrir4lSiy7NzXRd4"/>
+</div>
+</button>
+</div>
+</header>
+<!-- Main Content -->
+<main class="pt-20 px-md md:px-lg max-w-container-max mx-auto">
+<!-- Search and Filter Bar -->
+<div class="sticky top-12 z-40 bg-background/90 backdrop-blur-md py-base mb-md">
+<div class="flex items-center gap-sm">
+<div class="relative flex-1">
+<span class="material-symbols-outlined absolute left-sm top-1/2 -translate-y-1/2 text-outline">search</span>
+<input class="w-full h-12 pl-xl pr-sm rounded-lg border border-outline-variant bg-surface-container-lowest focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none transition-all font-body-md text-body-md text-on-surface placeholder:text-outline-variant" placeholder="Tìm kiếm sự kiện, địa điểm..." type="text"/>
+</div>
+<button class="flex items-center justify-center w-12 h-12 rounded-lg border border-outline-variant bg-surface-container-lowest text-on-surface hover:bg-surface-container-low transition-colors active:scale-95" id="filterBtn">
+<span class="material-symbols-outlined">tune</span>
+</button>
+</div>
+<!-- Quick Filters (Chips) -->
+<div class="flex overflow-x-auto gap-sm mt-sm pb-xs no-scrollbar">
+<button class="whitespace-nowrap px-md py-xs rounded-full border border-primary bg-primary text-on-primary font-label-md text-label-md transition-colors">Tất cả</button>
+<button class="whitespace-nowrap px-md py-xs rounded-full border border-outline-variant bg-surface-container-lowest text-on-surface-variant hover:bg-surface-container-low font-label-md text-label-md transition-colors">Âm nhạc</button>
+<button class="whitespace-nowrap px-md py-xs rounded-full border border-outline-variant bg-surface-container-lowest text-on-surface-variant hover:bg-surface-container-low font-label-md text-label-md transition-colors">Hội thảo</button>
+<button class="whitespace-nowrap px-md py-xs rounded-full border border-outline-variant bg-surface-container-lowest text-on-surface-variant hover:bg-surface-container-low font-label-md text-label-md transition-colors">Thể thao</button>
+<button class="whitespace-nowrap px-md py-xs rounded-full border border-outline-variant bg-surface-container-lowest text-on-surface-variant hover:bg-surface-container-low font-label-md text-label-md transition-colors">Nghệ thuật</button>
+</div>
+</div>
+<!-- Section Header -->
+<div class="flex justify-between items-end mb-md">
+<div>
+<h2 class="font-title-lg text-title-lg text-on-surface">Đang diễn ra</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-xs">Tại Hồ Chí Minh</p>
+</div>
+<div class="flex items-center gap-xs text-primary cursor-pointer hover:opacity-80 transition-opacity">
+<span class="font-label-md text-label-md">Sắp xếp</span>
+<span class="material-symbols-outlined text-[20px]">sort</span>
+</div>
+</div>
+<!-- Event Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-md">
+<!-- Event Card 1 -->
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant overflow-hidden flex flex-col hover:shadow-lg transition-shadow duration-300">
+<div class="relative h-48 w-full">
+<img alt="Event cover" class="w-full h-full object-cover" data-alt="A lively outdoor music festival scene captured during golden hour. The image features a large, illuminated stage with dynamic laser lights piercing the dusk sky. A massive crowd of silhouetted figures can be seen cheering and dancing in the foreground. The aesthetic is energetic, high-contrast, and vibrant, fitting a modern digital event platform style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAtYYR7RBgvEDvCVccDJ6waOm-VH_JpM9Xpsa5UKHf51-nEIe9H3ENiKDk9jbctjdumSEf0Y0PGtEXBTw0kQMvXsQChWcSnOppt6dIUWonXjeDB6yG2t4g-XVtlBdL8gdBxDXAFiuq6n_GO0biyCGoQZHpe1_-2hUBzqi_FB2KhoT8AFPiUpQgbZT5jp4gUxskEVpIYhcF7wba4rWFLS9nlTDRJHDMjCoyIuj9L6eLyiTiOVUdi2020"/>
+<div class="absolute top-sm left-sm bg-surface-container-lowest/90 backdrop-blur px-sm py-xs rounded-full flex items-center gap-xs border border-outline-variant/50">
+<span class="material-symbols-outlined text-[16px] text-tertiary-container">local_fire_department</span>
+<span class="font-label-sm text-label-sm text-on-surface">Sắp hết vé</span>
+</div>
+</div>
+<div class="p-md flex-1 flex flex-col">
+<div class="flex justify-between items-start mb-xs">
+<h3 class="font-title-lg text-title-lg text-on-surface line-clamp-2">Monsoon Music Festival 2024 - Đêm Khai Mạc Bùng Nổ</h3>
+</div>
+<div class="flex items-center gap-xs text-on-surface-variant mb-xs">
+<span class="material-symbols-outlined text-[16px]">calendar_month</span>
+<span class="font-body-md text-body-md">20/10/2024 • 19:00</span>
+</div>
+<div class="flex items-center gap-xs text-on-surface-variant mb-md">
+<span class="material-symbols-outlined text-[16px]">location_on</span>
+<span class="font-body-md text-body-md truncate">Sân vận động Mỹ Đình, Hà Nội</span>
+</div>
+<div class="mt-auto flex items-end justify-between">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Giá từ</span>
+<span class="font-title-lg text-title-lg text-primary font-numeric-tabular">500.000đ</span>
+</div>
+<button class="bg-primary text-on-primary px-lg py-sm rounded-lg font-label-md text-label-md font-bold hover:bg-primary/90 transition-colors active:scale-95">Mua ngay</button>
+</div>
+</div>
+</div>
+<!-- Event Card 2 -->
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant overflow-hidden flex flex-col hover:shadow-lg transition-shadow duration-300">
+<div class="relative h-48 w-full">
+<img alt="Event cover" class="w-full h-full object-cover" data-alt="A sleek, modern corporate conference hall filled with attendees. The focus is on a brightly lit stage where a speaker is presenting, with a large, crisp digital screen displaying graphs behind them. The lighting is professional, cool, and even, emphasizing a clean, light-mode, tech-forward corporate aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBCoxAmyvU2TEWCj2rd5cfwl0ju99yVbp-1zqHSKrHF057ZiUU2v569QUsAKwyrfxjbLJ8jst1BE1FGXk3LNcoJfraldp2N2_QzIwv-G6K3-k4YBi-tL3NVOselaD6-0WZD-IgLi2ao4NKXTnPe2GFQP80vrfEEKuqO5F7rDRiQD2m9DlBHb54QRatzxP82lHAhBPJnmXNHuHcMSsCJnwDX2u8lpoahgCS2hlBttQUkNC9LXfktVyuf"/>
+</div>
+<div class="p-md flex-1 flex flex-col">
+<div class="flex justify-between items-start mb-xs">
+<h3 class="font-title-lg text-title-lg text-on-surface line-clamp-2">Vietnam Tech Summit 2024: Kỷ Nguyên AI &amp; Tương Lai</h3>
+</div>
+<div class="flex items-center gap-xs text-on-surface-variant mb-xs">
+<span class="material-symbols-outlined text-[16px]">calendar_month</span>
+<span class="font-body-md text-body-md">05/11/2024 • 08:00</span>
+</div>
+<div class="flex items-center gap-xs text-on-surface-variant mb-md">
+<span class="material-symbols-outlined text-[16px]">location_on</span>
+<span class="font-body-md text-body-md truncate">Trung tâm Hội nghị Quốc gia, TP.HCM</span>
+</div>
+<div class="mt-auto flex items-end justify-between">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Trạng thái</span>
+<span class="font-title-lg text-title-lg text-secondary font-numeric-tabular">Miễn phí</span>
+</div>
+<button class="bg-surface-variant text-on-surface-variant px-lg py-sm rounded-lg border border-outline-variant font-label-md text-label-md font-bold hover:bg-surface-container-high transition-colors active:scale-95">Đăng ký</button>
+</div>
+</div>
+</div>
+<!-- Event Card 3 -->
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant overflow-hidden flex flex-col hover:shadow-lg transition-shadow duration-300">
+<div class="relative h-48 w-full">
+<img alt="Event cover" class="w-full h-full object-cover" data-alt="A vibrant indoor art exhibition featuring contemporary installations. Soft, colorful spotlights illuminate abstract sculptures and large canvas paintings. Attendees are quietly observing the artwork in a spacious, airy gallery with high ceilings and white walls, creating a sophisticated and culturally rich light-mode atmosphere." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCRwn4MWrdZDN74fGZRcpoXhgf3i7bhLNItIT0Xb-dPymkeQwggswloljEyQJ96XcRtjTUvsi0vIAmzgRovkOH7r5QBUL2qID6M_FGl_io2V7UIRvIl6J-YrJlsIhkomn6BME6LSCgz8aFzyCJMFtYB159VL_CyK1OrPEz7AzO3-R5HltVcCRPAxDax4UmS52gcyXehT_5q5ans26EnQD2gL69-vQeYVUn58MRpEWcNiUDEs3GejiqG"/>
+</div>
+<div class="p-md flex-1 flex flex-col">
+<div class="flex justify-between items-start mb-xs">
+<h3 class="font-title-lg text-title-lg text-on-surface line-clamp-2">Triển lãm Nghệ thuật Đương đại: "Sắc Màu Cảm Xúc"</h3>
+</div>
+<div class="flex items-center gap-xs text-on-surface-variant mb-xs">
+<span class="material-symbols-outlined text-[16px]">calendar_month</span>
+<span class="font-body-md text-body-md">15/12/2024 • 09:00</span>
+</div>
+<div class="flex items-center gap-xs text-on-surface-variant mb-md">
+<span class="material-symbols-outlined text-[16px]">location_on</span>
+<span class="font-body-md text-body-md truncate">Bảo tàng Mỹ thuật, TP.HCM</span>
+</div>
+<div class="mt-auto flex items-end justify-between">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Giá từ</span>
+<span class="font-title-lg text-title-lg text-primary font-numeric-tabular">150.000đ</span>
+</div>
+<button class="bg-primary text-on-primary px-lg py-sm rounded-lg font-label-md text-label-md font-bold hover:bg-primary/90 transition-colors active:scale-95">Mua ngay</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Pagination / Load More -->
+<div class="flex justify-center mt-xl mb-xxl">
+<button class="px-xl py-sm rounded-lg border border-outline-variant bg-surface-container-lowest text-on-surface font-label-md text-label-md hover:bg-surface-container-low transition-colors active:scale-95 flex items-center gap-sm">
+<span>Xem thêm sự kiện</span>
+<span class="material-symbols-outlined text-[20px]">expand_more</span>
+</button>
+</div>
+<!-- Empty State Example (Hidden by default, shown for context if needed) -->
+<!--
+        <div class="flex flex-col items-center justify-center py-xxl text-center">
+            <div class="w-48 h-48 bg-surface-variant rounded-full mb-md flex items-center justify-center">
+                 <span class="material-symbols-outlined text-[64px] text-outline" style="font-variation-settings: 'FILL' 0;">event_busy</span>
+            </div>
+            <h3 class="font-title-lg text-title-lg text-on-surface mb-sm">Không tìm thấy sự kiện nào</h3>
+            <p class="font-body-md text-body-md text-on-surface-variant mb-lg max-w-sm">Rất tiếc, chúng tôi không tìm thấy sự kiện nào phù hợp với bộ lọc hiện tại của bạn. Vui lòng thử lại với các tiêu chí khác.</p>
+            <button class="px-xl py-sm rounded-lg bg-primary text-on-primary font-label-md text-label-md font-bold hover:bg-primary/90 transition-colors active:scale-95">Xóa bộ lọc</button>
+        </div>
+        -->
+</main>
+<!-- Filter Bottom Sheet (Hidden by default) -->
+<div class="fixed inset-0 bg-on-background/40 z-[60] opacity-0 pointer-events-none transition-opacity duration-300" id="filterSheetOverlay"></div>
+<div class="fixed bottom-0 left-0 w-full bg-surface-container-lowest rounded-t-xl z-[70] transform translate-y-full transition-transform duration-300 flex flex-col max-h-[85vh]" id="filterSheet">
+<div class="flex justify-center pt-sm pb-xs">
+<div class="w-12 h-1 bg-outline-variant rounded-full"></div>
+</div>
+<div class="px-md pb-sm flex justify-between items-center border-b border-outline-variant">
+<h3 class="font-title-lg text-title-lg text-on-surface">Bộ lọc sự kiện</h3>
+<button class="p-sm text-on-surface-variant hover:bg-surface-container-low rounded-full transition-colors" id="closeFilterBtn">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<div class="overflow-y-auto px-md py-md flex-1">
+<!-- Location Filter -->
+<div class="mb-lg">
+<h4 class="font-label-md text-label-md text-on-surface mb-sm">Thành phố</h4>
+<select class="w-full h-12 px-sm rounded-lg border border-outline-variant bg-surface-container-lowest text-on-surface focus:border-primary focus:ring-2 focus:ring-primary/20 font-body-md text-body-md outline-none">
+<option>Hồ Chí Minh</option>
+<option>Hà Nội</option>
+<option>Đà Nẵng</option>
+<option>Tất cả</option>
+</select>
+</div>
+<!-- Date Filter -->
+<div class="mb-lg">
+<h4 class="font-label-md text-label-md text-on-surface mb-sm">Thời gian</h4>
+<div class="grid grid-cols-2 gap-sm">
+<button class="py-sm rounded-lg border border-primary bg-primary/10 text-primary font-label-md text-label-md">Cuối tuần này</button>
+<button class="py-sm rounded-lg border border-outline-variant bg-surface-container-lowest text-on-surface-variant font-label-md text-label-md">Tuần tới</button>
+<button class="py-sm rounded-lg border border-outline-variant bg-surface-container-lowest text-on-surface-variant font-label-md text-label-md">Tháng này</button>
+<button class="py-sm rounded-lg border border-outline-variant bg-surface-container-lowest text-on-surface-variant font-label-md text-label-md flex items-center justify-center gap-xs">
+<span class="material-symbols-outlined text-[18px]">calendar_today</span>
+                        Tùy chọn
+                    </button>
+</div>
+</div>
+<!-- Price Filter -->
+<div class="mb-lg">
+<h4 class="font-label-md text-label-md text-on-surface mb-sm">Mức giá</h4>
+<div class="flex items-center gap-sm">
+<input class="w-full h-12 px-sm rounded-lg border border-outline-variant bg-surface-container-lowest text-on-surface focus:border-primary focus:ring-2 focus:ring-primary/20 font-body-md text-body-md outline-none" placeholder="Từ" type="number"/>
+<span class="text-on-surface-variant">-</span>
+<input class="w-full h-12 px-sm rounded-lg border border-outline-variant bg-surface-container-lowest text-on-surface focus:border-primary focus:ring-2 focus:ring-primary/20 font-body-md text-body-md outline-none" placeholder="Đến" type="number"/>
+</div>
+</div>
+</div>
+<div class="p-md border-t border-outline-variant flex gap-sm bg-surface">
+<button class="flex-1 py-3 rounded-lg border border-outline-variant bg-surface-container-lowest text-on-surface font-label-md text-label-md font-bold hover:bg-surface-container-low transition-colors">Xóa bộ lọc</button>
+<button class="flex-1 py-3 rounded-lg bg-primary text-on-primary font-label-md text-label-md font-bold hover:bg-primary/90 transition-colors shadow-sm">Áp dụng (12)</button>
+</div>
+</div>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 w-full z-50 rounded-t-xl bg-surface-container-lowest dark:bg-on-secondary-fixed shadow-lg border-t border-outline-variant dark:border-outline md:hidden">
+<div class="flex justify-around items-center h-16 w-full px-sm pb-safe">
+<a class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim hover:opacity-80 active:scale-90 transition-transform duration-150" href="#">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 0;">home</span>
+<span class="font-label-sm text-label-sm">Trang chủ</span>
+</a>
+<a class="flex flex-col items-center justify-center text-primary dark:text-primary-fixed font-bold bg-primary-fixed dark:bg-primary-container rounded-full px-4 py-1 hover:opacity-80 active:scale-90 transition-transform duration-150" href="#">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">explore</span>
+<span class="font-label-sm text-label-sm">Khám phá</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim hover:opacity-80 active:scale-90 transition-transform duration-150" href="#">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 0;">confirmation_number</span>
+<span class="font-label-sm text-label-sm">Vé của tôi</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim hover:opacity-80 active:scale-90 transition-transform duration-150" href="#">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 0;">person</span>
+<span class="font-label-sm text-label-sm">Tài khoản</span>
+</a>
+</div>
+</nav>
+<script>
+        // Bottom Sheet Logic
+        const filterBtn = document.getElementById('filterBtn');
+        const closeFilterBtn = document.getElementById('closeFilterBtn');
+        const filterSheet = document.getElementById('filterSheet');
+        const filterSheetOverlay = document.getElementById('filterSheetOverlay');
+
+        function openSheet() {
+            filterSheetOverlay.classList.remove('opacity-0', 'pointer-events-none');
+            filterSheet.classList.remove('translate-y-full');
+            document.body.style.overflow = 'hidden'; // Prevent background scrolling
+        }
+
+        function closeSheet() {
+            filterSheetOverlay.classList.add('opacity-0', 'pointer-events-none');
+            filterSheet.classList.add('translate-y-full');
+            document.body.style.overflow = '';
+        }
+
+        filterBtn.addEventListener('click', openSheet);
+        closeFilterBtn.addEventListener('click', closeSheet);
+        filterSheetOverlay.addEventListener('click', closeSheet);
+    </script>
+</body></html>

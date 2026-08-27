@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+
+<html lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Sơ đồ chỗ ngồi - Neon Nights Music Festival</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-primary-fixed-variant": "#321ed2",
+                        "on-background": "#111c2d",
+                        "on-tertiary-container": "#fffaf9",
+                        "tertiary-container": "#d13e3a",
+                        "surface-tint": "#4c42e9",
+                        "on-tertiary-fixed-variant": "#910913",
+                        "surface-container-high": "#dfe8ff",
+                        "secondary-fixed-dim": "#c2c5de",
+                        "primary": "#493ee5",
+                        "primary-fixed": "#e2dfff",
+                        "error": "#ba1a1a",
+                        "surface-variant": "#d9e3fb",
+                        "background": "#f9f9ff",
+                        "outline-variant": "#c7c4d8",
+                        "on-primary": "#ffffff",
+                        "secondary-container": "#dee1fb",
+                        "primary-container": "#635bff",
+                        "surface-container-low": "#f0f3ff",
+                        "on-surface": "#111c2d",
+                        "on-secondary-fixed": "#171b2d",
+                        "surface-bright": "#f9f9ff",
+                        "on-tertiary": "#ffffff",
+                        "surface-container": "#e8eeff",
+                        "on-error-container": "#93000a",
+                        "on-secondary": "#ffffff",
+                        "secondary": "#5a5d73",
+                        "surface-container-highest": "#d9e3fb",
+                        "tertiary-fixed": "#ffdad6",
+                        "on-secondary-container": "#606379",
+                        "on-primary-container": "#fefaff",
+                        "on-primary-fixed": "#0f0069",
+                        "on-surface-variant": "#464555",
+                        "inverse-on-surface": "#ecf0ff",
+                        "inverse-surface": "#273143",
+                        "tertiary-fixed-dim": "#ffb3ac",
+                        "on-error": "#ffffff",
+                        "tertiary": "#ae2424",
+                        "inverse-primary": "#c3c0ff",
+                        "surface-container-lowest": "#ffffff",
+                        "outline": "#777587",
+                        "primary-fixed-dim": "#c3c0ff",
+                        "surface-dim": "#d0daf2",
+                        "error-container": "#ffdad6",
+                        "surface": "#f9f9ff",
+                        "on-tertiary-fixed": "#410003",
+                        "secondary-fixed": "#dee1fb",
+                        "on-secondary-fixed-variant": "#42465a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "sm": "8px",
+                        "xl": "32px",
+                        "gutter": "24px",
+                        "lg": "24px",
+                        "base": "8px",
+                        "xxl": "48px",
+                        "container-max": "1280px",
+                        "xs": "4px",
+                        "md": "16px"
+                    },
+                    "fontFamily": {
+                        "title-lg": ["Be Vietnam Pro"],
+                        "label-md": ["Be Vietnam Pro"],
+                        "headline-md": ["Be Vietnam Pro"],
+                        "body-md": ["Be Vietnam Pro"],
+                        "display-lg": ["Be Vietnam Pro"],
+                        "headline-lg": ["Be Vietnam Pro"],
+                        "numeric-tabular": ["Be Vietnam Pro"],
+                        "label-sm": ["Be Vietnam Pro"],
+                        "body-lg": ["Be Vietnam Pro"]
+                    },
+                    "fontSize": {
+                        "title-lg": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "fontWeight": "500" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "display-lg": ["48px", { "lineHeight": "60px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "numeric-tabular": ["inherit", { "lineHeight": "inherit", "fontWeight": "inherit" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .map-interactive {
+            transform-origin: center;
+            transition: transform 0.3s ease;
+        }
+        .seat-area:hover {
+            fill-opacity: 0.8;
+            cursor: pointer;
+            stroke: #4c42e9;
+            stroke-width: 2px;
+        }
+        .seat-area.selected {
+            fill: #4c42e9;
+            fill-opacity: 1;
+            stroke: #ffffff;
+            stroke-width: 2px;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background antialiased h-screen flex flex-col overflow-hidden">
+<!-- TopNavBar -->
+<nav class="bg-surface dark:bg-surface-container-low border-b border-outline-variant dark:border-outline shadow-sm dark:shadow-none docked full-width top-0 z-50 flex-shrink-0">
+<div class="flex justify-between items-center w-full px-lg md:px-xl max-w-container-max mx-auto h-[72px]">
+<div class="flex items-center gap-md">
+<a class="text-title-lg font-title-lg font-bold text-primary dark:text-primary-fixed" href="#">SMART EVENT</a>
+<div class="hidden md:flex gap-lg ml-xl">
+<a class="text-on-secondary-container dark:text-on-secondary-fixed-variant font-medium hover:text-primary-container dark:hover:text-primary-fixed-dim transition-colors text-label-md font-label-md" href="#">Discovery</a>
+<a class="text-on-secondary-container dark:text-on-secondary-fixed-variant font-medium hover:text-primary-container dark:hover:text-primary-fixed-dim transition-colors text-label-md font-label-md" href="#">Location</a>
+<a class="text-primary dark:text-primary-fixed border-b-2 border-primary font-bold pb-1 text-label-md font-label-md" href="#">My Tickets</a>
+</div>
+</div>
+<div class="flex items-center gap-md">
+<div class="hidden md:flex items-center gap-sm bg-surface-variant rounded-full px-sm py-xs">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="timer">timer</span>
+<span class="font-numeric-tabular font-bold text-error" id="countdown-timer">10:00</span>
+</div>
+<button class="bg-primary text-on-primary font-label-md text-label-md px-lg py-sm rounded-lg hover:opacity-90 transition-opacity">Login</button>
+</div>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="flex-1 flex flex-col md:flex-row overflow-hidden relative w-full max-w-container-max mx-auto">
+<!-- Interactive Map Area -->
+<section class="flex-1 bg-surface-container-low relative overflow-hidden flex items-center justify-center border-r border-outline-variant">
+<!-- Map Controls -->
+<div class="absolute top-lg right-lg flex flex-col gap-sm z-10 bg-surface rounded-lg shadow-sm p-xs border border-outline-variant">
+<button aria-label="Zoom In" class="w-10 h-10 flex items-center justify-center rounded hover:bg-surface-variant text-on-surface transition-colors">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+</button>
+<button aria-label="Zoom Out" class="w-10 h-10 flex items-center justify-center rounded hover:bg-surface-variant text-on-surface transition-colors">
+<span class="material-symbols-outlined" data-icon="remove">remove</span>
+</button>
+<button aria-label="Reset View" class="w-10 h-10 flex items-center justify-center rounded hover:bg-surface-variant text-on-surface transition-colors">
+<span class="material-symbols-outlined" data-icon="refresh">refresh</span>
+</button>
+</div>
+<!-- SVG Map -->
+<div class="w-full h-full p-xl flex items-center justify-center map-interactive overflow-hidden relative">
+<img class="absolute inset-0 w-full h-full object-contain opacity-20 pointer-events-none" data-alt="A detailed vector illustration of a modern music festival stadium layout viewed from above. The stage is at the top, surrounded by distinct geometric zones representing different seating areas like VIP (colored gold/yellow) and General Admission (colored light blue/gray). The style is clean, digital, and uses a light mode aesthetic with crisp lines and subtle gradients on a soft off-white background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuASy0C_A8eFda_VBpcD1KWCoqKT0Pz8bezyOtuQ5eBYpBSeCU4-SnoYa-et04m20lhAc-Bl4fpylGk9sRiIAznet2oEXg3UzsTeFOAvWaWCZQwKKTmtz-TT7SlTb6tjJ6RQ4eCdQwRDN_kZeqW-cI-DcE1nagmR-v0jOEWuvSG7bIVr9u2VcRzukFZDKkcoKeLe5I8EiLKWFGFtdKg8UidPzF4r4JfzNX2D5a_LjyKR6k1geJ9Ta1Tj"/>
+<svg class="w-full max-w-4xl max-h-full drop-shadow-lg relative z-10" preserveaspectratio="xMidYMid meet" viewbox="0 0 800 600">
+<!-- Stage -->
+<rect fill="#273143" height="80" rx="10" width="300" x="250" y="50"></rect>
+<text fill="white" font-family="Be Vietnam Pro" font-size="24" font-weight="700" text-anchor="middle" x="400" y="95">SÂN KHẤU</text>
+<!-- VIP Area -->
+<path class="seat-area" d="M 200 160 L 600 160 Q 650 250 600 300 L 200 300 Q 150 250 200 160 Z" data-area="vip" fill="#d9e3fb" fill-opacity="0.6" stroke="#c7c4d8" stroke-width="1"></path>
+<text fill="#111c2d" font-family="Be Vietnam Pro" font-size="20" font-weight="600" pointer-events="none" text-anchor="middle" x="400" y="235">VVIP - ĐỨNG</text>
+<!-- GA Area Left -->
+<path class="seat-area" d="M 100 330 L 380 330 L 380 480 L 100 480 Z" data-area="ga_left" fill="#f0f3ff" fill-opacity="0.6" stroke="#c7c4d8" stroke-width="1"></path>
+<text fill="#111c2d" font-family="Be Vietnam Pro" font-size="16" font-weight="600" pointer-events="none" text-anchor="middle" x="240" y="410">GA - TRÁI</text>
+<!-- GA Area Right -->
+<path class="seat-area selected" d="M 420 330 L 700 330 L 700 480 L 420 480 Z" data-area="ga_right" fill="#f0f3ff" fill-opacity="0.6" stroke="#c7c4d8" stroke-width="1"></path>
+<text fill="#ffffff" font-family="Be Vietnam Pro" font-size="16" font-weight="600" pointer-events="none" text-anchor="middle" x="560" y="410">GA - PHẢI</text>
+</svg>
+</div>
+<!-- Legend -->
+<div class="absolute bottom-lg left-lg bg-surface p-md rounded-xl shadow-sm border border-outline-variant flex gap-md">
+<div class="flex items-center gap-sm">
+<div class="w-4 h-4 rounded-full bg-surface-variant border border-outline-variant"></div>
+<span class="text-label-sm font-label-sm text-on-surface">Trống</span>
+</div>
+<div class="flex items-center gap-sm">
+<div class="w-4 h-4 rounded-full bg-primary border border-primary"></div>
+<span class="text-label-sm font-label-sm text-on-surface">Đang chọn</span>
+</div>
+<div class="flex items-center gap-sm">
+<div class="w-4 h-4 rounded-full bg-secondary-container border border-outline-variant"></div>
+<span class="text-label-sm font-label-sm text-on-surface">Đã bán</span>
+</div>
+</div>
+</section>
+<!-- Sidebar / Selection Area -->
+<aside class="w-full md:w-[400px] lg:w-[480px] bg-surface flex flex-col h-full overflow-y-auto">
+<div class="p-lg md:p-xl border-b border-outline-variant">
+<h1 class="text-headline-md font-headline-md text-on-surface mb-xs">Neon Nights Music Festival</h1>
+<p class="text-body-md font-body-md text-on-surface-variant flex items-center gap-xs">
+<span class="material-symbols-outlined text-sm" data-icon="calendar_today">calendar_today</span>
+                    24 Tháng 10, 2024 • 19:00
+                </p>
+<p class="text-body-md font-body-md text-on-surface-variant flex items-center gap-xs mt-xs">
+<span class="material-symbols-outlined text-sm" data-icon="location_on">location_on</span>
+                    Sân vận động Mỹ Đình, Hà Nội
+                </p>
+</div>
+<!-- Ticket Selection -->
+<div class="flex-1 p-lg md:p-xl flex flex-col gap-lg">
+<h2 class="text-title-lg font-title-lg text-on-surface">Khu vực đã chọn</h2>
+<!-- Selected Area Card -->
+<div class="bg-surface-container-low border border-primary rounded-xl p-md shadow-sm relative overflow-hidden">
+<div class="absolute top-0 left-0 w-1 h-full bg-primary"></div>
+<div class="flex justify-between items-start mb-md">
+<div>
+<h3 class="text-title-lg font-title-lg text-on-surface">GA - PHẢI</h3>
+<p class="text-label-md font-label-md text-on-surface-variant">Vé đứng</p>
+</div>
+<span class="text-headline-md font-headline-md text-primary font-numeric-tabular">1.500.000 ₫</span>
+</div>
+<div class="flex items-center justify-between mt-sm pt-md border-t border-outline-variant">
+<span class="text-body-md font-body-md text-on-surface">Số lượng</span>
+<div class="flex items-center gap-md">
+<button class="w-10 h-10 rounded-full bg-surface-variant text-on-surface flex items-center justify-center hover:bg-outline-variant transition-colors focus:ring-2 focus:ring-primary focus:ring-offset-2">
+<span class="material-symbols-outlined" data-icon="remove">remove</span>
+</button>
+<span class="text-title-lg font-title-lg font-numeric-tabular text-on-surface w-6 text-center">2</span>
+<button class="w-10 h-10 rounded-full bg-surface-variant text-on-surface flex items-center justify-center hover:bg-outline-variant transition-colors focus:ring-2 focus:ring-primary focus:ring-offset-2">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Unselected Area Example -->
+<div class="bg-surface border border-outline-variant rounded-xl p-md shadow-sm hover:border-primary-fixed-dim transition-colors cursor-pointer opacity-60">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="text-body-lg font-body-lg text-on-surface font-semibold">VVIP - ĐỨNG</h3>
+<p class="text-label-md font-label-md text-on-surface-variant">Vé đứng gần sân khấu</p>
+</div>
+<span class="text-body-lg font-body-lg text-on-surface font-numeric-tabular font-semibold">4.000.000 ₫</span>
+</div>
+</div>
+</div>
+<!-- Footer Summary -->
+<div class="p-lg md:p-xl border-t border-outline-variant bg-surface-container-lowest mt-auto">
+<div class="flex justify-between items-center mb-md">
+<span class="text-body-md font-body-md text-on-surface-variant">Tạm tính (2 vé)</span>
+<span class="text-headline-md font-headline-md text-on-surface font-numeric-tabular">3.000.000 ₫</span>
+</div>
+<button class="w-full h-12 bg-primary text-on-primary rounded-lg text-title-lg font-title-lg flex items-center justify-center hover:opacity-90 transition-opacity focus:ring-2 focus:ring-primary focus:ring-offset-2 shadow-sm">
+                    Thanh toán
+                </button>
+</div>
+</aside>
+</main>
+<script>
+        // Simple timer logic
+        let time = 600; // 10 minutes in seconds
+        const timerDisplay = document.getElementById('countdown-timer');
+        
+        setInterval(() => {
+            if(time <= 0) return;
+            time--;
+            const minutes = Math.floor(time / 60);
+            const seconds = time % 60;
+            timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }, 1000);
+    </script>
+</body></html>

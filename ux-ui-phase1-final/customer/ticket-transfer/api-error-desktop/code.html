@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+
+<html lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Chưa thể xác nhận kết quả chuyển vé</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-lowest": "#ffffff",
+                        "inverse-primary": "#c3c0ff",
+                        "outline-variant": "#c7c4d8",
+                        "outline": "#777587",
+                        "primary-container": "#635bff",
+                        "secondary-fixed": "#dee1fb",
+                        "on-surface": "#111c2d",
+                        "inverse-surface": "#273143",
+                        "on-error-container": "#93000a",
+                        "on-error": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "inverse-on-surface": "#ecf0ff",
+                        "primary-fixed": "#e2dfff",
+                        "on-tertiary-fixed": "#410003",
+                        "on-primary-fixed": "#0f0069",
+                        "tertiary-fixed": "#ffdad6",
+                        "surface-container-highest": "#d9e3fb",
+                        "secondary-container": "#dee1fb",
+                        "on-secondary-fixed": "#171b2d",
+                        "on-tertiary": "#ffffff",
+                        "surface-container-high": "#dfe8ff",
+                        "on-background": "#111c2d",
+                        "error": "#ba1a1a",
+                        "surface-container": "#e8eeff",
+                        "on-tertiary-container": "#fffaf9",
+                        "on-secondary-fixed-variant": "#42465a",
+                        "on-secondary": "#ffffff",
+                        "on-primary": "#ffffff",
+                        "tertiary-container": "#d13e3a",
+                        "surface-variant": "#d9e3fb",
+                        "primary": "#493ee5",
+                        "primary-fixed-dim": "#c3c0ff",
+                        "secondary": "#5a5d73",
+                        "surface-tint": "#4c42e9",
+                        "secondary-fixed-dim": "#c2c5de",
+                        "surface-bright": "#f9f9ff",
+                        "surface": "#f9f9ff",
+                        "surface-dim": "#d0daf2",
+                        "on-tertiary-fixed-variant": "#910913",
+                        "on-secondary-container": "#606379",
+                        "tertiary": "#ae2424",
+                        "on-primary-fixed-variant": "#321ed2",
+                        "tertiary-fixed-dim": "#ffb3ac",
+                        "on-surface-variant": "#464555",
+                        "on-primary-container": "#fefaff",
+                        "background": "#f9f9ff",
+                        "surface-container-low": "#f0f3ff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "md": "16px",
+                        "sm": "8px",
+                        "container-max": "1280px",
+                        "lg": "24px",
+                        "base": "8px",
+                        "xl": "32px",
+                        "gutter": "24px",
+                        "xs": "4px",
+                        "xxl": "48px"
+                    },
+                    "fontFamily": {
+                        "numeric-tabular": ["Be Vietnam Pro"],
+                        "label-md": ["Be Vietnam Pro"],
+                        "title-lg": ["Be Vietnam Pro"],
+                        "headline-lg": ["Be Vietnam Pro"],
+                        "body-lg": ["Be Vietnam Pro"],
+                        "label-sm": ["Be Vietnam Pro"],
+                        "headline-md": ["Be Vietnam Pro"],
+                        "body-md": ["Be Vietnam Pro"],
+                        "display-lg": ["Be Vietnam Pro"]
+                    },
+                    "fontSize": {
+                        "numeric-tabular": ["inherit", { "lineHeight": "inherit", "fontWeight": "inherit" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "fontWeight": "500" }],
+                        "title-lg": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "display-lg": ["48px", { "lineHeight": "60px", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+                    },
+                    "boxShadow": {
+                        "level2": "0px 4px 20px rgba(16, 20, 38, 0.08)",
+                        "level3": "0px 12px 32px rgba(16, 20, 38, 0.12)"
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Be Vietnam Pro', sans-serif; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface min-h-screen flex flex-col">
+<!-- TopNavBar: Suppressed for Transactional/Error Context -->
+<main class="flex-grow flex items-center justify-center p-lg md:p-xl">
+<div class="bg-surface-container-lowest border border-outline-variant shadow-level3 rounded-xl max-w-2xl w-full p-xl flex flex-col gap-lg items-center text-center">
+<!-- Icon -->
+<div class="w-16 h-16 rounded-full bg-error-container flex items-center justify-center mb-sm">
+<span class="material-symbols-outlined text-on-error-container text-4xl" data-icon="error" style="font-variation-settings: 'FILL' 1;">error</span>
+</div>
+<!-- Title & Message -->
+<div class="flex flex-col gap-xs">
+<h1 class="font-headline-lg text-headline-lg text-on-surface">Chưa thể xác nhận kết quả chuyển vé</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant mt-sm">Hệ thống gặp sự cố khi phản hồi yêu cầu chuyển vé TKT-INDIE-A12.</p>
+</div>
+<!-- Warning Callout -->
+<div class="bg-surface-container-high rounded-lg p-md border-l-4 border-primary w-full text-left">
+<div class="flex gap-sm items-start">
+<span class="material-symbols-outlined text-primary mt-xs" data-icon="warning" style="font-variation-settings: 'FILL' 1;">warning</span>
+<div>
+<p class="font-body-md text-body-md text-on-surface font-semibold">Chúng tôi chưa thể xác định vé đã được chuyển tới minh.nguyen@example.com hay chưa.</p>
+<p class="font-body-md text-body-md text-on-surface-variant mt-xs">Vui lòng kiểm tra trạng thái vé trước khi gửi lại yêu cầu để tránh chuyển lặp.</p>
+</div>
+</div>
+</div>
+<!-- Transfer Summary Card -->
+<div class="bg-surface-container-low rounded-lg p-lg w-full text-left border border-outline-variant">
+<h2 class="font-title-lg text-title-lg text-on-surface mb-md">Thông tin yêu cầu chuyển vé</h2>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-y-md gap-x-lg">
+<div class="flex flex-col gap-xs">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Sự kiện</span>
+<span class="font-body-md text-body-md text-on-surface font-medium">Đêm Nhạc Hội Indie 2024</span>
+</div>
+<div class="flex flex-col gap-xs">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Khu vực &amp; Ghế</span>
+<span class="font-body-md text-body-md text-on-surface font-medium">Khu A · A12</span>
+</div>
+<div class="flex flex-col gap-xs">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Loại vé</span>
+<span class="font-body-md text-body-md text-on-surface font-medium">VIP</span>
+</div>
+<div class="flex flex-col gap-xs">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Người nhận</span>
+<span class="font-body-md text-body-md text-on-surface font-medium break-words">minh.nguyen@example.com</span>
+</div>
+<div class="flex flex-col gap-xs">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Trạng thái gần nhất</span>
+<span class="font-body-md text-body-md text-on-surface font-medium">Đã phát hành</span>
+</div>
+<div class="flex flex-col gap-xs">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Kết quả chuyển</span>
+<span class="font-body-md text-body-md text-on-surface font-medium text-error flex items-center gap-xs">
+<span class="material-symbols-outlined text-sm" data-icon="help_outline">help_outline</span>
+                            Chưa xác định
+                        </span>
+</div>
+</div>
+</div>
+<!-- Actions -->
+<div class="flex flex-col sm:flex-row gap-md w-full justify-center mt-sm">
+<button class="h-12 px-xl bg-primary text-on-primary rounded-lg font-label-md text-label-md font-bold hover:bg-surface-tint focus:ring-2 focus:ring-primary focus:ring-offset-2 transition-colors shadow-level2">
+                    Kiểm tra trạng thái vé
+                </button>
+<button class="h-12 px-xl bg-surface-container-lowest border border-outline text-on-surface rounded-lg font-label-md text-label-md font-bold hover:bg-surface-container-low focus:ring-2 focus:ring-primary focus:ring-offset-2 transition-colors">
+                    Về vé của tôi
+                </button>
+</div>
+</div>
+</main>
+<!-- Footer: Suppressed for Transactional/Error Context to keep focus on resolution -->
+</body></html>

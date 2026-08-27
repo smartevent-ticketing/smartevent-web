@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Event Inventory &amp; Sales Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "surface-container-highest": "#d9e3fb",
+                        "surface": "#f9f9ff",
+                        "on-error-container": "#93000a",
+                        "surface-bright": "#f9f9ff",
+                        "inverse-surface": "#273143",
+                        "primary-fixed-dim": "#c3c0ff",
+                        "background": "#f9f9ff",
+                        "on-tertiary": "#ffffff",
+                        "secondary-fixed-dim": "#c2c5de",
+                        "inverse-on-surface": "#ecf0ff",
+                        "surface-container-low": "#f0f3ff",
+                        "on-tertiary-fixed-variant": "#910913",
+                        "tertiary-fixed-dim": "#ffb3ac",
+                        "on-secondary-fixed": "#171b2d",
+                        "surface-dim": "#d0daf2",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-tint": "#4c42e9",
+                        "outline-variant": "#c7c4d8",
+                        "secondary-fixed": "#dee1fb",
+                        "tertiary-container": "#d13e3a",
+                        "on-primary-fixed-variant": "#321ed2",
+                        "primary-fixed": "#e2dfff",
+                        "on-error": "#ffffff",
+                        "secondary-container": "#dee1fb",
+                        "surface-variant": "#d9e3fb",
+                        "surface-container": "#e8eeff",
+                        "on-primary-fixed": "#0f0069",
+                        "error-container": "#ffdad6",
+                        "surface-container-high": "#dfe8ff",
+                        "tertiary": "#ae2424",
+                        "outline": "#777587",
+                        "inverse-primary": "#c3c0ff",
+                        "on-secondary-container": "#606379",
+                        "on-primary": "#ffffff",
+                        "on-secondary-fixed-variant": "#42465a",
+                        "on-surface": "#111c2d",
+                        "on-primary-container": "#fefaff",
+                        "on-tertiary-container": "#fffaf9",
+                        "secondary": "#5a5d73",
+                        "on-surface-variant": "#464555",
+                        "on-background": "#111c2d",
+                        "primary-container": "#635bff",
+                        "error": "#ba1a1a",
+                        "tertiary-fixed": "#ffdad6",
+                        "on-secondary": "#ffffff",
+                        "primary": "#493ee5",
+                        "on-tertiary-fixed": "#410003"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    spacing: {
+                        "base": "8px",
+                        "xxl": "48px",
+                        "sm": "8px",
+                        "md": "16px",
+                        "xl": "32px",
+                        "lg": "24px",
+                        "gutter": "24px",
+                        "xs": "4px",
+                        "container-max": "1280px"
+                    },
+                    fontFamily: {
+                        "headline-md": ["Be Vietnam Pro"],
+                        "numeric-tabular": ["Be Vietnam Pro"],
+                        "title-lg": ["Be Vietnam Pro"],
+                        "body-md": ["Be Vietnam Pro"],
+                        "display-lg": ["Be Vietnam Pro"],
+                        "label-sm": ["Be Vietnam Pro"],
+                        "headline-lg": ["Be Vietnam Pro"],
+                        "body-lg": ["Be Vietnam Pro"],
+                        "label-md": ["Be Vietnam Pro"]
+                    },
+                    fontSize: {
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "numeric-tabular": ["inherit", { "lineHeight": "inherit", "fontWeight": "inherit" }],
+                        "title-lg": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "display-lg": ["48px", { "lineHeight": "60px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "fontWeight": "500" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Be Vietnam Pro', sans-serif; }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col">
+<!-- TopNavBar -->
+<header class="bg-surface dark:bg-surface-container-low border-b border-outline-variant dark:border-outline shadow-sm dark:shadow-none docked full-width top-0 z-50">
+<div class="flex justify-between items-center w-full px-lg md:px-xl max-w-container-max mx-auto h-[72px]">
+<div class="flex items-center gap-xl">
+<a class="text-title-lg font-title-lg font-bold text-primary dark:text-primary-fixed" href="#">SMART EVENT</a>
+<nav class="hidden md:flex gap-lg h-full items-center">
+<a class="text-on-secondary-container dark:text-on-secondary-fixed-variant font-medium hover:text-primary-container dark:hover:text-primary-fixed-dim transition-colors h-full flex items-center" href="#">Discovery</a>
+<a class="text-on-secondary-container dark:text-on-secondary-fixed-variant font-medium hover:text-primary-container dark:hover:text-primary-fixed-dim transition-colors h-full flex items-center" href="#">Location</a>
+<a class="text-on-secondary-container dark:text-on-secondary-fixed-variant font-medium hover:text-primary-container dark:hover:text-primary-fixed-dim transition-colors h-full flex items-center" href="#">My Tickets</a>
+</nav>
+</div>
+<div class="flex items-center gap-md">
+<button class="hidden md:flex items-center justify-center p-sm rounded-full hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+</button>
+<button class="bg-primary text-on-primary px-lg py-sm rounded-lg font-label-md text-label-md hover:opacity-90 transition-opacity">Login</button>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="flex-grow w-full max-w-container-max mx-auto px-lg md:px-xl py-xl space-y-xl">
+<!-- Header Section -->
+<div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-md">
+<div>
+<h1 class="text-headline-lg font-headline-lg text-on-surface">Vietnam Electronic Weekend 2024</h1>
+<p class="text-body-md font-body-md text-on-surface-variant mt-sm">Sales &amp; Inventory Dashboard</p>
+</div>
+<div class="flex gap-md">
+<button class="flex items-center gap-sm px-md py-sm bg-surface-container border border-outline-variant rounded-lg text-label-md font-label-md hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined" data-icon="download">download</span>
+                    Export CSV
+                </button>
+</div>
+</div>
+<!-- Metric Cards Grid -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-md">
+<!-- Tổng số lượng -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-lg shadow-[0px_4px_20px_rgba(16,20,38,0.08)]">
+<div class="flex items-center gap-sm text-on-surface-variant mb-md">
+<span class="material-symbols-outlined text-[20px]" data-icon="confirmation_number">confirmation_number</span>
+<h3 class="text-label-md font-label-md">Tổng số lượng</h3>
+</div>
+<div class="text-headline-lg font-headline-lg font-numeric-tabular text-on-surface">15,000</div>
+<div class="text-label-sm font-label-sm text-secondary mt-sm">Total Capacity</div>
+</div>
+<!-- Đã bán -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-lg shadow-[0px_4px_20px_rgba(16,20,38,0.08)]">
+<div class="flex items-center gap-sm text-on-surface-variant mb-md">
+<span class="material-symbols-outlined text-[20px] text-primary" data-icon="check_circle">check_circle</span>
+<h3 class="text-label-md font-label-md">Đã bán</h3>
+</div>
+<div class="text-headline-lg font-headline-lg font-numeric-tabular text-primary">8,450</div>
+<div class="text-label-sm font-label-sm text-secondary mt-sm flex items-center gap-xs">
+<span class="material-symbols-outlined text-[16px] text-[#008000]" data-icon="trending_up">trending_up</span>
+<span class="text-[#008000]">56.3%</span> of total
+                </div>
+</div>
+<!-- Đang giữ -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-lg shadow-[0px_4px_20px_rgba(16,20,38,0.08)]">
+<div class="flex items-center gap-sm text-on-surface-variant mb-md">
+<span class="material-symbols-outlined text-[20px] text-tertiary-container" data-icon="pending_actions">pending_actions</span>
+<h3 class="text-label-md font-label-md">Đang giữ</h3>
+</div>
+<div class="text-headline-lg font-headline-lg font-numeric-tabular text-on-surface">320</div>
+<div class="text-label-sm font-label-sm text-secondary mt-sm">In cart / Pending payment</div>
+</div>
+<!-- Còn lại -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-lg shadow-[0px_4px_20px_rgba(16,20,38,0.08)]">
+<div class="flex items-center gap-sm text-on-surface-variant mb-md">
+<span class="material-symbols-outlined text-[20px]" data-icon="inventory_2">inventory_2</span>
+<h3 class="text-label-md font-label-md">Còn lại</h3>
+</div>
+<div class="text-headline-lg font-headline-lg font-numeric-tabular text-on-surface">6,230</div>
+<div class="text-label-sm font-label-sm text-secondary mt-sm">Available for sale</div>
+</div>
+</div>
+<!-- Breakdown Section -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl shadow-[0px_4px_20px_rgba(16,20,38,0.08)] overflow-hidden">
+<div class="p-lg border-b border-outline-variant bg-surface-container-low">
+<h2 class="text-title-lg font-title-lg text-on-surface">Inventory Breakdown by Loại vé</h2>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="border-b border-outline-variant bg-surface-bright">
+<th class="p-md text-label-sm font-label-sm text-on-surface-variant uppercase tracking-wider">Loại vé</th>
+<th class="p-md text-label-sm font-label-sm text-on-surface-variant uppercase tracking-wider text-right">Price</th>
+<th class="p-md text-label-sm font-label-sm text-on-surface-variant uppercase tracking-wider text-right">Total</th>
+<th class="p-md text-label-sm font-label-sm text-on-surface-variant uppercase tracking-wider text-right">Sold</th>
+<th class="p-md text-label-sm font-label-sm text-on-surface-variant uppercase tracking-wider w-1/3">Progress</th>
+</tr>
+</thead>
+<tbody class="text-body-md font-body-md divide-y divide-outline-variant">
+<!-- VIP -->
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="p-md font-medium text-on-surface">VIP 2-Day Pass</td>
+<td class="p-md text-right font-numeric-tabular text-on-surface-variant">4,500,000 ₫</td>
+<td class="p-md text-right font-numeric-tabular text-on-surface">2,000</td>
+<td class="p-md text-right font-numeric-tabular text-primary font-medium">1,850</td>
+<td class="p-md">
+<div class="flex items-center gap-sm">
+<div class="w-full h-sm bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full" style="width: 92.5%"></div>
+</div>
+<span class="text-label-sm font-label-sm text-on-surface-variant w-12 text-right">92%</span>
+</div>
+</td>
+</tr>
+<!-- Early Bird -->
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="p-md font-medium text-on-surface">Early Bird GA</td>
+<td class="p-md text-right font-numeric-tabular text-on-surface-variant">1,200,000 ₫</td>
+<td class="p-md text-right font-numeric-tabular text-on-surface">3,000</td>
+<td class="p-md text-right font-numeric-tabular text-primary font-medium">3,000</td>
+<td class="p-md">
+<div class="flex items-center gap-sm">
+<div class="w-full h-sm bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-[#008000] rounded-full" style="width: 100%"></div>
+</div>
+<span class="text-label-sm font-label-sm text-[#008000] font-medium w-12 text-right">100%</span>
+</div>
+</td>
+</tr>
+<!-- GA Phase 1 -->
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="p-md font-medium text-on-surface">GA Phase 1</td>
+<td class="p-md text-right font-numeric-tabular text-on-surface-variant">1,500,000 ₫</td>
+<td class="p-md text-right font-numeric-tabular text-on-surface">5,000</td>
+<td class="p-md text-right font-numeric-tabular text-primary font-medium">2,100</td>
+<td class="p-md">
+<div class="flex items-center gap-sm">
+<div class="w-full h-sm bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full" style="width: 42%"></div>
+</div>
+<span class="text-label-sm font-label-sm text-on-surface-variant w-12 text-right">42%</span>
+</div>
+</td>
+</tr>
+<!-- GA Phase 2 -->
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="p-md font-medium text-on-surface flex items-center gap-sm">
+                                GA Phase 2
+                                <span class="bg-surface-container px-sm py-[2px] rounded-full text-label-sm font-label-sm text-secondary">Locked</span>
+</td>
+<td class="p-md text-right font-numeric-tabular text-on-surface-variant">1,800,000 ₫</td>
+<td class="p-md text-right font-numeric-tabular text-on-surface">5,000</td>
+<td class="p-md text-right font-numeric-tabular text-primary font-medium">0</td>
+<td class="p-md">
+<div class="flex items-center gap-sm">
+<div class="w-full h-sm bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-outline-variant rounded-full" style="width: 0%"></div>
+</div>
+<span class="text-label-sm font-label-sm text-on-surface-variant w-12 text-right">0%</span>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-surface-container-highest dark:bg-inverse-surface border-t border-outline-variant dark:border-outline mt-auto">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-gutter px-lg py-xxl max-w-container-max mx-auto w-full">
+<div class="col-span-1 md:col-span-1 flex flex-col gap-md">
+<span class="text-headline-md font-headline-md text-primary dark:text-primary-fixed">SMART EVENT</span>
+<p class="text-label-sm font-label-sm text-on-surface-variant dark:text-on-secondary-fixed-variant">© 2024 SMART EVENT. All rights reserved.</p>
+</div>
+<div class="col-span-1 md:col-span-3 flex flex-wrap gap-lg md:justify-end items-center">
+<a class="text-body-md font-body-md text-on-surface-variant dark:text-on-secondary-fixed-variant hover:text-primary dark:hover:text-primary-fixed transition-colors focus:ring-2 focus:ring-primary focus:ring-offset-2" href="#">About Us</a>
+<a class="text-body-md font-body-md text-on-surface-variant dark:text-on-secondary-fixed-variant hover:text-primary dark:hover:text-primary-fixed transition-colors focus:ring-2 focus:ring-primary focus:ring-offset-2" href="#">Terms of Service</a>
+<a class="text-body-md font-body-md text-on-surface-variant dark:text-on-secondary-fixed-variant hover:text-primary dark:hover:text-primary-fixed transition-colors focus:ring-2 focus:ring-primary focus:ring-offset-2" href="#">Privacy Policy</a>
+<a class="text-body-md font-body-md text-on-surface-variant dark:text-on-secondary-fixed-variant hover:text-primary dark:hover:text-primary-fixed transition-colors focus:ring-2 focus:ring-primary focus:ring-offset-2" href="#">Contact Support</a>
+</div>
+</div>
+</footer>
+</body></html>

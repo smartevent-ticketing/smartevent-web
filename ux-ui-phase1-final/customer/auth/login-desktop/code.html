@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+
+<html lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SMART EVENT - Login</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary-fixed": "#e2dfff",
+                        "on-error-container": "#93000a",
+                        "primary": "#493ee5",
+                        "tertiary-fixed": "#ffdad6",
+                        "on-secondary-container": "#606379",
+                        "surface-container-low": "#f0f3ff",
+                        "secondary": "#5a5d73",
+                        "tertiary-container": "#d13e3a",
+                        "tertiary-fixed-dim": "#ffb3ac",
+                        "on-surface": "#111c2d",
+                        "on-primary-fixed-variant": "#321ed2",
+                        "background": "#f9f9ff",
+                        "surface": "#f9f9ff",
+                        "surface-container": "#e8eeff",
+                        "inverse-on-surface": "#ecf0ff",
+                        "surface-bright": "#f9f9ff",
+                        "on-primary": "#ffffff",
+                        "surface-dim": "#d0daf2",
+                        "secondary-container": "#dee1fb",
+                        "on-primary-container": "#fefaff",
+                        "tertiary": "#ae2424",
+                        "on-tertiary": "#ffffff",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary-fixed": "#dee1fb",
+                        "on-tertiary-fixed-variant": "#910913",
+                        "error": "#ba1a1a",
+                        "on-primary-fixed": "#0f0069",
+                        "surface-container-high": "#dfe8ff",
+                        "outline": "#777587",
+                        "on-secondary": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "surface-variant": "#d9e3fb",
+                        "on-tertiary-fixed": "#410003",
+                        "on-tertiary-container": "#fffaf9",
+                        "surface-container-highest": "#d9e3fb",
+                        "inverse-primary": "#c3c0ff",
+                        "primary-container": "#635bff",
+                        "on-error": "#ffffff",
+                        "inverse-surface": "#273143",
+                        "on-secondary-fixed-variant": "#42465a",
+                        "on-surface-variant": "#464555",
+                        "secondary-fixed-dim": "#c2c5de",
+                        "on-background": "#111c2d",
+                        "outline-variant": "#c7c4d8",
+                        "surface-tint": "#4c42e9",
+                        "on-secondary-fixed": "#171b2d",
+                        "primary-fixed-dim": "#c3c0ff"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    spacing: {
+                        "lg": "24px",
+                        "xxl": "48px",
+                        "container-max": "1280px",
+                        "xl": "32px",
+                        "sm": "8px",
+                        "base": "8px",
+                        "md": "16px",
+                        "gutter": "24px",
+                        "xs": "4px"
+                    },
+                    fontFamily: {
+                        "headline-lg": ["Be Vietnam Pro"],
+                        "label-md": ["Be Vietnam Pro"],
+                        "display-lg": ["Be Vietnam Pro"],
+                        "title-lg": ["Be Vietnam Pro"],
+                        "body-lg": ["Be Vietnam Pro"],
+                        "label-sm": ["Be Vietnam Pro"],
+                        "body-md": ["Be Vietnam Pro"],
+                        "numeric-tabular": ["Be Vietnam Pro"],
+                        "headline-md": ["Be Vietnam Pro"]
+                    },
+                    fontSize: {
+                        "headline-lg": ["32px", { lineHeight: "40px", letterSpacing: "-0.01em", fontWeight: "700" }],
+                        "label-md": ["14px", { lineHeight: "20px", fontWeight: "500" }],
+                        "display-lg": ["48px", { lineHeight: "60px", letterSpacing: "-0.02em", fontWeight: "700" }],
+                        "title-lg": ["20px", { lineHeight: "28px", fontWeight: "600" }],
+                        "body-lg": ["18px", { lineHeight: "28px", fontWeight: "400" }],
+                        "label-sm": ["12px", { lineHeight: "16px", letterSpacing: "0.02em", fontWeight: "500" }],
+                        "body-md": ["16px", { lineHeight: "24px", fontWeight: "400" }],
+                        "numeric-tabular": ["inherit", { lineHeight: "inherit", fontWeight: "inherit" }],
+                        "headline-md": ["24px", { lineHeight: "32px", fontWeight: "600" }]
+                    }
+                }
+            }
+        };
+    </script>
+<style>
+        .shadow-elevation-2 {
+            box-shadow: 0px 4px 20px rgba(16, 20, 38, 0.08);
+        }
+        .focus-ring {
+            outline: none;
+        }
+        .focus-ring:focus-visible {
+            box-shadow: 0 0 0 2px #f9f9ff, 0 0 0 4px #493ee5;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md h-screen flex flex-col antialiased">
+<!-- Top NavBar (Suppressed content, logo only for transactional intent) -->
+<header class="bg-surface border-b border-outline-variant shadow-sm w-full top-0 z-50">
+<div class="flex justify-between items-center w-full px-lg md:px-xl max-w-container-max mx-auto h-[72px]">
+<div class="flex items-center">
+<span class="text-title-lg font-title-lg font-bold text-primary">SMART EVENT</span>
+</div>
+<!-- Navigation links suppressed for login -->
+</div>
+</header>
+<!-- Main Content: Split Screen -->
+<main class="flex-grow flex w-full">
+<div class="flex flex-col md:flex-row w-full max-w-container-max mx-auto h-full items-center justify-center p-md lg:p-xxl gap-xl">
+<!-- Left Side: Visual -->
+<div class="hidden md:flex w-1/2 h-full items-center justify-center relative rounded-xl overflow-hidden shadow-elevation-2" style="min-height: 600px;">
+<div class="bg-cover bg-center w-full h-full absolute inset-0" data-alt="A highly detailed and energetic photograph of a massive live music concert in a modern stadium. The scene is illuminated by striking laser lights primarily in electric indigo and vivid magenta, piercing through atmospheric fog. A massive crowd of ecstatic fans can be seen cheering with their hands up in the air. The aesthetic is dynamic, modern, and high-tech, reflecting a premium live event ticketing platform. The lighting is dramatic but retains a clean, structured composition." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAxMY4vpvkkvJRClqnlnHQynNr71SKuD893b8QuQvUj1kYR9xzWJZdYaEltJtmXljFbYjfHdnHn3wrondbaZtkLWbQ7CoxeaoRfsjbL2bdZaxffeFp8jSTis1htIY6Yfo5ABA9eHQqoVeGichtCuEw9XJ-rS4Mkl4PjAAGoiqAcJ5ddTXYgIxogYwWanwImjedDAoA4QV1MjanGM17UiNvs9_JTqqltsTiPE39MqknkEyOHgvF8ASk1')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-[#111c2d]/80 to-transparent flex flex-col justify-end p-xl">
+<h2 class="text-headline-lg font-headline-lg text-on-primary mb-sm">Trải nghiệm không giới hạn</h2>
+<p class="text-body-lg font-body-lg text-on-primary/90">Tham gia hàng ngàn sự kiện âm nhạc, thể thao và văn hóa hàng đầu.</p>
+</div>
+</div>
+<!-- Right Side: Login Form -->
+<div class="w-full md:w-1/2 flex items-center justify-center p-md">
+<div class="bg-surface-container-lowest p-xl rounded-xl shadow-elevation-2 w-full max-w-[480px] border border-outline-variant">
+<div class="mb-xl text-center">
+<h1 class="text-headline-lg font-headline-lg text-on-surface mb-sm">Chào mừng trở lại</h1>
+<p class="text-body-md font-body-md text-on-surface-variant">Vui lòng đăng nhập để tiếp tục</p>
+</div>
+<form action="#" class="space-y-lg" method="POST">
+<!-- Email / Phone Input -->
+<div>
+<label class="block text-label-md font-label-md text-on-surface mb-xs" for="username">Email</label>
+<div class="relative">
+<div class="absolute inset-y-0 left-0 pl-sm flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-outline">person</span>
+</div>
+<input class="block w-full pl-xl pr-md py-[12px] bg-surface-bright border border-outline-variant rounded-lg text-body-md font-body-md text-on-surface focus-ring focus:border-primary transition-colors" id="username" name="username" placeholder="Nhập email" required="" style="border-radius: 10px;" type="text"/>
+</div>
+</div>
+<!-- Password Input -->
+<div>
+<label class="block text-label-md font-label-md text-on-surface mb-xs" for="password">Mật khẩu</label>
+<div class="relative">
+<div class="absolute inset-y-0 left-0 pl-sm flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-outline">lock</span>
+</div>
+<input class="block w-full pl-xl pr-md py-[12px] bg-surface-bright border border-outline-variant rounded-lg text-body-md font-body-md text-on-surface focus-ring focus:border-primary transition-colors" id="password" name="password" placeholder="Nhập mật khẩu" required="" style="border-radius: 10px;" type="password"/>
+<div class="absolute inset-y-0 right-0 pr-sm flex items-center cursor-pointer text-outline hover:text-on-surface transition-colors" onclick="togglePassword()">
+<span class="material-symbols-outlined" id="visibility-icon">visibility_off</span>
+</div>
+</div>
+</div>
+<!-- Primary Action -->
+<div class="pt-sm">
+<button class="w-full h-[48px] bg-primary text-on-primary text-label-md font-label-md font-bold rounded-lg hover:bg-primary-container focus-ring transition-colors shadow-elevation-2 flex items-center justify-center gap-sm" style="border-radius: 10px;" type="submit">
+                                Đăng nhập
+                                <span class="material-symbols-outlined text-[20px]">arrow_forward</span>
+</button>
+</div>
+</form>
+<!-- Secondary Action -->
+<div class="mt-xl text-center">
+<p class="text-body-md font-body-md text-on-surface-variant">
+                            Chưa có tài khoản? 
+                            <a class="text-primary font-medium hover:text-primary-container underline focus-ring rounded-sm" href="#">Đăng ký tài khoản mới</a>
+</p>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer (Minimal) -->
+<footer class="bg-surface-container-highest border-t border-outline-variant w-full mt-auto">
+<div class="flex justify-center items-center w-full px-lg py-md max-w-container-max mx-auto">
+<p class="text-label-sm font-label-sm text-on-surface-variant">© 2024 SMART EVENT. All rights reserved.</p>
+</div>
+</footer>
+<script>
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const visibilityIcon = document.getElementById('visibility-icon');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                visibilityIcon.textContent = 'visibility';
+            } else {
+                passwordInput.type = 'password';
+                visibilityIcon.textContent = 'visibility_off';
+            }
+        }
+    </script>
+</body></html>

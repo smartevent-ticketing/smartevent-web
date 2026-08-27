@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+
+<html lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SMART EVENT - Live Scanner</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-error-container": "#93000a",
+                      "on-primary": "#ffffff",
+                      "inverse-on-surface": "#ecf0ff",
+                      "on-primary-fixed": "#0f0069",
+                      "on-tertiary-container": "#fffaf9",
+                      "on-surface": "#111c2d",
+                      "inverse-surface": "#273143",
+                      "on-secondary-container": "#606379",
+                      "primary-container": "#635bff",
+                      "surface-dim": "#d0daf2",
+                      "on-surface-variant": "#464555",
+                      "on-tertiary-fixed-variant": "#910913",
+                      "background": "#f9f9ff",
+                      "surface-variant": "#d9e3fb",
+                      "tertiary": "#ae2424",
+                      "surface-container-low": "#f0f3ff",
+                      "inverse-primary": "#c3c0ff",
+                      "tertiary-fixed-dim": "#ffb3ac",
+                      "on-tertiary": "#ffffff",
+                      "error": "#ba1a1a",
+                      "secondary-container": "#dee1fb",
+                      "surface-container-high": "#dfe8ff",
+                      "outline-variant": "#c7c4d8",
+                      "on-error": "#ffffff",
+                      "surface": "#f9f9ff",
+                      "primary-fixed-dim": "#c3c0ff",
+                      "secondary-fixed-dim": "#c2c5de",
+                      "surface-container-highest": "#d9e3fb",
+                      "on-background": "#111c2d",
+                      "surface-bright": "#f9f9ff",
+                      "on-primary-fixed-variant": "#321ed2",
+                      "on-primary-container": "#fefaff",
+                      "primary-fixed": "#e2dfff",
+                      "on-secondary-fixed": "#171b2d",
+                      "secondary": "#5a5d73",
+                      "tertiary-container": "#d13e3a",
+                      "secondary-fixed": "#dee1fb",
+                      "on-secondary-fixed-variant": "#42465a",
+                      "tertiary-fixed": "#ffdad6",
+                      "surface-tint": "#4c42e9",
+                      "surface-container-lowest": "#ffffff",
+                      "on-secondary": "#ffffff",
+                      "primary": "#493ee5",
+                      "error-container": "#ffdad6",
+                      "outline": "#777587",
+                      "on-tertiary-fixed": "#410003",
+                      "surface-container": "#e8eeff"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "xl": "32px",
+                      "md": "16px",
+                      "lg": "24px",
+                      "container-max": "1280px",
+                      "xs": "4px",
+                      "base": "8px",
+                      "sm": "8px",
+                      "xxl": "48px",
+                      "gutter": "24px"
+              },
+              "fontFamily": {
+                      "display-lg": [
+                              "Be Vietnam Pro"
+                      ],
+                      "label-md": [
+                              "Be Vietnam Pro"
+                      ],
+                      "title-lg": [
+                              "Be Vietnam Pro"
+                      ],
+                      "numeric-tabular": [
+                              "Be Vietnam Pro"
+                      ],
+                      "headline-md": [
+                              "Be Vietnam Pro"
+                      ],
+                      "body-lg": [
+                              "Be Vietnam Pro"
+                      ],
+                      "headline-lg": [
+                              "Be Vietnam Pro"
+                      ],
+                      "body-md": [
+                              "Be Vietnam Pro"
+                      ],
+                      "label-sm": [
+                              "Be Vietnam Pro"
+                      ]
+              },
+              "fontSize": {
+                      "display-lg": [
+                              "48px",
+                              {
+                                      "lineHeight": "60px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "label-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "title-lg": [
+                              "20px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "numeric-tabular": [
+                              "inherit",
+                              {
+                                      "lineHeight": "inherit",
+                                      "fontWeight": "inherit"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "label-sm": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.02em",
+                                      "fontWeight": "500"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<style>
+        body {
+            font-family: 'Be Vietnam Pro', sans-serif;
+            background-color: #000;
+            color: white;
+            overflow: hidden;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .camera-view {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 1;
+            /* Placeholder for camera feed */
+            background-color: #1a1a1a;
+        }
+
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            pointer-events: none; /* Let clicks pass through except where intended */
+        }
+
+        /* Dark overlay with cutout for scanning */
+        .scan-area-container {
+            flex-grow: 1;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            /* Using a mask to create the transparent scanning box */
+            -webkit-mask-image: linear-gradient(black, black),
+                                linear-gradient(black, black);
+            -webkit-mask-size: 100% 100%, 280px 280px;
+            -webkit-mask-position: center, center;
+            -webkit-mask-repeat: no-repeat, no-repeat;
+            -webkit-mask-composite: source-out;
+            mask-composite: subtract;
+            background: rgba(0, 0, 0, 0.7);
+        }
+
+        /* The glowing frame */
+        .scan-frame {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 280px;
+            height: 280px;
+            z-index: 3;
+            pointer-events: none;
+        }
+
+        .scan-frame::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 24px;
+        }
+        
+        /* Corner markers */
+        .corner {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            border-color: #493ee5; /* Electric Indigo */
+            border-style: solid;
+        }
+        .corner-tl { top: -2px; left: -2px; border-width: 4px 0 0 4px; border-top-left-radius: 24px; }
+        .corner-tr { top: -2px; right: -2px; border-width: 4px 4px 0 0; border-top-right-radius: 24px; }
+        .corner-bl { bottom: -2px; left: -2px; border-width: 0 0 4px 4px; border-bottom-left-radius: 24px; }
+        .corner-br { bottom: -2px; right: -2px; border-width: 0 4px 4px 0; border-bottom-right-radius: 24px; }
+
+        /* Scanning line animation */
+        .scan-line {
+            position: absolute;
+            top: 10%;
+            left: 5%;
+            width: 90%;
+            height: 2px;
+            background: #493ee5;
+            box-shadow: 0 0 10px #493ee5, 0 0 20px #493ee5;
+            animation: scan 2.5s infinite linear;
+            border-radius: 50%;
+        }
+
+        @keyframes scan {
+            0% { top: 10%; opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { top: 90%; opacity: 0; }
+        }
+
+        /* Interactive elements */
+        .ui-layer {
+            position: relative;
+            z-index: 10;
+            pointer-events: auto; /* Enable clicks here */
+        }
+        
+        .glass-panel {
+            background: rgba(39, 49, 67, 0.85); /* inverse-surface with opacity */
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Focus rings for accessibility */
+        .focus-ring-target:focus-visible {
+            outline: 2px solid #493ee5;
+            outline-offset: 2px;
+            border-radius: 8px;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-black text-white h-screen w-screen flex flex-col font-body-md text-body-md">
+<!-- Mock Camera Feed -->
+<div class="camera-view" data-alt="A slightly blurred background of a busy event entrance hall. People are walking by, some holding tickets. The lighting is moody and dramatic with blue and purple hues, typical of a concert venue entrance." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC3nI85qCWeQCmvgOScYrniJNDR2PQADmydHmqbys6l0z_-ZPUo-APgK4TXEeXSwfEiMagVnFfDZBGd-u238icstuW-WXQdEyNrcCY-THtN5LdYvN--370bbQnnYDfRanrZvkr3c0YdNtDzT7zXO6TT1bgekfkEd54kN_l2fXiPQzCRHIGkmq1Qy5VCj_bRNbTz9JUqIKGWXbUrNyko87g9VN9cuXTdTlVgycBOLgSvxFiZ78CadAwQ'); background-size: cover; background-position: center;"></div>
+<!-- Main Overlay -->
+<div class="overlay">
+<!-- Top Header: Event Info -->
+<header class="ui-layer w-full p-md bg-gradient-to-b from-black/80 to-transparent flex justify-between items-start pt-lg">
+<button aria-label="Quay lại" class="w-[48px] h-[48px] flex items-center justify-center rounded-full bg-black/40 hover:bg-black/60 transition-colors focus-ring-target">
+<span class="material-symbols-outlined text-white text-[24px]">arrow_back</span>
+</button>
+<div class="text-center flex-1 px-md">
+<div class="font-label-sm text-label-sm text-surface-variant uppercase tracking-wider mb-xs opacity-80">Đang Check-in</div>
+<h1 class="font-title-lg text-title-lg font-bold text-white leading-tight drop-shadow-md">
+                    Lễ Hội Âm Nhạc Mùa Hè 2024
+                </h1>
+<div class="inline-flex items-center gap-xs mt-sm bg-black/50 px-sm py-xs rounded-full border border-white/10">
+<span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+<span class="font-label-sm text-label-sm text-white">Camera Hoạt Động</span>
+</div>
+</div>
+<button aria-label="Cài đặt máy quét" class="w-[48px] h-[48px] flex items-center justify-center rounded-full bg-black/40 hover:bg-black/60 transition-colors focus-ring-target">
+<span class="material-symbols-outlined text-white text-[24px]">settings</span>
+</button>
+</header>
+<!-- Scanning Area -->
+<div class="scan-area-container">
+<!-- Cutout happens via CSS mask -->
+</div>
+<!-- The glowing frame that sits exactly over the cutout -->
+<div class="scan-frame">
+<div class="corner corner-tl"></div>
+<div class="corner corner-tr"></div>
+<div class="corner corner-bl"></div>
+<div class="corner corner-br"></div>
+<div class="scan-line"></div>
+<!-- Helper text -->
+<div class="absolute -bottom-xl left-0 right-0 text-center font-label-md text-label-md text-white drop-shadow-lg">
+                Căn chỉnh mã QR vào trong khung
+            </div>
+</div>
+<!-- Bottom Controls Panel -->
+<footer class="ui-layer glass-panel w-full pb-xl pt-lg px-lg rounded-t-[24px]">
+<!-- Gate Selection & Pause -->
+<div class="flex justify-between items-center mb-lg gap-md">
+<button class="flex-1 bg-surface/10 hover:bg-surface/20 border border-white/10 rounded-[12px] p-sm flex items-center justify-between transition-colors focus-ring-target">
+<div class="flex items-center gap-sm">
+<div class="w-[32px] h-[32px] rounded-full bg-primary/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary-fixed-dim text-[18px]">door_front</span>
+</div>
+<div class="text-left">
+<div class="font-label-sm text-label-sm text-surface-variant">Khu vực</div>
+<div class="font-label-md text-label-md font-semibold text-white">Cổng A - VIP</div>
+</div>
+</div>
+<span class="material-symbols-outlined text-white/50">expand_more</span>
+</button>
+<button class="h-[56px] px-lg bg-surface/10 hover:bg-surface/20 border border-white/10 rounded-[12px] flex items-center justify-center gap-sm transition-colors focus-ring-target text-white/90">
+<span class="material-symbols-outlined text-[20px]">pause_circle</span>
+<span class="font-label-md text-label-md font-semibold">Tạm dừng</span>
+</button>
+</div>
+<!-- Primary Actions -->
+<div class="grid grid-cols-2 gap-md">
+<button class="flex flex-col items-center justify-center gap-sm bg-surface/5 hover:bg-surface/15 border border-white/5 rounded-[16px] h-[96px] transition-all focus-ring-target group">
+<div class="w-[48px] h-[48px] rounded-full bg-white/10 flex items-center justify-center group-hover:bg-white/20 transition-colors">
+<span class="material-symbols-outlined text-white text-[24px]">keyboard</span>
+</div>
+<span class="font-label-md text-label-md text-white">Nhập Mã Thủ Công</span>
+</button>
+<button class="flex flex-col items-center justify-center gap-sm bg-surface/5 hover:bg-surface/15 border border-white/5 rounded-[16px] h-[96px] transition-all focus-ring-target group">
+<div class="w-[48px] h-[48px] rounded-full bg-white/10 flex items-center justify-center group-hover:bg-white/20 transition-colors">
+<span class="material-symbols-outlined text-white text-[24px]">flashlight_on</span>
+</div>
+<span class="font-label-md text-label-md text-white">Bật Đèn Flash</span>
+</button>
+</div>
+<!-- Safe Area Spacer for iOS -->
+<div class="h-xs mt-sm w-1/3 mx-auto bg-white/20 rounded-full"></div>
+</footer>
+</div>
+</body></html>

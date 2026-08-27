@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+
+<html class="light" lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Gửi hóa đơn qua email - SMART EVENT</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "inverse-surface": "#273143",
+                        "background": "#f9f9ff",
+                        "surface-tint": "#4c42e9",
+                        "on-primary-container": "#fefaff",
+                        "secondary-fixed-dim": "#c2c5de",
+                        "on-primary-fixed": "#0f0069",
+                        "secondary-fixed": "#dee1fb",
+                        "on-error-container": "#93000a",
+                        "surface-dim": "#d0daf2",
+                        "primary": "#493ee5",
+                        "on-secondary-fixed-variant": "#42465a",
+                        "on-secondary": "#ffffff",
+                        "tertiary-fixed-dim": "#ffb3ac",
+                        "tertiary-container": "#d13e3a",
+                        "on-surface-variant": "#464555",
+                        "secondary-container": "#dee1fb",
+                        "inverse-on-surface": "#ecf0ff",
+                        "on-tertiary-fixed": "#410003",
+                        "inverse-primary": "#c3c0ff",
+                        "on-primary": "#ffffff",
+                        "on-secondary-fixed": "#171b2d",
+                        "surface-container-lowest": "#ffffff",
+                        "outline": "#777587",
+                        "tertiary-fixed": "#ffdad6",
+                        "surface-container": "#e8eeff",
+                        "on-surface": "#111c2d",
+                        "error-container": "#ffdad6",
+                        "tertiary": "#ae2424",
+                        "primary-fixed": "#e2dfff",
+                        "secondary": "#5a5d73",
+                        "surface": "#f9f9ff",
+                        "outline-variant": "#c7c4d8",
+                        "surface-bright": "#f9f9ff",
+                        "on-error": "#ffffff",
+                        "on-tertiary-container": "#fffaf9",
+                        "primary-container": "#635bff",
+                        "on-background": "#111c2d",
+                        "error": "#ba1a1a",
+                        "surface-container-highest": "#d9e3fb",
+                        "primary-fixed-dim": "#c3c0ff",
+                        "surface-container-high": "#dfe8ff",
+                        "on-tertiary": "#ffffff",
+                        "surface-container-low": "#f0f3ff",
+                        "on-tertiary-fixed-variant": "#910913",
+                        "surface-variant": "#d9e3fb",
+                        "on-primary-fixed-variant": "#321ed2",
+                        "on-secondary-container": "#606379"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xs": "4px",
+                        "lg": "24px",
+                        "xl": "32px",
+                        "gutter": "24px",
+                        "xxl": "48px",
+                        "base": "8px",
+                        "sm": "8px",
+                        "container-max": "1280px",
+                        "md": "16px"
+                    },
+                    "fontFamily": {
+                        "display-lg": ["Be Vietnam Pro", "sans-serif"],
+                        "label-md": ["Be Vietnam Pro", "sans-serif"],
+                        "numeric-tabular": ["Be Vietnam Pro", "sans-serif"],
+                        "body-md": ["Be Vietnam Pro", "sans-serif"],
+                        "title-lg": ["Be Vietnam Pro", "sans-serif"],
+                        "label-sm": ["Be Vietnam Pro", "sans-serif"],
+                        "headline-lg": ["Be Vietnam Pro", "sans-serif"],
+                        "headline-md": ["Be Vietnam Pro", "sans-serif"],
+                        "body-lg": ["Be Vietnam Pro", "sans-serif"]
+                    },
+                    "fontSize": {
+                        "display-lg": ["48px", { "lineHeight": "60px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "fontWeight": "500" }],
+                        "numeric-tabular": ["inherit", { "lineHeight": "inherit", "fontWeight": "inherit" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "title-lg": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Be Vietnam Pro', sans-serif; }
+        .kinetic-pulse {
+            animation: pulse-border 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse-border {
+            0%, 100% { border-color: rgba(73, 62, 229, 0.2); }
+            50% { border-color: rgba(73, 62, 229, 0.6); box-shadow: 0 0 15px rgba(73, 62, 229, 0.1); }
+        }
+        .form-input:focus {
+            outline: none;
+            border-color: #493ee5;
+            box-shadow: 0 0 0 2px rgba(73, 62, 229, 0.2);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen flex flex-col antialiased">
+<!-- Top App Bar -->
+<header class="bg-surface dark:bg-surface-dim border-b border-outline-variant dark:border-outline sticky top-0 z-50 flex items-center w-full px-md h-[64px]">
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container-low transition-colors active:scale-95 text-on-surface-variant mr-xs">
+<span class="material-symbols-outlined" data-icon="close">close</span>
+</button>
+<h1 class="font-title-lg text-title-lg text-on-surface flex-1 truncate">Gửi hóa đơn qua email</h1>
+</header>
+<!-- Main Content -->
+<main class="flex-1 overflow-y-auto pb-[100px] px-md pt-lg">
+<!-- Invoice Info Card -->
+<div class="bg-surface-container-lowest rounded-xl p-md shadow-sm border border-outline-variant mb-lg relative overflow-hidden">
+<div class="absolute top-0 left-0 w-1 h-full bg-primary"></div>
+<div class="flex items-start gap-md">
+<div class="w-10 h-10 rounded-full bg-primary-fixed flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined" data-icon="receipt_long">receipt_long</span>
+</div>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider mb-xs">Mã hóa đơn</p>
+<p class="font-title-lg text-title-lg text-on-surface mb-sm">INV-20260822-ABC12345</p>
+<div class="flex items-center text-on-surface-variant">
+<span class="material-symbols-outlined text-[16px] mr-sm" data-icon="account_circle">account_circle</span>
+<span class="font-body-md text-body-md">customer@example.com</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Form Fields -->
+<div class="space-y-lg">
+<!-- Recipient Email -->
+<div class="space-y-xs">
+<label class="font-label-md text-label-md text-on-surface block" for="recipientEmail">Email người nhận (Không bắt buộc)</label>
+<div class="relative">
+<div class="absolute inset-y-0 left-0 pl-md flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-outline" data-icon="mail">mail</span>
+</div>
+<input class="form-input w-full h-[48px] pl-[44px] pr-md rounded-lg border border-outline-variant bg-surface-container-lowest font-body-md text-body-md text-on-surface transition-all kinetic-pulse" id="recipientEmail" placeholder="Nhập email..." type="email"/>
+</div>
+<p class="font-label-sm text-label-sm text-on-surface-variant mt-sm">Hóa đơn sẽ được gửi tới <span class="font-medium text-primary">customer@example.com</span> nếu để trống.</p>
+</div>
+<!-- Notes -->
+<div class="space-y-xs">
+<label class="font-label-md text-label-md text-on-surface block" for="notes">Ghi chú (Không bắt buộc)</label>
+<div class="relative">
+<textarea class="form-input w-full p-md rounded-lg border border-outline-variant bg-surface-container-lowest font-body-md text-body-md text-on-surface resize-none transition-all" id="notes" placeholder="Nhập ghi chú thêm..." rows="3"></textarea>
+</div>
+</div>
+<!-- Info Notice -->
+<div class="bg-surface-container-low rounded-lg p-md flex items-start gap-sm">
+<span class="material-symbols-outlined text-primary mt-[2px]" data-icon="info">info</span>
+<p class="font-body-md text-body-md text-on-surface-variant text-sm">Yêu cầu sẽ được xử lý trong nền và email sẽ đính kèm file PDF hóa đơn.</p>
+</div>
+</div>
+</main>
+<!-- Bottom Actions -->
+<div class="fixed bottom-0 left-0 right-0 p-md bg-surface border-t border-outline-variant pb-[max(16px,env(safe-area-inset-bottom))] shadow-[0_-4px_20px_rgba(16,20,38,0.04)] z-50">
+<div class="flex gap-md">
+<button class="flex-1 h-[48px] rounded-lg border border-outline-variant bg-surface-container-lowest font-label-md text-label-md text-on-surface font-semibold hover:bg-surface-container-low transition-colors active:scale-95">
+                Hủy
+            </button>
+<button class="flex-1 h-[48px] rounded-lg bg-primary font-label-md text-label-md text-on-primary font-semibold hover:bg-primary-container transition-colors active:scale-95 flex items-center justify-center gap-xs shadow-md">
+<span class="material-symbols-outlined text-[20px]" data-icon="send">send</span>
+                Gửi hóa đơn
+            </button>
+</div>
+</div>
+</body></html>

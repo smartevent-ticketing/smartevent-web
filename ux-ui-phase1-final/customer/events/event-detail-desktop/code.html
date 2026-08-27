@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+
+<html lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SMART EVENT - Event Detail</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-fixed": "#e2dfff",
+                        "on-error-container": "#93000a",
+                        "primary": "#493ee5",
+                        "tertiary-fixed": "#ffdad6",
+                        "on-secondary-container": "#606379",
+                        "surface-container-low": "#f0f3ff",
+                        "secondary": "#5a5d73",
+                        "tertiary-container": "#d13e3a",
+                        "tertiary-fixed-dim": "#ffb3ac",
+                        "on-surface": "#111c2d",
+                        "on-primary-fixed-variant": "#321ed2",
+                        "background": "#f9f9ff",
+                        "surface": "#f9f9ff",
+                        "surface-container": "#e8eeff",
+                        "inverse-on-surface": "#ecf0ff",
+                        "surface-bright": "#f9f9ff",
+                        "on-primary": "#ffffff",
+                        "surface-dim": "#d0daf2",
+                        "secondary-container": "#dee1fb",
+                        "on-primary-container": "#fefaff",
+                        "tertiary": "#ae2424",
+                        "on-tertiary": "#ffffff",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary-fixed": "#dee1fb",
+                        "on-tertiary-fixed-variant": "#910913",
+                        "error": "#ba1a1a",
+                        "on-primary-fixed": "#0f0069",
+                        "surface-container-high": "#dfe8ff",
+                        "outline": "#777587",
+                        "on-secondary": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "surface-variant": "#d9e3fb",
+                        "on-tertiary-fixed": "#410003",
+                        "on-tertiary-container": "#fffaf9",
+                        "surface-container-highest": "#d9e3fb",
+                        "inverse-primary": "#c3c0ff",
+                        "primary-container": "#635bff",
+                        "on-error": "#ffffff",
+                        "inverse-surface": "#273143",
+                        "on-secondary-fixed-variant": "#42465a",
+                        "on-surface-variant": "#464555",
+                        "secondary-fixed-dim": "#c2c5de",
+                        "on-background": "#111c2d",
+                        "outline-variant": "#c7c4d8",
+                        "surface-tint": "#4c42e9",
+                        "on-secondary-fixed": "#171b2d",
+                        "primary-fixed-dim": "#c3c0ff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "lg": "24px",
+                        "xxl": "48px",
+                        "container-max": "1280px",
+                        "xl": "32px",
+                        "sm": "8px",
+                        "base": "8px",
+                        "md": "16px",
+                        "gutter": "24px",
+                        "xs": "4px"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Be Vietnam Pro"],
+                        "label-md": ["Be Vietnam Pro"],
+                        "display-lg": ["Be Vietnam Pro"],
+                        "title-lg": ["Be Vietnam Pro"],
+                        "body-lg": ["Be Vietnam Pro"],
+                        "label-sm": ["Be Vietnam Pro"],
+                        "body-md": ["Be Vietnam Pro"],
+                        "numeric-tabular": ["Be Vietnam Pro"],
+                        "headline-md": ["Be Vietnam Pro"]
+                    },
+                    "fontSize": {
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "fontWeight": "500" }],
+                        "display-lg": ["48px", { "lineHeight": "60px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "title-lg": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "numeric-tabular": ["inherit", { "lineHeight": "inherit", "fontWeight": "inherit" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .custom-shadow-sm { box-shadow: 0px 4px 20px rgba(16, 20, 38, 0.08); }
+        .custom-shadow-lg { box-shadow: 0px 12px 32px rgba(16, 20, 38, 0.12); }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col">
+<!-- TopNavBar -->
+<header class="bg-surface dark:bg-surface-container-low text-primary dark:text-primary-fixed border-b border-outline-variant dark:border-outline shadow-sm dark:shadow-none docked full-width top-0 sticky z-50">
+<div class="flex justify-between items-center w-full px-lg md:px-xl max-w-container-max mx-auto h-[72px]">
+<div class="flex items-center gap-gutter">
+<a class="text-title-lg font-title-lg font-bold text-primary dark:text-primary-fixed" href="#">SMART EVENT</a>
+<nav class="hidden md:flex gap-lg h-full items-center">
+<a class="text-on-secondary-container dark:text-on-secondary-fixed-variant font-medium text-label-md font-label-md hover:text-primary-container dark:hover:text-primary-fixed-dim transition-colors h-full flex items-center" href="#">Discovery</a>
+<a class="text-on-secondary-container dark:text-on-secondary-fixed-variant font-medium text-label-md font-label-md hover:text-primary-container dark:hover:text-primary-fixed-dim transition-colors h-full flex items-center" href="#">Location</a>
+<a class="text-on-secondary-container dark:text-on-secondary-fixed-variant font-medium text-label-md font-label-md hover:text-primary-container dark:hover:text-primary-fixed-dim transition-colors h-full flex items-center" href="#">My Tickets</a>
+</nav>
+</div>
+<div class="flex items-center gap-md">
+<button class="hidden md:flex text-label-md font-label-md font-medium text-primary hover:text-primary-container transition-colors">Login</button>
+<div class="w-[40px] h-[40px] rounded-full bg-surface-container-high overflow-hidden border border-outline-variant cursor-pointer">
+<img alt="User Avatar" class="w-full h-full object-cover" data-alt="A modern, professional user avatar portrait in high resolution, soft studio lighting, light mode aesthetic with subtle cool tones, neutral background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCkTIhnOWdi28l-v397E5OEWgQwy18sewoVzHz2nDu2oF88VkRAl_he1fQq2c7L0Gbu9uvuN_oLEkHyLcQanOz4rZ5cQ_0up1GKRdXFfn0j-zWDFnKwqKReRbl2tyZDDgA25Ssqdpserjw-nI-O1YaPkp1sxyP4evSsou29KMUPnGZQ78Uf2lDIpuVLobB1v8xnwlCAxIZmbnKujwkr-NtWK970lMSQHmCi8QplkpcFp-G4iFUCZB2N"/>
+</div>
+</div>
+</div>
+</header>
+<main class="flex-grow w-full max-w-container-max mx-auto px-lg md:px-xl py-xl">
+<!-- Event Hero -->
+<div class="w-full rounded-xl overflow-hidden mb-lg relative bg-surface-container h-[400px]">
+<img alt="Event Banner" class="w-full h-full object-cover absolute inset-0" data-alt="A wide angle, cinematic shot of a vibrant outdoor electronic music festival stage at night. Bright electric indigo lasers and soft blue spotlights cut through the atmosphere. The crowd is energized. High resolution, crisp details, conveying excitement and high production value." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCjfqR_UpfpHIioJ1zPUoeLT94UpKIUKdmWpELT7UzNXWzEdF-L2OJ9NBfd74srnkJsF_wQdzRRxdyWwLRS4Z8ddxZ5xxYUweXq2gyV3EDRBK9RETrcThrtqT1Xz1G2L-EMuX1l7QLft5rlIF8FN-q2fTO8BMT9iTVPYqeYu66c3E0ynYDNK5qIztFrfL0xRt01z7HLth9kB2KvECyo8u_eXhvvCfWL5maW34RIDYC_sBSIrfpBWG8e"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
+<div class="absolute bottom-0 left-0 p-lg w-full text-white">
+<h1 class="text-display-lg font-display-lg mb-sm text-white drop-shadow-md">Neon Nights Music Festival 2024</h1>
+<div class="flex flex-wrap gap-lg text-body-md font-body-md opacity-90">
+<div class="flex items-center gap-xs">
+<span class="material-symbols-outlined" data-icon="calendar_month">calendar_month</span>
+<span>Sat, Oct 12, 2024 • 18:00 - 23:30</span>
+</div>
+<div class="flex items-center gap-xs">
+<span class="material-symbols-outlined" data-icon="location_on">location_on</span>
+<span>Stadium Arena, District 7, HCMC</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Layout: Main & Sidebar -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter">
+<!-- Main Content (Left) -->
+<div class="md:col-span-8 flex flex-col gap-lg">
+<!-- Quick Info Bar -->
+<div class="bg-surface rounded-lg p-md border border-outline-variant flex flex-wrap gap-md justify-between items-center custom-shadow-sm">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-primary bg-surface-container p-sm rounded-full" data-icon="music_note">music_note</span>
+<div>
+<p class="text-label-sm font-label-sm text-on-surface-variant">Category</p>
+<p class="text-label-md font-label-md text-on-surface">Live Concert</p>
+</div>
+</div>
+<div class="w-px h-8 bg-outline-variant hidden md:block"></div>
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-primary bg-surface-container p-sm rounded-full" data-icon="apartment">apartment</span>
+<div>
+<p class="text-label-sm font-label-sm text-on-surface-variant">Organizer</p>
+<p class="text-label-md font-label-md text-on-surface">Vibe Events Co.</p>
+</div>
+</div>
+<div class="w-px h-8 bg-outline-variant hidden md:block"></div>
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-primary bg-surface-container p-sm rounded-full" data-icon="payments">payments</span>
+<div>
+<p class="text-label-sm font-label-sm text-on-surface-variant">Price Range</p>
+<p class="text-label-md font-label-md text-on-surface font-numeric-tabular font-bold">500,000đ - 2,500,000đ</p>
+</div>
+</div>
+</div>
+<!-- Description -->
+<section class="bg-surface rounded-lg p-lg border border-outline-variant">
+<h2 class="text-headline-md font-headline-md text-on-surface mb-md">About The Event</h2>
+<div class="text-body-md font-body-md text-on-surface-variant space-y-md">
+<p>Get ready for the most electrifying night of the year! Neon Nights Music Festival returns with an unprecedented lineup of international and local artists. Experience mind-bending visual arts, state-of-the-art sound systems, and an atmosphere like no other.</p>
+<p>Join thousands of music lovers under the stars for a 6-hour journey through electronic, techno, and bass music. Food stalls and beverage stations will be available throughout the venue.</p>
+</div>
+</section>
+<!-- Venue Map -->
+<section class="bg-surface rounded-lg p-lg border border-outline-variant">
+<h2 class="text-headline-md font-headline-md text-on-surface mb-md">Venue Map</h2>
+<div class="w-full h-[300px] rounded-lg overflow-hidden bg-surface-container border border-outline-variant">
+<img alt="Venue Map" class="w-full h-full object-cover" data-location="Ho Chi Minh City" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC91W25V1dCdqN7NrRpnZR2HvZB9_e18H3ivAnGgpfbYmVNIbMdgK7LAMfJqLGzQQrQpKet4RwcUa9JScsAmr1MypGKKl0BEoT973m8a7ZfLRTxEikbYIaHtoNkpGVEiErX1I5b3KdPfKIeQqd9qB-nooMR7xela0SZC3FVQ4EwZhe59FrHP6nZooEcJW1FMw0l9L451ZHSVNtQCdwj1lPqAdtkg_SE4MS4EBN7Pb_6elPMIRekPJpD"/>
+</div>
+</section>
+</div>
+<!-- Sticky Sidebar (Right) -->
+<div class="md:col-span-4 relative">
+<div class="sticky top-[104px] bg-surface rounded-lg p-lg border border-outline-variant custom-shadow-lg flex flex-col gap-md">
+<div class="flex justify-between items-center border-b border-outline-variant pb-md">
+<h3 class="text-title-lg font-title-lg text-on-surface">Purchase Tickets</h3>
+<span class="bg-primary-fixed text-on-primary-fixed px-sm py-[2px] rounded-full text-label-sm font-label-sm font-bold uppercase tracking-wider">Early Bird</span>
+</div>
+<div class="flex flex-col gap-sm">
+<!-- Ticket Option 1 -->
+<div class="border border-outline-variant rounded-md p-md flex justify-between items-center hover:border-primary transition-colors cursor-pointer group">
+<div>
+<h4 class="text-label-md font-label-md text-on-surface group-hover:text-primary">GA Standing</h4>
+<p class="text-label-sm font-label-sm text-on-surface-variant font-numeric-tabular">500,000đ</p>
+</div>
+<button class="w-[32px] h-[32px] rounded border border-outline-variant flex items-center justify-center text-on-surface-variant hover:bg-surface-container">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+</button>
+</div>
+<!-- Ticket Option 2 -->
+<div class="border border-outline-variant rounded-md p-md flex justify-between items-center hover:border-primary transition-colors cursor-pointer group">
+<div>
+<h4 class="text-label-md font-label-md text-on-surface group-hover:text-primary">VIP Zone</h4>
+<p class="text-label-sm font-label-sm text-on-surface-variant font-numeric-tabular">1,500,000đ</p>
+</div>
+<button class="w-[32px] h-[32px] rounded border border-outline-variant flex items-center justify-center text-on-surface-variant hover:bg-surface-container">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+</button>
+</div>
+</div>
+<div class="mt-sm flex justify-between items-center text-title-lg font-title-lg">
+<span class="text-on-surface">Total:</span>
+<span class="text-primary font-numeric-tabular font-bold">0đ</span>
+</div>
+<button class="w-full h-[48px] bg-primary text-on-primary rounded-[10px] text-label-md font-label-md font-bold mt-sm hover:bg-primary/90 transition-colors focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-surface">
+                        Mua vé ngay
+                    </button>
+<p class="text-center text-label-sm font-label-sm text-on-surface-variant mt-xs">Secure transaction via SmartPay</p>
+</div>
+</div>
+</div>
+<!-- Related Events -->
+<section class="mt-xxl">
+<h2 class="text-headline-md font-headline-md text-on-surface mb-lg">Related Events</h2>
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-lg">
+<!-- Event Card 1 -->
+<div class="bg-surface border border-outline-variant rounded-lg overflow-hidden flex flex-col hover:custom-shadow-sm transition-shadow cursor-pointer">
+<div class="h-[160px] bg-surface-container relative">
+<img alt="Related Event 1" class="w-full h-full object-cover" data-alt="A brightly lit indoor classical concert hall. An orchestra is performing on stage. High-end, clean light mode aesthetic, sharp focus on the musicians, elegant atmosphere." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDojGiCn9l43MqgyBtpQHYpS5Nmc-gLnVaUoOm6WerjNdDfrpkY-KV_pPcuxGlIkuWg4lkLOP_FphFUka0-TwAA1ancK29arli0znP7Q-3PQqJdI7lZUf26EKm3478FK5PunsuLdrWOME7hR8dTavP7sQDnQJmmVP4tBK9QZEfn9N4zl5jgcdp2cD4hAoEjdGKRr3XR8ZB6mzFFoeKQdCf0Zx5jBXp6iKZs1Vl2VTJdlvMRNgwXCxTz"/>
+<div class="absolute top-sm right-sm bg-surface/90 backdrop-blur-sm px-sm py-[2px] rounded text-label-sm font-label-sm text-on-surface font-numeric-tabular font-bold">From 800k</div>
+</div>
+<div class="p-md flex flex-col gap-sm">
+<h3 class="text-title-lg font-title-lg text-on-surface line-clamp-1">Symphony of Lights</h3>
+<div class="text-label-sm font-label-sm text-on-surface-variant flex items-center gap-xs">
+<span class="material-symbols-outlined text-[16px]" data-icon="calendar_today">calendar_today</span> Oct 20, 2024
+                        </div>
+</div>
+</div>
+<!-- Event Card 2 -->
+<div class="bg-surface border border-outline-variant rounded-lg overflow-hidden flex flex-col hover:custom-shadow-sm transition-shadow cursor-pointer">
+<div class="h-[160px] bg-surface-container relative">
+<img alt="Related Event 2" class="w-full h-full object-cover" data-alt="A modern, minimalist tech conference stage. A speaker is presenting in front of a large, clean screen showing data visualizations. Bright, well-lit, professional corporate aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCdqzDXQYtwnYGP2CqppsOZmSEfy7Crso2p7h84mD8cspzQ1Rn-H44W15HB6Qusik_T8M_2jPCd9t3j5sh30DhrkU_OI3iquvvNrEEnlF1nLbgNvyF8kELiGeoKzJ1PoxiNoHjQ_nnrcGdR5P_XSSub2pg4IGtGdtqvxwEBGVkLU7GYuOBV1ftnlx3UPCU-Xro_tSXWK66BKeG-z3nVY-XYzhjlD9Vp4hlnEbhZ-H-AULxICGswdXmP"/>
+<div class="absolute top-sm right-sm bg-surface/90 backdrop-blur-sm px-sm py-[2px] rounded text-label-sm font-label-sm text-on-surface font-numeric-tabular font-bold">Free</div>
+</div>
+<div class="p-md flex flex-col gap-sm">
+<h3 class="text-title-lg font-title-lg text-on-surface line-clamp-1">Tech Innovators Summit</h3>
+<div class="text-label-sm font-label-sm text-on-surface-variant flex items-center gap-xs">
+<span class="material-symbols-outlined text-[16px]" data-icon="calendar_today">calendar_today</span> Nov 05, 2024
+                        </div>
+</div>
+</div>
+<!-- Event Card 3 -->
+<div class="bg-surface border border-outline-variant rounded-lg overflow-hidden flex flex-col hover:custom-shadow-sm transition-shadow cursor-pointer">
+<div class="h-[160px] bg-surface-container relative">
+<img alt="Related Event 3" class="w-full h-full object-cover" data-alt="An energetic contemporary dance performance in a modern theater setting. Dramatic but clean lighting highlighting the dancers against a neutral background. High clarity, artistic but structured aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC_eiIjSn7oRLTZOTcTJt6y0bgJNKyMahbXXGbEkiBEInynKNle6J2wIZMOVu3fNQVjeyRAsc6rof8gh14v8GVfORCoGGOOywby3Ec1dSxj1MZ7SflurNqCyV0SmeqORNedvz-vbTj4GvzmLi3eR_HK1nVPkCvohyVecgOljQmgLkcxkrZvTzbK2ASxlavEJFRQmbkq3S-wlcBYg5PlU1go5MSO1brhB1yrkydPx-07fgv65j2X6S7M"/>
+<div class="absolute top-sm right-sm bg-surface/90 backdrop-blur-sm px-sm py-[2px] rounded text-label-sm font-label-sm text-on-surface font-numeric-tabular font-bold">From 300k</div>
+</div>
+<div class="p-md flex flex-col gap-sm">
+<h3 class="text-title-lg font-title-lg text-on-surface line-clamp-1">Contemporary Movement Showcase</h3>
+<div class="text-label-sm font-label-sm text-on-surface-variant flex items-center gap-xs">
+<span class="material-symbols-outlined text-[16px]" data-icon="calendar_today">calendar_today</span> Nov 12, 2024
+                        </div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-surface-container-highest dark:bg-inverse-surface text-on-surface dark:text-inverse-on-surface border-t border-outline-variant dark:border-outline full-width bottom flat no shadows">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-gutter px-lg py-xxl max-w-container-max mx-auto text-body-md font-body-md">
+<div class="flex flex-col gap-sm md:col-span-1">
+<span class="text-headline-md font-headline-md text-primary dark:text-primary-fixed font-bold">SMART EVENT</span>
+<p class="text-label-sm font-label-sm text-on-surface-variant dark:text-on-secondary-fixed-variant mt-sm">Your premium platform for unforgettable experiences.</p>
+</div>
+<div class="flex flex-col gap-sm">
+<a class="text-on-surface-variant dark:text-on-secondary-fixed-variant hover:text-primary dark:hover:text-primary-fixed transition-colors focus:ring-2 focus:ring-primary focus:ring-offset-2" href="#">About Us</a>
+<a class="text-on-surface-variant dark:text-on-secondary-fixed-variant hover:text-primary dark:hover:text-primary-fixed transition-colors focus:ring-2 focus:ring-primary focus:ring-offset-2" href="#">Terms of Service</a>
+</div>
+<div class="flex flex-col gap-sm">
+<a class="text-on-surface-variant dark:text-on-secondary-fixed-variant hover:text-primary dark:hover:text-primary-fixed transition-colors focus:ring-2 focus:ring-primary focus:ring-offset-2" href="#">Privacy Policy</a>
+<a class="text-on-surface-variant dark:text-on-secondary-fixed-variant hover:text-primary dark:hover:text-primary-fixed transition-colors focus:ring-2 focus:ring-primary focus:ring-offset-2" href="#">Contact Support</a>
+</div>
+<div class="flex flex-col gap-sm md:items-end">
+<p class="text-label-sm font-label-sm text-on-surface-variant dark:text-on-secondary-fixed-variant">© 2024 SMART EVENT. All rights reserved.</p>
+</div>
+</div>
+</footer>
+</body></html>

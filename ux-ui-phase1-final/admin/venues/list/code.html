@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Quản lý Địa điểm - Kinetic Pulse Admin</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "background": "#f9f9ff",
+                      "on-background": "#111c2d",
+                      "on-error-container": "#93000a",
+                      "on-secondary-fixed": "#171b2d",
+                      "on-tertiary": "#ffffff",
+                      "surface-variant": "#d9e3fb",
+                      "inverse-surface": "#273143",
+                      "surface-container-high": "#dfe8ff",
+                      "surface-dim": "#d0daf2",
+                      "surface-container": "#e8eeff",
+                      "inverse-primary": "#c3c0ff",
+                      "primary-fixed-dim": "#c3c0ff",
+                      "inverse-on-surface": "#ecf0ff",
+                      "surface-tint": "#4c42e9",
+                      "on-tertiary-container": "#fffaf9",
+                      "on-error": "#ffffff",
+                      "on-surface-variant": "#464555",
+                      "error-container": "#ffdad6",
+                      "surface-bright": "#f9f9ff",
+                      "on-secondary-fixed-variant": "#42465a",
+                      "on-surface": "#111c2d",
+                      "surface-container-highest": "#d9e3fb",
+                      "primary-fixed": "#e2dfff",
+                      "primary": "#493ee5",
+                      "tertiary-fixed-dim": "#ffb3ac",
+                      "secondary-container": "#dee1fb",
+                      "primary-container": "#635bff",
+                      "on-tertiary-fixed-variant": "#910913",
+                      "on-secondary": "#ffffff",
+                      "secondary-fixed-dim": "#c2c5de",
+                      "on-primary-fixed": "#0f0069",
+                      "surface": "#f9f9ff",
+                      "outline": "#777587",
+                      "secondary": "#5a5d73",
+                      "error": "#ba1a1a",
+                      "tertiary": "#ae2424",
+                      "secondary-fixed": "#dee1fb",
+                      "outline-variant": "#c7c4d8",
+                      "on-tertiary-fixed": "#410003",
+                      "tertiary-fixed": "#ffdad6",
+                      "surface-container-lowest": "#ffffff",
+                      "on-primary-container": "#fefaff",
+                      "surface-container-low": "#f0f3ff",
+                      "on-primary": "#ffffff",
+                      "tertiary-container": "#d13e3a",
+                      "on-secondary-container": "#606379",
+                      "on-primary-fixed-variant": "#321ed2"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "md": "16px",
+                      "gutter": "24px",
+                      "xl": "32px",
+                      "lg": "24px",
+                      "xxl": "48px",
+                      "sm": "8px",
+                      "base": "8px",
+                      "container-max": "1280px",
+                      "xs": "4px"
+              },
+              "fontFamily": {
+                      "label-sm": [
+                              "Be Vietnam Pro"
+                      ],
+                      "body-lg": [
+                              "Be Vietnam Pro"
+                      ],
+                      "headline-lg": [
+                              "Be Vietnam Pro"
+                      ],
+                      "label-md": [
+                              "Be Vietnam Pro"
+                      ],
+                      "headline-md": [
+                              "Be Vietnam Pro"
+                      ],
+                      "display-lg": [
+                              "Be Vietnam Pro"
+                      ],
+                      "title-lg": [
+                              "Be Vietnam Pro"
+                      ],
+                      "body-md": [
+                              "Be Vietnam Pro"
+                      ],
+                      "numeric-tabular": [
+                              "Be Vietnam Pro"
+                      ]
+              },
+              "fontSize": {
+                      "label-sm": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.02em",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "label-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "display-lg": [
+                              "48px",
+                              {
+                                      "lineHeight": "60px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "title-lg": [
+                              "20px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "numeric-tabular": [
+                              "inherit",
+                              {
+                                      "lineHeight": "inherit",
+                                      "fontWeight": "inherit"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<style>
+        .table-shadow { box-shadow: 0px 4px 20px rgba(16, 20, 38, 0.08); }
+      </style>
+</head>
+<body class="bg-background text-on-background font-body-md text-body-md antialiased min-h-screen overflow-x-hidden flex">
+<!-- SideNavBar -->
+<aside class="bg-surface-container-lowest dark:bg-inverse-surface h-screen w-64 fixed left-0 top-0 overflow-y-auto border-r border-outline-variant dark:border-outline flex flex-col z-20">
+<div class="p-lg flex items-center gap-sm border-b border-outline-variant">
+<span class="material-symbols-outlined text-primary" style="font-size: 32px; font-variation-settings: 'FILL' 1;">graphic_eq</span>
+<div class="flex flex-col">
+<span class="font-headline-md text-headline-md font-bold text-primary dark:text-inverse-primary leading-none">Kinetic Pulse</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider mt-1">Platform Admin</span>
+</div>
+</div>
+<nav class="flex flex-col flex-1 p-md gap-base">
+<!-- Dashboard -->
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant dark:text-surface-variant hover:bg-surface-container dark:hover:bg-secondary-fixed-dim rounded-lg transition-colors group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">dashboard</span>
+<span class="font-label-md text-label-md">Tổng quan</span>
+</a>
+<!-- Event Approval -->
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant dark:text-surface-variant hover:bg-surface-container dark:hover:bg-secondary-fixed-dim rounded-lg transition-colors group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">how_to_reg</span>
+<span class="font-label-md text-label-md">Duyệt sự kiện</span>
+</a>
+<!-- Categories -->
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant dark:text-surface-variant hover:bg-surface-container dark:hover:bg-secondary-fixed-dim rounded-lg transition-colors group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">category</span>
+<span class="font-label-md text-label-md">Danh mục</span>
+</a>
+<!-- Venues (Active) -->
+<a class="flex items-center gap-md px-md py-sm bg-primary-container dark:bg-primary text-on-primary-container dark:text-on-primary rounded-lg font-bold scale-[0.98] transition-transform duration-150 shadow-sm" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">location_on</span>
+<span class="font-label-md text-label-md">Địa điểm</span>
+</a>
+<!-- Outbox -->
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant dark:text-surface-variant hover:bg-surface-container dark:hover:bg-secondary-fixed-dim rounded-lg transition-colors group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">outbox</span>
+<span class="font-label-md text-label-md">Hộp thư đi</span>
+</a>
+<!-- System Health -->
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant dark:text-surface-variant hover:bg-surface-container dark:hover:bg-secondary-fixed-dim rounded-lg transition-colors group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">health_and_safety</span>
+<span class="font-label-md text-label-md">Tình trạng hệ thống</span>
+</a>
+</nav>
+<!-- User Profile Pin to Bottom -->
+<div class="p-md mt-auto border-t border-outline-variant">
+<div class="flex items-center gap-sm">
+<img class="w-10 h-10 rounded-full object-cover border border-outline-variant" data-alt="A small, circular avatar image of a professional platform administrator, well-lit studio portrait, facing forward. Modern, clean aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDN6iXYOyH9yvtdwEVyenlEWJJyyff6EJheNw5sSf444qRYb6e5X3uZ_Hhq3Y7mcDONul5OKDis1685MIobbmKmk_NzLdQIf2l2vBA-PogjAc8zjAtr5Z4FQb1j22BOC5nbjqr_x0TLEyhkycQMPQuUbrHL-w3b5OpxLpVHgmIKYz2xmN293ZUZddy_Pzs7TlvM9LPWXjnQjLpxqXcYgVKOy3D5wjywNV2nOF2adNW3s9sLhcb9uKr1"/>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md font-bold text-on-surface">Admin User</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">admin@kineticpulse.io</span>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<div class="flex-1 ml-64 flex flex-col min-h-screen">
+<!-- TopNavBar -->
+<header class="bg-surface-bright dark:bg-surface-dim docked full-width top-0 h-16 border-b border-outline-variant dark:border-outline shadow-sm dark:shadow-none flex justify-between items-center px-lg sticky z-10 w-full">
+<div class="flex items-center w-1/3">
+<div class="relative w-full max-w-md">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-surface-container-low border border-outline-variant rounded-full font-body-md text-body-md text-on-surface focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all" placeholder="Tìm kiếm hệ thống..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-md">
+<button class="p-2 text-on-surface-variant hover:text-primary dark:hover:text-inverse-primary hover:bg-surface-container-high rounded-full transition-colors relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-1 right-1 w-2.5 h-2.5 bg-error rounded-full border-2 border-surface-bright"></span>
+</button>
+<button class="p-2 text-on-surface-variant hover:text-primary dark:hover:text-inverse-primary hover:bg-surface-container-high rounded-full transition-colors">
+<span class="material-symbols-outlined">settings</span>
+</button>
+</div>
+</header>
+<!-- Page Content -->
+<main class="flex-1 p-gutter bg-background overflow-y-auto">
+<!-- Page Header -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-md mb-xl">
+<div>
+<h1 class="font-headline-lg text-headline-lg text-on-background">Quản lý Địa điểm</h1>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1 max-w-2xl">Quản lý và giám sát tất cả các địa điểm sự kiện trên toàn nền tảng. Cập nhật sức chứa, trạng thái và chi tiết để đảm bảo cấu hình bán vé chính xác.</p>
+</div>
+<button class="flex items-center justify-center gap-sm h-12 px-6 bg-primary text-on-primary rounded-[10px] font-label-md text-label-md font-bold hover:bg-primary-container transition-colors shadow-sm whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background">
+<span class="material-symbols-outlined" style="font-size: 20px;">add</span>
+                    Thêm địa điểm mới
+                </button>
+</div>
+<!-- Metrics Cards (Bento-style layout) -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-gutter mb-xl">
+<!-- Total Venues -->
+<div class="bg-surface-container-lowest rounded-xl p-lg border border-outline-variant table-shadow flex flex-col justify-between h-full relative overflow-hidden">
+<div class="absolute top-0 right-0 p-4 opacity-10">
+<span class="material-symbols-outlined" style="font-size: 64px;">location_city</span>
+</div>
+<div>
+<h3 class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-2">Tổng địa điểm</h3>
+<div class="font-display-lg text-display-lg text-primary font-numeric-tabular">124</div>
+</div>
+<div class="flex items-center gap-xs mt-4 text-on-secondary-container">
+<span class="material-symbols-outlined text-tertiary" style="font-size: 16px;">trending_up</span>
+<span class="font-label-sm text-label-sm">+12 tháng này</span>
+</div>
+</div>
+<!-- Most Used Venue -->
+<div class="bg-surface-container-lowest rounded-xl p-lg border border-outline-variant table-shadow flex flex-col justify-between h-full">
+<div>
+<h3 class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-2">Địa điểm hoạt động nhất</h3>
+<div class="font-title-lg text-title-lg text-on-surface font-bold leading-tight line-clamp-2">Stadium M</div>
+</div>
+<div class="flex items-center justify-between mt-4">
+<div class="flex items-center gap-sm">
+<img class="w-10 h-10 rounded-lg object-cover" data-alt="A small thumbnail showing a massive, modern sports stadium lit up at night, high contrast, clean architecture." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAPRtxt2iZnFlaEPobDA5eFDawGgeAndvpqOxPae0zDZ6bGmw7mga42Y2TBJXHwGccB_X-wqO9nM69d93HCimi3K2nhGFlQJcqzszBkOQoFWHimg1Hq-syFyZJBP328_t4tNwue5lIq5Xu_kl6oYV3YePBjEzwW-QJG5T_ZbqQeJ1dghvFAr-ktBzuROxfKDbLd8KMxnS3HPr1jLAWyvrUIA7kyXWNBBIRNO9rzv2PXiC7DnVvnj946"/>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface">42 Sự kiện</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">90 Ngày qua</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Active Status -->
+<div class="bg-primary text-on-primary rounded-xl p-lg table-shadow flex flex-col justify-between h-full relative overflow-hidden">
+<!-- Decorative pattern overlay -->
+<div class="absolute inset-0 opacity-20" style="background-image: radial-gradient(circle at 2px 2px, white 1px, transparent 0); background-size: 20px 20px;"></div>
+<div class="relative z-10">
+<h3 class="font-label-md text-label-md text-inverse-primary uppercase tracking-wider mb-2">Trạng thái vận hành</h3>
+<div class="flex items-end gap-2">
+<div class="font-display-lg text-display-lg font-numeric-tabular leading-none">94%</div>
+<div class="font-label-md text-label-md mb-2 opacity-80">Hoạt động</div>
+</div>
+</div>
+<div class="w-full bg-primary-fixed-dim/30 rounded-full h-2 mt-4 relative z-10 overflow-hidden">
+<div class="bg-white h-2 rounded-full" style="width: 94%"></div>
+</div>
+</div>
+</div>
+<!-- Data Table Section -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl table-shadow overflow-hidden flex flex-col">
+<!-- Table Controls Toolbar -->
+<div class="p-md border-b border-outline-variant bg-surface-container-low/50 flex flex-col sm:flex-row justify-between items-center gap-md">
+<!-- Search -->
+<div class="relative w-full sm:w-72">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant" style="font-size: 20px;">search</span>
+<input class="w-full pl-10 pr-4 py-2 h-10 bg-surface-container-lowest border border-outline-variant rounded-lg font-body-md text-body-md text-on-surface focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all" placeholder="Tìm kiếm địa điểm theo tên..." type="text"/>
+</div>
+<!-- Filters -->
+<div class="flex items-center gap-sm w-full sm:w-auto">
+<select class="h-10 px-4 bg-surface-container-lowest border border-outline-variant rounded-lg font-label-md text-label-md text-on-surface focus:outline-none focus:ring-2 focus:ring-primary appearance-none cursor-pointer">
+<option value="">Tất cả trạng thái</option>
+<option value="active">Hoạt động</option>
+<option value="inactive">Không hoạt động</option>
+<option value="maintenance">Bảo trì</option>
+</select>
+<button class="h-10 px-4 bg-surface-container-lowest border border-outline-variant rounded-lg font-label-md text-label-md text-on-surface hover:bg-surface-container transition-colors flex items-center gap-xs">
+<span class="material-symbols-outlined" style="font-size: 18px;">filter_list</span>
+                            Bộ lọc khác
+                        </button>
+</div>
+</div>
+<!-- Table Container (Scrollable horizontally if needed) -->
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low border-b border-outline-variant">
+<th class="py-4 px-6 font-label-md text-label-md text-on-surface-variant font-semibold uppercase tracking-wider">Địa điểm</th>
+<th class="py-4 px-6 font-label-md text-label-md text-on-surface-variant font-semibold uppercase tracking-wider">Vị trí</th>
+<th class="py-4 px-6 font-label-md text-label-md text-on-surface-variant font-semibold uppercase tracking-wider text-right">Sức chứa</th>
+<th class="py-4 px-6 font-label-md text-label-md text-on-surface-variant font-semibold uppercase tracking-wider">Trạng thái</th>
+<th class="py-4 px-6 font-label-md text-label-md text-on-surface-variant font-semibold uppercase tracking-wider text-right">Thao tác</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant">
+<!-- Row 1 -->
+<tr class="hover:bg-surface-container-lowest transition-colors group">
+<td class="py-4 px-6">
+<div class="flex items-center gap-md">
+<img class="w-12 h-12 rounded-lg object-cover border border-outline-variant" data-alt="Thumbnail photo of an indoor arena, brightly lit, modern seating, high quality photography." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAJUk89JfHVhv45y2-XTP3nHkIIKVrV1OxEqh1zmAqQPtDTEgSp71m8U4n0eAEYRdthgGhD2URaR-cV43OlgyGq5e7Tr5rZsRpuheBXF8T4j0zyZuKj5FGe_xRxM8vPbq5FkH2JZYrS_hv2ad4akHhJ_D-NAeu5BoS3PdrKVZcG8ntdxT54xsg2tr3VUCswJbLbNcwdlvF8ppduhqqmwkaujvtH4JY463iLrResfh2lzkn3sFHHgEjm"/>
+<div>
+<div class="font-title-lg text-title-lg font-semibold text-on-surface group-hover:text-primary transition-colors">National Indoor Arena</div>
+<div class="font-label-sm text-label-sm text-on-surface-variant">ID: VEN-1042</div>
+</div>
+</div>
+</td>
+<td class="py-4 px-6">
+<div class="flex flex-col">
+<span class="font-body-md text-body-md text-on-surface">1200 Arena Way</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Quận 1, HCMC</span>
+</div>
+</td>
+<td class="py-4 px-6 text-right">
+<span class="font-body-md text-body-md font-numeric-tabular font-medium text-on-surface">15,000</span>
+</td>
+<td class="py-4 px-6">
+<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-[#E6F4EA] text-[#137333]">
+                                        Hoạt động
+                                    </span>
+</td>
+<td class="py-4 px-6 text-right">
+<div class="flex items-center justify-end gap-sm opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-2 text-on-surface-variant hover:text-primary bg-surface-container-low hover:bg-surface-container rounded-md transition-colors" title="Chỉnh sửa">
+<span class="material-symbols-outlined" style="font-size: 20px;">edit</span>
+</button>
+<button class="p-2 text-on-surface-variant hover:text-error bg-surface-container-low hover:bg-error-container rounded-md transition-colors" title="Xóa">
+<span class="material-symbols-outlined" style="font-size: 20px;">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-surface-container-lowest transition-colors group">
+<td class="py-4 px-6">
+<div class="flex items-center gap-md">
+<div class="w-12 h-12 rounded-lg bg-surface-container-high flex items-center justify-center border border-outline-variant text-on-surface-variant">
+<span class="material-symbols-outlined">festival</span>
+</div>
+<div>
+<div class="font-title-lg text-title-lg font-semibold text-on-surface group-hover:text-primary transition-colors">Riverside Festival Grounds</div>
+<div class="font-label-sm text-label-sm text-on-surface-variant">ID: VEN-2091</div>
+</div>
+</div>
+</td>
+<td class="py-4 px-6">
+<div class="flex flex-col">
+<span class="font-body-md text-body-md text-on-surface">Park Avenue Ext</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Quận 2, HCMC</span>
+</div>
+</td>
+<td class="py-4 px-6 text-right">
+<span class="font-body-md text-body-md font-numeric-tabular font-medium text-on-surface">35,000</span>
+</td>
+<td class="py-4 px-6">
+<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-[#E6F4EA] text-[#137333]">
+                                        Hoạt động
+                                    </span>
+</td>
+<td class="py-4 px-6 text-right">
+<div class="flex items-center justify-end gap-sm opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-2 text-on-surface-variant hover:text-primary bg-surface-container-low hover:bg-surface-container rounded-md transition-colors" title="Chỉnh sửa">
+<span class="material-symbols-outlined" style="font-size: 20px;">edit</span>
+</button>
+<button class="p-2 text-on-surface-variant hover:text-error bg-surface-container-low hover:bg-error-container rounded-md transition-colors" title="Xóa">
+<span class="material-symbols-outlined" style="font-size: 20px;">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-surface-container-lowest transition-colors group">
+<td class="py-4 px-6">
+<div class="flex items-center gap-md">
+<img class="w-12 h-12 rounded-lg object-cover border border-outline-variant" data-alt="Thumbnail photo of a classic theater interior with red velvet seats and ornate architecture." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB_rIkOUTdmqSR4yy5uFnS6ch7Qh4AuMZV0ZMNlnThBarKbYGwzafw2vCLQjWf55u3eq2slX6HjwapTn5KXoD1z_jnoOdLBZifYKxhiiVv78RR4iKggdt8G8nHoDuzisjonp2vaBgykLKqetrivCOcIDgL3P2-M2ShWVeiM1jwCCEbmiJz5i6qpZVYYDWqYqNYu0Hi9zv3ypBwb4TbayKHBQfQi5aDQR4PMcsRrjdNgI1oEM9NIByKo"/>
+<div>
+<div class="font-title-lg text-title-lg font-semibold text-on-surface group-hover:text-primary transition-colors">Grand Opera House</div>
+<div class="font-label-sm text-label-sm text-on-surface-variant">ID: VEN-0034</div>
+</div>
+</div>
+</td>
+<td class="py-4 px-6">
+<div class="flex flex-col">
+<span class="font-body-md text-body-md text-on-surface">7 Công trường Lam Sơn</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Quận 1, HCMC</span>
+</div>
+</td>
+<td class="py-4 px-6 text-right">
+<span class="font-body-md text-body-md font-numeric-tabular font-medium text-on-surface">800</span>
+</td>
+<td class="py-4 px-6">
+<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-error-container text-on-error-container">
+                                        Bảo trì
+                                    </span>
+</td>
+<td class="py-4 px-6 text-right">
+<div class="flex items-center justify-end gap-sm opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-2 text-on-surface-variant hover:text-primary bg-surface-container-low hover:bg-surface-container rounded-md transition-colors" title="Chỉnh sửa">
+<span class="material-symbols-outlined" style="font-size: 20px;">edit</span>
+</button>
+<button class="p-2 text-on-surface-variant hover:text-error bg-surface-container-low hover:bg-error-container rounded-md transition-colors" title="Xóa">
+<span class="material-symbols-outlined" style="font-size: 20px;">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="hover:bg-surface-container-lowest transition-colors group">
+<td class="py-4 px-6">
+<div class="flex items-center gap-md">
+<div class="w-12 h-12 rounded-lg bg-surface-container-high flex items-center justify-center border border-outline-variant text-on-surface-variant">
+<span class="material-symbols-outlined">stadium</span>
+</div>
+<div>
+<div class="font-title-lg text-title-lg font-semibold text-on-surface group-hover:text-primary transition-colors">City Stadium</div>
+<div class="font-label-sm text-label-sm text-on-surface-variant">ID: VEN-5512</div>
+</div>
+</div>
+</td>
+<td class="py-4 px-6">
+<div class="flex flex-col">
+<span class="font-body-md text-body-md text-on-surface">99 Sports Blvd</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Quận 7, HCMC</span>
+</div>
+</td>
+<td class="py-4 px-6 text-right">
+<span class="font-body-md text-body-md font-numeric-tabular font-medium text-on-surface">45,000</span>
+</td>
+<td class="py-4 px-6">
+<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-[#FCE8E6] text-[#C5221F]">
+                                        Không hoạt động
+                                    </span>
+</td>
+<td class="py-4 px-6 text-right">
+<div class="flex items-center justify-end gap-sm opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-2 text-on-surface-variant hover:text-primary bg-surface-container-low hover:bg-surface-container rounded-md transition-colors" title="Chỉnh sửa">
+<span class="material-symbols-outlined" style="font-size: 20px;">edit</span>
+</button>
+<button class="p-2 text-on-surface-variant hover:text-error bg-surface-container-low hover:bg-error-container rounded-md transition-colors" title="Xóa">
+<span class="material-symbols-outlined" style="font-size: 20px;">delete</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Table Pagination -->
+<div class="p-md border-t border-outline-variant bg-surface-container-lowest flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Hiển thị 1 đến 4 trong số 124 địa điểm</span>
+<div class="flex items-center gap-xs">
+<button class="w-8 h-8 flex items-center justify-center rounded border border-outline-variant text-on-surface-variant hover:bg-surface-container-low transition-colors disabled:opacity-50" disabled="">
+<span class="material-symbols-outlined" style="font-size: 18px;">chevron_left</span>
+</button>
+<button class="w-8 h-8 flex items-center justify-center rounded bg-primary text-on-primary font-label-sm text-label-sm font-semibold">1</button>
+<button class="w-8 h-8 flex items-center justify-center rounded border border-outline-variant text-on-surface hover:bg-surface-container-low font-label-sm text-label-sm transition-colors">2</button>
+<button class="w-8 h-8 flex items-center justify-center rounded border border-outline-variant text-on-surface hover:bg-surface-container-low font-label-sm text-label-sm transition-colors">3</button>
+<span class="px-1 text-on-surface-variant">...</span>
+<button class="w-8 h-8 flex items-center justify-center rounded border border-outline-variant text-on-surface-variant hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined" style="font-size: 18px;">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

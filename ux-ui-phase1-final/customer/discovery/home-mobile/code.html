@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+
+<html lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SMART EVENT</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-container-lowest": "#ffffff",
+                      "primary": "#493ee5",
+                      "primary-fixed": "#e2dfff",
+                      "tertiary": "#ae2424",
+                      "on-secondary-fixed": "#171b2d",
+                      "tertiary-fixed": "#ffdad6",
+                      "secondary": "#5a5d73",
+                      "on-secondary-container": "#606379",
+                      "on-primary-fixed": "#0f0069",
+                      "on-tertiary-fixed": "#410003",
+                      "on-tertiary-fixed-variant": "#910913",
+                      "secondary-fixed-dim": "#c2c5de",
+                      "secondary-fixed": "#dee1fb",
+                      "on-background": "#111c2d",
+                      "tertiary-fixed-dim": "#ffb3ac",
+                      "outline": "#777587",
+                      "inverse-primary": "#c3c0ff",
+                      "surface-dim": "#d0daf2",
+                      "on-secondary-fixed-variant": "#42465a",
+                      "outline-variant": "#c7c4d8",
+                      "on-error": "#ffffff",
+                      "error-container": "#ffdad6",
+                      "surface": "#f9f9ff",
+                      "inverse-on-surface": "#ecf0ff",
+                      "background": "#f9f9ff",
+                      "error": "#ba1a1a",
+                      "on-primary-container": "#fefaff",
+                      "surface-variant": "#d9e3fb",
+                      "primary-container": "#635bff",
+                      "secondary-container": "#dee1fb",
+                      "on-secondary": "#ffffff",
+                      "surface-tint": "#4c42e9",
+                      "on-tertiary-container": "#fffaf9",
+                      "tertiary-container": "#d13e3a",
+                      "surface-bright": "#f9f9ff",
+                      "on-primary-fixed-variant": "#321ed2",
+                      "on-surface-variant": "#464555",
+                      "surface-container-low": "#f0f3ff",
+                      "surface-container-highest": "#d9e3fb",
+                      "surface-container-high": "#dfe8ff",
+                      "surface-container": "#e8eeff",
+                      "on-error-container": "#93000a",
+                      "on-surface": "#111c2d",
+                      "inverse-surface": "#273143",
+                      "on-tertiary": "#ffffff",
+                      "on-primary": "#ffffff",
+                      "primary-fixed-dim": "#c3c0ff"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "gutter": "24px",
+                      "xl": "32px",
+                      "md": "16px",
+                      "base": "8px",
+                      "lg": "24px",
+                      "sm": "8px",
+                      "xs": "4px",
+                      "container-max": "1280px",
+                      "xxl": "48px"
+              },
+              "fontFamily": {
+                      "label-md": [
+                              "Be Vietnam Pro"
+                      ],
+                      "body-md": [
+                              "Be Vietnam Pro"
+                      ],
+                      "label-sm": [
+                              "Be Vietnam Pro"
+                      ],
+                      "body-lg": [
+                              "Be Vietnam Pro"
+                      ],
+                      "headline-lg": [
+                              "Be Vietnam Pro"
+                      ],
+                      "numeric-tabular": [
+                              "Be Vietnam Pro"
+                      ],
+                      "title-lg": [
+                              "Be Vietnam Pro"
+                      ],
+                      "headline-md": [
+                              "Be Vietnam Pro"
+                      ],
+                      "display-lg": [
+                              "Be Vietnam Pro"
+                      ]
+              },
+              "fontSize": {
+                      "label-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "label-sm": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.02em",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "numeric-tabular": [
+                              "inherit",
+                              {
+                                      "lineHeight": "inherit",
+                                      "fontWeight": "inherit"
+                              }
+                      ],
+                      "title-lg": [
+                              "20px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "display-lg": [
+                              "48px",
+                              {
+                                      "lineHeight": "60px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+    </script>
+<style>
+        /* Hide scrollbar for carousel but keep functionality */
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        
+        /* Padding safe area for iOS */
+        .pb-safe {
+            padding-bottom: env(safe-area-inset-bottom, 16px);
+        }
+        
+        /* Tonal layering shadow from style guidance */
+        .shadow-level-2 {
+            box-shadow: 0px 4px 20px rgba(16, 20, 38, 0.08);
+        }
+        
+        /* Ensures body has background color */
+        body {
+            background-color: #F7F8FC; /* Level 0 Base from guidance */
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col md:hidden pb-24">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-surface border-b border-outline-variant shadow-sm flex items-center justify-between px-md h-12 max-w-container-max mx-auto">
+<button aria-label="Search" class="text-secondary active:scale-95 transition-transform hover:bg-surface-container-high rounded-full p-1">
+<span class="material-symbols-outlined">search</span>
+</button>
+<div class="font-headline-md text-headline-md font-bold text-primary tracking-tight">SMART EVENT</div>
+<button aria-label="User profile avatar" class="text-secondary active:scale-95 transition-transform hover:bg-surface-container-high rounded-full p-1">
+<div class="w-7 h-7 rounded-full bg-secondary-container flex items-center justify-center text-primary font-bold text-xs">U</div>
+</button>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-1 mt-12 px-md py-md space-y-xl">
+<!-- Search Bar (In-page) -->
+<section class="mt-2">
+<div class="relative w-full shadow-level-2 rounded-lg bg-surface">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">search</span>
+<input class="w-full pl-10 pr-4 py-3 rounded-lg border border-outline-variant focus:border-primary focus:ring-2 focus:ring-primary focus:ring-offset-2 outline-none transition-all text-body-md font-body-md bg-surface text-on-surface placeholder:text-outline-variant h-12" placeholder="Tìm kiếm sự kiện, nghệ sĩ..." type="text"/>
+</div>
+</section>
+<!-- Category Chips -->
+<section>
+<div class="flex overflow-x-auto gap-sm hide-scrollbar pb-2">
+<button class="whitespace-nowrap px-4 py-2 rounded-full bg-primary text-on-primary font-label-md text-label-md shadow-sm active:scale-95 transition-transform">Tất cả</button>
+<button class="whitespace-nowrap px-4 py-2 rounded-full bg-surface border border-outline-variant text-on-surface-variant font-label-md text-label-md hover:bg-surface-container-low active:scale-95 transition-transform">Âm nhạc</button>
+<button class="whitespace-nowrap px-4 py-2 rounded-full bg-surface border border-outline-variant text-on-surface-variant font-label-md text-label-md hover:bg-surface-container-low active:scale-95 transition-transform">Thể thao</button>
+<button class="whitespace-nowrap px-4 py-2 rounded-full bg-surface border border-outline-variant text-on-surface-variant font-label-md text-label-md hover:bg-surface-container-low active:scale-95 transition-transform">Sân khấu</button>
+<button class="whitespace-nowrap px-4 py-2 rounded-full bg-surface border border-outline-variant text-on-surface-variant font-label-md text-label-md hover:bg-surface-container-low active:scale-95 transition-transform">Workshop</button>
+</div>
+</section>
+<!-- Featured Carousel (Published Events) -->
+<section>
+<h2 class="font-title-lg text-title-lg text-on-surface mb-md font-semibold">Sự kiện nổi bật</h2>
+<div class="flex overflow-x-auto gap-md hide-scrollbar snap-x snap-mandatory pb-4">
+<!-- Event Card 1 -->
+<div class="min-w-[280px] w-[85vw] max-w-[320px] bg-surface rounded-xl border border-outline-variant shadow-sm flex flex-col snap-center overflow-hidden">
+<div class="h-40 w-full relative">
+<img alt="Event cover image" class="w-full h-full object-cover rounded-t-xl" data-alt="A vibrant concert stage viewed from the audience perspective, illuminated with electric indigo and bright magenta lighting. A modern ticketing app aesthetic, high energy, crisp and clear focus on the stage lights and silhouette of a performer, captured in a clean, modern style suitable for a light mode event ticketing platform." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCmIqpzNWzdkpuao-avWckC1IwFTtW4Gi2DMTvNtptjNxGfVl46JmopPtOLe2yyd52sQRpgyS6EZeR2oxfpdEB-Pdyg_QSPzGznd0GwbtJTnRXA1yAjDGL8Nz_LUD7GsNXj3xjZmmGvNtJ8zJtmjqVwvd2jXlRuZM3CpsG08cw_2bPFlo4p2xvu3Y8ceFn5zFaYIKPv5-KixPW6SZ1JMXSYdyS2hUcC_rdjumXlJ_rNYZGCFYNGZYAD"/>
+<div class="absolute top-2 left-2 bg-primary text-on-primary text-xs font-bold px-2 py-1 rounded-md opacity-90 backdrop-blur-sm shadow-sm">HOT</div>
+</div>
+<div class="p-md flex-1 flex flex-col justify-between">
+<div>
+<div class="flex items-center gap-1 text-primary text-xs font-label-sm mb-1">
+<span class="material-symbols-outlined text-[14px]">calendar_month</span>
+<span>24 Th10, 2024</span>
+</div>
+<h3 class="font-title-lg text-title-lg text-on-surface leading-tight mb-1 truncate">Lễ Hội Âm Nhạc Gió Thu</h3>
+<div class="flex items-center gap-1 text-secondary text-sm mb-3">
+<span class="material-symbols-outlined text-[16px]">location_on</span>
+<span class="truncate">Sân vận động Mỹ Đình, Hà Nội</span>
+</div>
+</div>
+<div class="flex items-end justify-between mt-auto">
+<div class="text-xs text-secondary flex flex-col">
+<span>Từ</span>
+<span class="font-numeric-tabular font-bold text-lg text-primary">500.000 VNĐ</span>
+</div>
+<button class="w-10 h-10 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center active:scale-90 transition-transform">
+<span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Event Card 2 -->
+<div class="min-w-[280px] w-[85vw] max-w-[320px] bg-surface rounded-xl border border-outline-variant shadow-sm flex flex-col snap-center overflow-hidden">
+<div class="h-40 w-full relative">
+<img alt="Event cover image" class="w-full h-full object-cover rounded-t-xl" data-alt="A dynamic theatrical stage play in progress, featuring actors in colorful costumes under dramatic spotlighting against a modern, minimal set design. The scene is brightly lit overall to suit a light mode ticketing app, conveying a sense of artistic performance and structured storytelling with high-contrast shadows only from the stage lights." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBMC7WYxeJiI1ZODLQrfX4uFlgBwOSYLe2abny7wa6A2hNslNCn4FGBwokeWghzjsJmO5noyL5m_t4Nbfd1shICZGbLtJIfbg-cIoCW99RhcqYFXCOZg48o5DOrWkPoSpXaiq_n3qdn2viCAmiG4pGQOnNN4Z0J35ba0ebMz_EDV_jUGAtJK2p61Wt8eGPLGC8aqqceoqPbSpyJ-UHibzfwx3j21SdB28nMGI1BHeMvshtTwKC_4y-x"/>
+</div>
+<div class="p-md flex-1 flex flex-col justify-between">
+<div>
+<div class="flex items-center gap-1 text-primary text-xs font-label-sm mb-1">
+<span class="material-symbols-outlined text-[14px]">calendar_month</span>
+<span>05 Th11, 2024</span>
+</div>
+<h3 class="font-title-lg text-title-lg text-on-surface leading-tight mb-1 truncate">Kịch: Chuyện Làng Hoa</h3>
+<div class="flex items-center gap-1 text-secondary text-sm mb-3">
+<span class="material-symbols-outlined text-[16px]">location_on</span>
+<span class="truncate">Nhà hát Lớn Hà Nội, Hà Nội</span>
+</div>
+</div>
+<div class="flex items-end justify-between mt-auto">
+<div class="text-xs text-secondary flex flex-col">
+<span>Từ</span>
+<span class="font-numeric-tabular font-bold text-lg text-primary">250.000 VNĐ</span>
+</div>
+<button class="w-10 h-10 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center active:scale-90 transition-transform">
+<span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Upcoming Events List -->
+<section>
+<div class="flex items-center justify-between mb-md">
+<h2 class="font-title-lg text-title-lg text-on-surface font-semibold">Sắp diễn ra</h2>
+<a class="text-primary font-label-md text-label-md font-semibold hover:underline" href="#">Xem tất cả</a>
+</div>
+<div class="flex flex-col gap-md">
+<!-- List Item 1 -->
+<div class="bg-surface rounded-xl border border-outline-variant shadow-sm flex overflow-hidden p-2 gap-3 active:bg-surface-container-low transition-colors">
+<div class="w-24 h-24 flex-shrink-0 relative rounded-lg overflow-hidden">
+<img alt="Workshop image" class="w-full h-full object-cover" data-alt="A beautifully composed flat lay of art supplies on a pristine white desk, including colorful paints, brushes, and a blank canvas, illuminated by soft natural daylight. The aesthetic is clean, modern, and inspiring, perfectly suited for a creative workshop listing in a light mode digital interface, with a cohesive electric indigo accent color subtly incorporated." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA9TFr1QXQDbIoFoB1a-IBgn7MsI7SvwTr0hPcYtwAoDbGr3512rwzf5qY9mX-VmEgo9dRc6lECDQaOxvMwQf_UN3UINmmTETw4aG4KU-T2V-RN0maujaQJnmSC3bDsTH0o5Akh7xVjY9cL4z21OSa8B-BHWkOepYBpCn8b-TNKzq77wMJjJ0VJZ6qpc-hw0osvtIaBKw6qSWk4XNgnZM_cy96h3ZlLhp2-6MbBPuddRzVn34bZWcjw"/>
+</div>
+<div class="flex-1 flex flex-col justify-between py-1 pr-1 min-w-0">
+<div>
+<div class="flex items-center gap-1 text-tertiary text-xs font-label-sm mb-1 font-semibold">
+<span class="material-symbols-outlined text-[12px]">schedule</span>
+<span>Còn 3 ngày</span>
+</div>
+<h3 class="font-label-md text-label-md text-on-surface font-bold leading-tight mb-1 truncate">Workshop Vẽ Tranh Màu Nước</h3>
+<div class="flex items-center gap-1 text-secondary text-xs truncate">
+<span class="material-symbols-outlined text-[14px]">location_on</span>
+<span class="truncate">Q.1, TP. Hồ Chí Minh</span>
+</div>
+</div>
+<div class="font-numeric-tabular font-bold text-sm text-primary text-right mt-1">
+                            150.000 VNĐ
+                        </div>
+</div>
+</div>
+<!-- List Item 2 -->
+<div class="bg-surface rounded-xl border border-outline-variant shadow-sm flex overflow-hidden p-2 gap-3 active:bg-surface-container-low transition-colors">
+<div class="w-24 h-24 flex-shrink-0 relative rounded-lg overflow-hidden">
+<img alt="Sports event image" class="w-full h-full object-cover" data-alt="A marathon starting line filled with energetic runners in bright athletic gear, captured in bright morning sunlight. The scene conveys motion, health, and community spirit. The overall tone is bright, modern, and dynamic, fitting a light-mode event ticketing application, ensuring clear focus on the runners." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAXYsuKHih0FdMfCIWpZaUiUSW6RrSRQfDXWLrV3_tSzBiU5vWqceBDucCSOz6EAM_GL_FtvHXcu70mLqxTFJ1ZJS8YM_UhzF19h2ggaABb9yrhj_sB5WlzZHrEXP8DqZMM5fvo-KC1l0LjWHJut6K50Lw0TYcKsfgvKeLkdPkn_ldr5ZkkTrYljC2uyr-ac_2rcwruPNkht1j9NEqPzCjZ1hhB4dOrbh5D5IwHyxSNTpC30XachqAv"/>
+</div>
+<div class="flex-1 flex flex-col justify-between py-1 pr-1 min-w-0">
+<div>
+<div class="flex items-center gap-1 text-primary text-xs font-label-sm mb-1 font-semibold">
+<span class="material-symbols-outlined text-[12px]">calendar_month</span>
+<span>12 Th11, 2024</span>
+</div>
+<h3 class="font-label-md text-label-md text-on-surface font-bold leading-tight mb-1 truncate">Giải Chạy Marathon Mùa Thu</h3>
+<div class="flex items-center gap-1 text-secondary text-xs truncate">
+<span class="material-symbols-outlined text-[14px]">location_on</span>
+<span class="truncate">Hồ Gươm, Hà Nội</span>
+</div>
+</div>
+<div class="font-numeric-tabular font-bold text-sm text-primary text-right mt-1">
+                            300.000 VNĐ
+                        </div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 w-full z-50 rounded-t-xl bg-surface-container-lowest border-t border-outline-variant shadow-lg flex justify-around items-center h-16 px-sm pb-safe md:hidden">
+<a class="flex flex-col items-center justify-center text-primary font-bold bg-primary-fixed rounded-full px-4 py-1 hover:opacity-80 active:scale-90 transition-transform duration-150" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">home</span>
+<span class="font-label-sm text-label-sm mt-0.5 text-primary font-bold">Trang chủ</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary hover:opacity-80 active:scale-90 transition-transform duration-150 px-2 py-1" href="#">
+<span class="material-symbols-outlined">explore</span>
+<span class="font-label-sm text-label-sm mt-0.5">Khám phá</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary hover:opacity-80 active:scale-90 transition-transform duration-150 px-2 py-1" href="#">
+<span class="material-symbols-outlined">confirmation_number</span>
+<span class="font-label-sm text-label-sm mt-0.5">Vé của tôi</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary hover:opacity-80 active:scale-90 transition-transform duration-150 px-2 py-1" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-sm text-label-sm mt-0.5">Tài khoản</span>
+</a>
+</nav>
+</body></html>

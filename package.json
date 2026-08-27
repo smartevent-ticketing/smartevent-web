@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "api:generate": "openapi-typescript http://localhost:8080/v3/api-docs -o src/lib/api/schema.d.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.7.0",
@@ -15,6 +16,7 @@
     "clsx": "^2.1.1",
     "lucide-react": "^1.33.0",
     "next": "16.3.2",
+    "openapi-fetch": "^0.17.0",
     "react": "19.2.8",
     "react-dom": "19.2.8",
     "shadcn": "^4.19.0",
@@ -28,6 +30,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.3.2",
+    "openapi-typescript": "^7.13.0",
     "tailwindcss": "^4",
     "typescript": "^5"
   }
