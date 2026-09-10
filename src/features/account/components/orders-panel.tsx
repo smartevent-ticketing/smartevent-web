@@ -1,9 +1,12 @@
 "use client"
 
+import { useState } from "react"
 import Link from "next/link"
-import { CreditCard, Loader2 } from "lucide-react"
+import { CreditCard, Eye, Loader2 } from "lucide-react"
 import { ActionFeedback } from "@/components/shared/action-feedback"
 import { useCustomerOrders } from "@/features/account/hooks/use-orders"
+import { OrderDetailDialog } from "@/features/account/components/order-detail-dialog"
+import { CancelOrderDialog } from "@/features/account/components/cancel-order-dialog"
 
 export function CustomerOrdersPanel() {
   const {
@@ -14,6 +17,16 @@ export function CustomerOrdersPanel() {
     cancellingOrderId,
     handleCancelOrder,
   } = useCustomerOrders()
+
+  const [selectedOrderForDetail, setSelectedOrderForDetail] = useState<any | null>(null)
+  const [orderToCancel, setOrderToCancel] = useState<any | null>(null)
+
+  const handleConfirmCancel = async () => {
+    if (!orderToCancel?.id) return
+    await handleCancelOrder(orderToCancel.id)
+    setOrderToCancel(null)
+  }
+
   return (
     <div className="space-y-6">
       <ActionFeedback message={feedbackMessage} onDismiss={() => setFeedbackMessage(null)} />
@@ -83,6 +96,15 @@ export function CustomerOrdersPanel() {
                         </span>
                       </td>
                       <td className="px-6 py-4 text-right space-x-2">
+                        <button
+                          type="button"
+                          onClick={() => setSelectedOrderForDetail(ord)}
+                          className="px-3 py-1.5 bg-surface-container hover:bg-surface-container-high text-on-surface text-xs font-semibold rounded-lg transition cursor-pointer inline-flex items-center gap-1"
+                        >
+                          <Eye className="size-3.5" />
+                          <span>Chi tiết</span>
+                        </button>
+
                         {isPending && ord.id && (
                           <>
                             <Link
@@ -93,15 +115,11 @@ export function CustomerOrdersPanel() {
                             </Link>
                             <button
                               type="button"
-                              onClick={() => handleCancelOrder(ord.id!)}
+                              onClick={() => setOrderToCancel(ord)}
                               disabled={cancellingOrderId === ord.id}
                               className="px-3 py-1.5 border border-red-200 text-red-600 hover:bg-red-50 text-xs font-semibold rounded-lg transition cursor-pointer disabled:opacity-50"
                             >
-                              {cancellingOrderId === ord.id ? (
-                                <Loader2 className="size-3.5 animate-spin" />
-                              ) : (
-                                "Hủy"
-                              )}
+                              Hủy
                             </button>
                           </>
                         )}
@@ -114,6 +132,29 @@ export function CustomerOrdersPanel() {
           </div>
         )}
       </div>
+
+      {/* Dialogs */}
+      {selectedOrderForDetail && (
+        <OrderDetailDialog
+          order={selectedOrderForDetail}
+          isOpen={Boolean(selectedOrderForDetail)}
+          onClose={() => setSelectedOrderForDetail(null)}
+          onRequestCancel={(orderId) => {
+            const found = orders.find((o) => o.id === orderId)
+            if (found) setOrderToCancel(found)
+          }}
+        />
+      )}
+
+      {orderToCancel && (
+        <CancelOrderDialog
+          orderCode={orderToCancel.orderCode || orderToCancel.id}
+          isOpen={Boolean(orderToCancel)}
+          isCancelling={cancellingOrderId === orderToCancel.id}
+          onConfirm={handleConfirmCancel}
+          onClose={() => setOrderToCancel(null)}
+        />
+      )}
     </div>
   )
 }

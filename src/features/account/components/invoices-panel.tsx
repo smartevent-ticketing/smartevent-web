@@ -1,8 +1,11 @@
 "use client"
 
-import { Download, FileText, Loader2, Mail } from "lucide-react"
+import { useState } from "react"
+import { Download, Eye, FileText, Loader2, Mail } from "lucide-react"
 import { ActionFeedback } from "@/components/shared/action-feedback"
 import { useCustomerInvoices } from "@/features/account/hooks/use-invoices"
+import { InvoiceDetailDialog } from "@/features/account/components/invoice-detail-dialog"
+import { InvoiceEmailDialog } from "@/features/account/components/invoice-email-dialog"
 
 export function CustomerInvoicesPanel() {
   const {
@@ -15,6 +18,10 @@ export function CustomerInvoicesPanel() {
     handleDownloadInvoicePdf,
     handleSendInvoiceEmail,
   } = useCustomerInvoices()
+
+  const [selectedInvoiceForDetail, setSelectedInvoiceForDetail] = useState<any | null>(null)
+  const [selectedInvoiceForEmail, setSelectedInvoiceForEmail] = useState<any | null>(null)
+
   return (
     <div className="space-y-6">
       <ActionFeedback message={feedbackMessage} onDismiss={() => setFeedbackMessage(null)} />
@@ -67,7 +74,16 @@ export function CustomerInvoicesPanel() {
                   </p>
                 </div>
 
-                <div className="flex items-center gap-2">
+                <div className="flex flex-wrap items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setSelectedInvoiceForDetail(inv)}
+                    className="px-3 py-1.5 bg-white border border-outline-variant rounded-xl text-xs font-semibold text-on-surface hover:bg-surface-container flex items-center gap-1.5 cursor-pointer shadow-xs"
+                  >
+                    <Eye className="size-3.5 text-primary" />
+                    <span>Xem chi tiết</span>
+                  </button>
+
                   <button
                     type="button"
                     onClick={() => handleDownloadInvoicePdf(inv)}
@@ -84,7 +100,7 @@ export function CustomerInvoicesPanel() {
 
                   <button
                     type="button"
-                    onClick={() => handleSendInvoiceEmail(inv)}
+                    onClick={() => setSelectedInvoiceForEmail(inv)}
                     disabled={sendingInvoiceId === inv.id}
                     className="px-3 py-1.5 bg-white border border-outline-variant rounded-xl text-xs font-semibold text-on-surface hover:bg-surface-container flex items-center gap-1.5 cursor-pointer shadow-xs disabled:opacity-50"
                   >
@@ -93,7 +109,7 @@ export function CustomerInvoicesPanel() {
                     ) : (
                       <Mail className="size-3.5 text-primary" />
                     )}
-                    <span>Gửi lại qua email</span>
+                    <span>Gửi qua email</span>
                   </button>
                 </div>
               </div>
@@ -101,6 +117,27 @@ export function CustomerInvoicesPanel() {
           </div>
         )}
       </div>
+
+      {/* Dialogs */}
+      {selectedInvoiceForDetail && (
+        <InvoiceDetailDialog
+          invoice={selectedInvoiceForDetail}
+          isOpen={Boolean(selectedInvoiceForDetail)}
+          onClose={() => setSelectedInvoiceForDetail(null)}
+          onDownloadPdf={handleDownloadInvoicePdf}
+        />
+      )}
+
+      {selectedInvoiceForEmail && (
+        <InvoiceEmailDialog
+          invoice={selectedInvoiceForEmail}
+          isOpen={Boolean(selectedInvoiceForEmail)}
+          onClose={() => setSelectedInvoiceForEmail(null)}
+          onSendEmail={async (inv, customEmail) => {
+            await handleSendInvoiceEmail({ ...inv, recipientEmail: customEmail })
+          }}
+        />
+      )}
     </div>
   )
 }

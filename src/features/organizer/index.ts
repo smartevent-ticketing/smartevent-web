@@ -1,5 +1,6 @@
 export { EventCreateWizard } from "./event-create-wizard"
 export { OrganizerDashboardView } from "./organizer-dashboard-view"
+export { EventManagementView } from "./event-management-view"
 
 export { OrganizerDashboardPanel } from "./components/dashboard-panel"
 export { OrganizerEventsPanel } from "./components/events-panel"

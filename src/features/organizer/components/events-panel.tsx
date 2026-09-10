@@ -54,10 +54,16 @@ export function OrganizerEventsPanel({ events }: Props) {
                         : ev.status}
                   </span>
                 </td>
-                <td className="px-5 py-4 text-right">
+                <td className="px-5 py-4 text-right space-x-2">
+                  <Link
+                    href={`/organizer/events/${ev.id}`}
+                    className="inline-block px-3 py-1.5 text-xs font-bold text-white bg-primary hover:bg-primary-hover rounded-lg transition shadow-xs"
+                  >
+                    Quản lý
+                  </Link>
                   <Link
                     href={`/events/${ev.id}`}
-                    className="px-3 py-1.5 text-xs font-semibold text-primary hover:bg-surface-container rounded-lg transition"
+                    className="inline-block px-3 py-1.5 text-xs font-semibold text-on-surface-variant hover:bg-surface-container rounded-lg transition"
                   >
                     Xem trang bán
                   </Link>

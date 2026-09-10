@@ -1,6 +1,8 @@
 export { AdminPortalView } from "./admin-portal-view"
 export { AdminWorkspace } from "./admin-workspace"
 export { AdminApprovalsPanel } from "./components/approvals-panel"
+export { ApprovalDetailDialog } from "./components/approval-detail-dialog"
+export { ApproveConfirmationModal, RejectModal } from "./components/approval-action-modals"
 export { AdminCategoriesPanel } from "./components/categories-panel"
 export { AdminDashboardPanel } from "./components/dashboard-panel"
 export { AdminOutboxPanel } from "./components/outbox-panel"

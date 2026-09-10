@@ -1,8 +1,14 @@
 "use client"
 
-import { Clock, Info } from "lucide-react"
+import { useState } from "react"
+import { Clock, Eye, Info } from "lucide-react"
 import { ActionFeedback } from "@/components/shared/action-feedback"
 import { useAdminApprovals } from "@/features/admin/hooks/use-approvals"
+import { ApprovalDetailDialog } from "@/features/admin/components/approval-detail-dialog"
+import {
+  ApproveConfirmationModal,
+  RejectModal,
+} from "@/features/admin/components/approval-action-modals"
 
 export function AdminApprovalsPanel() {
   const {
@@ -16,6 +22,25 @@ export function AdminApprovalsPanel() {
     handleApprove,
     handleReject,
   } = useAdminApprovals()
+
+  const [selectedEventForDetail, setSelectedEventForDetail] = useState<any | null>(null)
+  const [eventToApprove, setEventToApprove] = useState<any | null>(null)
+  const [eventToReject, setEventToReject] = useState<any | null>(null)
+
+  const onConfirmApprove = async () => {
+    if (!eventToApprove) return
+    await handleApprove(eventToApprove.id)
+    setEventToApprove(null)
+    setSelectedEventForDetail(null)
+  }
+
+  const onConfirmReject = async (reason: string) => {
+    if (!eventToReject) return
+    await handleReject(eventToReject.id)
+    setEventToReject(null)
+    setSelectedEventForDetail(null)
+  }
+
   return (
     <div className="space-y-6">
       <ActionFeedback message={notification} onDismiss={() => setNotification(null)} />
@@ -51,7 +76,9 @@ export function AdminApprovalsPanel() {
             />
             <button
               type="button"
-              onClick={() => handleApprove(customEventIdToApprove)}
+              onClick={() =>
+                setEventToApprove({ id: customEventIdToApprove, name: customEventIdToApprove })
+              }
               disabled={!customEventIdToApprove || isApproving}
               className="px-5 py-2.5 bg-green-600 hover:bg-green-700 text-white text-xs font-bold rounded-xl transition cursor-pointer disabled:opacity-50"
             >
@@ -59,7 +86,9 @@ export function AdminApprovalsPanel() {
             </button>
             <button
               type="button"
-              onClick={() => handleReject(customEventIdToApprove)}
+              onClick={() =>
+                setEventToReject({ id: customEventIdToApprove, name: customEventIdToApprove })
+              }
               disabled={!customEventIdToApprove || isRejecting}
               className="px-5 py-2.5 border border-red-200 text-red-600 hover:bg-red-50 text-xs font-bold rounded-xl transition cursor-pointer disabled:opacity-50"
             >
@@ -107,14 +136,23 @@ export function AdminApprovalsPanel() {
                 <div className="flex items-center gap-2">
                   <button
                     type="button"
-                    onClick={() => handleApprove(ev.id)}
+                    onClick={() => setSelectedEventForDetail(ev)}
+                    className="px-3.5 py-2 bg-surface-container hover:bg-surface-container-high text-on-surface text-xs font-semibold rounded-xl transition cursor-pointer inline-flex items-center gap-1.5"
+                  >
+                    <Eye className="size-3.5 text-primary" />
+                    <span>Xem hồ sơ</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setEventToApprove(ev)}
                     className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-xs font-bold rounded-xl transition cursor-pointer shadow-xs"
                   >
                     Phê duyệt
                   </button>
                   <button
                     type="button"
-                    onClick={() => handleReject(ev.id)}
+                    onClick={() => setEventToReject(ev)}
                     className="px-4 py-2 border border-red-200 text-red-600 hover:bg-red-50 text-xs font-bold rounded-xl transition cursor-pointer"
                   >
                     Từ chối
@@ -125,6 +163,38 @@ export function AdminApprovalsPanel() {
           )}
         </div>
       </div>
+
+      {/* Detail Dialog */}
+      {selectedEventForDetail && (
+        <ApprovalDetailDialog
+          event={selectedEventForDetail}
+          isOpen={Boolean(selectedEventForDetail)}
+          onClose={() => setSelectedEventForDetail(null)}
+          onApprove={(ev) => setEventToApprove(ev)}
+          onReject={(ev) => setEventToReject(ev)}
+        />
+      )}
+
+      {/* Confirmation Modals */}
+      {eventToApprove && (
+        <ApproveConfirmationModal
+          eventName={eventToApprove.name || eventToApprove.id}
+          isOpen={Boolean(eventToApprove)}
+          isApproving={isApproving}
+          onConfirm={onConfirmApprove}
+          onClose={() => setEventToApprove(null)}
+        />
+      )}
+
+      {eventToReject && (
+        <RejectModal
+          eventName={eventToReject.name || eventToReject.id}
+          isOpen={Boolean(eventToReject)}
+          isRejecting={isRejecting}
+          onConfirm={onConfirmReject}
+          onClose={() => setEventToReject(null)}
+        />
+      )}
     </div>
   )
 }
