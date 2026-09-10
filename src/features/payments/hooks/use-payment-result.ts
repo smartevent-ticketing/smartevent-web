@@ -60,7 +60,9 @@ export function usePaymentResult() {
     orderCode,
     status,
     pollCount,
-    displayAmount: order?.totalAmount ?? 0,
+    displayAmount:
+      order?.totalAmount ??
+      (params.get("vnp_Amount") ? Number(params.get("vnp_Amount")) / 100 : 0),
     errorMessage: orderCode ? null : "Không tìm thấy mã đơn hàng cần xác thực.",
     handleManualRetry: () => setRetryTrigger((value) => value + 1),
     formatPayDate,
