@@ -27,10 +27,10 @@ export const organizerApi = {
       }),
     ),
 
-  cancelEvent: (id: string) =>
+  cancelEvent: (id: string, reason?: string) =>
     requireApiSuccess(
       apiClient.POST("/api/v1/events/{id}/cancel", {
-        params: { path: { id } },
+        params: { path: { id }, query: reason ? { reason } : undefined },
       }),
     ),
 
@@ -88,6 +88,26 @@ export const organizerApi = {
       }),
     ),
 
+  createSalePhase: (
+    ticketTypeId: string,
+    body: {
+      name: string
+      price: number
+      quantity: number
+      saleStartAt: string
+      saleEndAt: string
+      maxPerOrder?: number
+      maxPerUser?: number
+      status?: "ACTIVE" | "PAUSED" | "CLOSED"
+    },
+  ) =>
+    requireApiSuccess(
+      apiClient.POST("/api/v1/ticket-types/{ticketTypeId}/sale-phases", {
+        params: { path: { ticketTypeId } },
+        body,
+      }),
+    ),
+
   getInventory: (eventId: string) =>
     requireApiSuccess(
       apiClient.GET("/api/v1/events/{eventId}/inventory", {
@@ -99,6 +119,39 @@ export const organizerApi = {
     requireApiSuccess(
       apiClient.GET("/api/v1/tickets/events/{eventId}", {
         params: { path: { eventId } },
+      }),
+    ),
+
+  getSeatsByArea: (
+    areaId: string,
+    options?: Omit<FetchOptions<ApiPaths["/api/v1/areas/{areaId}/seats"]["get"]>, "parseAs">,
+  ) =>
+    requireApiSuccess(
+      apiClient.GET("/api/v1/areas/{areaId}/seats", {
+        params: { path: { areaId }, query: { pageable: {} } },
+        ...options,
+      }),
+    ),
+
+  generateSeats: (
+    areaId: string,
+    body: {
+      fromRow: string
+      toRow: string
+      seatsPerRow: number
+    },
+  ) =>
+    requireApiSuccess(
+      apiClient.POST("/api/v1/areas/{areaId}/seats/generate", {
+        params: { path: { areaId } },
+        body,
+      }),
+    ),
+
+  deleteAllSeatsInArea: (areaId: string) =>
+    requireApiSuccess(
+      apiClient.DELETE("/api/v1/areas/{areaId}/seats", {
+        params: { path: { areaId } },
       }),
     ),
 }

@@ -56,7 +56,7 @@ export function setRefreshTokenCookie(
 
   response.cookies.set({
     name: SESSION_COOKIE_NAME,
-    value: resolvedRoles.length > 0 ? resolvedRoles.join(",") : "ROLE_USER",
+    value: resolvedRoles.length > 0 ? resolvedRoles.join(",") : "ROLE_CUSTOMER",
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",

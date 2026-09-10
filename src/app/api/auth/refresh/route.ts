@@ -3,9 +3,11 @@ import { NextRequest, NextResponse } from "next/server"
 import type { components } from "@/lib/api/schema"
 import {
   clearRefreshTokenCookie,
+  extractRolesFromJwt,
   REFRESH_COOKIE_NAME,
   setRefreshTokenCookie,
 } from "@/lib/auth/refresh-cookie"
+import { SESSION_COOKIE_NAME } from "@/lib/constants"
 
 type RefreshApiResponse = components["schemas"]["ApiResponseTokenRefreshResponse"]
 
@@ -112,8 +114,22 @@ export async function POST(request: NextRequest) {
     },
   )
 
-  // Cập nhật refresh token MỚI vào HttpOnly cookie
-  setRefreshTokenCookie(response, newRefreshToken, undefined, safeData.accessToken)
+  // Cập nhật refresh token MỚI vào HttpOnly cookie, giữ lại vai trò nếu JWT không chứa roles
+  const currentSessionRoles = request.cookies
+    .get(SESSION_COOKIE_NAME)
+    ?.value?.split(",")
+    .map((r) => r.trim())
+    .filter(Boolean)
+
+  const jwtRoles = extractRolesFromJwt(safeData.accessToken)
+  const effectiveRoles =
+    jwtRoles.length > 0
+      ? jwtRoles
+      : currentSessionRoles && currentSessionRoles.length > 0
+        ? currentSessionRoles
+        : undefined
+
+  setRefreshTokenCookie(response, newRefreshToken, effectiveRoles, safeData.accessToken)
 
   return response
 }

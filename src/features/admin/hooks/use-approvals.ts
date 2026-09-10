@@ -2,7 +2,7 @@
 
 import { adminApi } from "@/features/admin/api/admin-api"
 
-import { useState } from "react"
+import { useState, useEffect, useCallback } from "react"
 
 import type { AdminNotification, PendingEvent } from "../model/admin-types"
 
@@ -17,7 +17,39 @@ export function useAdminApprovals() {
 
   const [isRejecting, setIsRejecting] = useState(false)
 
+  const [isLoading, setIsLoading] = useState(true)
+
   const [pendingEvents, setPendingEvents] = useState<PendingEvent[]>([])
+
+  const fetchPendingEvents = useCallback(async () => {
+    setIsLoading(true)
+    try {
+      const res = await adminApi.getPendingEvents()
+      const data = res.data?.data
+      const content = Array.isArray(data?.content) ? data.content : []
+      setPendingEvents(
+        content
+          .filter((ev) => Boolean(ev.id))
+          .map((ev) => ({
+            id: ev.id!,
+            name: ev.name || "Sự kiện chưa đặt tên",
+            organizer: ev.organizerId ? `BTC (${ev.organizerId.slice(0, 8)})` : "Ban tổ chức",
+            venue: ev.venue?.name ? `${ev.venue.name}, ${ev.venue.city || ""}` : "Chưa chọn địa điểm",
+            submittedDate: ev.createdAt ? new Date(ev.createdAt).toLocaleDateString("vi-VN") : "Hôm nay",
+            expectedTickets: 0,
+            priceRange: "Chờ cập nhật",
+          })),
+      )
+    } catch {
+      // Keep empty if failed
+    } finally {
+      setIsLoading(false)
+    }
+  }, [])
+
+  useEffect(() => {
+    fetchPendingEvents()
+  }, [fetchPendingEvents])
 
   async function handleApprove(id: string) {
     setIsApproving(true)
@@ -74,8 +106,10 @@ export function useAdminApprovals() {
     setCustomEventIdToApprove,
     isApproving,
     isRejecting,
+    isLoading,
     pendingEvents,
     handleApprove,
     handleReject,
+    fetchPendingEvents,
   }
 }

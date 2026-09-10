@@ -28,7 +28,10 @@ export function ScanResult({ resultStatus, lastScanned, handleScan }: Props) {
             </div>
             <div className="flex justify-between">
               <span className="text-gray-300">Hạng vé / Ghế:</span>
-              <strong className="text-green-300">{lastScanned.tier}</strong>
+              <strong className="text-green-300">
+                {lastScanned.tier}
+                {lastScanned.seatCode ? ` • Ghế ${lastScanned.seatCode}` : ""}
+              </strong>
             </div>
             <div className="flex justify-between">
               <span className="text-gray-300">Cổng soát vé:</span>

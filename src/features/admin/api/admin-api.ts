@@ -2,11 +2,24 @@ import type { FetchOptions } from "openapi-fetch"
 import { apiClient } from "@/lib/api/client"
 import { requireApiSuccess } from "@/lib/api/result"
 import type { paths } from "@/lib/api/schema"
-import type { EventSetupPaths } from "@/lib/api/event-setup-contract"
+import type { EventSetupPaths, AdminEventPaths } from "@/lib/api/event-setup-contract"
 
-type ApiPaths = paths & EventSetupPaths
+type ApiPaths = paths & EventSetupPaths & AdminEventPaths
 
 export const adminApi = {
+  getPendingEvents: (
+    options?: Omit<FetchOptions<ApiPaths["/api/v1/admin/events/pending"]["get"]>, "parseAs"> & {
+      parseAs?: "json"
+    },
+  ) => requireApiSuccess(apiClient.GET("/api/v1/admin/events/pending", options)),
+
+  getAdminEventDetail: (id: string) =>
+    requireApiSuccess(
+      apiClient.GET("/api/v1/admin/events/{id}", {
+        params: { path: { id } },
+      }),
+    ),
+
   approveEvent: (
     options: Omit<FetchOptions<ApiPaths["/api/v1/events/{id}/approve"]["post"]>, "parseAs"> & {
       parseAs?: "json"

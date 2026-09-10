@@ -58,8 +58,18 @@ export function CustomerOrdersPanel() {
               </thead>
               <tbody className="divide-y divide-outline-variant/40">
                 {orders.map((ord) => {
-                  const isPending = ord.status === "PENDING_PAYMENT"
+                  const isExpired =
+                    ord.status === "EXPIRED" ||
+                    (Boolean(ord.paymentDeadline) &&
+                      new Date(ord.paymentDeadline!).getTime() < Date.now())
+                  const isPending =
+                    ((ord.status as string) === "PENDING" || ord.status === "PENDING_PAYMENT") &&
+                    !isExpired
                   const isPaid = ord.status === "PAID"
+                  const isRefundPending = (ord.status as string) === "REFUND_PENDING"
+                  const isRefunded = ord.status === "REFUNDED"
+                  const isPartiallyRefunded = ord.status === "PARTIALLY_REFUNDED"
+                  const isCancelled = ord.status === "CANCELLED"
 
                   return (
                     <tr key={ord.id} className="hover:bg-surface-container-low/50 transition">
@@ -81,18 +91,30 @@ export function CustomerOrdersPanel() {
                               ? "bg-green-50 text-green-700 border border-green-200"
                               : isPending
                                 ? "bg-amber-50 text-amber-700 border border-amber-200"
-                                : "bg-gray-100 text-gray-600"
+                                : isRefundPending
+                                  ? "bg-purple-50 text-purple-700 border border-purple-200"
+                                  : isRefunded || isPartiallyRefunded
+                                    ? "bg-blue-50 text-blue-700 border border-blue-200"
+                                    : isCancelled
+                                      ? "bg-red-50 text-red-700 border border-red-200"
+                                      : "bg-gray-100 text-gray-600 border border-gray-200"
                           }`}
                         >
                           {isPaid
                             ? "Đã thanh toán"
                             : isPending
                               ? "Chờ thanh toán"
-                              : ord.status === "CANCELLED"
-                                ? "Đã hủy"
-                                : ord.status === "EXPIRED"
-                                  ? "Hết hạn"
-                                  : ord.status}
+                              : isRefundPending
+                                ? "Chờ hoàn tiền"
+                                : isRefunded
+                                  ? "Đã hoàn tiền"
+                                  : isPartiallyRefunded
+                                    ? "Hoàn một phần"
+                                    : isCancelled
+                                      ? "Đã hủy"
+                                      : isExpired
+                                        ? "Hết hạn"
+                                        : ord.status}
                         </span>
                       </td>
                       <td className="px-6 py-4 text-right space-x-2">

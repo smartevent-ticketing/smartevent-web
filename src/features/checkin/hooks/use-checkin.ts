@@ -14,6 +14,7 @@ interface ScanResult {
   name: string
   tier: string
   gate: string
+  seatCode?: string
   time?: string
   message?: string
 }
@@ -49,6 +50,7 @@ export function useCheckin() {
         name: data?.attendeeName ?? "Khách tham dự",
         tier: data?.ticketTypeName ?? "Vé sự kiện",
         gate: data?.gateName ?? gateName,
+        seatCode: data?.seatCode ?? undefined,
         message: data?.message ?? "Chưa nhận được kết quả soát vé hợp lệ.",
         time: data?.checkedAt ? new Date(data.checkedAt).toLocaleTimeString("vi-VN") : undefined,
       })

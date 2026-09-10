@@ -161,7 +161,7 @@ export function EventManagementView({ eventId }: EventManagementViewProps) {
         ])
 
         if (eventRes.status === "fulfilled" && eventRes.value.data && isMounted) {
-          const ev = eventRes.value.data as any
+          const ev = ((eventRes.value.data as any)?.data ?? eventRes.value.data) as any
           setEventData((prev: any) => ({
             ...prev,
             id: ev.id || eventId,
@@ -173,8 +173,8 @@ export function EventManagementView({ eventId }: EventManagementViewProps) {
         }
 
         if (areasRes.status === "fulfilled" && areasRes.value.data && isMounted) {
-          const rawAreas = areasRes.value.data as any[]
-          if (rawAreas.length > 0) {
+          const rawAreas = ((areasRes.value.data as any)?.data ?? areasRes.value.data) as any[]
+          if (Array.isArray(rawAreas) && rawAreas.length > 0) {
             setAreas(
               rawAreas.map((a) => ({
                 id: a.id,
@@ -186,43 +186,50 @@ export function EventManagementView({ eventId }: EventManagementViewProps) {
           }
         }
 
-        if (typesRes.status === "fulfilled" && typesRes.value.data && isMounted) {
-          const rawTypes = typesRes.value.data as any[]
-          if (rawTypes.length > 0) {
-            setTicketTypes(
-              rawTypes.map((t) => ({
-                id: t.id,
-                name: t.name,
-                price: t.price || 500000,
-                totalQuota: t.totalQuota || 100,
-                soldCount: t.soldCount || 0,
-                areaName: t.areaName || "Khu vực chung",
-                description: t.description,
-              })),
-            )
+        let rawPhases: any[] = []
+        if (phasesRes.status === "fulfilled" && phasesRes.value.data && isMounted) {
+          const phasesData = ((phasesRes.value.data as any)?.data ?? phasesRes.value.data) as any[]
+          if (Array.isArray(phasesData)) {
+            rawPhases = phasesData
+            if (rawPhases.length > 0) {
+              setSalePhases(
+                rawPhases.map((p) => ({
+                  id: p.id,
+                  name: p.name,
+                  startTime: p.saleStartAt || p.startTime,
+                  endTime: p.saleEndAt || p.endTime,
+                  status: p.status,
+                  maxPerOrder: p.maxPerOrder || 4,
+                  ticketTypeName: p.ticketTypeName,
+                })),
+              )
+            }
           }
         }
 
-        if (phasesRes.status === "fulfilled" && phasesRes.value.data && isMounted) {
-          const rawPhases = phasesRes.value.data as any[]
-          if (rawPhases.length > 0) {
-            setSalePhases(
-              rawPhases.map((p) => ({
-                id: p.id,
-                name: p.name,
-                startTime: p.startTime,
-                endTime: p.endTime,
-                status: p.status,
-                maxPerOrder: p.maxPerOrder || 4,
-                ticketTypeName: p.ticketTypeName,
-              })),
+        if (typesRes.status === "fulfilled" && typesRes.value.data && isMounted) {
+          const rawTypes = ((typesRes.value.data as any)?.data ?? typesRes.value.data) as any[]
+          if (Array.isArray(rawTypes) && rawTypes.length > 0) {
+            setTicketTypes(
+              rawTypes.map((t) => {
+                const matchedPhase = rawPhases.find((p) => p.ticketTypeId === t.id)
+                return {
+                  id: t.id,
+                  name: t.name,
+                  price: matchedPhase?.price ?? t.price ?? 500000,
+                  totalQuota: matchedPhase?.quantity ?? t.totalQuota ?? 100,
+                  soldCount: matchedPhase?.soldCount ?? t.soldCount ?? 0,
+                  areaName: t.areaName || "Khu vực chung",
+                  description: t.description,
+                }
+              }),
             )
           }
         }
 
         if (ticketsRes.status === "fulfilled" && ticketsRes.value.data && isMounted) {
-          const rawTickets = ticketsRes.value.data as any[]
-          if (rawTickets.length > 0) {
+          const rawTickets = ((ticketsRes.value.data as any)?.data ?? ticketsRes.value.data) as any[]
+          if (Array.isArray(rawTickets) && rawTickets.length > 0) {
             setIssuedTickets(
               rawTickets.map((tk) => ({
                 id: tk.id,
@@ -230,8 +237,13 @@ export function EventManagementView({ eventId }: EventManagementViewProps) {
                 ticketTypeName: tk.ticketTypeName || "Vé sự kiện",
                 areaName: tk.areaName,
                 seatName: tk.seatName || tk.seatCode,
-                status: tk.status || "ACTIVE",
-                checkedInAt: tk.checkedInAt,
+                status:
+                  tk.status === "ISSUED"
+                    ? "ACTIVE"
+                    : tk.status === "USED"
+                      ? "CHECKED_IN"
+                      : tk.status || "ACTIVE",
+                checkedInAt: tk.usedAt || tk.checkedInAt,
                 issuedAt: tk.issuedAt || tk.createdAt,
               })),
             )
@@ -277,17 +289,65 @@ export function EventManagementView({ eventId }: EventManagementViewProps) {
     description?: string
   }) => {
     try {
-      await organizerApi.createTicketType(eventId, {
+      const createRes = await organizerApi.createTicketType(eventId, {
         name: ticketType.name,
         eventAreaId: ticketType.areaId || areas[0]?.id || "",
         description: ticketType.description,
       })
+      const createdType = (createRes as any)?.data?.data ?? (createRes as any)?.data
+      const createdTypeId = createdType?.id
+
+      if (createdTypeId) {
+        const now = new Date()
+        const end = new Date(
+          eventData?.endTime
+            ? new Date(eventData.endTime).getTime()
+            : now.getTime() + 30 * 24 * 60 * 60 * 1000,
+        )
+        try {
+          const phaseRes = await organizerApi.createSalePhase(createdTypeId, {
+            name: `Mở bán - ${ticketType.name}`,
+            price: ticketType.price,
+            quantity: ticketType.totalQuota,
+            saleStartAt: now.toISOString(),
+            saleEndAt: end.toISOString(),
+            status: "ACTIVE",
+            maxPerOrder: Math.min(4, ticketType.totalQuota),
+            maxPerUser: Math.min(4, ticketType.totalQuota),
+          })
+          const createdPhase = (phaseRes as any)?.data?.data ?? (phaseRes as any)?.data
+          if (createdPhase) {
+            setSalePhases((prev) => [
+              ...prev,
+              {
+                id: createdPhase.id || `phase-${Date.now()}`,
+                name: createdPhase.name || `Mở bán - ${ticketType.name}`,
+                startTime: createdPhase.saleStartAt || now.toISOString(),
+                endTime: createdPhase.saleEndAt || end.toISOString(),
+                status: "ACTIVE",
+                maxPerOrder: Math.min(4, ticketType.totalQuota),
+                ticketTypeName: ticketType.name,
+              },
+            ])
+          }
+        } catch (e) {
+          console.error("Auto create sale phase error:", e)
+        }
+      }
+
       const area = areas.find((a) => a.id === ticketType.areaId)
       setTicketTypes((prev) => [
         ...prev,
-        { id: `tt-${Date.now()}`, ...ticketType, areaName: area?.name || "Khu vực chung" },
+        {
+          id: createdTypeId || `tt-${Date.now()}`,
+          ...ticketType,
+          areaName: area?.name || "Khu vực chung",
+        },
       ])
-      setFeedback({ type: "success", text: `Đã tạo hạng vé "${ticketType.name}" thành công.` })
+      setFeedback({
+        type: "success",
+        text: `Đã tạo hạng vé "${ticketType.name}" cùng đợt mở bán thành công.`,
+      })
     } catch {
       const area = areas.find((a) => a.id === ticketType.areaId)
       setTicketTypes((prev) => [
@@ -322,7 +382,7 @@ export function EventManagementView({ eventId }: EventManagementViewProps) {
   const handleConfirmCancel = async (reason: string) => {
     setIsCancellingEvent(true)
     try {
-      await organizerApi.cancelEvent(eventId)
+      await organizerApi.cancelEvent(eventId, reason)
       setEventData((prev: any) => ({ ...prev, status: "CANCELLED" }))
       setFeedback({ type: "error", text: `Sự kiện đã được hủy: ${reason}` })
     } catch {

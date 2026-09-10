@@ -25,7 +25,9 @@ export function useLoginForm() {
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
   const submitting = useRef(false)
 
-  const redirectTo = safeInternalRedirect(searchParams.get("redirect"))
+  const redirectTo = safeInternalRedirect(
+    searchParams.get("callbackUrl") || searchParams.get("redirect"),
+  )
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault()

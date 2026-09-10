@@ -54,7 +54,7 @@ export const AUTH_ROLES = {
   ADMIN: "ROLE_ADMIN",
   ORGANIZER: "ROLE_ORGANIZER",
   STAFF: "ROLE_STAFF",
-  CUSTOMER: "ROLE_USER",
+  CUSTOMER: "ROLE_CUSTOMER",
 } as const
 
 export const SESSION_COOKIE_NAME = "smartevent_session"

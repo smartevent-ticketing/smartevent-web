@@ -44,14 +44,24 @@ export function OrganizerEventsPanel({ events }: Props) {
                         ? "bg-green-50 text-green-700 border border-green-200"
                         : ev.status === "PENDING_APPROVAL"
                           ? "bg-amber-50 text-amber-700 border border-amber-200"
-                          : "bg-gray-100 text-gray-600"
+                          : ev.status === "COMPLETED"
+                            ? "bg-blue-50 text-blue-700 border border-blue-200"
+                            : ev.status === "CANCELLED"
+                              ? "bg-red-50 text-red-700 border border-red-200"
+                              : "bg-gray-100 text-gray-600 border border-gray-200"
                     }`}
                   >
                     {ev.status === "PUBLISHED"
                       ? "Đang mở bán"
                       : ev.status === "PENDING_APPROVAL"
                         ? "Chờ duyệt"
-                        : ev.status}
+                        : ev.status === "COMPLETED"
+                          ? "Đã kết thúc"
+                          : ev.status === "CANCELLED"
+                            ? "Đã hủy"
+                            : ev.status === "DRAFT"
+                              ? "Bản nháp"
+                              : ev.status}
                   </span>
                 </td>
                 <td className="px-5 py-4 text-right space-x-2">

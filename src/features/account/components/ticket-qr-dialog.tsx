@@ -39,7 +39,11 @@ export function TicketQrDialog({ ticket, busy, error, onRefresh, onClose }: Prop
             // The service returns a signed QR image; ticket codes are not QR tokens.
             // eslint-disable-next-line @next/next/no-img-element
             <img
-              src={`data:image/png;base64,${ticket.qrCodeBase64}`}
+              src={
+                ticket.qrCodeBase64.startsWith("data:")
+                  ? ticket.qrCodeBase64
+                  : `data:image/png;base64,${ticket.qrCodeBase64}`
+              }
               alt="Mã QR vé vào cửa"
               className="size-48 rounded-lg object-contain shadow-xs"
             />

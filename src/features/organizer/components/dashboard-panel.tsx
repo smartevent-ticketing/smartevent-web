@@ -175,6 +175,18 @@ export function OrganizerDashboardPanel({
                         <span className="px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200">
                           Chờ phê duyệt
                         </span>
+                      ) : ev.status === "COMPLETED" ? (
+                        <span className="px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200">
+                          Đã kết thúc
+                        </span>
+                      ) : ev.status === "CANCELLED" ? (
+                        <span className="px-2.5 py-1 rounded-full text-xs font-semibold bg-red-50 text-red-700 border border-red-200">
+                          Đã hủy
+                        </span>
+                      ) : ev.status === "DRAFT" ? (
+                        <span className="px-2.5 py-1 rounded-full text-xs font-semibold bg-gray-100 text-gray-600 border border-gray-200">
+                          Bản nháp
+                        </span>
                       ) : (
                         <span className="px-2.5 py-1 rounded-full text-xs font-semibold bg-gray-100 text-gray-600 border border-gray-200">
                           {ev.status}

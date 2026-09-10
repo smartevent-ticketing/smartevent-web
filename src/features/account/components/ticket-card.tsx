@@ -13,6 +13,38 @@ export function TicketCard({ ticket: t, onShowQr, onTransfer }: Props) {
   const isValid = t.status === "ISSUED"
   const isUsed = t.status === "USED"
   const isTransferred = t.status === "TRANSFERRED"
+  const isCancelled = t.status === "CANCELLED"
+  const isRefunded = t.status === "REFUNDED"
+  const isResaleListed = t.status === "RESALE_LISTED"
+
+  const getStatusLabel = () => {
+    if (isValid) return "Hợp lệ"
+    if (isUsed) return "Đã check-in"
+    if (isTransferred) return "Đã chuyển nhượng"
+    if (isCancelled) return "Đã hủy"
+    if (isRefunded) return "Đã hoàn tiền"
+    if (isResaleListed) return "Đang bán lại"
+    return t.status || "Không hiệu lực"
+  }
+
+  const getStatusStyle = () => {
+    if (isValid) return "bg-green-50 text-green-700 border border-green-200"
+    if (isUsed) return "bg-gray-100 text-gray-600"
+    if (isTransferred) return "bg-blue-50 text-blue-700"
+    if (isRefunded) return "bg-amber-50 text-amber-700"
+    if (isResaleListed) return "bg-purple-50 text-purple-700"
+    return "bg-red-50 text-red-700"
+  }
+
+  const getNoticeCaption = () => {
+    if (isUsed) return "Vé đã được sử dụng check-in tại cổng."
+    if (isTransferred) return "Vé đã được chuyển giao cho người khác."
+    if (isCancelled) return "Vé đã bị hủy theo yêu cầu hoặc do sự kiện bị hủy."
+    if (isRefunded) return "Vé đã được hoàn tiền thành công."
+    if (isResaleListed) return "Vé đang được niêm yết bán lại trên sàn."
+    return "Vé không còn hiệu lực sử dụng."
+  }
+
   return (
     <div
       key={t.id}
@@ -24,26 +56,10 @@ export function TicketCard({ ticket: t, onShowQr, onTransfer }: Props) {
             {t.ticketCode}
           </span>
           <span
-            className={`text-xs font-semibold px-2.5 py-1 rounded-lg flex items-center gap-1 ${
-              isValid
-                ? "bg-green-50 text-green-700 border border-green-200"
-                : isUsed
-                  ? "bg-gray-100 text-gray-600"
-                  : isTransferred
-                    ? "bg-blue-50 text-blue-700"
-                    : "bg-red-50 text-red-700"
-            }`}
+            className={`text-xs font-semibold px-2.5 py-1 rounded-lg flex items-center gap-1 ${getStatusStyle()}`}
           >
             {isValid && <CheckCircle2 className="size-3.5" />}
-            <span>
-              {isValid
-                ? "Hợp lệ"
-                : isUsed
-                  ? "Đã check-in"
-                  : isTransferred
-                    ? "Đã chuyển nhượng"
-                    : t.status || "Hủy"}
-            </span>
+            <span>{getStatusLabel()}</span>
           </span>
         </div>
 
@@ -86,7 +102,7 @@ export function TicketCard({ ticket: t, onShowQr, onTransfer }: Props) {
           </>
         ) : (
           <span className="text-xs text-on-surface-variant italic">
-            Vé đã được sử dụng hoặc chuyển giao.
+            {getNoticeCaption()}
           </span>
         )}
       </div>

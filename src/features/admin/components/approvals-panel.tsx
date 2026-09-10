@@ -45,18 +45,15 @@ export function AdminApprovalsPanel() {
     <div className="space-y-6">
       <ActionFeedback message={notification} onDismiss={() => setNotification(null)} />
       <div className="space-y-6">
-        {/* Cảnh báo phụ thuộc API backend B1/B2 */}
-        <div className="bg-blue-50/70 border border-blue-200/80 p-5 rounded-3xl flex items-start gap-3.5 text-xs sm:text-sm text-blue-900 shadow-xs">
-          <Info className="size-5 text-blue-600 shrink-0 mt-0.5" />
+        {/* Banner trạng thái tích hợp API Phê duyệt */}
+        <div className="bg-emerald-50/80 border border-emerald-200/80 p-5 rounded-3xl flex items-start gap-3.5 text-xs sm:text-sm text-emerald-950 shadow-xs">
+          <Info className="size-5 text-emerald-600 shrink-0 mt-0.5" />
           <div className="space-y-1">
-            <span className="font-bold block">
-              Trạng thái tích hợp API Phê duyệt (Backend B1, B2)
+            <span className="font-bold block text-emerald-900">
+              Hàng đợi phê duyệt sự kiện trực tuyến
             </span>
-            <p className="leading-relaxed text-blue-800">
-              Endpoint <code>GET /api/v1/events</code> hiện chỉ trả sự kiện <code>PUBLISHED</code>.
-              Đang chờ phía backend hoàn tất API riêng cho danh sách sự kiện chờ duyệt kèm phân
-              quyền quản trị viên. Dưới đây là màn hình xử lý phê duyệt trực tiếp và dữ liệu mẫu
-              kiểm thử.
+            <p className="leading-relaxed text-emerald-800">
+              Danh sách được tải tự động từ endpoint <code>GET /api/v1/admin/events/pending</code>. Quản trị viên có thể xem hồ sơ chi tiết, phê duyệt đưa vào hoạt động (PUBLISHED) hoặc từ chối kèm lý do trả về DRAFT.
             </p>
           </div>
         </div>

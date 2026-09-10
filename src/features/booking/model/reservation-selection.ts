@@ -14,7 +14,8 @@ export function buildReservationItems(selection: {
   if (!phase?.id || phase.ticketTypeId !== ticketTypeId)
     throw new Error("Không có đợt bán phù hợp cho loại vé này.")
   const count = seated ? seats.length : quantity
-  if (!Number.isInteger(count) || count < 1 || count > (phase.maxPerOrder ?? 4))
+  const maxAllowed = Math.min(phase.maxPerOrder ?? 4, phase.maxPerUser ?? Infinity)
+  if (!Number.isInteger(count) || count < 1 || count > maxAllowed)
     throw new Error("Số lượng vé không hợp lệ hoặc vượt giới hạn mỗi đơn.")
   if (
     seated &&

@@ -10,7 +10,7 @@ import { CustomerInvoicesPanel } from "@/features/account/components/invoices-pa
 import { CustomerProfilePanel } from "@/features/account/components/profile-panel"
 
 export function CustomerPortalView() {
-  const { user, logout } = useAuth()
+  const { user, logout, hasRole } = useAuth()
   const searchParams = useSearchParams()
   const router = useRouter()
   const tab = searchParams.get("tab")
@@ -37,9 +37,9 @@ export function CustomerPortalView() {
                   {user?.fullName || "Tài khoản SmartEvent"}
                 </h1>
                 <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-primary/10 text-primary">
-                  {user?.roles?.includes("ROLE_ORGANIZER")
+                  {hasRole("ORGANIZER")
                     ? "Ban tổ chức"
-                    : user?.roles?.includes("ROLE_ADMIN")
+                    : hasRole("ADMIN")
                       ? "Quản trị viên"
                       : "Khách hàng"}
                 </span>

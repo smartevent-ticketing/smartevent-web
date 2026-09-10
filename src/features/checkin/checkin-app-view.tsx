@@ -71,7 +71,7 @@ export function CheckinAppView() {
         />
 
         {/* Camera Scanner Viewport */}
-        <ScannerViewport />
+        <ScannerViewport onScan={handleScan} isScanning={isScanning} />
 
         {/* Manual Code Entry Form */}
         <ScanInput {...{ selectedEventId, manualCode, setManualCode, isScanning, handleScan }} />

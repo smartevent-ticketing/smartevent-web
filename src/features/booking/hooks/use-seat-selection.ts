@@ -51,7 +51,7 @@ export function useSeatSelection({ eventId }: { eventId: string }) {
   const [actionError, setErrorMessage] = useState<string | null>(null)
   const inFlight = useRef(false)
   const lastRequest = useRef<{ fingerprint: string; key: string } | null>(null)
-  const maxAllowed = phase?.maxPerOrder ?? 4
+  const maxAllowed = Math.min(phase?.maxPerOrder ?? 4, phase?.maxPerUser ?? Infinity)
   function setSelectedAreaId(id: string) {
     chooseArea(id)
     setSelection([])
@@ -63,7 +63,7 @@ export function useSeatSelection({ eventId }: { eventId: string }) {
     else if (selectedSeats.length < maxAllowed) {
       setSelection([...selectedSeats, seat])
       setErrorMessage(null)
-    } else setErrorMessage("Bạn đã chọn đủ số ghế tối đa cho mỗi đơn.")
+    } else setErrorMessage(`Bạn đã chọn đủ số ghế tối đa (${maxAllowed} vé) cho đợt bán này.`)
   }
   async function handleCancelActiveReservation() {
     if (!active.activeReservation?.id || inFlight.current) return
@@ -111,6 +111,9 @@ export function useSeatSelection({ eventId }: { eventId: string }) {
         throw new Error("Chưa xác nhận được phiên giữ chỗ. Vui lòng thử lại.")
       router.push("/checkout?reservationId=" + response.data.data.id)
     } catch (error) {
+      if (isSeated) {
+        seats.refreshSeats()
+      }
       setErrorMessage(getApiErrorMessage(error, "Giữ chỗ không thành công."))
     } finally {
       inFlight.current = false
