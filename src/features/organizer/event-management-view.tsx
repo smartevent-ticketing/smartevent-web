@@ -152,9 +152,16 @@ export function EventManagementView({ eventId }: EventManagementViewProps) {
     async function loadEvent() {
       setIsLoading(true)
       try {
-        const res = await organizerApi.getEvent(eventId)
-        if (res.data && isMounted) {
-          const ev = res.data as any
+        const [eventRes, areasRes, typesRes, phasesRes, ticketsRes] = await Promise.allSettled([
+          organizerApi.getEvent(eventId),
+          organizerApi.getAreas(eventId),
+          organizerApi.getTicketTypes(eventId),
+          organizerApi.getSalePhases(eventId),
+          organizerApi.getEventTickets(eventId),
+        ])
+
+        if (eventRes.status === "fulfilled" && eventRes.value.data && isMounted) {
+          const ev = eventRes.value.data as any
           setEventData((prev: any) => ({
             ...prev,
             id: ev.id || eventId,
@@ -164,8 +171,74 @@ export function EventManagementView({ eventId }: EventManagementViewProps) {
             date: ev.startTime ? new Date(ev.startTime).toLocaleString("vi-VN") : prev.date,
           }))
         }
+
+        if (areasRes.status === "fulfilled" && areasRes.value.data && isMounted) {
+          const rawAreas = areasRes.value.data as any[]
+          if (rawAreas.length > 0) {
+            setAreas(
+              rawAreas.map((a) => ({
+                id: a.id,
+                name: a.name,
+                type: a.areaType || a.type || "SEATED",
+                capacity: a.capacity || 100,
+              })),
+            )
+          }
+        }
+
+        if (typesRes.status === "fulfilled" && typesRes.value.data && isMounted) {
+          const rawTypes = typesRes.value.data as any[]
+          if (rawTypes.length > 0) {
+            setTicketTypes(
+              rawTypes.map((t) => ({
+                id: t.id,
+                name: t.name,
+                price: t.price || 500000,
+                totalQuota: t.totalQuota || 100,
+                soldCount: t.soldCount || 0,
+                areaName: t.areaName || "Khu vực chung",
+                description: t.description,
+              })),
+            )
+          }
+        }
+
+        if (phasesRes.status === "fulfilled" && phasesRes.value.data && isMounted) {
+          const rawPhases = phasesRes.value.data as any[]
+          if (rawPhases.length > 0) {
+            setSalePhases(
+              rawPhases.map((p) => ({
+                id: p.id,
+                name: p.name,
+                startTime: p.startTime,
+                endTime: p.endTime,
+                status: p.status,
+                maxPerOrder: p.maxPerOrder || 4,
+                ticketTypeName: p.ticketTypeName,
+              })),
+            )
+          }
+        }
+
+        if (ticketsRes.status === "fulfilled" && ticketsRes.value.data && isMounted) {
+          const rawTickets = ticketsRes.value.data as any[]
+          if (rawTickets.length > 0) {
+            setIssuedTickets(
+              rawTickets.map((tk) => ({
+                id: tk.id,
+                ticketCode: tk.ticketCode || tk.code || tk.id,
+                ticketTypeName: tk.ticketTypeName || "Vé sự kiện",
+                areaName: tk.areaName,
+                seatName: tk.seatName || tk.seatCode,
+                status: tk.status || "ACTIVE",
+                checkedInAt: tk.checkedInAt,
+                issuedAt: tk.issuedAt || tk.createdAt,
+              })),
+            )
+          }
+        }
       } catch {
-        // Keep initial mock for dev inspection
+        // Keep initial state for dev inspection
       } finally {
         if (isMounted) setIsLoading(false)
       }

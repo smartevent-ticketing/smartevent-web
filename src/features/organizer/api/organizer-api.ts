@@ -94,4 +94,11 @@ export const organizerApi = {
         params: { path: { eventId } },
       }),
     ),
+
+  getEventTickets: (eventId: string) =>
+    requireApiSuccess(
+      apiClient.GET("/api/v1/tickets/events/{eventId}", {
+        params: { path: { eventId } },
+      }),
+    ),
 }

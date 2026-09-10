@@ -12,4 +12,10 @@ export const paymentsApi = {
       parseAs?: "json"
     },
   ) => requireApiSuccess(apiClient.POST("/api/v1/payments/create-url", options)),
+
+  getPayment: (
+    options: Omit<FetchOptions<ApiPaths["/api/v1/payments/{id}"]["get"]>, "parseAs"> & {
+      parseAs?: "json"
+    },
+  ) => requireApiSuccess(apiClient.GET("/api/v1/payments/{id}", options)),
 }

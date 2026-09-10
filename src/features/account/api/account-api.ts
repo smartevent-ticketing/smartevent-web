@@ -31,6 +31,18 @@ export const accountApi = {
     } = {},
   ) => requireApiSuccess(apiClient.GET("/api/v1/invoices/my-invoices", options)),
 
+  getInvoice: (
+    options: Omit<FetchOptions<ApiPaths["/api/v1/invoices/{id}"]["get"]>, "parseAs"> & {
+      parseAs?: "json"
+    },
+  ) => requireApiSuccess(apiClient.GET("/api/v1/invoices/{id}", options)),
+
+  getInvoiceByOrder: (
+    options: Omit<FetchOptions<ApiPaths["/api/v1/invoices/order/{orderId}"]["get"]>, "parseAs"> & {
+      parseAs?: "json"
+    },
+  ) => requireApiSuccess(apiClient.GET("/api/v1/invoices/order/{orderId}", options)),
+
   getInvoicePdf: (
     options: Omit<FetchOptions<ApiPaths["/api/v1/invoices/{id}/pdf"]["get"]>, "parseAs"> & {
       parseAs?: "blob"
