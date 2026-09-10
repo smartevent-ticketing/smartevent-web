@@ -1,5 +1,5 @@
 import { CheckinAppView } from "@/features/checkin"
 
-export default function CheckinPage() {
+export default function CheckinHistoryPage() {
   return <CheckinAppView />
 }

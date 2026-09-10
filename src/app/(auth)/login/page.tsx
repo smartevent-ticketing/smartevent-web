@@ -1,11 +1,9 @@
-import { PagePlaceholder } from "@/components/shared/page-placeholder";
+import { LoginForm } from "@/features/auth"
 
 export default function LoginPage() {
   return (
-    <PagePlaceholder
-      description="Form đăng nhập sẽ được triển khai cùng HttpOnly cookie và BFF."
-      eyebrow="Tài khoản"
-      title="Đăng nhập"
-    />
-  );
+    <main className="min-h-screen flex items-center justify-center p-4">
+      <LoginForm />
+    </main>
+  )
 }

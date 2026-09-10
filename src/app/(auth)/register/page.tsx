@@ -1,11 +1,9 @@
-import { PagePlaceholder } from "@/components/shared/page-placeholder";
+import { RegisterForm } from "@/features/auth"
 
 export default function RegisterPage() {
   return (
-    <PagePlaceholder
-      description="Tạo tài khoản khách hàng mới."
-      eyebrow="Tài khoản"
-      title="Đăng ký"
-    />
-  );
+    <main className="min-h-screen flex items-center justify-center p-4">
+      <RegisterForm />
+    </main>
+  )
 }
