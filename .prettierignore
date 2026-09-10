@@ -1,0 +1,13 @@
+node_modules
+.next
+out
+build
+coverage
+dist
+*.tsbuildinfo
+next-env.d.ts
+src/lib/api/schema.d.ts
+package-lock.json
+ux-ui-phase1-final
+docs
+*.md
