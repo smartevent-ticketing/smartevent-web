@@ -15,14 +15,10 @@ export function proxy(request: NextRequest) {
   const roles = sessionCookie ? sessionCookie.split(",").map((r) => r.trim().toUpperCase()) : []
 
   const hasAnyRole = (...requiredRoles: string[]) => {
-    // If session cookie is simply "authenticated" (no explicit roles stored),
-    // allow access to role-protected pages and let client/API enforce strict permissions.
-    if (roles.includes("AUTHENTICATED") || roles.includes("1")) {
-      return true
-    }
-    return requiredRoles.some(
-      (role) => roles.includes(role.toUpperCase()) || roles.includes(`ROLE_${role.toUpperCase()}`),
-    )
+    return requiredRoles.some((req) => {
+      const cleanReq = req.toUpperCase().replace(/^ROLE_/, "")
+      return roles.some((userRole) => userRole.toUpperCase().replace(/^ROLE_/, "") === cleanReq)
+    })
   }
 
   // ── 1. GUEST-ONLY ROUTES (/login, /register) ──

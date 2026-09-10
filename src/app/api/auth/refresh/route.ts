@@ -113,7 +113,7 @@ export async function POST(request: NextRequest) {
   )
 
   // Cập nhật refresh token MỚI vào HttpOnly cookie
-  setRefreshTokenCookie(response, newRefreshToken)
+  setRefreshTokenCookie(response, newRefreshToken, undefined, safeData.accessToken)
 
   return response
 }

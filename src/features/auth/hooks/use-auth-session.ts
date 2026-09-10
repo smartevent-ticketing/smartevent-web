@@ -100,7 +100,14 @@ export function useAuthSession() {
     if (operationVersion.current === operation) router.push("/login")
   }, [resetLocalSession, router])
 
-  const hasRole = useCallback((role: string) => user?.roles.includes(role) ?? false, [user])
+  const hasRole = useCallback(
+    (role: string) => {
+      if (!user?.roles || user.roles.length === 0) return false
+      const target = role.toUpperCase().replace(/^ROLE_/, "")
+      return user.roles.some((r) => r.toUpperCase().replace(/^ROLE_/, "") === target)
+    },
+    [user],
+  )
 
   return {
     user,

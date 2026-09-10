@@ -1,8 +1,8 @@
 "use client"
 
-import { useState, type ReactNode } from "react"
+import { useEffect, useState, type ReactNode } from "react"
 import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import {
   Building,
   Calendar,
@@ -14,6 +14,7 @@ import {
   Tag,
   X,
 } from "lucide-react"
+import { useAuth } from "@/features/auth"
 
 const sections = [
   {
@@ -49,9 +50,36 @@ const sections = [
 ]
 
 export function AdminWorkspace({ children }: { children: ReactNode }) {
+  const { isAuthenticated, isLoading, hasRole } = useAuth()
+  const router = useRouter()
   const pathname = usePathname()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const active = sections.find((section) => section.href === pathname) ?? sections[0]
+
+  const isAdmin = hasRole("ADMIN")
+
+  useEffect(() => {
+    if (!isLoading) {
+      if (!isAuthenticated) {
+        router.replace("/login?callbackUrl=" + encodeURIComponent(pathname))
+      } else if (!isAdmin) {
+        router.replace("/")
+      }
+    }
+  }, [isLoading, isAuthenticated, isAdmin, router, pathname])
+
+  if (isLoading || !isAuthenticated || !isAdmin) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-surface">
+        <div className="flex flex-col items-center gap-3">
+          <div className="size-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+          <p className="text-sm text-on-surface-variant font-medium">
+            Đang kiểm tra quyền quản trị...
+          </p>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="min-h-screen bg-surface flex flex-col md:flex-row text-on-surface">

@@ -114,7 +114,7 @@ export async function POST(request: Request) {
     },
   )
 
-  setRefreshTokenCookie(response, refreshToken, safeLoginData.user?.roles)
+  setRefreshTokenCookie(response, refreshToken, safeLoginData.user?.roles, loginData.accessToken)
 
   return response
 }

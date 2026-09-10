@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Link from "next/link"
 import {
   BarChart3,
@@ -14,15 +14,29 @@ import {
   X,
 } from "lucide-react"
 import { usePathname, useRouter } from "next/navigation"
+import { useAuth } from "@/features/auth"
 import { useOrganizerEvents } from "@/features/organizer/hooks/use-organizer-events"
 import { OrganizerDashboardPanel } from "@/features/organizer/components/dashboard-panel"
 import { OrganizerEventsPanel } from "@/features/organizer/components/events-panel"
 import { OrganizerInventoryPanel } from "@/features/organizer/components/inventory-panel"
 
 export function OrganizerDashboardView() {
+  const { isAuthenticated, isLoading: isAuthLoading, hasRole } = useAuth()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const pathname = usePathname()
   const router = useRouter()
+
+  const isOrganizer = hasRole("ORGANIZER") || hasRole("ADMIN")
+
+  useEffect(() => {
+    if (!isAuthLoading) {
+      if (!isAuthenticated) {
+        router.replace("/login?callbackUrl=" + encodeURIComponent(pathname))
+      } else if (!isOrganizer) {
+        router.replace("/")
+      }
+    }
+  }, [isAuthLoading, isAuthenticated, isOrganizer, router, pathname])
   const activeSection =
     pathname === "/organizer/inventory"
       ? "inventory"
@@ -44,6 +58,20 @@ export function OrganizerDashboardView() {
     totalRevenue,
     totalSold,
   } = useOrganizerEvents()
+
+  if (isAuthLoading || !isAuthenticated || !isOrganizer) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-surface">
+        <div className="flex flex-col items-center gap-3">
+          <div className="size-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+          <p className="text-sm text-on-surface-variant font-medium">
+            Đang kiểm tra quyền ban tổ chức...
+          </p>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="min-h-screen bg-surface flex flex-col md:flex-row text-on-surface">
       {/* Mobile Top Navbar */}
