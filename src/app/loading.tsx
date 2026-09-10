@@ -7,5 +7,5 @@ export default function Loading() {
         role="status"
       />
     </main>
-  );
+  )
 }

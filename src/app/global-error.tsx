@@ -1,16 +1,13 @@
-"use client";
+"use client"
 
 interface GlobalErrorProps {
   error: Error & {
-    digest?: string;
-  };
-  reset: () => void;
+    digest?: string
+  }
+  reset: () => void
 }
 
-export default function GlobalError({
-  error,
-  reset,
-}: GlobalErrorProps) {
+export default function GlobalError({ error, reset }: GlobalErrorProps) {
   return (
     <html lang="vi">
       <body>
@@ -24,16 +21,11 @@ export default function GlobalError({
           }}
         >
           <section style={{ maxWidth: "420px", textAlign: "center" }}>
-            <p style={{ color: "#dc2626", fontWeight: 600 }}>
-              Lỗi hệ thống
-            </p>
+            <p style={{ color: "#dc2626", fontWeight: 600 }}>Lỗi hệ thống</p>
 
             <h1>Ứng dụng tạm thời không khả dụng</h1>
 
-            <p>
-              Vui lòng thử tải lại ứng dụng. Mã lỗi:{" "}
-              {error.digest ?? "UNKNOWN"}
-            </p>
+            <p>Vui lòng thử tải lại ứng dụng. Mã lỗi: {error.digest ?? "UNKNOWN"}</p>
 
             <button
               type="button"
@@ -54,5 +46,5 @@ export default function GlobalError({
         </main>
       </body>
     </html>
-  );
+  )
 }
