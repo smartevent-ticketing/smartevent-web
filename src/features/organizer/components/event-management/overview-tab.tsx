@@ -7,20 +7,41 @@ interface OverviewTabProps {
     id?: string
     name?: string
     status?: string
-    expectedRevenue?: number
-    totalTickets?: number
-    vipTickets?: number
-    regularTickets?: number
+    location?: string
+    date?: string
   }
+  areas?: any[]
+  ticketTypes?: any[]
+  salePhases?: any[]
   onSwitchTab: (tab: string) => void
 }
 
-export function OverviewTab({ event, onSwitchTab }: OverviewTabProps) {
+export function OverviewTab({
+  event,
+  areas = [],
+  ticketTypes = [],
+  salePhases = [],
+  onSwitchTab,
+}: OverviewTabProps) {
   const isDraft = !event.status || event.status === "DRAFT"
-  const expectedRev = event.expectedRevenue || 0
-  const totalTix = event.totalTickets || 1500
-  const vipTix = event.vipTickets || 300
-  const regularTix = event.regularTickets || totalTix - vipTix
+
+  // 1. Tính toán doanh thu và vé THỰC TẾ từ danh sách hạng vé
+  const totalTickets = ticketTypes.reduce((sum, t) => sum + (t.totalQuota || 0), 0)
+  const totalSold = ticketTypes.reduce((sum, t) => sum + (t.soldCount || 0), 0)
+  const expectedRevenue = ticketTypes.reduce(
+    (sum, t) => sum + (t.price || 0) * (t.totalQuota || 0),
+    0
+  )
+
+  // 2. Tính toán tiến độ thiết lập thực tế (4 tiêu chí)
+  const checklist = [
+    { label: "Thông tin cơ bản & Thời gian", done: Boolean(event.name && event.date) },
+    { label: "Địa điểm tổ chức", done: Boolean(event.location && !event.location.includes("Chưa cấu hình")) },
+    { label: "Phân khu & Ghế ngồi", done: areas.length > 0 },
+    { label: "Hạng vé & Đợt mở bán", done: ticketTypes.length > 0 && salePhases.length > 0 },
+  ]
+  const completedCount = checklist.filter((item) => item.done).length
+  const progressPercent = Math.round((completedCount / checklist.length) * 100)
 
   return (
     <div className="space-y-6">
@@ -59,7 +80,7 @@ export function OverviewTab({ event, onSwitchTab }: OverviewTabProps) {
           </div>
           <div>
             <p className="text-2xl sm:text-3xl font-bold font-mono text-on-surface">
-              {expectedRev.toLocaleString("vi-VN")} ₫
+              {expectedRevenue.toLocaleString("vi-VN")} ₫
             </p>
             <p className="text-xs text-on-surface-variant mt-1.5">
               Dựa trên cấu hình giá vé hiện tại
@@ -67,7 +88,7 @@ export function OverviewTab({ event, onSwitchTab }: OverviewTabProps) {
           </div>
         </div>
 
-        {/* Tổng vé thiết lập */}
+                {/* Tổng vé thiết lập */}
         <div className="bg-white border border-outline-variant/60 rounded-3xl p-6 shadow-xs flex flex-col justify-between">
           <div className="flex items-center gap-2 text-on-surface-variant mb-6">
             <Ticket className="size-4 text-primary" />
@@ -77,22 +98,15 @@ export function OverviewTab({ event, onSwitchTab }: OverviewTabProps) {
           </div>
           <div>
             <p className="text-2xl sm:text-3xl font-bold font-mono text-on-surface">
-              {totalTix.toLocaleString("vi-VN")}
+              {totalTickets.toLocaleString("vi-VN")} vé
             </p>
-            <div className="flex items-center gap-4 mt-2 text-xs text-on-surface-variant">
-              <span className="flex items-center gap-1.5">
-                <span className="size-2.5 rounded-full bg-primary" />
-                VIP: {vipTix}
-              </span>
-              <span className="flex items-center gap-1.5">
-                <span className="size-2.5 rounded-full bg-slate-400" />
-                Thường: {regularTix}
-              </span>
-            </div>
+            <p className="text-xs text-on-surface-variant mt-1.5">
+              Đã bán: <span className="font-semibold text-primary">{totalSold.toLocaleString("vi-VN")}</span> vé
+            </p>
           </div>
         </div>
 
-        {/* Tiến độ thiết lập */}
+        {/* Tiến độ thiết lập động */}
         <div className="bg-white border border-outline-variant/60 rounded-3xl p-6 shadow-xs flex flex-col justify-between">
           <div className="flex items-center gap-2 text-on-surface-variant mb-4">
             <ListChecks className="size-4 text-primary" />
@@ -102,32 +116,31 @@ export function OverviewTab({ event, onSwitchTab }: OverviewTabProps) {
           </div>
           <div className="space-y-3">
             <div className="flex justify-between items-center text-xs">
-              <span className="font-bold text-on-surface">75%</span>
-              <span className="text-on-surface-variant">3/4 Hạng mục</span>
+              <span className="font-bold text-on-surface">{progressPercent}%</span>
+              <span className="text-on-surface-variant">{completedCount}/{checklist.length} Hạng mục</span>
             </div>
             <div className="w-full bg-surface-container-highest rounded-full h-2">
               <div
                 className="bg-primary h-2 rounded-full transition-all duration-500"
-                style={{ width: "75%" }}
+                style={{ width: `${progressPercent}%` }}
               />
             </div>
             <ul className="space-y-1.5 text-xs">
-              <li className="flex items-center gap-2 text-primary font-medium">
-                <CheckCircle2 className="size-3.5 text-primary shrink-0" />
-                <span>Thông tin cơ bản & Thời gian</span>
-              </li>
-              <li className="flex items-center gap-2 text-primary font-medium">
-                <CheckCircle2 className="size-3.5 text-primary shrink-0" />
-                <span>Địa điểm & Hình ảnh</span>
-              </li>
-              <li className="flex items-center gap-2 text-primary font-medium">
-                <CheckCircle2 className="size-3.5 text-primary shrink-0" />
-                <span>Phân khu & Ghế ngồi</span>
-              </li>
-              <li className="flex items-center gap-2 text-on-surface-variant/60">
-                <Circle className="size-3.5 text-outline-variant shrink-0" />
-                <span>Hoàn tất Đợt mở bán vé</span>
-              </li>
+              {checklist.map((item, idx) => (
+                <li
+                  key={idx}
+                  className={`flex items-center gap-2 font-medium ${
+                    item.done ? "text-primary" : "text-on-surface-variant/60"
+                  }`}
+                >
+                  {item.done ? (
+                    <CheckCircle2 className="size-3.5 text-primary shrink-0" />
+                  ) : (
+                    <Circle className="size-3.5 text-outline-variant shrink-0" />
+                  )}
+                  <span>{item.label}</span>
+                </li>
+              ))}
             </ul>
           </div>
         </div>

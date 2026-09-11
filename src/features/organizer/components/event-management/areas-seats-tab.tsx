@@ -29,7 +29,14 @@ export function AreasSeatsTab({ areas, onAddArea }: AreasSeatsTabProps) {
   const [type, setType] = useState<"STANDING" | "SEATED">("SEATED")
   const [capacity, setCapacity] = useState(200)
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [selectedAreaId, setSelectedAreaId] = useState<string>(areas[0]?.id || "area-1")
+  const [selectedAreaId, setSelectedAreaId] = useState<string>(areas[0]?.id || "")
+
+  useEffect(() => {
+    if (areas.length > 0 && (!selectedAreaId || !areas.some((a) => a.id === selectedAreaId))) {
+      setSelectedAreaId(areas[0].id)
+    }
+  }, [areas, selectedAreaId])
+
 
   // Real seats state
   const [realSeats, setRealSeats] = useState<components["schemas"]["EventSeatResponse"][]>([])
@@ -151,8 +158,30 @@ export function AreasSeatsTab({ areas, onAddArea }: AreasSeatsTabProps) {
         </button>
       </div>
 
-      {/* Areas Cards Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      {areas.length === 0 ? (
+        <div className="bg-white border border-outline-variant/60 rounded-3xl p-12 text-center space-y-4 shadow-xs">
+          <div className="size-14 bg-primary/10 text-primary rounded-2xl flex items-center justify-center mx-auto">
+            <Layers className="size-7" />
+          </div>
+          <div className="space-y-1">
+            <h4 className="text-base font-bold text-on-surface">Chưa có phân khu nào</h4>
+            <p className="text-xs text-on-surface-variant max-w-md mx-auto">
+              Sự kiện của bạn cần ít nhất một phân khu (Khu đứng tự do hoặc Khu có ghế ngồi cố định) để có thể tạo hạng vé và mở bán.
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={() => setShowAddModal(true)}
+            className="inline-flex items-center gap-1.5 px-5 py-2.5 bg-primary hover:bg-primary-hover text-white text-xs font-bold rounded-xl transition cursor-pointer shadow-xs"
+          >
+            <Plus className="size-4" />
+            <span>Thêm phân khu đầu tiên</span>
+          </button>
+        </div>
+      ) : (
+        <>
+          {/* Areas Cards Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {areas.map((area) => {
           const isSelected = area.id === selectedAreaId
           const isSeated = area.type === "SEATED"
@@ -357,6 +386,8 @@ export function AreasSeatsTab({ areas, onAddArea }: AreasSeatsTabProps) {
           </div>
         )}
       </div>
+        </>
+      )}
 
       {/* Generate Seats Modal */}
       {showGenerateModal && (

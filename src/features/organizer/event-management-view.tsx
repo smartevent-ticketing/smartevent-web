@@ -1,5 +1,7 @@
 "use client"
 
+import { getApiErrorMessage } from "@/lib/api/result"
+
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import {
@@ -41,115 +43,31 @@ export function EventManagementView({ eventId }: EventManagementViewProps) {
   const [showSubmitModal, setShowSubmitModal] = useState(false)
   const [showCancelModal, setShowCancelModal] = useState(false)
 
-  // Event State
-  const [eventData, setEventData] = useState<any>({
+  const [eventData, setEventData] = useState<{
+    id: string
+    name: string
+    status: string
+    location?: string
+    date?: string
+    startTime?: string
+    endTime?: string
+    expectedRevenue?: number
+    totalTickets?: number
+    vipTickets?: number
+    regularTickets?: number
+  }>({
     id: eventId,
-    name: "Hội nghị Tech Innovators 2024",
-    status: "DRAFT",
-    location: "Trung tâm Hội nghị Quốc gia, Hà Nội",
-    date: "24/10/2024 - 19:00",
-    expectedRevenue: 350000000,
-    totalTickets: 1500,
-    vipTickets: 300,
-    regularTickets: 1200,
+    name: "Đang tải thông tin sự kiện...",
+    status: "DRAFT"
   })
-
-  // Areas State
-  const [areas, setAreas] = useState<any[]>([
-    { id: "area-1", name: "Khu VIP Khán Đài A", type: "SEATED", capacity: 300 },
-    { id: "area-2", name: "Khu Phổ Thông B", type: "SEATED", capacity: 800 },
-    { id: "area-3", name: "Khu Fanzone Đứng", type: "STANDING", capacity: 400 },
-  ])
-
-  // Ticket Types State
-  const [ticketTypes, setTicketTypes] = useState<any[]>([
-    {
-      id: "tt-1",
-      name: "Vé VIP Thảm Đỏ",
-      price: 1500000,
-      totalQuota: 300,
-      soldCount: 85,
-      areaName: "Khu VIP Khán Đài A",
-      description: "Bao gồm quà tặng lưu niệm và vị trí gần sân khấu nhất",
-    },
-    {
-      id: "tt-2",
-      name: "Vé Tiêu Chuẩn Hàng B",
-      price: 650000,
-      totalQuota: 800,
-      soldCount: 320,
-      areaName: "Khu Phổ Thông B",
-      description: "Ghế ngồi cố định tầm nhìn bao quát",
-    },
-    {
-      id: "tt-3",
-      name: "Vé Fanzone Đứng Tự Do",
-      price: 450000,
-      totalQuota: 400,
-      soldCount: 150,
-      areaName: "Khu Fanzone Đứng",
-      description: "Khu vực đứng gần ban nhạc",
-    },
-  ])
-
-  // Sale Phases State
-  const [salePhases, setSalePhases] = useState<any[]>([
-    {
-      id: "sp-1",
-      name: "Đợt Mở Bán Sớm (Early Bird)",
-      startTime: "2024-09-01T08:00:00Z",
-      endTime: "2024-09-15T23:59:59Z",
-      status: "COMPLETED",
-      maxPerOrder: 4,
-      ticketTypeName: "Vé VIP Thảm Đỏ & Fanzone",
-    },
-    {
-      id: "sp-2",
-      name: "Đợt Mở Bán Chính Thức (General Sale)",
-      startTime: "2024-09-16T08:00:00Z",
-      endTime: "2024-10-23T23:59:59Z",
-      status: "ACTIVE",
-      maxPerOrder: 6,
-      ticketTypeName: "Toàn bộ hạng vé",
-    },
-  ])
-
-  // Issued Tickets State
-  const [issuedTickets, setIssuedTickets] = useState<any[]>([
-    {
-      id: "tkt-001",
-      ticketCode: "TKT-TECH-VIP-001",
-      ticketTypeName: "Vé VIP Thảm Đỏ",
-      areaName: "Khu VIP Khán Đài A",
-      seatName: "A-12",
-      status: "ACTIVE",
-      issuedAt: "2024-09-10T14:30:00Z",
-    },
-    {
-      id: "tkt-002",
-      ticketCode: "TKT-TECH-VIP-002",
-      ticketTypeName: "Vé VIP Thảm Đỏ",
-      areaName: "Khu VIP Khán Đài A",
-      seatName: "A-13",
-      status: "CHECKED_IN",
-      checkedInAt: "2024-10-24T18:15:00Z",
-      issuedAt: "2024-09-10T14:30:00Z",
-    },
-    {
-      id: "tkt-003",
-      ticketCode: "TKT-TECH-STD-089",
-      ticketTypeName: "Vé Tiêu Chuẩn Hàng B",
-      areaName: "Khu Phổ Thông B",
-      seatName: "B-05",
-      status: "ACTIVE",
-      issuedAt: "2024-09-18T09:12:00Z",
-    },
-  ])
-
+  const [areas, setAreas] = useState<any[]>([])
+  const [ticketTypes, setTicketTypes] = useState<any[]>([])
+  const [salePhases, setSalePhases] = useState<any[]>([])
+  const [issuedTickets, setIssuedTickets] = useState<any[]>([])
   // Fetch real event data on load
   useEffect(() => {
     let isMounted = true
-    async function loadEvent() {
+        async function loadEvent() {
       setIsLoading(true)
       try {
         const [eventRes, areasRes, typesRes, phasesRes, ticketsRes] = await Promise.allSettled([
@@ -160,127 +78,150 @@ export function EventManagementView({ eventId }: EventManagementViewProps) {
           organizerApi.getEventTickets(eventId),
         ])
 
-        if (eventRes.status === "fulfilled" && eventRes.value.data && isMounted) {
-          const ev = ((eventRes.value.data as any)?.data ?? eventRes.value.data) as any
-          setEventData((prev: any) => ({
-            ...prev,
-            id: ev.id || eventId,
-            name: ev.name || prev.name,
-            status: ev.status || prev.status,
-            location: ev.venue?.name ? `${ev.venue.name}, ${ev.venue.city || ""}` : prev.location,
-            date: ev.startTime ? new Date(ev.startTime).toLocaleString("vi-VN") : prev.date,
-          }))
+                // 1. Xử lý thông tin chính của sự kiện (Event Core)
+        if (eventRes.status === "fulfilled" && eventRes.value?.data) {
+          const ev = (eventRes.value.data as any)?.data ?? eventRes.value.data
+          setEventData({
+            id: ev.id,
+            name: ev.name, // Lấy đúng tên thật từ server, không bịa fallback
+            status: ev.status, // Lấy đúng enum trạng thái từ server
+            location: ev.venue?.name ? `${ev.venue.name}, ${ev.venue.city || ""}` : "Chưa cấu hình địa điểm",
+            date: ev.startTime ? new Date(ev.startTime).toLocaleString("vi-VN") : "Chưa cấu hình thời gian",
+            startTime: ev.startTime,
+            endTime: ev.endTime,
+            expectedRevenue: 0,
+            totalTickets: 0,
+          })
         }
 
-        if (areasRes.status === "fulfilled" && areasRes.value.data && isMounted) {
+
+        // 2. Xử lý phân khu (Areas) - Cập nhật đúng mảng server trả về (kể cả rỗng)
+        if (areasRes.status === "fulfilled" && areasRes.value?.data) {
           const rawAreas = ((areasRes.value.data as any)?.data ?? areasRes.value.data) as any[]
-          if (Array.isArray(rawAreas) && rawAreas.length > 0) {
-            setAreas(
-              rawAreas.map((a) => ({
-                id: a.id,
-                name: a.name,
-                type: a.areaType || a.type || "SEATED",
-                capacity: a.capacity || 100,
-              })),
-            )
-          }
+          setAreas(
+            Array.isArray(rawAreas)
+              ? rawAreas.map((a) => ({
+                  id: a.id,
+                  name: a.name,
+                  type: a.areaType || a.type || "SEATED",
+                  capacity: a.capacity || 0,
+                }))
+              : []
+          )
         }
 
+        // 3. Xử lý đợt mở bán (Sale Phases)
         let rawPhases: any[] = []
-        if (phasesRes.status === "fulfilled" && phasesRes.value.data && isMounted) {
+        if (phasesRes.status === "fulfilled" && phasesRes.value?.data) {
           const phasesData = ((phasesRes.value.data as any)?.data ?? phasesRes.value.data) as any[]
           if (Array.isArray(phasesData)) {
             rawPhases = phasesData
-            if (rawPhases.length > 0) {
-              setSalePhases(
-                rawPhases.map((p) => ({
-                  id: p.id,
-                  name: p.name,
-                  startTime: p.saleStartAt || p.startTime,
-                  endTime: p.saleEndAt || p.endTime,
-                  status: p.status,
-                  maxPerOrder: p.maxPerOrder || 4,
-                  ticketTypeName: p.ticketTypeName,
-                })),
-              )
-            }
+            setSalePhases(
+              rawPhases.map((p) => ({
+                id: p.id,
+                name: p.name,
+                startTime: p.saleStartAt || p.startTime,
+                endTime: p.saleEndAt || p.endTime,
+                status: p.status,
+                maxPerOrder: p.maxPerOrder || 4,
+                ticketTypeName: p.ticketTypeName,
+              }))
+            )
           }
         }
 
-        if (typesRes.status === "fulfilled" && typesRes.value.data && isMounted) {
+        // 4. Xử lý hạng vé (Ticket Types) - Không bịa giá 500k hay quota 100
+        if (typesRes.status === "fulfilled" && typesRes.value?.data) {
           const rawTypes = ((typesRes.value.data as any)?.data ?? typesRes.value.data) as any[]
-          if (Array.isArray(rawTypes) && rawTypes.length > 0) {
-            setTicketTypes(
-              rawTypes.map((t) => {
-                const matchedPhase = rawPhases.find((p) => p.ticketTypeId === t.id)
-                return {
-                  id: t.id,
-                  name: t.name,
-                  price: matchedPhase?.price ?? t.price ?? 500000,
-                  totalQuota: matchedPhase?.quantity ?? t.totalQuota ?? 100,
-                  soldCount: matchedPhase?.soldCount ?? t.soldCount ?? 0,
-                  areaName: t.areaName || "Khu vực chung",
-                  description: t.description,
-                }
-              }),
-            )
-          }
+          setTicketTypes(
+            Array.isArray(rawTypes)
+              ? rawTypes.map((t) => {
+                  const matchedPhase = rawPhases.find((p) => p.ticketTypeId === t.id)
+                  return {
+                    id: t.id,
+                    name: t.name,
+                    price: matchedPhase?.price ?? t.price ?? 0,
+                    totalQuota: matchedPhase?.quantity ?? t.totalQuota ?? 0,
+                    soldCount: matchedPhase?.soldCount ?? t.soldCount ?? 0,
+                    areaName: t.areaName || "Khu vực chung",
+                    description: t.description || "",
+                  }
+                })
+              : []
+          )
         }
 
-        if (ticketsRes.status === "fulfilled" && ticketsRes.value.data && isMounted) {
+        // 5. Xử lý vé đã phát hành (Issued Tickets)
+        if (ticketsRes.status === "fulfilled" && ticketsRes.value?.data) {
           const rawTickets = ((ticketsRes.value.data as any)?.data ?? ticketsRes.value.data) as any[]
-          if (Array.isArray(rawTickets) && rawTickets.length > 0) {
-            setIssuedTickets(
-              rawTickets.map((tk) => ({
-                id: tk.id,
-                ticketCode: tk.ticketCode || tk.code || tk.id,
-                ticketTypeName: tk.ticketTypeName || "Vé sự kiện",
-                areaName: tk.areaName,
-                seatName: tk.seatName || tk.seatCode,
-                status:
-                  tk.status === "ISSUED"
-                    ? "ACTIVE"
-                    : tk.status === "USED"
-                      ? "CHECKED_IN"
-                      : tk.status || "ACTIVE",
-                checkedInAt: tk.usedAt || tk.checkedInAt,
-                issuedAt: tk.issuedAt || tk.createdAt,
-              })),
-            )
-          }
+          setIssuedTickets(
+            Array.isArray(rawTickets)
+              ? rawTickets.map((tk) => ({
+                  id: tk.id,
+                  ticketCode: tk.ticketCode || tk.code || tk.id,
+                  ticketTypeName: tk.ticketTypeName || "Vé sự kiện",
+                  areaName: tk.areaName,
+                  seatName: tk.seatName || tk.seatCode,
+                  status:
+                    tk.status === "ISSUED"
+                      ? "ACTIVE"
+                      : tk.status === "USED"
+                        ? "CHECKED_IN"
+                        : tk.status || "ACTIVE",
+                  checkedInAt: tk.usedAt || tk.checkedInAt,
+                  issuedAt: tk.issuedAt || tk.createdAt,
+                }))
+              : []
+          )
         }
-      } catch {
-        // Keep initial state for dev inspection
+      } catch (err: any) {
+        setFeedback({
+          type: "error",
+          text: err?.message || "Đã xảy ra lỗi không xác định khi nạp dữ liệu sự kiện.",
+        })
       } finally {
         if (isMounted) setIsLoading(false)
       }
     }
+
     loadEvent()
     return () => {
       isMounted = false
     }
   }, [eventId])
 
+    // 1. Thêm phân khu: Dùng ID thật từ response của server, lỗi thì báo lỗi thật
   const handleAddArea = async (area: {
     name: string
     type: "STANDING" | "SEATED"
     capacity: number
   }) => {
     try {
-      await organizerApi.createArea(eventId, {
+      const res = await organizerApi.createArea(eventId, {
         name: area.name,
         areaType: area.type,
         capacity: area.capacity,
       })
-      setAreas((prev) => [...prev, { id: `area-${Date.now()}`, ...area }])
+      const created = (res.data as any)?.data ?? res.data
+      setAreas((prev) => [
+        ...prev,
+        {
+          id: created?.id,
+          name: created?.name || area.name,
+          type: created?.areaType || area.type,
+          capacity: created?.capacity || area.capacity,
+        },
+      ])
       setFeedback({ type: "success", text: `Đã thêm phân khu "${area.name}" thành công.` })
-    } catch {
-      // Local fallback
-      setAreas((prev) => [...prev, { id: `area-${Date.now()}`, ...area }])
-      setFeedback({ type: "success", text: `Đã lưu phân khu "${area.name}".` })
+    } catch (error: any) {
+      setFeedback({
+        type: "error",
+        text: getApiErrorMessage(error, `Không thể tạo phân khu "${area.name}". Vui lòng thử lại.`),
+      })
     }
   }
 
+  // 2. Thêm hạng vé: Chỉ tạo hạng vé, không sinh phase ngầm, nhận ID thật từ server
   const handleAddTicketType = async (ticketType: {
     name: string
     price: number
@@ -289,89 +230,61 @@ export function EventManagementView({ eventId }: EventManagementViewProps) {
     description?: string
   }) => {
     try {
+      const targetAreaId = ticketType.areaId || areas[0]?.id
+      if (!targetAreaId) {
+        setFeedback({
+          type: "error",
+          text: "Vui lòng tạo ít nhất một phân khu trước khi tạo hạng vé.",
+        })
+        return
+      }
+
       const createRes = await organizerApi.createTicketType(eventId, {
         name: ticketType.name,
-        eventAreaId: ticketType.areaId || areas[0]?.id || "",
+        eventAreaId: targetAreaId,
         description: ticketType.description,
       })
       const createdType = (createRes as any)?.data?.data ?? (createRes as any)?.data
-      const createdTypeId = createdType?.id
 
-      if (createdTypeId) {
-        const now = new Date()
-        const end = new Date(
-          eventData?.endTime
-            ? new Date(eventData.endTime).getTime()
-            : now.getTime() + 30 * 24 * 60 * 60 * 1000,
-        )
-        try {
-          const phaseRes = await organizerApi.createSalePhase(createdTypeId, {
-            name: `Mở bán - ${ticketType.name}`,
-            price: ticketType.price,
-            quantity: ticketType.totalQuota,
-            saleStartAt: now.toISOString(),
-            saleEndAt: end.toISOString(),
-            status: "ACTIVE",
-            maxPerOrder: Math.min(4, ticketType.totalQuota),
-            maxPerUser: Math.min(4, ticketType.totalQuota),
-          })
-          const createdPhase = (phaseRes as any)?.data?.data ?? (phaseRes as any)?.data
-          if (createdPhase) {
-            setSalePhases((prev) => [
-              ...prev,
-              {
-                id: createdPhase.id || `phase-${Date.now()}`,
-                name: createdPhase.name || `Mở bán - ${ticketType.name}`,
-                startTime: createdPhase.saleStartAt || now.toISOString(),
-                endTime: createdPhase.saleEndAt || end.toISOString(),
-                status: "ACTIVE",
-                maxPerOrder: Math.min(4, ticketType.totalQuota),
-                ticketTypeName: ticketType.name,
-              },
-            ])
-          }
-        } catch (e) {
-          console.error("Auto create sale phase error:", e)
-        }
-      }
-
-      const area = areas.find((a) => a.id === ticketType.areaId)
+      const area = areas.find((a) => a.id === targetAreaId)
       setTicketTypes((prev) => [
         ...prev,
         {
-          id: createdTypeId || `tt-${Date.now()}`,
-          ...ticketType,
+          id: createdType?.id,
+          name: createdType?.name || ticketType.name,
+          price: ticketType.price,
+          totalQuota: ticketType.totalQuota,
+          soldCount: 0,
           areaName: area?.name || "Khu vực chung",
+          description: createdType?.description || ticketType.description,
         },
       ])
       setFeedback({
         type: "success",
-        text: `Đã tạo hạng vé "${ticketType.name}" cùng đợt mở bán thành công.`,
+        text: `Đã tạo hạng vé "${ticketType.name}" thành công.`,
       })
-    } catch {
-      const area = areas.find((a) => a.id === ticketType.areaId)
-      setTicketTypes((prev) => [
-        ...prev,
-        { id: `tt-${Date.now()}`, ...ticketType, areaName: area?.name || "Khu vực chung" },
-      ])
-      setFeedback({ type: "success", text: `Đã lưu hạng vé "${ticketType.name}".` })
+    } catch (error: any) {
+      setFeedback({
+        type: "error",
+        text: getApiErrorMessage(error, `Không thể tạo hạng vé "${ticketType.name}". Vui lòng thử lại.`),
+      })
     }
   }
 
+  // 3. Gửi duyệt: Chỉ cập nhật trạng thái khi server thành công, thất bại thì giữ nguyên DRAFT
   const handleConfirmSubmit = async () => {
     setIsSubmittingApproval(true)
     try {
       await organizerApi.submitEvent(eventId)
-      setEventData((prev: any) => ({ ...prev, status: "PENDING_APPROVAL" }))
+      setEventData((prev) => ({ ...prev, status: "PENDING_APPROVAL" }))
       setFeedback({
         type: "success",
         text: "Sự kiện đã được gửi lên ban quản trị xét duyệt thành công.",
       })
-    } catch {
-      setEventData((prev: any) => ({ ...prev, status: "PENDING_APPROVAL" }))
+    } catch (error: any) {
       setFeedback({
-        type: "success",
-        text: "Sự kiện đã được chuyển sang trạng thái 'Chờ duyệt' (PENDING_APPROVAL).",
+        type: "error",
+        text: getApiErrorMessage(error, "Gửi duyệt sự kiện thất bại. Vui lòng kiểm tra lại điều kiện sự kiện."),
       })
     } finally {
       setIsSubmittingApproval(false)
@@ -379,20 +292,24 @@ export function EventManagementView({ eventId }: EventManagementViewProps) {
     }
   }
 
+  // 4. Hủy sự kiện: Chỉ cập nhật CANCELLED khi server xác nhận hủy thành công
   const handleConfirmCancel = async (reason: string) => {
     setIsCancellingEvent(true)
     try {
       await organizerApi.cancelEvent(eventId, reason)
-      setEventData((prev: any) => ({ ...prev, status: "CANCELLED" }))
+      setEventData((prev) => ({ ...prev, status: "CANCELLED" }))
       setFeedback({ type: "error", text: `Sự kiện đã được hủy: ${reason}` })
-    } catch {
-      setEventData((prev: any) => ({ ...prev, status: "CANCELLED" }))
-      setFeedback({ type: "error", text: `Đã cập nhật trạng thái hủy sự kiện.` })
+    } catch (error: any) {
+      setFeedback({
+        type: "error",
+        text: getApiErrorMessage(error, "Hủy sự kiện thất bại. Vui lòng thử lại."),
+      })
     } finally {
       setIsCancellingEvent(false)
       setShowCancelModal(false)
     }
   }
+
 
   const isDraft = eventData.status === "DRAFT"
   const isPending = eventData.status === "PENDING_APPROVAL"
@@ -559,11 +476,15 @@ export function EventManagementView({ eventId }: EventManagementViewProps) {
         {activeTab === "overview" && (
           <OverviewTab
             event={eventData}
+            areas={areas}
+            ticketTypes={ticketTypes}
+            salePhases={salePhases}
             onSwitchTab={(t) =>
               setActiveTab(t as "overview" | "areas" | "ticket-types" | "sale-phases" | "tickets")
             }
           />
         )}
+
         {activeTab === "areas" && (
           <AreasSeatsTab eventId={eventId} areas={areas} onAddArea={handleAddArea} />
         )}
