@@ -253,7 +253,6 @@ export function useEventSetup() {
           saleStartAt: new Date().toISOString(),
           saleEndAt: end.toISOString(),
           maxPerOrder: 4,
-          status: "ACTIVE",
         })
       }
 

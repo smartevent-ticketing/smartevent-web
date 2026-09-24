@@ -104,7 +104,6 @@ export const organizerApi = {
       saleEndAt: string
       maxPerOrder?: number
       maxPerUser?: number
-      status?: "ACTIVE" | "PAUSED" | "CLOSED"
     },
   ) =>
     requireApiSuccess(

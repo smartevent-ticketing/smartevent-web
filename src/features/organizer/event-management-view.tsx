@@ -16,11 +16,13 @@ import {
   Clock,
   QrCode,
   Loader2,
+  ImageIcon,
 } from "lucide-react"
 import { ActionFeedback } from "@/components/shared/action-feedback"
 import type { ActionMessage } from "@/components/shared/action-feedback"
 import { organizerApi } from "@/features/organizer/api/organizer-api"
 import { OverviewTab } from "@/features/organizer/components/event-management/overview-tab"
+import { MediaTab } from "@/features/organizer/components/event-management/media-tab"
 import { AreasSeatsTab } from "@/features/organizer/components/event-management/areas-seats-tab"
 import { TicketTypesTab } from "@/features/organizer/components/event-management/ticket-types-tab"
 import { SalePhasesTab } from "@/features/organizer/components/event-management/sale-phases-tab"
@@ -37,7 +39,7 @@ interface EventManagementViewProps {
 
 export function EventManagementView({ eventId }: EventManagementViewProps) {
   const [activeTab, setActiveTab] = useState<
-    "overview" | "areas" | "ticket-types" | "sale-phases" | "tickets"
+    "overview" | "media" | "areas" | "ticket-types" | "sale-phases" | "tickets"
   >("overview")
   const [feedback, setFeedback] = useState<ActionMessage | null>(null)
   const [isSubmittingApproval, setIsSubmittingApproval] = useState(false)
@@ -616,6 +618,19 @@ export function EventManagementView({ eventId }: EventManagementViewProps) {
 
         <button
           type="button"
+          onClick={() => setActiveTab("media")}
+          className={`px-4 py-3 text-xs font-bold transition flex items-center gap-2 border-b-2 cursor-pointer ${
+            activeTab === "media"
+              ? "border-primary text-primary"
+              : "border-transparent text-on-surface-variant hover:text-on-surface"
+          }`}
+        >
+          <ImageIcon className="size-4" />
+          <span>Ảnh sự kiện</span>
+        </button>
+
+        <button
+          type="button"
           onClick={() => setActiveTab("areas")}
           className={`px-4 py-3 text-xs font-bold transition flex items-center gap-2 border-b-2 cursor-pointer ${
             activeTab === "areas"
@@ -676,9 +691,15 @@ export function EventManagementView({ eventId }: EventManagementViewProps) {
             ticketTypes={ticketTypes}
             salePhases={salePhases}
             onSwitchTab={(t) =>
-              setActiveTab(t as "overview" | "areas" | "ticket-types" | "sale-phases" | "tickets")
+              setActiveTab(
+                t as "overview" | "media" | "areas" | "ticket-types" | "sale-phases" | "tickets",
+              )
             }
           />
+        )}
+
+        {activeTab === "media" && (
+          <MediaTab eventId={eventId} isDraft={isDraft} onMediaChanged={fetchReadiness} />
         )}
 
         {activeTab === "areas" && (

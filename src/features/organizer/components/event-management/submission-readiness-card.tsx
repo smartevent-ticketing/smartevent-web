@@ -16,14 +16,16 @@ interface SubmissionReadinessCardProps {
   isLoading: boolean
   isDraft: boolean
   onRefresh: () => Promise<void>
-  onSwitchTab: (tab: "overview" | "areas" | "ticket-types" | "sale-phases" | "tickets") => void
+  onSwitchTab: (
+    tab: "overview" | "media" | "areas" | "ticket-types" | "sale-phases" | "tickets",
+  ) => void
   onSubmitForApproval: () => void
 }
 
 interface ChecklistItemMeta {
   key: keyof EventSubmissionReadiness["checklist"]
   label: string
-  targetTab: "overview" | "areas" | "ticket-types" | "sale-phases" | "tickets"
+  targetTab: "overview" | "media" | "areas" | "ticket-types" | "sale-phases" | "tickets"
   actionLabel: string
 }
 
@@ -49,7 +51,7 @@ const CHECKLIST_ITEMS: ChecklistItemMeta[] = [
   {
     key: "hasBanner",
     label: "Ảnh Banner đại diện sự kiện",
-    targetTab: "overview",
+    targetTab: "media",
     actionLabel: "Tải ảnh banner",
   },
   {

@@ -105,7 +105,6 @@ export type SalePhasePaths = {
             saleEndAt: string
             maxPerOrder?: number
             maxPerUser?: number
-            status?: "ACTIVE" | "PAUSED" | "CLOSED"
           }
         }
       }
