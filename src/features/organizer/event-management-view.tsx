@@ -279,6 +279,63 @@ export function EventManagementView({ eventId }: EventManagementViewProps) {
     }
   }
 
+  // Cập nhật phân khu (Đổi tên, loại SEATED <-> STANDING, sức chứa)
+  const handleUpdateArea = async (
+    areaId: string,
+    area: {
+      name: string
+      type: "STANDING" | "SEATED"
+      capacity: number
+    },
+  ) => {
+    try {
+      const res = await organizerApi.updateArea(areaId, {
+        name: area.name,
+        areaType: area.type,
+        capacity: area.capacity,
+      })
+      const updated = (res.data as any)?.data ?? res.data
+      setAreas((prev) =>
+        prev.map((a) =>
+          a.id === areaId
+            ? {
+                ...a,
+                name: updated?.name || area.name,
+                type: updated?.areaType || area.type,
+                capacity: updated?.capacity || area.capacity,
+              }
+            : a,
+        ),
+      )
+      setFeedback({ type: "success", text: `Đã cập nhật phân khu "${area.name}" thành công.` })
+      fetchReadiness()
+    } catch (error: any) {
+      const msg = getApiErrorMessage(error, `Không thể cập nhật phân khu "${area.name}".`)
+      setFeedback({
+        type: "error",
+        text: msg,
+      })
+      throw error
+    }
+  }
+
+  // Xóa phân khu
+  const handleDeleteArea = async (areaId: string) => {
+    try {
+      await organizerApi.deleteArea(areaId)
+      setAreas((prev) => prev.filter((a) => a.id !== areaId))
+      setFeedback({ type: "success", text: "Đã xóa phân khu thành công." })
+      fetchReadiness()
+    } catch (error: any) {
+      const msg = getApiErrorMessage(error, "Không thể xóa phân khu.")
+      setFeedback({
+        type: "error",
+        text: msg,
+      })
+      throw error
+    }
+  }
+
   // 2. Thêm hạng vé: Chỉ tạo hạng vé, không sinh phase ngầm, nhận ID thật từ server
   const handleAddTicketType = async (ticketType: {
     name: string
@@ -703,7 +760,13 @@ export function EventManagementView({ eventId }: EventManagementViewProps) {
         )}
 
         {activeTab === "areas" && (
-          <AreasSeatsTab eventId={eventId} areas={areas} onAddArea={handleAddArea} />
+          <AreasSeatsTab
+            eventId={eventId}
+            areas={areas}
+            onAddArea={handleAddArea}
+            onUpdateArea={handleUpdateArea}
+            onDeleteArea={handleDeleteArea}
+          />
         )}
         {activeTab === "ticket-types" && (
           <TicketTypesTab

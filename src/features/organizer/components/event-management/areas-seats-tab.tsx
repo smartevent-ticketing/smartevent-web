@@ -1,7 +1,18 @@
 "use client"
 
 import { useState, useEffect, useCallback, useMemo } from "react"
-import { Layers, Plus, Armchair, Users, Loader2, Grid, Trash2 } from "lucide-react"
+import {
+  Layers,
+  Plus,
+  Armchair,
+  Users,
+  Loader2,
+  Grid,
+  Trash2,
+  Pencil,
+  Sparkles,
+  AlertTriangle,
+} from "lucide-react"
 import { organizerApi } from "@/features/organizer/api/organizer-api"
 import type { components } from "@/lib/api/schema"
 
@@ -21,15 +32,33 @@ interface AreasSeatsTabProps {
     type: "STANDING" | "SEATED"
     capacity: number
   }) => Promise<void>
+  onUpdateArea?: (
+    areaId: string,
+    area: {
+      name: string
+      type: "STANDING" | "SEATED"
+      capacity: number
+    },
+  ) => Promise<void>
+  onDeleteArea?: (areaId: string) => Promise<void>
 }
 
-export function AreasSeatsTab({ areas, onAddArea }: AreasSeatsTabProps) {
+export function AreasSeatsTab({ areas, onAddArea, onUpdateArea, onDeleteArea }: AreasSeatsTabProps) {
   const [showAddModal, setShowAddModal] = useState(false)
   const [name, setName] = useState("")
   const [type, setType] = useState<"STANDING" | "SEATED">("SEATED")
   const [capacity, setCapacity] = useState(200)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [selectedAreaId, setSelectedAreaId] = useState<string>(areas[0]?.id || "")
+
+  // Edit area state
+  const [showEditModal, setShowEditModal] = useState(false)
+  const [editingArea, setEditingArea] = useState<AreaItem | null>(null)
+  const [editName, setEditName] = useState("")
+  const [editType, setEditType] = useState<"STANDING" | "SEATED">("SEATED")
+  const [editCapacity, setEditCapacity] = useState(200)
+  const [isUpdatingArea, setIsUpdatingArea] = useState(false)
+  const [isDeletingArea, setIsDeletingArea] = useState(false)
 
   useEffect(() => {
     if (areas.length > 0 && (!selectedAreaId || !areas.some((a) => a.id === selectedAreaId))) {
@@ -80,9 +109,55 @@ export function AreasSeatsTab({ areas, onAddArea }: AreasSeatsTabProps) {
     }
   }, [selectedArea?.id, selectedArea?.type, loadSeats])
 
+  // Tự động tính số hàng và ghế tương thích với sức chứa phân khu
+  const handleAutoFillByCapacity = () => {
+    if (!selectedArea) return
+    const cap = selectedArea.capacity
+    let rows = 1
+    let seats = cap
+    // Tìm cấu hình hàng x ghế đẹp mắt (tối đa 26 hàng A-Z, mỗi hàng tối đa 50 ghế)
+    for (let r = 26; r >= 1; r--) {
+      if (cap % r === 0 && cap / r <= 50) {
+        rows = r
+        seats = cap / r
+        if (rows <= 15) break // Tỷ lệ cân đối đẹp (ví dụ 200 = 10 hàng x 20 ghế)
+      }
+    }
+    if (rows === 1 && cap > 26) {
+      rows = Math.min(26, Math.ceil(Math.sqrt(cap)))
+      seats = Math.ceil(cap / rows)
+    }
+    setFromRow("A")
+    setToRow(String.fromCharCode(65 + rows - 1))
+    setSeatsPerRowInput(seats)
+  }
+
+  // Tính số ghế dự kiến tạo theo fromRow, toRow, seatsPerRowInput
+  const calculatedRowCount = useMemo(() => {
+    const f = fromRow.trim().toUpperCase().charCodeAt(0) || 65
+    const t = toRow.trim().toUpperCase().charCodeAt(0) || 65
+    return Math.max(0, t - f + 1)
+  }, [fromRow, toRow])
+
+  const calculatedTotalSeats = useMemo(() => {
+    return calculatedRowCount * (Number(seatsPerRowInput) || 0)
+  }, [calculatedRowCount, seatsPerRowInput])
+
+  const isExceedingCapacity = useMemo(() => {
+    if (!selectedArea?.capacity) return false
+    return calculatedTotalSeats > selectedArea.capacity
+  }, [calculatedTotalSeats, selectedArea?.capacity])
+
   const handleGenerateSeats = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!selectedArea?.id) return
+    if (isExceedingCapacity) {
+      setSeatMessage({
+        type: "error",
+        text: `Số lượng ghế dự kiến (${calculatedTotalSeats}) vượt quá sức chứa phân khu (${selectedArea.capacity} vé).`,
+      })
+      return
+    }
     setIsGenerating(true)
     setSeatMessage(null)
     try {
@@ -116,6 +191,65 @@ export function AreasSeatsTab({ areas, onAddArea }: AreasSeatsTabProps) {
       await loadSeats(selectedArea.id)
     } catch {
       setSeatMessage({ type: "error", text: "Xóa sơ đồ ghế thất bại." })
+    }
+  }
+
+  const openEditModal = (area: AreaItem) => {
+    setEditingArea(area)
+    setEditName(area.name)
+    setEditType(area.type)
+    setEditCapacity(area.capacity)
+    setShowEditModal(true)
+  }
+
+  const handleUpdateSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!editingArea || !onUpdateArea || !editName.trim() || editCapacity <= 0) return
+    setIsUpdatingArea(true)
+    try {
+      await onUpdateArea(editingArea.id, {
+        name: editName.trim(),
+        type: editType,
+        capacity: editCapacity,
+      })
+      setShowEditModal(false)
+      setSeatMessage({
+        type: "success",
+        text: `Đã cập nhật phân khu "${editName}" thành công.`,
+      })
+    } catch (err: any) {
+      setSeatMessage({
+        type: "error",
+        text: err?.message || "Cập nhật phân khu thất bại.",
+      })
+    } finally {
+      setIsUpdatingArea(false)
+    }
+  }
+
+  const handleDeleteAreaConfirm = async () => {
+    if (!editingArea || !onDeleteArea) return
+    if (
+      !confirm(
+        `Bạn có chắc chắn muốn xóa phân khu "${editingArea.name}"? Mọi dữ liệu liên quan sẽ bị xóa vĩnh viễn.`,
+      )
+    )
+      return
+    setIsDeletingArea(true)
+    try {
+      await onDeleteArea(editingArea.id)
+      setShowEditModal(false)
+      setSeatMessage({
+        type: "success",
+        text: `Đã xóa phân khu "${editingArea.name}".`,
+      })
+    } catch (err: any) {
+      setSeatMessage({
+        type: "error",
+        text: err?.message || "Xóa phân khu thất bại.",
+      })
+    } finally {
+      setIsDeletingArea(false)
     }
   }
 
@@ -223,9 +357,24 @@ export function AreasSeatsTab({ areas, onAddArea }: AreasSeatsTabProps) {
                         </span>
                       </div>
                     </div>
-                    <span className="text-xs font-mono font-bold text-primary">
-                      {area.capacity.toLocaleString("vi-VN")} vé
-                    </span>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-mono font-bold text-primary">
+                        {area.capacity.toLocaleString("vi-VN")} vé
+                      </span>
+                      {onUpdateArea && (
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            openEditModal(area)
+                          }}
+                          className="p-1 hover:bg-slate-100 rounded-lg text-on-surface-variant hover:text-primary transition"
+                          title="Chỉnh sửa phân khu này"
+                        >
+                          <Pencil className="size-3.5" />
+                        </button>
+                      )}
+                    </div>
                   </div>
                 </div>
               )
@@ -259,13 +408,26 @@ export function AreasSeatsTab({ areas, onAddArea }: AreasSeatsTabProps) {
               <div className="flex items-center gap-2">
                 <Layers className="size-5 text-primary" />
                 <div>
-                  <h4 className="text-sm font-bold text-on-surface">
-                    Sơ đồ cấu hình: {selectedArea ? selectedArea.name : "Chưa chọn khu vực"}
-                  </h4>
+                  <div className="flex items-center gap-2">
+                    <h4 className="text-sm font-bold text-on-surface">
+                      Sơ đồ cấu hình: {selectedArea ? selectedArea.name : "Chưa chọn khu vực"}
+                    </h4>
+                    {selectedArea && onUpdateArea && (
+                      <button
+                        type="button"
+                        onClick={() => openEditModal(selectedArea)}
+                        className="px-2.5 py-1 text-[11px] font-bold text-primary hover:bg-primary/10 rounded-lg transition inline-flex items-center gap-1 cursor-pointer border border-primary/20"
+                        title="Chỉnh sửa thông tin phân khu"
+                      >
+                        <Pencil className="size-3" />
+                        <span>Sửa phân khu</span>
+                      </button>
+                    )}
+                  </div>
                   <p className="text-xs text-on-surface-variant">
                     {selectedArea?.type === "SEATED"
-                      ? `Sơ đồ bố trí hàng ghế (${realSeats.length} ghế đã tạo)`
-                      : "Khu đứng tự do - Sức chứa quản lý theo số lượng vé phát hành"}
+                      ? `Sơ đồ bố trí hàng ghế (${realSeats.length} ghế đã tạo / Sức chứa: ${selectedArea.capacity.toLocaleString("vi-VN")} vé)`
+                      : `Khu đứng tự do - Sức chứa quản lý theo số lượng vé phát hành (${selectedArea?.capacity.toLocaleString("vi-VN")} người)`}
                   </p>
                 </div>
               </div>
@@ -407,9 +569,20 @@ export function AreasSeatsTab({ areas, onAddArea }: AreasSeatsTabProps) {
           <div className="bg-white rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl space-y-5">
             <h3 className="text-lg font-bold text-on-surface">Sinh sơ đồ ghế ngồi tự động</h3>
             <p className="text-xs text-on-surface-variant">
-              Tạo hàng loạt mã ghế cho phân khu <strong>{selectedArea?.name}</strong> theo quy ước
-              A1..A12, B1..B12...
+              Tạo hàng loạt mã ghế cho phân khu <strong>{selectedArea?.name}</strong> (Sức chứa:{" "}
+              <strong>{selectedArea?.capacity} vé</strong>).
             </p>
+
+            {/* Quick autofill button */}
+            <button
+              type="button"
+              onClick={handleAutoFillByCapacity}
+              className="w-full py-2.5 px-4 bg-primary/10 hover:bg-primary/15 text-primary text-xs font-bold rounded-xl transition flex items-center justify-center gap-1.5 cursor-pointer border border-primary/20"
+            >
+              <Sparkles className="size-3.5" />
+              <span>⚡ Tự động tính theo sức chứa ({selectedArea?.capacity} ghế)</span>
+            </button>
+
             <form onSubmit={handleGenerateSeats} className="space-y-4">
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-1">
@@ -457,6 +630,33 @@ export function AreasSeatsTab({ areas, onAddArea }: AreasSeatsTabProps) {
                 />
               </div>
 
+              {/* Calculated Summary Badge */}
+              <div
+                className={`p-3 rounded-xl text-xs flex items-center justify-between border ${
+                  isExceedingCapacity
+                    ? "bg-red-50 text-red-700 border-red-200"
+                    : "bg-slate-50 text-slate-700 border-slate-200"
+                }`}
+              >
+                <span>
+                  Dự kiến tạo: <strong>{calculatedTotalSeats} ghế</strong> ({calculatedRowCount}{" "}
+                  hàng × {seatsPerRowInput} ghế)
+                </span>
+                <span className="font-semibold text-on-surface-variant">
+                  Sức chứa: {selectedArea?.capacity} vé
+                </span>
+              </div>
+
+              {isExceedingCapacity && (
+                <p className="text-[11px] text-red-600 font-semibold flex items-center gap-1.5">
+                  <AlertTriangle className="size-3.5 shrink-0" />
+                  <span>
+                    Vượt quá sức chứa phân khu ({selectedArea?.capacity} vé). Vui lòng giảm số hàng
+                    hoặc số ghế mỗi hàng!
+                  </span>
+                </p>
+              )}
+
               <div className="flex items-center justify-end gap-2 pt-2">
                 <button
                   type="button"
@@ -467,7 +667,7 @@ export function AreasSeatsTab({ areas, onAddArea }: AreasSeatsTabProps) {
                 </button>
                 <button
                   type="submit"
-                  disabled={isGenerating}
+                  disabled={isGenerating || isExceedingCapacity || calculatedTotalSeats === 0}
                   className="px-5 py-2 bg-primary hover:bg-primary-hover text-white text-xs font-bold rounded-xl transition cursor-pointer disabled:opacity-50 inline-flex items-center gap-1.5 shadow-xs"
                 >
                   {isGenerating && <Loader2 className="size-3.5 animate-spin" />}
@@ -559,6 +759,116 @@ export function AreasSeatsTab({ areas, onAddArea }: AreasSeatsTabProps) {
                   {isSubmitting && <Loader2 className="size-3.5 animate-spin" />}
                   <span>Lưu phân khu</span>
                 </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Edit Area Modal */}
+      {showEditModal && editingArea && (
+        <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl space-y-5">
+            <h3 className="text-lg font-bold text-on-surface">Chỉnh sửa phân khu sự kiện</h3>
+            <form onSubmit={handleUpdateSubmit} className="space-y-4">
+              <div className="space-y-1">
+                <label className="text-xs font-semibold text-on-surface-variant">
+                  Tên phân khu
+                </label>
+                <input
+                  type="text"
+                  required
+                  placeholder="Ví dụ: Khu A VIP, Khán đài Đông..."
+                  value={editName}
+                  onChange={(e) => setEditName(e.target.value)}
+                  className="w-full px-4 py-2.5 rounded-xl border border-outline-variant text-xs"
+                />
+              </div>
+
+              <div className="space-y-1">
+                <label className="text-xs font-semibold text-on-surface-variant">
+                  Loại phân khu
+                </label>
+                <div className="grid grid-cols-2 gap-3">
+                  <button
+                    type="button"
+                    onClick={() => setEditType("SEATED")}
+                    className={`p-3 rounded-xl border text-xs font-bold text-center cursor-pointer transition ${
+                      editType === "SEATED"
+                        ? "bg-primary/10 border-primary text-primary"
+                        : "border-outline-variant text-on-surface-variant hover:bg-surface-container"
+                    }`}
+                  >
+                    Khu có ghế (SEATED)
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setEditType("STANDING")}
+                    className={`p-3 rounded-xl border text-xs font-bold text-center cursor-pointer transition ${
+                      editType === "STANDING"
+                        ? "bg-primary/10 border-primary text-primary"
+                        : "border-outline-variant text-on-surface-variant hover:bg-surface-container"
+                    }`}
+                  >
+                    Khu đứng (STANDING)
+                  </button>
+                </div>
+                {editingArea.type === "SEATED" && editType === "STANDING" && (
+                  <p className="text-[11px] text-amber-600 mt-1">
+                    * Lưu ý: Chuyển sang khu đứng sẽ tự động xóa các ghế trống chưa được giữ/bán.
+                  </p>
+                )}
+              </div>
+
+              <div className="space-y-1">
+                <label className="text-xs font-semibold text-on-surface-variant">
+                  Sức chứa tối đa (vé)
+                </label>
+                <input
+                  type="number"
+                  min={1}
+                  required
+                  value={editCapacity}
+                  onChange={(e) => setEditCapacity(Number(e.target.value))}
+                  className="w-full px-4 py-2.5 rounded-xl border border-outline-variant text-xs"
+                />
+              </div>
+
+              <div className="flex items-center justify-between pt-3 border-t border-outline-variant/40">
+                {onDeleteArea ? (
+                  <button
+                    type="button"
+                    disabled={isDeletingArea || isUpdatingArea}
+                    onClick={handleDeleteAreaConfirm}
+                    className="px-3.5 py-2 text-xs font-bold text-red-600 hover:bg-red-50 rounded-xl transition cursor-pointer inline-flex items-center gap-1.5"
+                  >
+                    {isDeletingArea ? (
+                      <Loader2 className="size-3.5 animate-spin" />
+                    ) : (
+                      <Trash2 className="size-3.5" />
+                    )}
+                    <span>Xóa phân khu</span>
+                  </button>
+                ) : (
+                  <div />
+                )}
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setShowEditModal(false)}
+                    className="px-4 py-2 text-xs font-bold text-on-surface-variant hover:bg-surface-container rounded-xl transition cursor-pointer"
+                  >
+                    Hủy
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={isUpdatingArea || isDeletingArea}
+                    className="px-5 py-2 bg-primary hover:bg-primary-hover text-white text-xs font-bold rounded-xl transition cursor-pointer disabled:opacity-50 inline-flex items-center gap-1.5"
+                  >
+                    {isUpdatingArea && <Loader2 className="size-3.5 animate-spin" />}
+                    <span>Lưu thay đổi</span>
+                  </button>
+                </div>
               </div>
             </form>
           </div>

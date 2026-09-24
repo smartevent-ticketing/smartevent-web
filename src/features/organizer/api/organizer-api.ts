@@ -64,6 +64,30 @@ export const organizerApi = {
       }),
     ),
 
+  updateArea: (
+    areaId: string,
+    body: {
+      name: string
+      areaType: "STANDING" | "SEATED"
+      capacity: number
+      sortOrder?: number
+      description?: string
+    },
+  ) =>
+    requireApiSuccess(
+      apiClient.PUT("/api/v1/areas/{id}", {
+        params: { path: { id: areaId } },
+        body,
+      }),
+    ),
+
+  deleteArea: (areaId: string) =>
+    requireApiSuccess(
+      apiClient.DELETE("/api/v1/areas/{id}", {
+        params: { path: { id: areaId } },
+      }),
+    ),
+
   getTicketTypes: (eventId: string) =>
     requireApiSuccess(
       apiClient.GET("/api/v1/events/{eventId}/ticket-types", {
@@ -133,7 +157,7 @@ export const organizerApi = {
   ) =>
     requireApiSuccess(
       apiClient.GET("/api/v1/areas/{areaId}/seats", {
-        params: { path: { areaId }, query: { pageable: {} } },
+        params: { path: { areaId }, query: { pageable: { size: 1000 } } },
         ...options,
       }),
     ),

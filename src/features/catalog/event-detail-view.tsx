@@ -11,6 +11,8 @@ import { useEventDetail } from "./hooks/use-event-detail"
 export function EventDetailView({ eventId }: { eventId: string }) {
   const {
     bannerUrl,
+    galleryUrls,
+    minPrice,
     isLoading,
     isNotFound,
     setSelectedTierId,
@@ -72,30 +74,36 @@ export function EventDetailView({ eventId }: { eventId: string }) {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12 flex flex-col gap-8">
       {/* 1. Hero Event Banner */}
-      <EventHero {...{ bannerUrl, isSaleActive, title, date, time, locationName, cityName }} />
+      <EventHero
+        {...{ bannerUrl, isSaleActive, title, date, time, locationName, cityName, minPrice }}
+      />
 
       {/* 2. Grid Layout: Left Content & Right Sticky Booking Card */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         {/* Main Content (Left - 8 cols) */}
-        <EventInformation {...{ isSaleActive, categoryName, locationName, descriptionText }} />
+        <EventInformation
+          {...{ isSaleActive, categoryName, locationName, descriptionText, galleryUrls }}
+        />
 
         {/* Sticky Sidebar Booking (Right - 4 cols) */}
-        <TicketPicker
-          {...{
-            setSelectedTierId,
-            quantity,
-            setQuantity,
-            shared,
-            availableTiers,
-            isSaleActive,
-            effectiveTierId,
-            currentTier,
-            totalPrice,
-            maxAllowedQty,
-            handleShare,
-            targetEventId,
-          }}
-        />
+        <div id="ticket-picker-section" className="lg:col-span-4 w-full">
+          <TicketPicker
+            {...{
+              setSelectedTierId,
+              quantity,
+              setQuantity,
+              shared,
+              availableTiers,
+              isSaleActive,
+              effectiveTierId,
+              currentTier,
+              totalPrice,
+              maxAllowedQty,
+              handleShare,
+              targetEventId,
+            }}
+          />
+        </div>
       </div>
     </div>
   )

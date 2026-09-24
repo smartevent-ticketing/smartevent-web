@@ -1,11 +1,11 @@
 "use client"
 
-import { AlertCircle, Building, Music, Tag } from "lucide-react"
+import { AlertCircle, Building, Music, Tag, ImageIcon } from "lucide-react"
 import { useEventDetail } from "@/features/catalog/hooks/use-event-detail"
 
 type Props = Pick<
   ReturnType<typeof useEventDetail>,
-  "isSaleActive" | "categoryName" | "locationName" | "descriptionText"
+  "isSaleActive" | "categoryName" | "locationName" | "descriptionText" | "galleryUrls"
 >
 
 export function EventInformation({
@@ -13,6 +13,7 @@ export function EventInformation({
   categoryName,
   locationName,
   descriptionText,
+  galleryUrls = [],
 }: Props) {
   return (
     <>
@@ -63,6 +64,36 @@ export function EventInformation({
             {descriptionText}
           </div>
         </section>
+
+        {/* Gallery / Hình ảnh sự kiện */}
+        {galleryUrls && galleryUrls.length > 0 && (
+          <section className="bg-white rounded-2xl p-6 sm:p-8 border border-outline-variant/60 shadow-xs space-y-4">
+            <div className="flex items-center justify-between border-b border-outline-variant/40 pb-3">
+              <h2 className="text-xl font-bold text-on-surface flex items-center gap-2">
+                <ImageIcon className="size-5 text-primary" />
+                <span>Hình ảnh sự kiện & Poster</span>
+              </h2>
+              <span className="text-xs font-semibold text-on-surface-variant">
+                {galleryUrls.length} ảnh
+              </span>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
+              {galleryUrls.map((url, idx) => (
+                <div
+                  key={idx}
+                  className="rounded-2xl overflow-hidden border border-outline-variant/60 shadow-sm bg-slate-950 aspect-video group"
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={url}
+                    alt={`Event photo ${idx + 1}`}
+                    className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
+                  />
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
 
         {/* Sơ đồ khu vực */}
         <section className="bg-white rounded-2xl p-6 sm:p-8 border border-outline-variant/60 shadow-xs space-y-4">

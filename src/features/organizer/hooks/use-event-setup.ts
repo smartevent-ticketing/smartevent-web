@@ -127,7 +127,7 @@ export function useEventSetup() {
     setMediaError(null)
     try {
       const res = await organizerApi.uploadEventMedia(createdEventId, file, "BANNER")
-      const media = res.data?.data
+      const media = (res.data?.data ?? res.data) as EventMediaResponse
       if (media) {
         setBannerMedia(media)
       }
@@ -162,7 +162,7 @@ export function useEventSetup() {
     setMediaError(null)
     try {
       const res = await organizerApi.uploadEventMedia(createdEventId, file, "GALLERY")
-      const media = res.data?.data
+      const media = (res.data?.data ?? res.data) as EventMediaResponse
       if (media) {
         setGalleryMedia((prev) => [...prev, media])
       }

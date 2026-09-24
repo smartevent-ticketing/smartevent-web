@@ -26,6 +26,7 @@ const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"]
 
 export function MediaTab({ eventId, isDraft, onMediaChanged }: MediaTabProps) {
   const [bannerMedia, setBannerMedia] = useState<EventMediaResponse | null>(null)
+  const [bannerPreview, setBannerPreview] = useState<string | null>(null)
   const [galleryMedia, setGalleryMedia] = useState<EventMediaResponse[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [isUploadingBanner, setIsUploadingBanner] = useState(false)
@@ -89,16 +90,20 @@ export function MediaTab({ eventId, isDraft, onMediaChanged }: MediaTabProps) {
       return
     }
 
+    const preview = URL.createObjectURL(file)
+    setBannerPreview(preview)
     setIsUploadingBanner(true)
     try {
       const res = await organizerApi.uploadEventMedia(eventId, file, "BANNER")
       const media = (res.data?.data ?? res.data) as EventMediaResponse
       if (media) {
         setBannerMedia(media)
+        setBannerPreview(null)
         setSuccessMessage("Đã cập nhật ảnh bìa sự kiện thành công.")
         await onMediaChanged?.()
       }
     } catch (apiErr) {
+      setBannerPreview(null)
       setErrorMessage(getApiErrorMessage(apiErr, "Không thể tải ảnh bìa lên. Vui lòng thử lại."))
     } finally {
       setIsUploadingBanner(false)
@@ -106,14 +111,17 @@ export function MediaTab({ eventId, isDraft, onMediaChanged }: MediaTabProps) {
   }
 
   const handleDeleteBanner = async () => {
-    if (!isDraft || !bannerMedia) return
+    if (!isDraft) return
     setErrorMessage(null)
     setSuccessMessage(null)
 
     setIsUploadingBanner(true)
     try {
-      await organizerApi.deleteEventMedia(eventId, bannerMedia.eventFileId)
+      if (bannerMedia?.eventFileId) {
+        await organizerApi.deleteEventMedia(eventId, bannerMedia.eventFileId)
+      }
       setBannerMedia(null)
+      setBannerPreview(null)
       setSuccessMessage("Đã gỡ ảnh bìa sự kiện.")
       await onMediaChanged?.()
     } catch (apiErr) {
@@ -128,8 +136,8 @@ export function MediaTab({ eventId, isDraft, onMediaChanged }: MediaTabProps) {
     setErrorMessage(null)
     setSuccessMessage(null)
 
-    if (galleryMedia.length >= 8) {
-      setErrorMessage("Đã đạt giới hạn tối đa 8 ảnh trong bộ sưu tập.")
+    if (galleryMedia.length >= 10) {
+      setErrorMessage("Đã đạt giới hạn tối đa 10 ảnh trong bộ sưu tập.")
       return
     }
 
@@ -253,11 +261,11 @@ export function MediaTab({ eventId, isDraft, onMediaChanged }: MediaTabProps) {
           }}
         />
 
-        {bannerMedia ? (
+        {bannerPreview || bannerMedia ? (
           <div className="relative group rounded-2xl overflow-hidden border border-outline-variant/60 aspect-video max-h-[360px] bg-slate-900">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src={bannerMedia.fileUrl}
+              src={bannerPreview || bannerMedia?.fileUrl}
               alt="Event Banner"
               className="w-full h-full object-cover"
             />
@@ -350,10 +358,10 @@ export function MediaTab({ eventId, isDraft, onMediaChanged }: MediaTabProps) {
               Bộ sưu tập ảnh phụ (Gallery)
             </label>
             <p className="text-xs text-on-surface-variant">
-              Tối đa 8 ảnh ({galleryMedia.length}/8 ảnh đã tải lên)
+              Tối đa 10 ảnh ({galleryMedia.length}/10 ảnh đã tải lên)
             </p>
           </div>
-          {isDraft && galleryMedia.length < 8 && (
+          {isDraft && galleryMedia.length < 10 && (
             <button
               type="button"
               disabled={isUploadingGallery}

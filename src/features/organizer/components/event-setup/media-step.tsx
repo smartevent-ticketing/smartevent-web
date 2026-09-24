@@ -43,6 +43,7 @@ export function EventMediaStep({
   const bannerInputRef = useRef<HTMLInputElement>(null)
   const galleryInputRef = useRef<HTMLInputElement>(null)
   const [localError, setLocalError] = useState<string | null>(null)
+  const [bannerPreview, setBannerPreview] = useState<string | null>(null)
   const [isDraggingBanner, setIsDraggingBanner] = useState(false)
 
   function validateFile(file: File): string | null {
@@ -62,17 +63,19 @@ export function EventMediaStep({
       setLocalError(err)
       return
     }
+    const preview = URL.createObjectURL(file)
+    setBannerPreview(preview)
     try {
       await onUploadBanner(file)
     } catch {
-      // Handled by parent hook
+      setBannerPreview(null)
     }
   }
 
   async function handleGallerySelect(file: File) {
     setLocalError(null)
-    if (galleryMedia.length >= 8) {
-      setLocalError("Đã đạt giới hạn tối đa 8 ảnh trong bộ sưu tập.")
+    if (galleryMedia.length >= 10) {
+      setLocalError("Đã đạt giới hạn tối đa 10 ảnh trong bộ sưu tập.")
       return
     }
     const err = validateFile(file)
@@ -88,6 +91,7 @@ export function EventMediaStep({
   }
 
   const activeError = localError || mediaError
+  const bannerDisplayUrl = bannerPreview || bannerMedia?.fileUrl
 
   return (
     <div className="bg-white p-6 sm:p-8 rounded-3xl border border-outline-variant/60 shadow-xs space-y-6">
@@ -131,11 +135,11 @@ export function EventMediaStep({
           }}
         />
 
-        {bannerMedia ? (
+        {bannerDisplayUrl ? (
           <div className="relative group rounded-2xl overflow-hidden border border-outline-variant/60 aspect-video max-h-[320px] bg-slate-900">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src={bannerMedia.fileUrl}
+              src={bannerDisplayUrl}
               alt="Event Banner"
               className="w-full h-full object-cover"
             />
@@ -151,7 +155,10 @@ export function EventMediaStep({
               <button
                 type="button"
                 disabled={isUploadingBanner}
-                onClick={onDeleteBanner}
+                onClick={async () => {
+                  setBannerPreview(null)
+                  await onDeleteBanner()
+                }}
                 className="p-2 bg-red-600/90 hover:bg-red-600 text-white rounded-xl shadow-sm transition"
                 title="Gỡ ảnh bìa"
               >
@@ -220,10 +227,10 @@ export function EventMediaStep({
               Bộ sưu tập ảnh phụ (Gallery)
             </label>
             <p className="text-xs text-on-surface-variant">
-              Tối đa 8 ảnh ({galleryMedia.length}/8 ảnh đã tải lên)
+              Tối đa 10 ảnh ({galleryMedia.length}/10 ảnh đã tải lên)
             </p>
           </div>
-          {galleryMedia.length < 8 && (
+          {galleryMedia.length < 10 && (
             <button
               type="button"
               disabled={isUploadingGallery}

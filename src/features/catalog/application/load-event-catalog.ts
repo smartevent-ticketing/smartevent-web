@@ -27,6 +27,28 @@ export async function loadEventCatalog(identifier: string, signal: AbortSignal) 
       if (signal.aborted) throw error
     }
   }
+
+  const galleryUrls: string[] = []
+  const galleryFiles = (event.files?.filter((file) => file.fileType === "GALLERY") ?? []).sort(
+    (a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0),
+  )
+  for (const gf of galleryFiles) {
+    if (gf.fileId) {
+      try {
+        const res = await catalogApi.getMediaUrl({
+          params: { path: { fileId: gf.fileId } },
+          signal,
+        })
+        const url = res.data?.data?.url
+        if (url) {
+          galleryUrls.push(url)
+        }
+      } catch (error) {
+        if (signal.aborted) throw error
+      }
+    }
+  }
+
   return {
     event,
     areas: areas.data?.data ?? [],
@@ -34,5 +56,6 @@ export async function loadEventCatalog(identifier: string, signal: AbortSignal) 
     phases: phases.data?.data ?? [],
     inventory: inventory.data?.data ?? [],
     bannerUrl,
+    galleryUrls,
   }
 }
