@@ -12,6 +12,7 @@ import {
   X,
   Play,
   Pause,
+  RotateCcw,
 } from "lucide-react"
 import type { SalePhaseStatus } from "@/lib/api/event-setup-contract"
 
@@ -405,6 +406,15 @@ export function SalePhasesTab({
                           <>
                             <button
                               type="button"
+                              onClick={() => handleTransition(phase.id, "DRAFT")}
+                              className="px-2.5 py-1 text-[11px] font-semibold bg-blue-50 text-blue-700 hover:bg-blue-100 rounded-lg border border-blue-200 transition inline-flex items-center gap-1"
+                              title="Thu hồi về bản nháp để chỉnh sửa ngày giờ hoặc số lượng"
+                            >
+                              <RotateCcw className="size-3" />
+                              <span>Thu hồi về nháp</span>
+                            </button>
+                            <button
+                              type="button"
                               onClick={() => handleTransition(phase.id, "ACTIVE")}
                               className="px-2.5 py-1 text-[11px] font-semibold bg-emerald-50 text-emerald-700 hover:bg-emerald-100 rounded-lg border border-emerald-200 transition inline-flex items-center gap-1"
                             >
@@ -477,6 +487,35 @@ export function SalePhasesTab({
             )
           })
         )}
+      </div>
+
+      {/* Hướng dẫn nghiệp vụ vòng đời & số lượng vé */}
+      <div className="bg-surface-container-low/70 border border-outline-variant/60 rounded-2xl p-4 text-xs text-on-surface-variant space-y-2">
+        <div className="flex items-center gap-2 font-bold text-on-surface text-[13px]">
+          <span>💡</span>
+          <span>Quy tắc vòng đời &amp; Bảo toàn số lượng vé</span>
+        </div>
+        <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px] list-disc list-inside text-on-surface-variant leading-relaxed">
+          <li>
+            <strong>Thu hồi lịch hẹn:</strong> Đợt mở bán ở trạng thái &quot;Đã lên lịch&quot; có
+            thể bấm <em>&quot;Thu hồi về nháp&quot;</em> bất cứ lúc nào để chỉnh sửa lại ngày giờ
+            hoặc số lượng mà không bị hủy.
+          </li>
+          <li>
+            <strong>Bảo toàn số lượng khi Đóng cổng:</strong> Khi một đợt đóng cổng, số vé chưa bán
+            không hề bị mất. Hệ thống tự động hoàn lại hạn ngạch vé chưa bán về sức chứa khán đài để
+            bạn tạo đợt mở bán tiếp theo.
+          </li>
+          <li>
+            <strong>Tạm dừng bán vé:</strong> Sử dụng trạng thái <em>&quot;Tạm dừng&quot;</em> khi
+            cần kiểm tra lại đơn hàng hoặc nghẽn mạng, sau đó bấm <em>&quot;Tiếp tục bán&quot;</em>{" "}
+            mà không làm gián đoạn kế hoạch.
+          </li>
+          <li>
+            <strong>Đóng cổng:</strong> Chỉ bấm <em>&quot;Đóng đợt/Đóng cổng&quot;</em> khi đợt bán
+            đó đã thực sự kết thúc chiến dịch và bạn không muốn nhận thêm đơn mua mới.
+          </li>
+        </ul>
       </div>
 
       {/* Modal: Thêm đợt mở bán mới */}
