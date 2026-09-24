@@ -147,21 +147,28 @@ export function SalePhasesTab({
     })
   }
 
+  // Helper to compute remaining available capacity for a ticket type
+  const getRemainingCapacity = (ticketTypeId: string) => {
+    const t = ticketTypes.find((item) => item.id === ticketTypeId)
+    if (!t) return 0
+    const matchedArea = areas.find((a) => a.id === t.areaId)
+    const totalAreaCapacity = matchedArea?.capacity ?? t.totalQuota ?? 0
+    const configuredQty = salePhases
+      .filter((p) => {
+        if (p.status === "CLOSED") return false
+        if (p.ticketTypeId === t.id) return true
+        const otherType = ticketTypes.find((ot) => ot.id === p.ticketTypeId)
+        return Boolean(otherType?.areaId && t.areaId && otherType.areaId === t.areaId)
+      })
+      .reduce((sum, p) => sum + p.quantity, 0)
+    return Math.max(0, totalAreaCapacity - configuredQty)
+  }
+
   // Open modal and pre-initialize tier configs
   const handleOpenAddModal = () => {
     const initial: Record<string, TierPhaseConfig> = {}
     ticketTypes.forEach((t) => {
-      const matchedArea = areas.find((a) => a.id === t.areaId)
-      const totalAreaCapacity = matchedArea?.capacity ?? t.totalQuota ?? 0
-      const configuredQty = salePhases
-        .filter((p) => {
-          if (p.status === "CLOSED") return false
-          if (p.ticketTypeId === t.id) return true
-          const otherType = ticketTypes.find((ot) => ot.id === p.ticketTypeId)
-          return Boolean(otherType?.areaId && t.areaId && otherType.areaId === t.areaId)
-        })
-        .reduce((sum, p) => sum + p.quantity, 0)
-      const remaining = Math.max(0, totalAreaCapacity - configuredQty)
+      const remaining = getRemainingCapacity(t.id)
 
       const initialBase =
         (t.basePrice && t.basePrice > 0 ? t.basePrice : undefined) ??
@@ -242,15 +249,7 @@ export function SalePhasesTab({
       // Capacity verification
       const matchedArea = areas.find((a) => a.id === t.areaId)
       const totalAreaCapacity = matchedArea?.capacity ?? t.totalQuota ?? 0
-      const configuredQty = salePhases
-        .filter((p) => {
-          if (p.status === "CLOSED") return false
-          if (p.ticketTypeId === t.id) return true
-          const otherType = ticketTypes.find((ot) => ot.id === p.ticketTypeId)
-          return Boolean(otherType?.areaId && t.areaId && otherType.areaId === t.areaId)
-        })
-        .reduce((sum, p) => sum + p.quantity, 0)
-      const remainingCapacity = Math.max(0, totalAreaCapacity - configuredQty)
+      const remainingCapacity = getRemainingCapacity(t.id)
 
       if (totalAreaCapacity > 0 && numQty > remainingCapacity) {
         setFormError(
@@ -324,6 +323,78 @@ export function SalePhasesTab({
     } finally {
       setDeletingPhaseId(null)
     }
+  }
+
+  // Multi-tier Batch Actions & Status Helpers
+  const selectedTiers = ticketTypes.filter((t) => tierConfigs[t.id]?.selected)
+  const allTiersSelected =
+    ticketTypes.length > 0 && ticketTypes.every((t) => tierConfigs[t.id]?.selected)
+
+  // Check if all selected tiers are currently configured to sell ALL their available tickets
+  const isAllRemainingSelected =
+    selectedTiers.length > 0 &&
+    selectedTiers.every((t) => {
+      const remaining = getRemainingCapacity(t.id)
+      const qty = Number(tierConfigs[t.id]?.quantity)
+      return remaining > 0 ? qty === remaining : true
+    })
+
+  const totalRemainingSelected = selectedTiers.reduce(
+    (sum, t) => sum + getRemainingCapacity(t.id),
+    0,
+  )
+
+  const handleToggleAllRemaining = (checked: boolean) => {
+    setTierConfigs((prev) => {
+      const updated = { ...prev }
+      selectedTiers.forEach((t) => {
+        const remaining = getRemainingCapacity(t.id)
+        if (updated[t.id]) {
+          updated[t.id] = {
+            ...updated[t.id],
+            quantity: checked
+              ? remaining > 0
+                ? remaining
+                : ""
+              : remaining >= 50
+                ? 50
+                : remaining || "",
+          }
+        }
+      })
+      return updated
+    })
+  }
+
+  const handleToggleSelectAllTiers = () => {
+    const updated: Record<string, TierPhaseConfig> = {}
+    ticketTypes.forEach((t) => {
+      if (tierConfigs[t.id]) {
+        updated[t.id] = { ...tierConfigs[t.id], selected: !allTiersSelected }
+      }
+    })
+    setTierConfigs(updated)
+  }
+
+  const handleBatchDiscount = (discountPercent: number) => {
+    setTierConfigs((prev) => {
+      const updated = { ...prev }
+      selectedTiers.forEach((t) => {
+        if (updated[t.id]) {
+          const base = Number(updated[t.id].basePrice) || 0
+          const calculatedPrice =
+            discountPercent === 0
+              ? base
+              : Math.round((base * (1 - discountPercent / 100)) / 1000) * 1000
+          updated[t.id] = {
+            ...updated[t.id],
+            discountPercent,
+            price: calculatedPrice,
+          }
+        }
+      })
+      return updated
+    })
   }
 
   return (
@@ -817,29 +888,83 @@ export function SalePhasesTab({
               </div>
 
               {/* 4. Danh sách chọn các hạng vé mở bán trong đợt này */}
-              <div className="space-y-2 pt-2 border-t border-outline-variant/40">
+              <div className="space-y-2.5 pt-2 border-t border-outline-variant/40">
                 <div className="flex items-center justify-between">
                   <label className="font-bold text-on-surface">
                     Các hạng vé mở bán trong đợt này *
                   </label>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      const allSelected = ticketTypes.every((t) => tierConfigs[t.id]?.selected)
-                      const updated: Record<string, TierPhaseConfig> = {}
-                      ticketTypes.forEach((t) => {
-                        if (tierConfigs[t.id]) {
-                          updated[t.id] = { ...tierConfigs[t.id], selected: !allSelected }
-                        }
-                      })
-                      setTierConfigs(updated)
-                    }}
-                    className="text-[11px] text-primary hover:underline font-semibold cursor-pointer"
-                  >
-                    {ticketTypes.every((t) => tierConfigs[t.id]?.selected)
-                      ? "Bỏ chọn tất cả"
-                      : "Chọn tất cả"}
-                  </button>
+                  <span className="text-[11px] text-on-surface-variant font-medium">
+                    Đã chọn:{" "}
+                    <strong className="text-primary font-bold">
+                      {selectedTiers.length}/{ticketTypes.length}
+                    </strong>{" "}
+                    hạng vé
+                  </span>
+                </div>
+
+                {/* Thanh điều khiển hàng loạt & Ô lọc chọn bán toàn bộ vé cho đợt */}
+                <div className="bg-surface-container-low/90 border border-outline-variant/70 rounded-2xl p-3 space-y-2.5 shadow-2xs">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+                    {/* Ô tích lọc chọn bán toàn bộ vé cho đợt đấy */}
+                    <label className="flex items-center gap-2.5 cursor-pointer select-none">
+                      <input
+                        type="checkbox"
+                        checked={isAllRemainingSelected}
+                        onChange={(e) => handleToggleAllRemaining(e.target.checked)}
+                        className="size-4.5 rounded text-primary focus:ring-primary accent-primary cursor-pointer"
+                      />
+                      <div>
+                        <span className="text-xs font-bold text-on-surface flex items-center gap-1.5">
+                          <span>Bán toàn bộ vé khả dụng cho đợt này</span>
+                          <span className="px-1.5 py-0.5 rounded-full bg-primary/10 text-primary text-[10px] font-mono font-bold">
+                            {totalRemainingSelected.toLocaleString("vi-VN")} vé
+                          </span>
+                        </span>
+                        <span className="text-[10px] text-on-surface-variant block">
+                          Tự động phân bổ tối đa 100% hạn ngạch vé cho tất cả các hạng vé được chọn
+                        </span>
+                      </div>
+                    </label>
+
+                    {/* Nút chọn / bỏ chọn tất cả hạng vé */}
+                    <div className="flex items-center gap-2 self-end sm:self-auto shrink-0">
+                      <button
+                        type="button"
+                        onClick={handleToggleSelectAllTiers}
+                        className="px-2.5 py-1 rounded-lg bg-surface-container hover:bg-surface-container-high text-[11px] font-semibold text-primary transition cursor-pointer"
+                      >
+                        {allTiersSelected ? "Bỏ chọn tất cả" : "Chọn tất cả hạng vé"}
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Thanh áp dụng chiết khấu hàng loạt cho các hạng vé được chọn */}
+                  {selectedTiers.length > 0 && (
+                    <div className="pt-2 border-t border-outline-variant/40 flex items-center justify-between gap-2 flex-wrap text-[10px]">
+                      <span className="text-on-surface-variant font-medium">
+                        Áp dụng mức giá / chiết khấu hàng loạt:
+                      </span>
+                      <div className="flex items-center gap-1 flex-wrap">
+                        {[
+                          { label: "Giá gốc", percent: 0 },
+                          { label: "Giảm 5%", percent: 5 },
+                          { label: "Giảm 10%", percent: 10 },
+                          { label: "Giảm 15%", percent: 15 },
+                          { label: "Giảm 20%", percent: 20 },
+                        ].map((btn) => (
+                          <button
+                            key={btn.percent}
+                            type="button"
+                            onClick={() => handleBatchDiscount(btn.percent)}
+                            className="px-2 py-0.5 rounded-md bg-white hover:bg-surface-container border border-outline-variant/60 font-mono font-bold text-on-surface transition cursor-pointer"
+                            title={`Áp dụng ${btn.label} cho ${selectedTiers.length} hạng vé đã chọn`}
+                          >
+                            {btn.label}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 <div className="space-y-2.5 max-h-[300px] overflow-y-auto pr-1">
@@ -853,17 +978,7 @@ export function SalePhasesTab({
                     }
                     const matchedArea = areas.find((a) => a.id === t.areaId)
                     const totalAreaCapacity = matchedArea?.capacity ?? t.totalQuota ?? 0
-                    const configuredQty = salePhases
-                      .filter((p) => {
-                        if (p.status === "CLOSED") return false
-                        if (p.ticketTypeId === t.id) return true
-                        const otherType = ticketTypes.find((ot) => ot.id === p.ticketTypeId)
-                        return Boolean(
-                          otherType?.areaId && t.areaId && otherType.areaId === t.areaId,
-                        )
-                      })
-                      .reduce((sum, p) => sum + p.quantity, 0)
-                    const remainingCapacity = Math.max(0, totalAreaCapacity - configuredQty)
+                    const remainingCapacity = getRemainingCapacity(t.id)
 
                     return (
                       <div
@@ -1127,9 +1242,32 @@ export function SalePhasesTab({
                                   Số lượng vé mở bán đợt này *
                                 </label>
                                 {remainingCapacity > 0 && (
-                                  <span className="text-[10px] text-primary font-semibold">
-                                    Tối đa {remainingCapacity.toLocaleString("vi-VN")} vé
-                                  </span>
+                                  <label className="flex items-center gap-1.5 cursor-pointer select-none">
+                                    <input
+                                      type="checkbox"
+                                      checked={
+                                        remainingCapacity > 0 &&
+                                        Number(cfg.quantity) === remainingCapacity
+                                      }
+                                      onChange={(e) => {
+                                        setTierConfigs((prev) => ({
+                                          ...prev,
+                                          [t.id]: {
+                                            ...cfg,
+                                            quantity: e.target.checked
+                                              ? remainingCapacity
+                                              : remainingCapacity >= 50
+                                                ? 50
+                                                : remainingCapacity || "",
+                                          },
+                                        }))
+                                      }}
+                                      className="size-3.5 rounded text-primary focus:ring-primary accent-primary cursor-pointer"
+                                    />
+                                    <span className="text-[10px] font-bold text-primary">
+                                      Bán toàn bộ ({remainingCapacity.toLocaleString("vi-VN")} vé)
+                                    </span>
+                                  </label>
                                 )}
                               </div>
                               <input
