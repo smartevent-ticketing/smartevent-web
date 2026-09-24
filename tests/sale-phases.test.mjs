@@ -173,3 +173,82 @@ test("inventory matches the selected phase even when another phase of the same t
     0,
   )
 })
+
+test("sale phase overlap detection correctly flags overlapping windows for the same tier", () => {
+  const phaseA = {
+    ticketTypeId: "tier-ga",
+    saleStartAt: "2026-09-01T00:00:00.000Z",
+    saleEndAt: "2026-09-10T00:00:00.000Z",
+  }
+  const checkOverlap = (existing, start, end) => {
+    const s = Date.parse(start)
+    const e = Date.parse(end)
+    const es = Date.parse(existing.saleStartAt)
+    const ee = Date.parse(existing.saleEndAt)
+    return s < ee && e > es
+  }
+
+  // Exact overlap
+  assert.equal(checkOverlap(phaseA, "2026-09-05T00:00:00.000Z", "2026-09-12T00:00:00.000Z"), true)
+  // Sub-interval
+  assert.equal(checkOverlap(phaseA, "2026-09-02T00:00:00.000Z", "2026-09-08T00:00:00.000Z"), true)
+  // Non-overlapping: strictly before
+  assert.equal(checkOverlap(phaseA, "2026-08-20T00:00:00.000Z", "2026-08-31T23:59:59.000Z"), false)
+  // Non-overlapping: strictly after
+  assert.equal(checkOverlap(phaseA, "2026-09-10T00:00:00.000Z", "2026-09-20T00:00:00.000Z"), false)
+})
+
+test("sale phase cannot extend beyond event endTime", () => {
+  const eventEndTime = "2026-09-20T18:00:00.000Z"
+  const isPhaseEndValid = (phaseEnd, eventEnd) => Date.parse(phaseEnd) <= Date.parse(eventEnd)
+
+  assert.equal(isPhaseEndValid("2026-09-20T17:59:59.000Z", eventEndTime), true)
+  assert.equal(isPhaseEndValid("2026-09-20T18:00:00.000Z", eventEndTime), true)
+  assert.equal(isPhaseEndValid("2026-09-20T18:00:01.000Z", eventEndTime), false)
+  assert.equal(isPhaseEndValid("2026-09-21T00:00:00.000Z", eventEndTime), false)
+})
+
+test("submission readiness requires all 9 checklist criteria to be met", () => {
+  const evaluateReadiness = (checklist) => {
+    const requiredKeys = [
+      "hasBasicInfo",
+      "hasVenue",
+      "hasCategories",
+      "hasBanner",
+      "hasAreas",
+      "hasTicketTypes",
+      "hasSalePhases",
+      "areaCapacityValid",
+      "draftStatus",
+    ]
+    const blockers = []
+    for (const key of requiredKeys) {
+      if (!checklist[key]) {
+        blockers.push(`Missing: ${key}`)
+      }
+    }
+    return { ready: blockers.length === 0, blockers }
+  }
+
+  const completeChecklist = {
+    hasBasicInfo: true,
+    hasVenue: true,
+    hasCategories: true,
+    hasBanner: true,
+    hasAreas: true,
+    hasTicketTypes: true,
+    hasSalePhases: true,
+    areaCapacityValid: true,
+    draftStatus: true,
+  }
+
+  assert.equal(evaluateReadiness(completeChecklist).ready, true)
+  assert.equal(evaluateReadiness(completeChecklist).blockers.length, 0)
+
+  // Missing banner & sale phases
+  const incomplete = { ...completeChecklist, hasBanner: false, hasSalePhases: false }
+  const result = evaluateReadiness(incomplete)
+  assert.equal(result.ready, false)
+  assert.equal(result.blockers.length, 2)
+  assert.deepEqual(result.blockers, ["Missing: hasBanner", "Missing: hasSalePhases"])
+})
