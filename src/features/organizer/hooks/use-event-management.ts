@@ -241,20 +241,26 @@ export function useEventManagement(eventId: string) {
     const phases = Array.isArray(phaseData) ? phaseData : [phaseData]
     if (phases.length === 0) return
 
+    const createdPhaseIds: string[] = []
+
     try {
-      const results = await Promise.all(
-        phases.map((p) =>
-          organizerApi.createSalePhase(p.ticketTypeId, {
-            name: p.name,
-            price: p.price,
-            quantity: p.quantity,
-            saleStartAt: p.saleStartAt,
-            saleEndAt: p.saleEndAt,
-            maxPerOrder: p.maxPerOrder,
-            maxPerUser: p.maxPerUser,
-          }),
-        ),
-      )
+      const results: any[] = []
+      for (const p of phases) {
+        const res = await organizerApi.createSalePhase(p.ticketTypeId, {
+          name: p.name,
+          price: p.price,
+          quantity: p.quantity,
+          saleStartAt: p.saleStartAt,
+          saleEndAt: p.saleEndAt,
+          maxPerOrder: p.maxPerOrder,
+          maxPerUser: p.maxPerUser,
+        })
+        const created = (res as any)?.data?.data ?? (res as any)?.data ?? res
+        if (created?.id) {
+          createdPhaseIds.push(created.id)
+        }
+        results.push(res)
+      }
 
       const newPhases: SalePhaseItem[] = phases.map((p, idx) => {
         const res = results[idx]
@@ -314,6 +320,13 @@ export function useEventManagement(eventId: string) {
       })
       refreshReadiness()
     } catch (error: any) {
+      // Revert partially created phases in this batch so the database is never left dirty
+      if (createdPhaseIds.length > 0) {
+        console.warn(
+          `[Batch Create] Reverting ${createdPhaseIds.length} partially created phases due to error...`,
+        )
+        await Promise.allSettled(createdPhaseIds.map((id) => organizerApi.deleteSalePhase(id)))
+      }
       setFeedback({
         type: "error",
         text: getApiErrorMessage(error, "Không thể tạo đợt mở bán. Vui lòng thử lại."),

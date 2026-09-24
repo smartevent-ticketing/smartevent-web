@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useMemo } from "react"
 import {
   Calendar,
   Clock,
@@ -166,21 +166,39 @@ export function SalePhasesTab({
 
   // Open modal and pre-initialize tier configs
   const handleOpenAddModal = () => {
-    const initial: Record<string, TierPhaseConfig> = {}
+    // Group ticket types by area to distribute initial quantities fairly
+    const areaGroups = new Map<string, typeof ticketTypes>()
     ticketTypes.forEach((t) => {
-      const remaining = getRemainingCapacity(t.id)
+      const areaKey = t.areaId || `tier-${t.id}`
+      const list = areaGroups.get(areaKey) || []
+      list.push(t)
+      areaGroups.set(areaKey, list)
+    })
 
-      const initialBase =
-        (t.basePrice && t.basePrice > 0 ? t.basePrice : undefined) ??
-        (t.price && t.price > 0 ? t.price : 500000)
+    const initial: Record<string, TierPhaseConfig> = {}
+    areaGroups.forEach((group) => {
+      const firstTier = group[0]
+      const areaAvailable = getRemainingCapacity(firstTier.id)
+      const perTierQuota = Math.floor(areaAvailable / group.length)
+      let remainder = areaAvailable % group.length
 
-      initial[t.id] = {
-        selected: true, // Default selected for speed
-        basePrice: initialBase,
-        discountPercent: 0,
-        price: initialBase,
-        quantity: remaining > 0 ? Math.min(50, remaining) : "",
-      }
+      group.forEach((t) => {
+        const initialBase =
+          (t.basePrice && t.basePrice > 0 ? t.basePrice : undefined) ??
+          (t.price && t.price > 0 ? t.price : 500000)
+
+        const maxAllowed = perTierQuota + (remainder > 0 ? 1 : 0)
+        if (remainder > 0) remainder--
+        const initialQty = maxAllowed > 0 ? Math.min(50, maxAllowed) : ""
+
+        initial[t.id] = {
+          selected: true, // Default selected for speed
+          basePrice: initialBase,
+          discountPercent: 0,
+          price: initialBase,
+          quantity: initialQty,
+        }
+      })
     })
 
     setTierConfigs(initial)
@@ -266,6 +284,60 @@ export function SalePhasesTab({
       }
     }
 
+    // Area-level capacity verification across all selected tiers in the batch
+    const areaGroups: Record<
+      string,
+      { areaName: string; totalAreaCapacity: number; tiers: typeof selectedTiers }
+    > = {}
+    for (const t of selectedTiers) {
+      const areaKey = t.areaId || `tier-${t.id}`
+      const matchedArea = areas.find((a) => a.id === t.areaId)
+      const areaName = matchedArea?.name || t.name
+      const totalAreaCapacity = matchedArea?.capacity ?? t.totalQuota ?? 0
+      if (!areaGroups[areaKey]) {
+        areaGroups[areaKey] = { areaName, totalAreaCapacity, tiers: [] }
+      }
+      areaGroups[areaKey].tiers.push(t)
+    }
+
+    for (const [areaKey, group] of Object.entries(areaGroups)) {
+      if (group.tiers.length > 1) {
+        const batchTotalForArea = group.tiers.reduce((sum, t) => {
+          return sum + Number(tierConfigs[t.id]?.quantity || 0)
+        }, 0)
+
+        // Calculate remaining capacity for this area (considering already saved phases in DB)
+        const existingAreaQty = salePhases
+          .filter((p) => {
+            if (p.status === "CLOSED") return false
+            const tier = ticketTypes.find((ot) => ot.id === p.ticketTypeId)
+            return (tier?.areaId && tier.areaId === areaKey) || p.ticketTypeId === areaKey
+          })
+          .reduce((sum, p) => sum + p.quantity, 0)
+
+        const remainingForArea = Math.max(0, group.totalAreaCapacity - existingAreaQty)
+
+        if (group.totalAreaCapacity > 0 && batchTotalForArea > remainingForArea) {
+          const tierDetails = group.tiers
+            .map(
+              (t) =>
+                `"${t.name}" (${Number(tierConfigs[t.id]?.quantity || 0).toLocaleString("vi-VN")} vé)`,
+            )
+            .join(" + ")
+          setFormError(
+            `Khu vực / Khán đài "${group.areaName}" chỉ còn lại ${remainingForArea.toLocaleString(
+              "vi-VN",
+            )} vé khả dụng, nhưng tổng số lượng vé bạn đang phân bổ cho các hạng vé thuộc khu vực này là ${batchTotalForArea.toLocaleString(
+              "vi-VN",
+            )} vé [${tierDetails}]. Vui lòng điều chỉnh lại để tổng số không vượt quá ${remainingForArea.toLocaleString(
+              "vi-VN",
+            )} vé.`,
+          )
+          return
+        }
+      }
+    }
+
     const customerLimit = Number(maxTicketsPerCustomer) || 4
 
     const phasesToCreate = selectedTiers.map((t) => ({
@@ -330,36 +402,91 @@ export function SalePhasesTab({
   const allTiersSelected =
     ticketTypes.length > 0 && ticketTypes.every((t) => tierConfigs[t.id]?.selected)
 
+  // Map each area (or standalone tier) to its available capacity in DB
+  const areaRemainingMap = useMemo(() => {
+    const map = new Map<string, number>()
+    ticketTypes.forEach((t) => {
+      const areaKey = t.areaId || `tier-${t.id}`
+      if (!map.has(areaKey)) {
+        map.set(areaKey, getRemainingCapacity(t.id))
+      }
+    })
+    return map
+  }, [ticketTypes, areas, salePhases])
+
+  // Deduplicated remaining capacity calculation for selected tiers
+  // (tiers sharing the same area do not double count the area's remaining capacity)
+  const totalRemainingSelected = useMemo(() => {
+    const seenAreaKeys = new Set<string>()
+    let total = 0
+    selectedTiers.forEach((t) => {
+      const areaKey = t.areaId || `tier-${t.id}`
+      if (!seenAreaKeys.has(areaKey)) {
+        seenAreaKeys.add(areaKey)
+        total += areaRemainingMap.get(areaKey) ?? 0
+      }
+    })
+    return total
+  }, [selectedTiers, areaRemainingMap])
+
   // Check if all selected tiers are currently configured to sell ALL their available tickets
-  const isAllRemainingSelected =
-    selectedTiers.length > 0 &&
-    selectedTiers.every((t) => {
-      const remaining = getRemainingCapacity(t.id)
-      const qty = Number(tierConfigs[t.id]?.quantity)
-      return remaining > 0 ? qty === remaining : true
+  const isAllRemainingSelected = useMemo(() => {
+    if (selectedTiers.length === 0) return false
+    const groups = new Map<string, typeof selectedTiers>()
+    selectedTiers.forEach((t) => {
+      const areaKey = t.areaId || `tier-${t.id}`
+      const list = groups.get(areaKey) || []
+      list.push(t)
+      groups.set(areaKey, list)
     })
 
-  const totalRemainingSelected = selectedTiers.reduce(
-    (sum, t) => sum + getRemainingCapacity(t.id),
-    0,
-  )
+    for (const [areaKey, group] of groups.entries()) {
+      const available = areaRemainingMap.get(areaKey) ?? 0
+      const currentSum = group.reduce((sum, t) => sum + Number(tierConfigs[t.id]?.quantity || 0), 0)
+      if (available > 0 && currentSum !== available) {
+        return false
+      }
+    }
+    return true
+  }, [selectedTiers, tierConfigs, areaRemainingMap])
 
   const handleToggleAllRemaining = (checked: boolean) => {
     setTierConfigs((prev) => {
       const updated = { ...prev }
+      // Group selected tiers by area to distribute available capacity fairly
+      const groups = new Map<string, typeof selectedTiers>()
       selectedTiers.forEach((t) => {
-        const remaining = getRemainingCapacity(t.id)
-        if (updated[t.id]) {
-          updated[t.id] = {
-            ...updated[t.id],
-            quantity: checked
-              ? remaining > 0
-                ? remaining
-                : ""
-              : remaining >= 50
-                ? 50
-                : remaining || "",
-          }
+        const areaKey = t.areaId || `tier-${t.id}`
+        const list = groups.get(areaKey) || []
+        list.push(t)
+        groups.set(areaKey, list)
+      })
+
+      groups.forEach((group, areaKey) => {
+        const available = areaRemainingMap.get(areaKey) ?? 0
+        if (checked) {
+          const share = Math.floor(available / group.length)
+          let remainder = available % group.length
+          group.forEach((t) => {
+            const qty = share + (remainder > 0 ? 1 : 0)
+            if (remainder > 0) remainder--
+            if (updated[t.id]) {
+              updated[t.id] = {
+                ...updated[t.id],
+                quantity: qty > 0 ? qty : "",
+              }
+            }
+          })
+        } else {
+          const share = Math.floor(available / group.length)
+          group.forEach((t) => {
+            if (updated[t.id]) {
+              updated[t.id] = {
+                ...updated[t.id],
+                quantity: share >= 50 ? 50 : share > 0 ? share : "",
+              }
+            }
+          })
         }
       })
       return updated
@@ -979,6 +1106,9 @@ export function SalePhasesTab({
                     const matchedArea = areas.find((a) => a.id === t.areaId)
                     const totalAreaCapacity = matchedArea?.capacity ?? t.totalQuota ?? 0
                     const remainingCapacity = getRemainingCapacity(t.id)
+                    const tiersInSameArea = t.areaId
+                      ? ticketTypes.filter((ot) => ot.areaId === t.areaId)
+                      : []
 
                     return (
                       <div
@@ -1004,9 +1134,16 @@ export function SalePhasesTab({
                               className="size-4 rounded text-primary focus:ring-primary accent-primary cursor-pointer"
                             />
                             <div>
-                              <span className="font-bold text-on-surface text-xs block">
-                                {t.name}
-                              </span>
+                              <div className="flex items-center gap-1.5 flex-wrap">
+                                <span className="font-bold text-on-surface text-xs block">
+                                  {t.name}
+                                </span>
+                                {tiersInSameArea.length > 1 && (
+                                  <span className="px-1.5 py-0.2 rounded text-[9px] font-semibold bg-amber-50 text-amber-800 border border-amber-200">
+                                    Chung khán đài ({tiersInSameArea.length} hạng vé)
+                                  </span>
+                                )}
+                              </div>
                               <span className="text-[11px] text-on-surface-variant font-medium">
                                 {matchedArea?.name || t.areaName || "Khán đài"} (
                                 {totalAreaCapacity.toLocaleString("vi-VN")} chỗ)
@@ -1015,7 +1152,8 @@ export function SalePhasesTab({
                           </label>
 
                           <span className="text-[11px] font-mono text-primary font-bold">
-                            Khả dụng: {remainingCapacity.toLocaleString("vi-VN")} vé
+                            {tiersInSameArea.length > 1 ? "Khả dụng khán đài: " : "Khả dụng: "}
+                            {remainingCapacity.toLocaleString("vi-VN")} vé
                           </span>
                         </div>
 
@@ -1250,17 +1388,40 @@ export function SalePhasesTab({
                                         Number(cfg.quantity) === remainingCapacity
                                       }
                                       onChange={(e) => {
-                                        setTierConfigs((prev) => ({
-                                          ...prev,
-                                          [t.id]: {
-                                            ...cfg,
-                                            quantity: e.target.checked
-                                              ? remainingCapacity
-                                              : remainingCapacity >= 50
-                                                ? 50
-                                                : remainingCapacity || "",
-                                          },
-                                        }))
+                                        setTierConfigs((prev) => {
+                                          const updated = { ...prev }
+                                          if (e.target.checked) {
+                                            // If this tier claims the entire available capacity of its shared area,
+                                            // reset other tiers in the same area to avoid batch capacity overflow
+                                            if (t.areaId) {
+                                              selectedTiers.forEach((ot) => {
+                                                if (
+                                                  ot.id !== t.id &&
+                                                  ot.areaId === t.areaId &&
+                                                  updated[ot.id]
+                                                ) {
+                                                  updated[ot.id] = {
+                                                    ...updated[ot.id],
+                                                    quantity: "",
+                                                  }
+                                                }
+                                              })
+                                            }
+                                            updated[t.id] = {
+                                              ...cfg,
+                                              quantity: remainingCapacity,
+                                            }
+                                          } else {
+                                            updated[t.id] = {
+                                              ...cfg,
+                                              quantity:
+                                                remainingCapacity >= 50
+                                                  ? 50
+                                                  : remainingCapacity || "",
+                                            }
+                                          }
+                                          return updated
+                                        })
                                       }}
                                       className="size-3.5 rounded text-primary focus:ring-primary accent-primary cursor-pointer"
                                     />
