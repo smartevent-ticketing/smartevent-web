@@ -24,9 +24,12 @@ import { OverviewTab } from "@/features/organizer/components/event-management/ov
 import { AreasSeatsTab } from "@/features/organizer/components/event-management/areas-seats-tab"
 import { TicketTypesTab } from "@/features/organizer/components/event-management/ticket-types-tab"
 import { SalePhasesTab } from "@/features/organizer/components/event-management/sale-phases-tab"
+import type { SalePhaseItem } from "@/features/organizer/components/event-management/sale-phases-tab"
+import { SubmissionReadinessCard } from "@/features/organizer/components/event-management/submission-readiness-card"
 import { IssuedTicketsTab } from "@/features/organizer/components/event-management/issued-tickets-tab"
 import { SubmitConfirmationModal } from "@/features/organizer/components/event-management/submit-confirmation-modal"
 import { CancelEventModal } from "@/features/organizer/components/event-management/cancel-event-modal"
+import type { EventSubmissionReadiness, SalePhaseStatus } from "@/lib/api/event-setup-contract"
 
 interface EventManagementViewProps {
   eventId: string
@@ -41,6 +44,9 @@ export function EventManagementView({ eventId }: EventManagementViewProps) {
   const [isCancellingEvent, setIsCancellingEvent] = useState(false)
   const [showSubmitModal, setShowSubmitModal] = useState(false)
   const [showCancelModal, setShowCancelModal] = useState(false)
+
+  const [readiness, setReadiness] = useState<EventSubmissionReadiness | null>(null)
+  const [isLoadingReadiness, setIsLoadingReadiness] = useState(false)
 
   const [eventData, setEventData] = useState<{
     id: string
@@ -57,7 +63,7 @@ export function EventManagementView({ eventId }: EventManagementViewProps) {
   const [loadError, setLoadError] = useState<string | null>(null)
   const [areas, setAreas] = useState<any[]>([])
   const [ticketTypes, setTicketTypes] = useState<any[]>([])
-  const [salePhases, setSalePhases] = useState<any[]>([])
+  const [salePhases, setSalePhases] = useState<SalePhaseItem[]>([])
   const [issuedTickets, setIssuedTickets] = useState<any[]>([])
   // Fetch real event data on load
   useEffect(() => {
@@ -66,13 +72,15 @@ export function EventManagementView({ eventId }: EventManagementViewProps) {
       setIsLoadingEvent(true)
       setLoadError(null)
 
-      const [eventRes, areasRes, typesRes, phasesRes, ticketsRes] = await Promise.allSettled([
-        organizerApi.getEvent(eventId),
-        organizerApi.getAreas(eventId),
-        organizerApi.getTicketTypes(eventId),
-        organizerApi.getSalePhases(eventId),
-        organizerApi.getEventTickets(eventId),
-      ])
+      const [eventRes, areasRes, typesRes, phasesRes, ticketsRes, readinessRes] =
+        await Promise.allSettled([
+          organizerApi.getEvent(eventId),
+          organizerApi.getAreas(eventId),
+          organizerApi.getTicketTypes(eventId),
+          organizerApi.getSalePhases(eventId),
+          organizerApi.getEventTickets(eventId),
+          organizerApi.getSubmissionReadiness(eventId),
+        ])
 
       if (!isMounted) return
 
@@ -104,6 +112,13 @@ export function EventManagementView({ eventId }: EventManagementViewProps) {
         setFeedback({ type: "error", text: errMsg })
       }
 
+      // Readiness Check
+      if (readinessRes.status === "fulfilled" && readinessRes.value?.data) {
+        const rData = ((readinessRes.value.data as any)?.data ??
+          readinessRes.value.data) as EventSubmissionReadiness
+        setReadiness(rData)
+      }
+
       // 2. Xử lý phân khu (Areas)
       if (areasRes.status === "fulfilled" && areasRes.value?.data) {
         const rawAreas = ((areasRes.value.data as any)?.data ?? areasRes.value.data) as any[]
@@ -130,11 +145,15 @@ export function EventManagementView({ eventId }: EventManagementViewProps) {
           setSalePhases(
             rawPhases.map((p) => ({
               id: p.id,
+              ticketTypeId: p.ticketTypeId,
               name: p.name,
-              startTime: p.saleStartAt || p.startTime,
-              endTime: p.saleEndAt || p.endTime,
-              status: p.status,
+              price: Number(p.price) || 0,
+              quantity: Number(p.quantity) || 0,
+              saleStartAt: p.saleStartAt || p.startTime,
+              saleEndAt: p.saleEndAt || p.endTime,
+              status: (p.status as SalePhaseStatus) || "DRAFT",
               maxPerOrder: p.maxPerOrder || 4,
+              maxPerUser: p.maxPerUser,
               ticketTypeName: p.ticketTypeName,
             })),
           )
@@ -211,6 +230,21 @@ export function EventManagementView({ eventId }: EventManagementViewProps) {
     }
   }, [eventId])
 
+  const fetchReadiness = async () => {
+    setIsLoadingReadiness(true)
+    try {
+      const res = await organizerApi.getSubmissionReadiness(eventId)
+      const data = ((res as any)?.data?.data ??
+        (res as any)?.data ??
+        res) as EventSubmissionReadiness
+      setReadiness(data)
+    } catch {
+      // ignore
+    } finally {
+      setIsLoadingReadiness(false)
+    }
+  }
+
   // 1. Thêm phân khu: Dùng ID thật từ response của server, lỗi thì báo lỗi thật
   const handleAddArea = async (area: {
     name: string
@@ -234,6 +268,7 @@ export function EventManagementView({ eventId }: EventManagementViewProps) {
         },
       ])
       setFeedback({ type: "success", text: `Đã thêm phân khu "${area.name}" thành công.` })
+      fetchReadiness()
     } catch (error: any) {
       setFeedback({
         type: "error",
@@ -285,6 +320,7 @@ export function EventManagementView({ eventId }: EventManagementViewProps) {
         type: "success",
         text: `Đã tạo hạng vé "${ticketType.name}" thành công. Vui lòng cấu hình đợt mở bán để định giá và phân bổ số lượng.`,
       })
+      fetchReadiness()
     } catch (error: any) {
       setFeedback({
         type: "error",
@@ -292,6 +328,75 @@ export function EventManagementView({ eventId }: EventManagementViewProps) {
           error,
           `Không thể tạo hạng vé "${ticketType.name}". Vui lòng thử lại.`,
         ),
+      })
+    }
+  }
+
+  // 2b. Thêm đợt mở bán (Sale Phase)
+  const handleAddSalePhase = async (phaseData: {
+    ticketTypeId: string
+    name: string
+    price: number
+    quantity: number
+    saleStartAt: string
+    saleEndAt: string
+    maxPerOrder?: number
+    maxPerUser?: number
+  }) => {
+    try {
+      const res = await organizerApi.createSalePhase(phaseData.ticketTypeId, {
+        name: phaseData.name,
+        price: phaseData.price,
+        quantity: phaseData.quantity,
+        saleStartAt: phaseData.saleStartAt,
+        saleEndAt: phaseData.saleEndAt,
+        maxPerOrder: phaseData.maxPerOrder,
+        maxPerUser: phaseData.maxPerUser,
+      })
+      const created = (res as any)?.data?.data ?? (res as any)?.data ?? res
+      const matchedType = ticketTypes.find((t) => t.id === phaseData.ticketTypeId)
+      const newPhase: SalePhaseItem = {
+        id: created?.id || Math.random().toString(),
+        ticketTypeId: phaseData.ticketTypeId,
+        name: created?.name || phaseData.name,
+        price: phaseData.price,
+        quantity: phaseData.quantity,
+        saleStartAt: created?.saleStartAt || phaseData.saleStartAt,
+        saleEndAt: created?.saleEndAt || phaseData.saleEndAt,
+        status: (created?.status as SalePhaseStatus) || "DRAFT",
+        maxPerOrder: phaseData.maxPerOrder || 4,
+        maxPerUser: phaseData.maxPerUser,
+        ticketTypeName: matchedType?.name || created?.ticketTypeName,
+      }
+      setSalePhases((prev) => [...prev, newPhase])
+      setFeedback({
+        type: "success",
+        text: `Đã tạo đợt mở bán "${newPhase.name}" thành công!`,
+      })
+      fetchReadiness()
+    } catch (error: any) {
+      setFeedback({
+        type: "error",
+        text: getApiErrorMessage(error, "Không thể tạo đợt mở bán. Vui lòng thử lại."),
+      })
+      throw error
+    }
+  }
+
+  // 2c. Cập nhật trạng thái đợt mở bán
+  const handleUpdatePhaseStatus = async (phaseId: string, newStatus: SalePhaseStatus) => {
+    try {
+      await organizerApi.updateSalePhaseStatus(phaseId, newStatus)
+      setSalePhases((prev) => prev.map((p) => (p.id === phaseId ? { ...p, status: newStatus } : p)))
+      setFeedback({
+        type: "success",
+        text: `Đã cập nhật trạng thái đợt mở bán thành công.`,
+      })
+      fetchReadiness()
+    } catch (error: any) {
+      setFeedback({
+        type: "error",
+        text: getApiErrorMessage(error, "Không thể cập nhật trạng thái đợt mở bán."),
       })
     }
   }
@@ -448,8 +553,23 @@ export function EventManagementView({ eventId }: EventManagementViewProps) {
           {isDraft && (
             <button
               type="button"
-              onClick={() => setShowSubmitModal(true)}
-              className="px-5 py-2.5 bg-primary hover:bg-primary-hover text-white text-xs font-bold rounded-xl transition cursor-pointer shadow-xs inline-flex items-center gap-1.5"
+              onClick={() => {
+                if (readiness && !readiness.ready) {
+                  const firstBlocker =
+                    readiness.blockers?.[0] || "Sự kiện chưa đủ điều kiện gửi duyệt."
+                  setFeedback({
+                    type: "error",
+                    text: `${firstBlocker} Vui lòng xem bảng tiêu chuẩn kiểm duyệt bên dưới.`,
+                  })
+                  return
+                }
+                setShowSubmitModal(true)
+              }}
+              className={`px-5 py-2.5 text-xs font-bold rounded-xl transition cursor-pointer shadow-xs inline-flex items-center gap-1.5 ${
+                readiness && !readiness.ready
+                  ? "bg-slate-200 text-slate-500 hover:bg-slate-300"
+                  : "bg-primary hover:bg-primary-hover text-white"
+              }`}
             >
               <Send className="size-3.5" />
               <span>Gửi duyệt sự kiện</span>
@@ -468,6 +588,16 @@ export function EventManagementView({ eventId }: EventManagementViewProps) {
           )}
         </div>
       </div>
+
+      {/* Submission Readiness Card (for DRAFT events) */}
+      <SubmissionReadinessCard
+        readiness={readiness}
+        isLoading={isLoadingReadiness}
+        isDraft={isDraft}
+        onRefresh={fetchReadiness}
+        onSwitchTab={(t) => setActiveTab(t)}
+        onSubmitForApproval={() => setShowSubmitModal(true)}
+      />
 
       {/* Tabs Navigation */}
       <div className="border-b border-outline-variant/60 flex items-center gap-2 overflow-x-auto">
@@ -562,7 +692,17 @@ export function EventManagementView({ eventId }: EventManagementViewProps) {
             onAddTicketType={handleAddTicketType}
           />
         )}
-        {activeTab === "sale-phases" && <SalePhasesTab eventId={eventId} salePhases={salePhases} />}
+        {activeTab === "sale-phases" && (
+          <SalePhasesTab
+            eventId={eventId}
+            eventStartTime={eventData.startTime}
+            eventEndTime={eventData.endTime}
+            salePhases={salePhases}
+            ticketTypes={ticketTypes}
+            onAddSalePhase={handleAddSalePhase}
+            onUpdatePhaseStatus={handleUpdatePhaseStatus}
+          />
+        )}
         {activeTab === "tickets" && <IssuedTicketsTab eventId={eventId} tickets={issuedTickets} />}
       </div>
 

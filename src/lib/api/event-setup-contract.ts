@@ -71,6 +71,24 @@ export type AdminEventPaths = {
   }
 }
 
+export type SalePhaseStatus = "DRAFT" | "SCHEDULED" | "ACTIVE" | "PAUSED" | "CLOSED" | "SOLD_OUT"
+
+export interface EventSubmissionReadiness {
+  ready: boolean
+  checklist: {
+    hasBasicInfo: boolean
+    hasVenue: boolean
+    hasCategories: boolean
+    hasBanner: boolean
+    hasAreas: boolean
+    hasTicketTypes: boolean
+    hasSalePhases: boolean
+    areaCapacityValid: boolean
+    draftStatus: boolean
+  }
+  blockers: string[]
+}
+
 export type SalePhasePaths = {
   "/api/v1/ticket-types/{ticketTypeId}/sale-phases": {
     post: {
@@ -94,6 +112,47 @@ export type SalePhasePaths = {
       responses: {
         200: {
           content: { "application/json": { success?: boolean; data?: unknown; message?: string } }
+        }
+        default: { content: { "application/json": { message?: string } } }
+      }
+    }
+  }
+  "/api/v1/sale-phases/{id}/status": {
+    patch: {
+      parameters: {
+        path: { id: string }
+      }
+      requestBody: {
+        content: {
+          "application/json": {
+            status: SalePhaseStatus
+          }
+        }
+      }
+      responses: {
+        200: {
+          content: {
+            "application/json": components["schemas"]["ApiResponseTicketSalePhaseResponse"]
+          }
+        }
+        default: { content: { "application/json": { message?: string } } }
+      }
+    }
+  }
+  "/api/v1/events/{id}/submission-readiness": {
+    get: {
+      parameters: {
+        path: { id: string }
+      }
+      responses: {
+        200: {
+          content: {
+            "application/json": {
+              success?: boolean
+              data?: EventSubmissionReadiness
+              message?: string
+            }
+          }
         }
         default: { content: { "application/json": { message?: string } } }
       }

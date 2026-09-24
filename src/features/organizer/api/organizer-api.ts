@@ -6,9 +6,11 @@ import type {
   EventSetupPaths,
   EventMediaPaths,
   EventFileType,
+  SalePhaseStatus,
+  SalePhasePaths,
 } from "@/lib/api/event-setup-contract"
 
-type ApiPaths = paths & EventSetupPaths & EventMediaPaths
+type ApiPaths = paths & EventSetupPaths & EventMediaPaths & SalePhasePaths
 
 export const organizerApi = {
   createEventSetup: (
@@ -190,6 +192,21 @@ export const organizerApi = {
     requireApiSuccess(
       apiClient.DELETE("/api/v1/events/{eventId}/media/{eventFileId}", {
         params: { path: { eventId, eventFileId } },
+      }),
+    ),
+
+  updateSalePhaseStatus: (id: string, status: SalePhaseStatus) =>
+    requireApiSuccess(
+      apiClient.PATCH("/api/v1/sale-phases/{id}/status", {
+        params: { path: { id } },
+        body: { status },
+      }),
+    ),
+
+  getSubmissionReadiness: (id: string) =>
+    requireApiSuccess(
+      apiClient.GET("/api/v1/events/{id}/submission-readiness", {
+        params: { path: { id } },
       }),
     ),
 }

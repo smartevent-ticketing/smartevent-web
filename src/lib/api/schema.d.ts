@@ -3513,7 +3513,22 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": "DRAFT" | "SCHEDULED" | "ACTIVE" | "PAUSED" | "CLOSED" | "SOLD_OUT";
+                "application/json":
+                    | {
+                          status:
+                              | "DRAFT"
+                              | "SCHEDULED"
+                              | "ACTIVE"
+                              | "PAUSED"
+                              | "CLOSED"
+                              | "SOLD_OUT";
+                      }
+                    | "DRAFT"
+                    | "SCHEDULED"
+                    | "ACTIVE"
+                    | "PAUSED"
+                    | "CLOSED"
+                    | "SOLD_OUT";
             };
         };
         responses: {
