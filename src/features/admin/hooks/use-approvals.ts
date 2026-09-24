@@ -11,8 +11,6 @@ export function useAdminApprovals() {
 
   const [customEventIdToApprove, setCustomEventIdToApprove] = useState("")
 
-  const [rejectReason, setRejectReason] = useState("")
-
   const [isApproving, setIsApproving] = useState(false)
 
   const [isRejecting, setIsRejecting] = useState(false)
@@ -73,13 +71,13 @@ export function useAdminApprovals() {
     }
   }
 
-  async function handleReject(id: string) {
+  async function handleReject(id: string, reason?: string) {
     setIsRejecting(true)
     try {
       await adminApi.rejectEvent({
         params: {
           path: { id },
-          query: { reason: rejectReason.trim() || undefined },
+          query: { reason: reason?.trim() || undefined },
         },
       })
       setNotification({
@@ -88,7 +86,6 @@ export function useAdminApprovals() {
       })
       setPendingEvents((prev) => prev.filter((e) => e.id !== id))
       setCustomEventIdToApprove("")
-      setRejectReason("")
     } catch {
       setNotification({
         type: "error",

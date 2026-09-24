@@ -36,7 +36,7 @@ export function AdminApprovalsPanel() {
 
   const onConfirmReject = async (reason: string) => {
     if (!eventToReject) return
-    await handleReject(eventToReject.id)
+    await handleReject(eventToReject.id, reason)
     setEventToReject(null)
     setSelectedEventForDetail(null)
   }

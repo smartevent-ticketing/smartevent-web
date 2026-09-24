@@ -18,7 +18,7 @@ export function CancelEventModal({
   onConfirm,
   onClose,
 }: CancelEventModalProps) {
-  const [reason, setReason] = useState("Lý do bất khả kháng từ Ban tổ chức")
+  const [reason, setReason] = useState("")
 
   if (!isOpen) return null
 

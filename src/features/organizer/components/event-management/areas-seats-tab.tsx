@@ -51,7 +51,7 @@ export function AreasSeatsTab({ areas, onAddArea }: AreasSeatsTabProps) {
   const selectedArea = areas.find((a) => a.id === selectedAreaId) || areas[0]
 
   const loadSeats = useCallback(async (areaId: string) => {
-    if (!areaId || areaId.startsWith("area-")) {
+    if (!areaId) {
       setRealSeats([])
       return
     }
@@ -68,6 +68,7 @@ export function AreasSeatsTab({ areas, onAddArea }: AreasSeatsTabProps) {
       setRealSeats(content)
     } catch {
       setRealSeats([])
+      setSeatMessage({ type: "error", text: "Không thể tải danh sách ghế từ máy chủ." })
     } finally {
       setIsLoadingSeats(false)
     }
