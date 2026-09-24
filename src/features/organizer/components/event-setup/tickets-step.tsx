@@ -18,7 +18,7 @@ export function EventTicketsStep({
     <div className="bg-white p-6 sm:p-8 rounded-3xl border border-outline-variant/60 shadow-xs space-y-5">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-xl font-bold text-on-surface">Bước 3: Thiết lập các hạng vé</h2>
+          <h2 className="text-xl font-bold text-on-surface">Bước 4: Thiết lập các hạng vé</h2>
           <p className="text-xs text-on-surface-variant mt-0.5">
             Quy định phân khu: Chỉ gồm <strong>Khu đứng (STANDING)</strong> và{" "}
             <strong>Khu có ghế (SEATED)</strong>.
@@ -105,14 +105,14 @@ export function EventTicketsStep({
       <div className="pt-4 flex justify-between">
         <button
           type="button"
-          onClick={() => setCurrentStep(2)}
+          onClick={() => setCurrentStep(3)}
           className="px-5 py-2.5 border border-outline-variant rounded-xl text-sm font-semibold hover:bg-surface-container cursor-pointer"
         >
-          Quay lại
+          Quay lại Bước 3
         </button>
         <button
           type="button"
-          onClick={() => setCurrentStep(4)}
+          onClick={() => setCurrentStep(5)}
           className="px-6 py-2.5 bg-primary hover:bg-primary-hover text-white text-sm font-bold rounded-xl shadow-xs transition flex items-center gap-2 cursor-pointer"
         >
           <span>Xem lại & Gửi duyệt</span>

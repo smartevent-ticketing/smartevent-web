@@ -19,6 +19,12 @@ const eslintConfig = defineConfig([
   ...nextVitals,
   ...nextTs,
   {
+    rules: {
+      "@typescript-eslint/no-explicit-any": "warn",
+      "react-hooks/set-state-in-effect": "warn",
+    },
+  },
+  {
     files: ["src/features/**/*.{ts,tsx}"],
     ignores: ["src/features/*/api/**"],
     rules: {

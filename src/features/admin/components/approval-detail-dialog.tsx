@@ -1,17 +1,6 @@
 "use client"
 
-import {
-  X,
-  Calendar,
-  MapPin,
-  Building,
-  Ticket,
-  FileCheck,
-  CheckCircle2,
-  XCircle,
-  Clock,
-  Layers,
-} from "lucide-react"
+import { X, Calendar, MapPin, Building, Ticket, CheckCircle2, XCircle, Layers } from "lucide-react"
 
 interface ApprovalDetailDialogProps {
   event: any | null
@@ -30,11 +19,8 @@ export function ApprovalDetailDialog({
 }: ApprovalDetailDialogProps) {
   if (!isOpen || !event) return null
 
-  const ticketTiers = event.ticketTiers || [
-    { name: "Vé VIP Thảm Đỏ", area: "Khu VIP Khán Đài A", price: 1500000, quota: 300 },
-    { name: "Vé Tiêu Chuẩn Hàng B", area: "Khu Phổ Thông B", price: 650000, quota: 800 },
-    { name: "Vé Fanzone Đứng Tự Do", area: "Khu Fanzone Đứng", price: 450000, quota: 400 },
-  ]
+  const ticketTiers: Array<{ name: string; area?: string; price: number; quota: number }> =
+    Array.isArray(event.ticketTiers) ? event.ticketTiers : []
 
   return (
     <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
@@ -71,14 +57,10 @@ export function ApprovalDetailDialog({
                 <span>Đơn vị tổ chức sự kiện</span>
               </div>
               <p className="font-bold text-sm text-on-surface">
-                {event.organizer || "Công ty Giải trí Âm nhạc Việt"}
+                {event.organizer || "Chưa có thông tin đơn vị tổ chức"}
               </p>
               <p className="text-on-surface-variant">
-                Ngày gửi hồ sơ: {event.submittedDate || "Gần đây"}
-              </p>
-              <p className="text-on-surface-variant flex items-center gap-1 text-green-700 font-semibold pt-1">
-                <FileCheck className="size-3.5" />
-                <span>Hồ sơ pháp lý hợp lệ</span>
+                Ngày gửi hồ sơ: {event.submittedDate || "Chưa ghi nhận"}
               </p>
             </div>
 
@@ -88,15 +70,24 @@ export function ApprovalDetailDialog({
                 <span>Địa điểm & Thời gian</span>
               </div>
               <p className="font-bold text-sm text-on-surface">
-                {event.venue || "Trung tâm Hội nghị Quốc gia"}
+                {event.venue || "Chưa chọn địa điểm"}
               </p>
               <p className="text-on-surface-variant flex items-center gap-1.5">
                 <Calendar className="size-3.5 text-primary" />
-                <span>24/10/2024 - 19:30</span>
+                <span>
+                  {event.startTime
+                    ? new Date(event.startTime).toLocaleString("vi-VN")
+                    : event.date || "Chưa thiết lập"}
+                </span>
               </p>
               <p className="text-on-surface-variant flex items-center gap-1.5">
                 <Layers className="size-3.5 text-primary" />
-                <span>Sức chứa phê duyệt: 1.500 chỗ</span>
+                <span>
+                  Sức chứa:{" "}
+                  {event.totalCapacity
+                    ? `${event.totalCapacity.toLocaleString("vi-VN")} chỗ`
+                    : "Chưa xác định"}
+                </span>
               </p>
             </div>
           </div>
@@ -107,8 +98,7 @@ export function ApprovalDetailDialog({
               Mô tả & Nội dung chương trình
             </h4>
             <div className="p-4 rounded-2xl bg-surface-container-low/40 border border-outline-variant/60 text-on-surface leading-relaxed">
-              {event.description ||
-                "Sự kiện âm nhạc và công nghệ thường niên quy tụ các chuyên gia hàng đầu và nghệ sĩ khách mời đặc biệt. Hệ thống âm thanh ánh sáng chuẩn quốc tế kết hợp sơ đồ phân khu hiện đại."}
+              {event.description || "Chưa có mô tả cho sự kiện này."}
             </div>
           </div>
 
@@ -118,32 +108,38 @@ export function ApprovalDetailDialog({
               <Ticket className="size-4 text-primary" />
               <span>Cơ cấu các hạng vé phát hành</span>
             </h4>
-            <div className="border border-outline-variant/60 rounded-2xl overflow-hidden">
-              <table className="w-full text-left text-xs">
-                <thead className="bg-surface-container-low text-on-surface-variant uppercase font-bold border-b border-outline-variant/60">
-                  <tr>
-                    <th className="px-4 py-3">Hạng vé</th>
-                    <th className="px-4 py-3">Phân khu</th>
-                    <th className="px-4 py-3 text-right">Đơn giá niêm yết</th>
-                    <th className="px-4 py-3 text-right">Số lượng phát hành</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-outline-variant/40">
-                  {ticketTiers.map((tier: any, idx: number) => (
-                    <tr key={idx} className="hover:bg-surface-container-low/30">
-                      <td className="px-4 py-3 font-bold text-on-surface">{tier.name}</td>
-                      <td className="px-4 py-3 text-on-surface-variant">{tier.area}</td>
-                      <td className="px-4 py-3 text-right font-mono font-bold text-primary">
-                        {tier.price.toLocaleString("vi-VN")} ₫
-                      </td>
-                      <td className="px-4 py-3 text-right font-mono">
-                        {tier.quota.toLocaleString("vi-VN")} vé
-                      </td>
+            {ticketTiers.length === 0 ? (
+              <div className="p-6 text-center text-on-surface-variant bg-surface-container-low/40 rounded-2xl border border-outline-variant/60">
+                Chưa có thông tin hạng vé chi tiết
+              </div>
+            ) : (
+              <div className="border border-outline-variant/60 rounded-2xl overflow-hidden">
+                <table className="w-full text-left text-xs">
+                  <thead className="bg-surface-container-low text-on-surface-variant uppercase font-bold border-b border-outline-variant/60">
+                    <tr>
+                      <th className="px-4 py-3">Hạng vé</th>
+                      <th className="px-4 py-3">Phân khu</th>
+                      <th className="px-4 py-3 text-right">Đơn giá niêm yết</th>
+                      <th className="px-4 py-3 text-right">Số lượng phát hành</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                  </thead>
+                  <tbody className="divide-y divide-outline-variant/40">
+                    {ticketTiers.map((tier: any, idx: number) => (
+                      <tr key={idx} className="hover:bg-surface-container-low/30">
+                        <td className="px-4 py-3 font-bold text-on-surface">{tier.name}</td>
+                        <td className="px-4 py-3 text-on-surface-variant">{tier.area || "—"}</td>
+                        <td className="px-4 py-3 text-right font-mono font-bold text-primary">
+                          {tier.price.toLocaleString("vi-VN")} ₫
+                        </td>
+                        <td className="px-4 py-3 text-right font-mono">
+                          {tier.quota.toLocaleString("vi-VN")} vé
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
           </div>
         </div>
 

@@ -30,7 +30,11 @@ export type AdminEventPaths = {
         }
       }
       responses: {
-        200: { content: { "application/json": components["schemas"]["ApiResponsePageResponseEventResponse"] } }
+        200: {
+          content: {
+            "application/json": components["schemas"]["ApiResponsePageResponseEventResponse"]
+          }
+        }
         default: { content: { "application/json": { message?: string } } }
       }
     }
@@ -45,7 +49,11 @@ export type AdminEventPaths = {
         }
       }
       responses: {
-        200: { content: { "application/json": components["schemas"]["ApiResponsePageResponseEventResponse"] } }
+        200: {
+          content: {
+            "application/json": components["schemas"]["ApiResponsePageResponseEventResponse"]
+          }
+        }
         default: { content: { "application/json": { message?: string } } }
       }
     }
@@ -84,7 +92,83 @@ export type SalePhasePaths = {
         }
       }
       responses: {
-        200: { content: { "application/json": { success?: boolean; data?: any; message?: string } } }
+        200: {
+          content: { "application/json": { success?: boolean; data?: unknown; message?: string } }
+        }
+        default: { content: { "application/json": { message?: string } } }
+      }
+    }
+  }
+}
+
+export type EventFileType = "BANNER" | "GALLERY" | "SEAT_MAP" | "DOCUMENT"
+
+export type EventMediaResponse = {
+  eventFileId: string
+  fileID?: string
+  fileId?: string
+  fileType: EventFileType
+  fileUrl: string
+  sortOrder?: number
+  createdAt?: string
+}
+
+export type EventMediaPaths = {
+  "/api/v1/events/{eventId}/media": {
+    post: {
+      parameters: {
+        path: { eventId: string }
+        query?: {
+          type?: EventFileType
+        }
+      }
+      requestBody?: {
+        content: {
+          "multipart/form-data":
+            | {
+                file: Blob | File
+                type?: EventFileType
+              }
+            | FormData
+        }
+      }
+      responses: {
+        201: {
+          content: {
+            "application/json": { success?: boolean; data?: EventMediaResponse; message?: string }
+          }
+        }
+        200: {
+          content: {
+            "application/json": { success?: boolean; data?: EventMediaResponse; message?: string }
+          }
+        }
+        default: { content: { "application/json": { message?: string } } }
+      }
+    }
+    get: {
+      parameters: {
+        path: { eventId: string }
+      }
+      responses: {
+        200: {
+          content: {
+            "application/json": { success?: boolean; data?: EventMediaResponse[]; message?: string }
+          }
+        }
+        default: { content: { "application/json": { message?: string } } }
+      }
+    }
+  }
+  "/api/v1/events/{eventId}/media/{eventFileId}": {
+    delete: {
+      parameters: {
+        path: { eventId: string; eventFileId: string }
+      }
+      responses: {
+        200: {
+          content: { "application/json": { success?: boolean; data?: void; message?: string } }
+        }
         default: { content: { "application/json": { message?: string } } }
       }
     }

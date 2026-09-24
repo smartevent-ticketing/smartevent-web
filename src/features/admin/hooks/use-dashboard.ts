@@ -17,7 +17,9 @@ import type {
 export function useAdminDashboard() {
   const [notification, setNotification] = useState<AdminNotification | null>(null)
 
-  const [pendingEvents] = useState<PendingEvent[]>([])
+  const [pendingEvents, setPendingEvents] = useState<PendingEvent[]>([])
+
+  const [isLoadingPendingEvents, setIsLoadingPendingEvents] = useState(true)
 
   const [categories, setCategories] = useState<CategoryResponse[]>([])
 
@@ -39,11 +41,31 @@ export function useAdminDashboard() {
           catalogApi.getCategories(),
           catalogApi.getVenues(),
           adminApi.getFailedOutbox(),
+          adminApi.getPendingEvents(),
         ])
         if (!mounted) return
         setCategories(results[0].data?.data ?? [])
         setVenues(results[1].data?.data ?? [])
         setFailedOutbox(results[2].data?.data ?? [])
+        const rawPending =
+          (results[3] as any)?.data?.data?.content ?? (results[3] as any)?.data?.data ?? []
+        setPendingEvents(
+          Array.isArray(rawPending)
+            ? rawPending.map((ev: any) => ({
+                id: ev.id,
+                name: ev.name || "Sự kiện chưa đặt tên",
+                organizer: ev.organizerId ? `BTC (${ev.organizerId.slice(0, 8)})` : "Ban tổ chức",
+                venue: ev.venue?.name
+                  ? `${ev.venue.name}, ${ev.venue.city || ""}`
+                  : "Chưa chọn địa điểm",
+                submittedDate: ev.createdAt
+                  ? new Date(ev.createdAt).toLocaleDateString("vi-VN")
+                  : "Hôm nay",
+                expectedTickets: 0,
+                priceRange: "Chờ cập nhật",
+              }))
+            : [],
+        )
       } catch (error) {
         if (mounted)
           setNotification({
@@ -55,6 +77,7 @@ export function useAdminDashboard() {
           setIsLoadingCategories(false)
           setIsLoadingVenues(false)
           setIsLoadingOutbox(false)
+          setIsLoadingPendingEvents(false)
         }
       }
     }
@@ -68,6 +91,7 @@ export function useAdminDashboard() {
     notification,
     setNotification,
     pendingEvents,
+    isLoadingPendingEvents,
     categories,
     isLoadingCategories,
     venues,

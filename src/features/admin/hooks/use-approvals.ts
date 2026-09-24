@@ -11,8 +11,6 @@ export function useAdminApprovals() {
 
   const [customEventIdToApprove, setCustomEventIdToApprove] = useState("")
 
-  const [rejectReason, setRejectReason] = useState("")
-
   const [isApproving, setIsApproving] = useState(false)
 
   const [isRejecting, setIsRejecting] = useState(false)
@@ -34,8 +32,12 @@ export function useAdminApprovals() {
             id: ev.id!,
             name: ev.name || "Sự kiện chưa đặt tên",
             organizer: ev.organizerId ? `BTC (${ev.organizerId.slice(0, 8)})` : "Ban tổ chức",
-            venue: ev.venue?.name ? `${ev.venue.name}, ${ev.venue.city || ""}` : "Chưa chọn địa điểm",
-            submittedDate: ev.createdAt ? new Date(ev.createdAt).toLocaleDateString("vi-VN") : "Hôm nay",
+            venue: ev.venue?.name
+              ? `${ev.venue.name}, ${ev.venue.city || ""}`
+              : "Chưa chọn địa điểm",
+            submittedDate: ev.createdAt
+              ? new Date(ev.createdAt).toLocaleDateString("vi-VN")
+              : "Hôm nay",
             expectedTickets: 0,
             priceRange: "Chờ cập nhật",
           })),
@@ -73,13 +75,13 @@ export function useAdminApprovals() {
     }
   }
 
-  async function handleReject(id: string) {
+  async function handleReject(id: string, reason?: string) {
     setIsRejecting(true)
     try {
       await adminApi.rejectEvent({
         params: {
           path: { id },
-          query: { reason: rejectReason.trim() || undefined },
+          query: { reason: reason?.trim() || undefined },
         },
       })
       setNotification({
@@ -88,7 +90,6 @@ export function useAdminApprovals() {
       })
       setPendingEvents((prev) => prev.filter((e) => e.id !== id))
       setCustomEventIdToApprove("")
-      setRejectReason("")
     } catch {
       setNotification({
         type: "error",

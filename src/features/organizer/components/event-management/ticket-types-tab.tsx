@@ -30,27 +30,29 @@ interface TicketTypesTabProps {
 export function TicketTypesTab({ ticketTypes, areas, onAddTicketType }: TicketTypesTabProps) {
   const [showAddModal, setShowAddModal] = useState(false)
   const [name, setName] = useState("")
-  const [price, setPrice] = useState(500000)
-  const [totalQuota, setTotalQuota] = useState(100)
+  const [price, setPrice] = useState<number | "">("")
+  const [totalQuota, setTotalQuota] = useState<number | "">("")
   const [areaId, setAreaId] = useState(areas[0]?.id || "")
   const [description, setDescription] = useState("")
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!name.trim() || price < 0 || totalQuota <= 0) return
+    const parsedPrice = Number(price) || 0
+    const parsedQuota = Number(totalQuota) || 0
+    if (!name.trim() || parsedPrice < 0 || parsedQuota <= 0) return
     setIsSubmitting(true)
     try {
       await onAddTicketType({
         name: name.trim(),
-        price,
-        totalQuota,
+        price: parsedPrice,
+        totalQuota: parsedQuota,
         areaId: areaId || undefined,
         description: description.trim() || undefined,
       })
       setName("")
-      setPrice(500000)
-      setTotalQuota(100)
+      setPrice("")
+      setTotalQuota("")
       setDescription("")
       setShowAddModal(false)
     } finally {
@@ -182,8 +184,9 @@ export function TicketTypesTab({ ticketTypes, areas, onAddTicketType }: TicketTy
                     min={0}
                     step={10000}
                     required
+                    placeholder="0"
                     value={price}
-                    onChange={(e) => setPrice(Number(e.target.value))}
+                    onChange={(e) => setPrice(e.target.value === "" ? "" : Number(e.target.value))}
                     className="w-full px-4 py-2.5 rounded-xl border border-outline-variant text-xs font-mono"
                   />
                 </div>
@@ -195,8 +198,11 @@ export function TicketTypesTab({ ticketTypes, areas, onAddTicketType }: TicketTy
                     type="number"
                     min={1}
                     required
+                    placeholder="100"
                     value={totalQuota}
-                    onChange={(e) => setTotalQuota(Number(e.target.value))}
+                    onChange={(e) =>
+                      setTotalQuota(e.target.value === "" ? "" : Number(e.target.value))
+                    }
                     className="w-full px-4 py-2.5 rounded-xl border border-outline-variant text-xs font-mono"
                   />
                 </div>

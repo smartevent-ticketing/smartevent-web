@@ -1,6 +1,6 @@
 "use client"
 
-import { ArrowRight } from "lucide-react"
+import { ArrowRight, Loader2 } from "lucide-react"
 import type { useEventSetup } from "@/features/organizer/hooks/use-event-setup"
 
 type Props = Pick<
@@ -13,6 +13,8 @@ type Props = Pick<
   | "setStartTime"
   | "selectedVenueId"
   | "setSelectedVenueId"
+  | "handleProceedToMedia"
+  | "isCreatingDraft"
 >
 export function EventScheduleStep({
   setCurrentStep,
@@ -23,6 +25,8 @@ export function EventScheduleStep({
   setStartTime,
   selectedVenueId,
   setSelectedVenueId,
+  handleProceedToMedia,
+  isCreatingDraft,
 }: Props) {
   return (
     <div className="bg-white p-6 sm:p-8 rounded-3xl border border-outline-variant/60 shadow-xs space-y-5">
@@ -83,11 +87,21 @@ export function EventScheduleStep({
         </button>
         <button
           type="button"
-          onClick={() => setCurrentStep(3)}
-          className="px-6 py-2.5 bg-primary hover:bg-primary-hover text-white text-sm font-bold rounded-xl shadow-xs transition flex items-center gap-2 cursor-pointer"
+          disabled={isCreatingDraft}
+          onClick={handleProceedToMedia}
+          className="px-6 py-2.5 bg-primary hover:bg-primary-hover disabled:bg-slate-300 disabled:cursor-not-allowed text-white text-sm font-bold rounded-xl shadow-xs transition flex items-center gap-2 cursor-pointer"
         >
-          <span>Tiếp tục</span>
-          <ArrowRight className="size-4" />
+          {isCreatingDraft ? (
+            <>
+              <Loader2 className="size-4 animate-spin" />
+              <span>Đang tạo bản nháp...</span>
+            </>
+          ) : (
+            <>
+              <span>Tiếp tục: Tải ảnh</span>
+              <ArrowRight className="size-4" />
+            </>
+          )}
         </button>
       </div>
     </div>

@@ -101,9 +101,7 @@ export function TicketCard({ ticket: t, onShowQr, onTransfer }: Props) {
             </button>
           </>
         ) : (
-          <span className="text-xs text-on-surface-variant italic">
-            {getNoticeCaption()}
-          </span>
+          <span className="text-xs text-on-surface-variant italic">{getNoticeCaption()}</span>
         )}
       </div>
     </div>

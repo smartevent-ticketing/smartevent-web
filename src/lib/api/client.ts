@@ -6,7 +6,12 @@ import { accessTokenStore } from "@/lib/auth/access-token"
 import { refreshAccessToken } from "@/lib/auth/token-refresher"
 
 import type { paths } from "./schema"
-import type { EventSetupPaths, AdminEventPaths, SalePhasePaths } from "./event-setup-contract"
+import type {
+  EventSetupPaths,
+  AdminEventPaths,
+  SalePhasePaths,
+  EventMediaPaths,
+} from "./event-setup-contract"
 
 // ─── Cấu hình ─────────────────────────────────────────────
 
@@ -16,10 +21,19 @@ if (!apiBaseUrl) {
   throw new Error("Missing NEXT_PUBLIC_API_BASE_URL")
 }
 
+// ─── Lưu bản clone request trước khi body bị tiêu thụ ────
+// request.clone() phải được gọi TRƯỚC khi fetch() tiêu thụ body.
+// Nếu gọi sau (trong onResponse), POST/PUT/PATCH sẽ ném TypeError
+// vì body stream đã bị "disturbed". (R04)
+const requestCloneMap = new WeakMap<Request, Request>()
+
 // ─── Middleware gắn Bearer token ──────────────────────────
 
 const authMiddleware: Middleware = {
   onRequest({ request }) {
+    // Lưu bản clone trước khi body bị fetch tiêu thụ
+    requestCloneMap.set(request, request.clone())
+
     const accessToken = accessTokenStore.get()
 
     if (accessToken) {
@@ -56,7 +70,16 @@ const refreshMiddleware: Middleware = {
     }
 
     // Retry request gốc với token mới (đúng 1 lần)
-    const retryRequest = request.clone()
+    // Dùng bản clone đã lưu từ onRequest (body chưa bị tiêu thụ)
+    const savedClone = requestCloneMap.get(request)
+    requestCloneMap.delete(request) // cleanup
+
+    if (!savedClone) {
+      // Fallback: không có clone → trả response 401 gốc
+      return response
+    }
+
+    const retryRequest = savedClone.clone()
     retryRequest.headers.set("Authorization", `Bearer ${result.accessToken}`)
 
     return fetch(retryRequest)
@@ -97,7 +120,9 @@ const serializeQueryParams = (queryParams: Record<string, unknown>) => {
 
 // ─── Client instance ──────────────────────────────────────
 
-export const apiClient = createClient<paths & EventSetupPaths & AdminEventPaths & SalePhasePaths>({
+export const apiClient = createClient<
+  paths & EventSetupPaths & AdminEventPaths & SalePhasePaths & EventMediaPaths
+>({
   baseUrl: apiBaseUrl,
   querySerializer: serializeQueryParams,
 })
