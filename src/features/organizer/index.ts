@@ -14,8 +14,25 @@ export { EventTicketsStep } from "./components/event-setup/tickets-step"
 export { useEventSetup } from "./hooks/use-event-setup"
 export { useOrganizerEvents } from "./hooks/use-organizer-events"
 export type { DisplayEvent } from "./hooks/use-organizer-events"
+export { useEventManagement } from "./hooks/use-event-management"
 
 export type { TicketTierSetup, EventSetupInput } from "./model/event-setup-input"
 export { buildEventSetupRequest, requireSubmittedEvent } from "./model/event-setup-input"
+export type {
+  EventManagementData,
+  AreaItem,
+  TicketTypeItem,
+  IssuedTicketItem,
+  CreateAreaInput,
+  UpdateAreaInput,
+  CreateTicketTypeInput,
+  CreateSalePhaseInput,
+} from "./model/event-management.types"
+
+export {
+  loadEventManagementData,
+  fetchSubmissionReadiness,
+  computePhaseStats,
+} from "./services/event-management.service"
 
 export { organizerApi } from "./api/organizer-api"

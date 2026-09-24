@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Ticket, Plus, Tag, Loader2 } from "lucide-react"
+import { Ticket, Plus, Tag, Loader2, Sparkles } from "lucide-react"
 
 interface TicketTypeItem {
   id: string
@@ -20,8 +20,6 @@ interface TicketTypesTabProps {
   areas: Array<{ id: string; name: string; capacity?: number; type?: string }>
   onAddTicketType: (ticketType: {
     name: string
-    price: number
-    totalQuota: number
     areaId?: string
     description?: string
   }) => Promise<void>
@@ -30,8 +28,6 @@ interface TicketTypesTabProps {
 export function TicketTypesTab({ ticketTypes, areas, onAddTicketType }: TicketTypesTabProps) {
   const [showAddModal, setShowAddModal] = useState(false)
   const [name, setName] = useState("")
-  const [price, setPrice] = useState<number | "">("")
-  const [totalQuota, setTotalQuota] = useState<number | "">("")
   const [areaId, setAreaId] = useState(areas[0]?.id || "")
   const [description, setDescription] = useState("")
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -40,29 +36,23 @@ export function TicketTypesTab({ ticketTypes, areas, onAddTicketType }: TicketTy
     const defaultArea = areas[0]
     setAreaId(defaultArea?.id || "")
     setName(defaultArea?.name || "")
-    setTotalQuota(defaultArea?.capacity || 100)
-    setPrice("")
     setDescription("")
     setShowAddModal(true)
   }
 
+  const selectedArea = areas.find((a) => a.id === areaId)
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    const parsedPrice = Number(price) || 0
-    const parsedQuota = Number(totalQuota) || 0
-    if (!name.trim() || parsedPrice < 0 || parsedQuota <= 0) return
+    if (!name.trim() || !areaId) return
     setIsSubmitting(true)
     try {
       await onAddTicketType({
         name: name.trim(),
-        price: parsedPrice,
-        totalQuota: parsedQuota,
         areaId: areaId || undefined,
         description: description.trim() || undefined,
       })
       setName("")
-      setPrice("")
-      setTotalQuota("")
       setDescription("")
       setShowAddModal(false)
     } finally {
@@ -77,7 +67,8 @@ export function TicketTypesTab({ ticketTypes, areas, onAddTicketType }: TicketTy
         <div>
           <h3 className="text-base font-bold text-on-surface">Cấu hình các hạng vé</h3>
           <p className="text-xs text-on-surface-variant">
-            Định giá và phân bổ số lượng vé cho từng hạng vé thuộc các phân khu sự kiện.
+            Khởi tạo các hạng vé theo từng phân khu khán đài. Giá vé và số lượng mở bán sẽ được phân
+            bổ tại tab <strong>&quot;Đợt mở bán&quot;</strong>.
           </p>
         </div>
         <button
@@ -107,9 +98,9 @@ export function TicketTypesTab({ ticketTypes, areas, onAddTicketType }: TicketTy
               <thead className="bg-surface-container-low text-xs uppercase font-bold text-on-surface-variant border-b border-outline-variant/60">
                 <tr>
                   <th className="px-6 py-4">Hạng vé</th>
-                  <th className="px-6 py-4">Phân khu</th>
-                  <th className="px-6 py-4">Đơn giá</th>
-                  <th className="px-6 py-4">Hạn ngạch</th>
+                  <th className="px-6 py-4">Phân khu / Khán đài</th>
+                  <th className="px-6 py-4">Giá vé hiện tại</th>
+                  <th className="px-6 py-4">Sức chứa khán đài</th>
                   <th className="px-6 py-4">Đã bán</th>
                   <th className="px-6 py-4 text-right">Trạng thái</th>
                 </tr>
@@ -117,7 +108,8 @@ export function TicketTypesTab({ ticketTypes, areas, onAddTicketType }: TicketTy
               <tbody className="divide-y divide-outline-variant/40">
                 {ticketTypes.map((t) => {
                   const sold = t.soldCount || 0
-                  const isSoldOut = sold >= t.totalQuota
+                  const isSoldOut = t.totalQuota > 0 && sold >= t.totalQuota
+                  const hasActiveSale = t.price > 0
 
                   return (
                     <tr key={t.id} className="hover:bg-surface-container-low/40 transition">
@@ -138,7 +130,13 @@ export function TicketTypesTab({ ticketTypes, areas, onAddTicketType }: TicketTy
                         {t.areaName || "Toàn địa điểm"}
                       </td>
                       <td className="px-6 py-4 font-mono font-bold text-primary">
-                        {t.price.toLocaleString("vi-VN")} ₫
+                        {hasActiveSale ? (
+                          `${t.price.toLocaleString("vi-VN")} ₫`
+                        ) : (
+                          <span className="text-xs font-normal text-on-surface-variant italic">
+                            Chưa có đợt bán
+                          </span>
+                        )}
                       </td>
                       <td className="px-6 py-4 font-mono text-xs">
                         {t.totalQuota.toLocaleString("vi-VN")} vé
@@ -151,10 +149,12 @@ export function TicketTypesTab({ ticketTypes, areas, onAddTicketType }: TicketTy
                           className={`px-2.5 py-1 rounded-full text-xs font-semibold ${
                             isSoldOut
                               ? "bg-red-50 text-red-700 border border-red-200"
-                              : "bg-green-50 text-green-700 border border-green-200"
+                              : hasActiveSale
+                                ? "bg-green-50 text-green-700 border border-green-200"
+                                : "bg-slate-100 text-slate-600 border border-slate-300"
                           }`}
                         >
-                          {isSoldOut ? "Hết vé" : "Đang bán"}
+                          {isSoldOut ? "Hết vé" : hasActiveSale ? "Đang mở bán" : "Chờ mở bán"}
                         </span>
                       </td>
                     </tr>
@@ -164,6 +164,19 @@ export function TicketTypesTab({ ticketTypes, areas, onAddTicketType }: TicketTy
             </table>
           </div>
         )}
+      </div>
+
+      {/* Info card */}
+      <div className="bg-surface-container-low/70 border border-outline-variant/60 rounded-2xl p-4 text-xs text-on-surface-variant flex items-start gap-3">
+        <Sparkles className="size-4 text-primary shrink-0 mt-0.5" />
+        <div className="space-y-1">
+          <span className="font-bold text-on-surface">Lưu ý về quy trình phân bổ đợt mở bán</span>
+          <p className="text-[11px] leading-relaxed">
+            Hạng vé được gắn liền với phân khu/khán đài để quản lý sơ đồ và sức chứa. Sau khi tạo
+            hạng vé, hãy chuyển sang tab <strong>&quot;Đợt mở bán&quot;</strong> để tạo các chiến
+            dịch bán vé (như Early Bird, Mở bán chính thức) với mức giá và số lượng mong muốn.
+          </p>
+        </div>
       </div>
 
       {/* Add Ticket Type Modal */}
@@ -192,7 +205,6 @@ export function TicketTypesTab({ ticketTypes, areas, onAddTicketType }: TicketTy
                       const target = areas.find((a) => a.id === newAreaId)
                       if (target) {
                         setName(target.name)
-                        setTotalQuota(target.capacity || 100)
                       }
                     }}
                     className="w-full px-4 py-2.5 rounded-xl border border-outline-variant text-xs bg-white cursor-pointer font-medium"
@@ -227,36 +239,24 @@ export function TicketTypesTab({ ticketTypes, areas, onAddTicketType }: TicketTy
                 />
               </div>
 
-              {/* 3. Đơn giá & Sức chứa khán đài */}
-              <div className="grid grid-cols-2 gap-3">
-                <div className="space-y-1">
-                  <label className="text-xs font-semibold text-on-surface-variant">
-                    Đơn giá vé (VNĐ) <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="number"
-                    min={0}
-                    step={10000}
-                    required
-                    placeholder="500000"
-                    value={price}
-                    onChange={(e) => setPrice(e.target.value === "" ? "" : Number(e.target.value))}
-                    className="w-full px-4 py-2.5 rounded-xl border border-outline-variant text-xs font-mono font-bold"
-                  />
-                </div>
-                <div className="space-y-1">
-                  <label className="text-xs font-semibold text-on-surface-variant">
-                    Sức chứa khán đài
-                  </label>
-                  <div className="px-4 py-2.5 rounded-xl bg-surface-container-low border border-outline-variant/60 text-xs font-mono font-bold text-primary flex items-center">
-                    {totalQuota
-                      ? `${Number(totalQuota).toLocaleString("vi-VN")} vé`
+              {/* Sức chứa khán đài info */}
+              <div className="space-y-1">
+                <label className="text-xs font-semibold text-on-surface-variant">
+                  Sức chứa khán đài
+                </label>
+                <div className="px-4 py-2.5 rounded-xl bg-surface-container-low border border-outline-variant/60 text-xs font-mono font-bold text-primary flex items-center justify-between">
+                  <span>
+                    {selectedArea?.capacity
+                      ? `${selectedArea.capacity.toLocaleString("vi-VN")} vé`
                       : "Theo khán đài"}
-                  </div>
+                  </span>
+                  <span className="text-[11px] font-normal text-on-surface-variant">
+                    {selectedArea?.type === "SEATED" ? "Ghế ngồi chỉ định" : "Vé đứng tự do"}
+                  </span>
                 </div>
               </div>
 
-              {/* 4. Mô tả quyền lợi vé */}
+              {/* 3. Mô tả quyền lợi vé */}
               <div className="space-y-1">
                 <label className="text-xs font-semibold text-on-surface-variant">
                   Quyền lợi của hạng vé
@@ -272,9 +272,10 @@ export function TicketTypesTab({ ticketTypes, areas, onAddTicketType }: TicketTy
 
               {/* Ghi chú về đợt bán */}
               <div className="p-3 bg-blue-50/70 border border-blue-200/80 rounded-xl text-[11px] text-blue-900 leading-relaxed">
-                💡 <strong>Phân bổ số lượng theo đợt bán:</strong> Bạn có thể chia nhỏ số lượng vé
-                để bán theo từng đợt (ví dụ: đợt Early Bird bán 50 vé với giá ưu đãi, đợt Mở bán
-                chính thức bán số vé còn lại) tại tab <strong>&quot;Đợt mở bán&quot;</strong>.
+                💡 <strong>Định giá &amp; Số lượng:</strong> Không cần nhập giá vé ở bước này. Bạn
+                sẽ chia nhỏ số lượng vé theo từng đợt mở bán (ví dụ: đợt Early Bird bán 50 vé giá ưu
+                đãi, đợt Mở bán chính thức bán các vé còn lại) tại tab{" "}
+                <strong>&quot;Đợt mở bán&quot;</strong>.
               </div>
 
               <div className="flex items-center justify-end gap-2 pt-2">

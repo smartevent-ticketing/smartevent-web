@@ -15,27 +15,23 @@ import {
   RotateCcw,
 } from "lucide-react"
 import type { SalePhaseStatus } from "@/lib/api/event-setup-contract"
-
-export interface SalePhaseItem {
-  id: string
-  ticketTypeId: string
-  name: string
-  price: number
-  quantity: number
-  saleStartAt: string
-  saleEndAt: string
-  status?: SalePhaseStatus
-  maxPerOrder?: number
-  maxPerUser?: number
-  ticketTypeName?: string
-}
+import type { SalePhaseItem } from "@/features/organizer/model/event-management.types"
+export type { SalePhaseItem }
 
 export interface SalePhasesTabProps {
   eventId: string
   eventStartTime?: string
   eventEndTime?: string
   salePhases: SalePhaseItem[]
-  ticketTypes: Array<{ id: string; name: string }>
+  ticketTypes: Array<{
+    id: string
+    name: string
+    areaId?: string
+    areaName?: string
+    totalQuota?: number
+    price?: number
+  }>
+  areas?: Array<{ id: string; name: string; capacity?: number; type?: string }>
   onAddSalePhase: (phase: {
     ticketTypeId: string
     name: string
@@ -87,6 +83,7 @@ export function SalePhasesTab({
   eventEndTime,
   salePhases,
   ticketTypes,
+  areas = [],
   onAddSalePhase,
   onUpdatePhaseStatus,
 }: SalePhasesTabProps) {
@@ -104,6 +101,24 @@ export function SalePhasesTab({
   const [maxPerOrder, setMaxPerOrder] = useState<number | "">(4)
   const [maxPerUser, setMaxPerUser] = useState<number | "">("")
   const [formError, setFormError] = useState<string | null>(null)
+
+  // Capacity calculation for selected ticket type
+  const selectedType = ticketTypes.find((t) => t.id === selectedTicketTypeId)
+  const matchedArea = areas.find((a) => a.id === selectedType?.areaId)
+  const totalAreaCapacity = matchedArea?.capacity ?? selectedType?.totalQuota ?? 0
+
+  const configuredQty = salePhases
+    .filter((p) => {
+      if (p.status === "CLOSED") return false
+      if (p.ticketTypeId === selectedTicketTypeId) return true
+      const otherType = ticketTypes.find((t) => t.id === p.ticketTypeId)
+      return Boolean(
+        otherType?.areaId && selectedType?.areaId && otherType.areaId === selectedType.areaId,
+      )
+    })
+    .reduce((sum, p) => sum + p.quantity, 0)
+
+  const remainingCapacity = Math.max(0, totalAreaCapacity - configuredQty)
 
   // Helper check overlap locally
   const checkOverlap = (
@@ -144,6 +159,12 @@ export function SalePhasesTab({
     const numQty = Number(quantity)
     if (isNaN(numQty) || numQty <= 0) {
       setFormError("Số lượng vé phải lớn hơn 0.")
+      return
+    }
+    if (totalAreaCapacity > 0 && numQty > remainingCapacity) {
+      setFormError(
+        `Số lượng vé mở bán (${numQty.toLocaleString("vi-VN")}) vượt quá số lượng vé còn khả dụng của khán đài (${remainingCapacity.toLocaleString("vi-VN")} vé). Vui lòng điều chỉnh lại.`,
+      )
       return
     }
     if (!saleStartAt || !saleEndAt) {
@@ -552,7 +573,7 @@ export function SalePhasesTab({
 
             <form onSubmit={handleCreateSubmit} className="space-y-4 text-xs">
               {/* Chọn Hạng vé */}
-              <div className="space-y-1">
+              <div className="space-y-1.5">
                 <label className="font-bold text-on-surface">Hạng vé áp dụng *</label>
                 <select
                   value={selectedTicketTypeId}
@@ -566,6 +587,35 @@ export function SalePhasesTab({
                     </option>
                   ))}
                 </select>
+
+                {/* Sức chứa khán đài & số lượng khả dụng */}
+                <div className="bg-surface-container-low/80 border border-outline-variant/60 rounded-xl p-3 flex flex-wrap items-center justify-between gap-2 text-xs">
+                  <div>
+                    <span className="text-on-surface-variant">Phân khu: </span>
+                    <strong className="text-on-surface">
+                      {matchedArea?.name || selectedType?.areaName || "Khu vực chung"}
+                    </strong>
+                    <span className="text-on-surface-variant font-mono">
+                      {" "}
+                      ({totalAreaCapacity.toLocaleString("vi-VN")} chỗ)
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <span className="text-on-surface-variant">
+                      Đã lên lịch:{" "}
+                      <strong className="font-mono text-on-surface">
+                        {configuredQty.toLocaleString("vi-VN")}
+                      </strong>
+                    </span>
+                    <span className="text-primary font-bold">
+                      Còn khả dụng:{" "}
+                      <strong className="font-mono">
+                        {remainingCapacity.toLocaleString("vi-VN")}
+                      </strong>{" "}
+                      vé
+                    </span>
+                  </div>
+                </div>
               </div>
 
               {/* Tên đợt */}
@@ -582,7 +632,7 @@ export function SalePhasesTab({
               </div>
 
               {/* Giá vé & Số lượng */}
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div className="space-y-1">
                   <label className="font-bold text-on-surface">Giá vé (VNĐ) *</label>
                   <input
@@ -600,11 +650,19 @@ export function SalePhasesTab({
                 </div>
 
                 <div className="space-y-1">
-                  <label className="font-bold text-on-surface">Số lượng vé *</label>
+                  <div className="flex items-center justify-between">
+                    <label className="font-bold text-on-surface">Số lượng vé *</label>
+                    {remainingCapacity > 0 && (
+                      <span className="text-[10px] text-primary font-semibold">
+                        Tối đa {remainingCapacity.toLocaleString("vi-VN")}
+                      </span>
+                    )}
+                  </div>
                   <input
                     type="number"
                     min="1"
-                    placeholder="100"
+                    max={remainingCapacity > 0 ? remainingCapacity : undefined}
+                    placeholder={remainingCapacity > 0 ? `Tối đa ${remainingCapacity}` : "100"}
                     value={quantity}
                     onChange={(e) =>
                       setQuantity(e.target.value === "" ? "" : Math.max(1, Number(e.target.value)))
@@ -612,6 +670,37 @@ export function SalePhasesTab({
                     className="w-full px-3 py-2 rounded-xl border border-outline-variant font-mono text-on-surface focus:outline-primary"
                     required
                   />
+                  {/* Quick Select Buttons */}
+                  {remainingCapacity > 0 && (
+                    <div className="flex items-center gap-1.5 pt-1 flex-wrap">
+                      <span className="text-[10px] text-on-surface-variant">Nhanh:</span>
+                      {remainingCapacity >= 50 && (
+                        <button
+                          type="button"
+                          onClick={() => setQuantity(50)}
+                          className="px-2 py-0.5 rounded-lg bg-surface-container hover:bg-surface-container-high text-[10px] font-mono font-medium transition cursor-pointer"
+                        >
+                          50 vé (Early)
+                        </button>
+                      )}
+                      {remainingCapacity >= 100 && (
+                        <button
+                          type="button"
+                          onClick={() => setQuantity(100)}
+                          className="px-2 py-0.5 rounded-lg bg-surface-container hover:bg-surface-container-high text-[10px] font-mono font-medium transition cursor-pointer"
+                        >
+                          100 vé
+                        </button>
+                      )}
+                      <button
+                        type="button"
+                        onClick={() => setQuantity(remainingCapacity)}
+                        className="px-2 py-0.5 rounded-lg bg-primary/10 hover:bg-primary/20 text-primary text-[10px] font-mono font-bold transition cursor-pointer"
+                      >
+                        Toàn bộ ({remainingCapacity.toLocaleString("vi-VN")} vé)
+                      </button>
+                    </div>
+                  )}
                 </div>
               </div>
 
