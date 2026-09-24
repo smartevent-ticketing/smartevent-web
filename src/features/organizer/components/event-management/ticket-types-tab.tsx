@@ -104,7 +104,7 @@ export function TicketTypesTab({ ticketTypes, areas, onAddTicketType }: TicketTy
                 <tr>
                   <th className="px-6 py-4">Hạng vé</th>
                   <th className="px-6 py-4">Phân khu / Khán đài</th>
-                  <th className="px-6 py-4">Giá vé hiện tại</th>
+                  <th className="px-6 py-4">Giá vé niêm yết (gốc)</th>
                   <th className="px-6 py-4">Sức chứa khán đài</th>
                   <th className="px-6 py-4">Đã bán</th>
                   <th className="px-6 py-4 text-right">Trạng thái</th>
@@ -136,10 +136,15 @@ export function TicketTypesTab({ ticketTypes, areas, onAddTicketType }: TicketTy
                       </td>
                       <td className="px-6 py-4 font-mono font-bold text-primary">
                         {hasActiveSale ? (
-                          `${t.price.toLocaleString("vi-VN")} ₫`
+                          <div>
+                            <span>{t.price.toLocaleString("vi-VN")} ₫</span>
+                            <span className="text-[10px] font-normal text-on-surface-variant block">
+                              (Giá gốc niêm yết)
+                            </span>
+                          </div>
                         ) : (
                           <span className="text-xs font-normal text-on-surface-variant italic">
-                            Chưa có đợt bán
+                            Chưa đặt giá gốc
                           </span>
                         )}
                       </td>
@@ -159,7 +164,7 @@ export function TicketTypesTab({ ticketTypes, areas, onAddTicketType }: TicketTy
                                 : "bg-slate-100 text-slate-600 border border-slate-300"
                           }`}
                         >
-                          {isSoldOut ? "Hết vé" : hasActiveSale ? "Đang mở bán" : "Chờ mở bán"}
+                          {isSoldOut ? "Hết vé" : hasActiveSale ? "Đã định giá" : "Chưa định giá"}
                         </span>
                       </td>
                     </tr>

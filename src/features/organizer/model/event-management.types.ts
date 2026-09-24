@@ -24,6 +24,7 @@ export interface TicketTypeItem {
   id: string
   name: string
   price: number
+  basePrice?: number
   totalQuota: number
   soldCount?: number
   areaName?: string
@@ -79,6 +80,7 @@ export interface CreateSalePhaseInput {
   ticketTypeId: string
   name: string
   price: number
+  basePrice?: number
   quantity: number
   saleStartAt: string
   saleEndAt: string

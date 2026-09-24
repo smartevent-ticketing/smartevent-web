@@ -190,10 +190,15 @@ export function useEventManagement(eventId: string) {
         return
       }
 
+      const priceTag = ticketType.price && ticketType.price > 0 ? `[PRICE:${ticketType.price}]` : ""
+      const combinedDesc = ticketType.description
+        ? `${ticketType.description.trim()}${priceTag ? `\n${priceTag}` : ""}`
+        : priceTag || undefined
+
       const createRes = await organizerApi.createTicketType(eventId, {
         name: ticketType.name,
         eventAreaId: targetAreaId,
-        description: ticketType.description,
+        description: combinedDesc,
       })
       const createdType = (createRes as any)?.data?.data ?? (createRes as any)?.data
       const typeId = createdType?.id
@@ -205,11 +210,12 @@ export function useEventManagement(eventId: string) {
           id: typeId,
           name: createdType?.name || ticketType.name,
           price: ticketType.price || 0,
+          basePrice: ticketType.price || 0,
           totalQuota: area?.capacity || 0,
           soldCount: 0,
           areaName: area?.name || "Khu vực chung",
           areaId: targetAreaId,
-          description: createdType?.description || ticketType.description,
+          description: ticketType.description || "",
         },
       ])
 
@@ -276,9 +282,11 @@ export function useEventManagement(eventId: string) {
         prev.map((t) => {
           const added = phases.find((p) => p.ticketTypeId === t.id)
           if (!added) return t
+          const newBase = added.basePrice || t.basePrice || (t.price === 0 ? added.price : t.price)
           return {
             ...t,
-            price: t.price === 0 ? added.price : t.price,
+            price: newBase,
+            basePrice: newBase,
             totalQuota: (t.totalQuota || 0) + added.quantity,
           }
         }),

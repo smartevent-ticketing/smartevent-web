@@ -58,16 +58,31 @@ export function parseSalePhases(raw: any): SalePhaseItem[] {
 export function parseTicketTypes(raw: any, phases: SalePhaseItem[]): TicketTypeItem[] {
   if (!Array.isArray(raw)) return []
   return raw.map((t) => {
-    const matchedPhase = phases.find((p) => p.ticketTypeId === t.id)
+    let rawDesc = t.description || ""
+    let embeddedPrice: number | undefined
+    const priceMatch = rawDesc.match(/\[PRICE:(\d+)\]/)
+    if (priceMatch) {
+      embeddedPrice = Number(priceMatch[1])
+      rawDesc = rawDesc.replace(/\[PRICE:\d+\]/, "").trim()
+    }
+
+    const matchedPhases = phases.filter((p) => p.ticketTypeId === t.id)
+    const maxPhasePrice =
+      matchedPhases.length > 0
+        ? Math.max(...matchedPhases.map((p) => Number(p.price) || 0))
+        : undefined
+    const basePrice = embeddedPrice ?? maxPhasePrice ?? (Number(t.price) || 0)
+
     return {
       id: t.id,
       name: t.name,
-      price: matchedPhase?.price ?? t.price ?? 0,
-      totalQuota: matchedPhase?.quantity ?? t.totalQuota ?? 0,
-      soldCount: (matchedPhase as any)?.soldCount ?? t.soldCount ?? 0,
+      price: basePrice,
+      basePrice,
+      totalQuota: matchedPhases.reduce((sum, p) => sum + p.quantity, 0) || t.totalQuota || 0,
+      soldCount: (matchedPhases[0] as any)?.soldCount ?? t.soldCount ?? 0,
       areaName: t.areaName || "Khu vực chung",
       areaId: t.eventAreaId || t.areaId,
-      description: t.description || "",
+      description: rawDesc,
     }
   })
 }
