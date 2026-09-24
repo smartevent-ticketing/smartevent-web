@@ -30,11 +30,24 @@ const requestCloneMap = new WeakMap<Request, Request>()
 // ─── Middleware gắn Bearer token ──────────────────────────
 
 const authMiddleware: Middleware = {
-  onRequest({ request }) {
+  async onRequest({ request }) {
     // Lưu bản clone trước khi body bị fetch tiêu thụ
     requestCloneMap.set(request, request.clone())
 
-    const accessToken = accessTokenStore.get()
+    let accessToken = accessTokenStore.get()
+
+    // Nếu chưa có token nhưng phiên có thể refresh (sau khi F5 reload)
+    // Và request không phải là endpoint auth nội bộ
+    if (!accessToken && accessTokenStore.canRefresh() && typeof window !== "undefined") {
+      const url = new URL(request.url)
+      const isAuthPath = SKIP_RETRY_PATHS.some((p) => url.pathname.endsWith(p))
+      if (!isAuthPath) {
+        const result = await refreshAccessToken()
+        if (result.status === "refreshed") {
+          accessToken = result.accessToken
+        }
+      }
+    }
 
     if (accessToken) {
       request.headers.set("Authorization", `Bearer ${accessToken}`)

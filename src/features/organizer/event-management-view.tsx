@@ -4,6 +4,8 @@ import { getApiErrorMessage } from "@/lib/api/result"
 
 import { useState, useEffect } from "react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
+import { useAuth } from "@/features/auth"
 import {
   ArrowLeft,
   Calendar,
@@ -39,6 +41,10 @@ interface EventManagementViewProps {
 }
 
 export function EventManagementView({ eventId }: EventManagementViewProps) {
+  const { isAuthenticated, isLoading: isAuthLoading } = useAuth()
+  const router = useRouter()
+  const [refreshTrigger, setRefreshTrigger] = useState(0)
+
   const [activeTab, setActiveTab] = useState<
     "overview" | "media" | "areas" | "ticket-types" | "sale-phases" | "tickets"
   >("overview")
@@ -68,8 +74,18 @@ export function EventManagementView({ eventId }: EventManagementViewProps) {
   const [ticketTypes, setTicketTypes] = useState<any[]>([])
   const [salePhases, setSalePhases] = useState<SalePhaseItem[]>([])
   const [issuedTickets, setIssuedTickets] = useState<any[]>([])
-  // Fetch real event data on load
+
+  // Chuyển hướng đăng nhập nếu phiên hết hạn
   useEffect(() => {
+    if (!isAuthLoading && !isAuthenticated) {
+      router.replace(`/login?callbackUrl=${encodeURIComponent(`/organizer/events/${eventId}`)}`)
+    }
+  }, [isAuthLoading, isAuthenticated, router, eventId])
+
+  // Fetch real event data on load: Chờ cho session xác thực hoàn tất trước khi gọi API
+  useEffect(() => {
+    if (isAuthLoading || !isAuthenticated) return
+
     let isMounted = true
     async function loadEvent() {
       setIsLoadingEvent(true)
@@ -231,7 +247,7 @@ export function EventManagementView({ eventId }: EventManagementViewProps) {
     return () => {
       isMounted = false
     }
-  }, [eventId])
+  }, [eventId, isAuthLoading, isAuthenticated, refreshTrigger])
 
   const fetchReadiness = async () => {
     setIsLoadingReadiness(true)
@@ -567,7 +583,7 @@ export function EventManagementView({ eventId }: EventManagementViewProps) {
     }
   }
 
-  if (isLoadingEvent) {
+  if (isAuthLoading || (isLoadingEvent && !eventData)) {
     return (
       <div className="py-24 text-center space-y-4">
         <Loader2 className="size-8 animate-spin text-primary mx-auto" />
@@ -593,12 +609,25 @@ export function EventManagementView({ eventId }: EventManagementViewProps) {
           <Ban className="size-10 text-red-500 mx-auto" />
           <h3 className="text-base font-bold text-on-surface">Không thể tải thông tin sự kiện</h3>
           <p className="text-xs text-on-surface-variant max-w-md mx-auto">{loadError}</p>
-          <Link
-            href="/organizer/events"
-            className="inline-block px-5 py-2.5 bg-primary text-white text-xs font-bold rounded-xl"
-          >
-            Quay lại danh sách
-          </Link>
+          <div className="flex items-center justify-center gap-3 pt-2">
+            <button
+              type="button"
+              onClick={() => {
+                setLoadError(null)
+                setIsLoadingEvent(true)
+                setRefreshTrigger((prev) => prev + 1)
+              }}
+              className="px-5 py-2.5 bg-primary text-white text-xs font-bold rounded-xl hover:bg-primary-hover transition cursor-pointer shadow-xs"
+            >
+              Thử lại
+            </button>
+            <Link
+              href="/organizer/events"
+              className="inline-block px-5 py-2.5 border border-outline-variant text-on-surface-variant text-xs font-bold rounded-xl hover:bg-surface-container transition"
+            >
+              Quay lại danh sách
+            </Link>
+          </div>
         </div>
       </div>
     )
