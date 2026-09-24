@@ -17,7 +17,7 @@ interface TicketTypeItem {
 interface TicketTypesTabProps {
   eventId: string
   ticketTypes: TicketTypeItem[]
-  areas: Array<{ id: string; name: string }>
+  areas: Array<{ id: string; name: string; capacity?: number; type?: string }>
   onAddTicketType: (ticketType: {
     name: string
     price: number
@@ -35,6 +35,16 @@ export function TicketTypesTab({ ticketTypes, areas, onAddTicketType }: TicketTy
   const [areaId, setAreaId] = useState(areas[0]?.id || "")
   const [description, setDescription] = useState("")
   const [isSubmitting, setIsSubmitting] = useState(false)
+
+  const handleOpenAddModal = () => {
+    const defaultArea = areas[0]
+    setAreaId(defaultArea?.id || "")
+    setName(defaultArea?.name || "")
+    setTotalQuota(defaultArea?.capacity || 100)
+    setPrice("")
+    setDescription("")
+    setShowAddModal(true)
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -72,7 +82,7 @@ export function TicketTypesTab({ ticketTypes, areas, onAddTicketType }: TicketTy
         </div>
         <button
           type="button"
-          onClick={() => setShowAddModal(true)}
+          onClick={handleOpenAddModal}
           className="inline-flex items-center gap-1.5 px-4 py-2 bg-primary hover:bg-primary-hover text-white text-xs font-bold rounded-xl transition cursor-pointer shadow-xs"
         >
           <Plus className="size-4" />
@@ -160,85 +170,109 @@ export function TicketTypesTab({ ticketTypes, areas, onAddTicketType }: TicketTy
       {showAddModal && (
         <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4">
           <div className="bg-white rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl space-y-5">
-            <h3 className="text-lg font-bold text-on-surface">Thêm hạng vé sự kiện</h3>
+            <div>
+              <h3 className="text-lg font-bold text-on-surface">Thêm hạng vé sự kiện</h3>
+              <p className="text-xs text-on-surface-variant mt-0.5">
+                Hạng vé gắn liền với từng phân khu khán đài đã thiết lập.
+              </p>
+            </div>
+
             <form onSubmit={handleSubmit} className="space-y-4">
+              {/* 1. Chọn Khán đài trước */}
               <div className="space-y-1">
-                <label className="text-xs font-semibold text-on-surface-variant">Tên hạng vé</label>
+                <label className="text-xs font-semibold text-on-surface-variant">
+                  Khán đài / Phân khu áp dụng <span className="text-red-500">*</span>
+                </label>
+                {areas.length > 0 ? (
+                  <select
+                    value={areaId}
+                    onChange={(e) => {
+                      const newAreaId = e.target.value
+                      setAreaId(newAreaId)
+                      const target = areas.find((a) => a.id === newAreaId)
+                      if (target) {
+                        setName(target.name)
+                        setTotalQuota(target.capacity || 100)
+                      }
+                    }}
+                    className="w-full px-4 py-2.5 rounded-xl border border-outline-variant text-xs bg-white cursor-pointer font-medium"
+                  >
+                    {areas.map((a) => (
+                      <option key={a.id} value={a.id}>
+                        {a.name} ({a.type === "SEATED" ? "Khu có ghế" : "Khu đứng"} —{" "}
+                        {a.capacity?.toLocaleString("vi-VN")} chỗ)
+                      </option>
+                    ))}
+                  </select>
+                ) : (
+                  <div className="p-3 bg-amber-50 border border-amber-200 rounded-xl text-xs text-amber-800">
+                    Sự kiện chưa có phân khu nào. Vui lòng tạo phân khu trước tại tab "Phân khu &
+                    Ghế ngồi".
+                  </div>
+                )}
+              </div>
+
+              {/* 2. Tên hạng vé (Tự động điền theo tên khán đài) */}
+              <div className="space-y-1">
+                <label className="text-xs font-semibold text-on-surface-variant">
+                  Tên hạng vé <span className="text-red-500">*</span>
+                </label>
                 <input
                   type="text"
                   required
-                  placeholder="Ví dụ: Vé VIP, Vé Phổ thông (GA)..."
+                  placeholder="Ví dụ: Khán đài A, Vé VIP 1..."
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   className="w-full px-4 py-2.5 rounded-xl border border-outline-variant text-xs"
                 />
               </div>
 
+              {/* 3. Đơn giá & Sức chứa khán đài */}
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-1">
                   <label className="text-xs font-semibold text-on-surface-variant">
-                    Đơn giá (VNĐ)
+                    Đơn giá vé (VNĐ) <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="number"
                     min={0}
                     step={10000}
                     required
-                    placeholder="0"
+                    placeholder="500000"
                     value={price}
                     onChange={(e) => setPrice(e.target.value === "" ? "" : Number(e.target.value))}
-                    className="w-full px-4 py-2.5 rounded-xl border border-outline-variant text-xs font-mono"
+                    className="w-full px-4 py-2.5 rounded-xl border border-outline-variant text-xs font-mono font-bold"
                   />
                 </div>
                 <div className="space-y-1">
                   <label className="text-xs font-semibold text-on-surface-variant">
-                    Số lượng phát hành
+                    Sức chứa khán đài
                   </label>
-                  <input
-                    type="number"
-                    min={1}
-                    required
-                    placeholder="100"
-                    value={totalQuota}
-                    onChange={(e) =>
-                      setTotalQuota(e.target.value === "" ? "" : Number(e.target.value))
-                    }
-                    className="w-full px-4 py-2.5 rounded-xl border border-outline-variant text-xs font-mono"
-                  />
+                  <div className="px-4 py-2.5 rounded-xl bg-surface-container-low border border-outline-variant/60 text-xs font-mono font-bold text-primary flex items-center">
+                    {totalQuota ? `${Number(totalQuota).toLocaleString("vi-VN")} vé` : "Theo khán đài"}
+                  </div>
                 </div>
               </div>
 
-              {areas.length > 0 && (
-                <div className="space-y-1">
-                  <label className="text-xs font-semibold text-on-surface-variant">
-                    Phân khu áp dụng
-                  </label>
-                  <select
-                    value={areaId}
-                    onChange={(e) => setAreaId(e.target.value)}
-                    className="w-full px-4 py-2.5 rounded-xl border border-outline-variant text-xs bg-white"
-                  >
-                    <option value="">Tất cả / Không gán khu cụ thể</option>
-                    {areas.map((a) => (
-                      <option key={a.id} value={a.id}>
-                        {a.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              )}
-
+              {/* 4. Mô tả quyền lợi vé */}
               <div className="space-y-1">
                 <label className="text-xs font-semibold text-on-surface-variant">
-                  Mô tả quyền lợi
+                  Quyền lợi của hạng vé
                 </label>
                 <textarea
                   rows={2}
-                  placeholder="Ví dụ: Đã bao gồm nước uống, lối vào ưu tiên..."
+                  placeholder="Ví dụ: Đã bao gồm 01 đồ uống miễn phí, lối vào ưu tiên, quà tặng kỷ niệm..."
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   className="w-full px-4 py-2 rounded-xl border border-outline-variant text-xs resize-none"
                 />
+              </div>
+
+              {/* Ghi chú về đợt bán */}
+              <div className="p-3 bg-blue-50/70 border border-blue-200/80 rounded-xl text-[11px] text-blue-900 leading-relaxed">
+                💡 <strong>Phân bổ số lượng theo đợt bán:</strong> Bạn có thể chia nhỏ số lượng vé để
+                bán theo từng đợt (ví dụ: đợt Early Bird bán 50 vé với giá ưu đãi, đợt Mở bán chính
+                thức bán số vé còn lại) tại tab <strong>"Đợt mở bán"</strong>.
               </div>
 
               <div className="flex items-center justify-end gap-2 pt-2">
@@ -251,8 +285,8 @@ export function TicketTypesTab({ ticketTypes, areas, onAddTicketType }: TicketTy
                 </button>
                 <button
                   type="submit"
-                  disabled={isSubmitting}
-                  className="px-5 py-2 bg-primary hover:bg-primary-hover text-white text-xs font-bold rounded-xl transition cursor-pointer disabled:opacity-50 inline-flex items-center gap-1.5"
+                  disabled={isSubmitting || areas.length === 0}
+                  className="px-5 py-2 bg-primary hover:bg-primary-hover text-white text-xs font-bold rounded-xl transition cursor-pointer disabled:opacity-50 inline-flex items-center gap-1.5 shadow-xs"
                 >
                   {isSubmitting && <Loader2 className="size-3.5 animate-spin" />}
                   <span>Lưu hạng vé</span>

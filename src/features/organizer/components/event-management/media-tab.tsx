@@ -27,15 +27,20 @@ const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"]
 export function MediaTab({ eventId, isDraft, onMediaChanged }: MediaTabProps) {
   const [bannerMedia, setBannerMedia] = useState<EventMediaResponse | null>(null)
   const [bannerPreview, setBannerPreview] = useState<string | null>(null)
+  const [seatMapMedia, setSeatMapMedia] = useState<EventMediaResponse | null>(null)
+  const [seatMapPreview, setSeatMapPreview] = useState<string | null>(null)
   const [galleryMedia, setGalleryMedia] = useState<EventMediaResponse[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [isUploadingBanner, setIsUploadingBanner] = useState(false)
+  const [isUploadingSeatMap, setIsUploadingSeatMap] = useState(false)
   const [isUploadingGallery, setIsUploadingGallery] = useState(false)
   const [isDraggingBanner, setIsDraggingBanner] = useState(false)
+  const [isDraggingSeatMap, setIsDraggingSeatMap] = useState(false)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
 
   const bannerInputRef = useRef<HTMLInputElement>(null)
+  const seatMapInputRef = useRef<HTMLInputElement>(null)
   const galleryInputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
@@ -48,10 +53,12 @@ export function MediaTab({ eventId, isDraft, onMediaChanged }: MediaTabProps) {
         if (!isMounted) return
         const list = (res.data?.data ?? res.data ?? []) as EventMediaResponse[]
         const banner = list.find((m) => m.fileType === "BANNER") || null
+        const seatMap = list.find((m) => m.fileType === "SEAT_MAP") || null
         const gallery = list
           .filter((m) => m.fileType === "GALLERY")
           .sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0))
         setBannerMedia(banner)
+        setSeatMapMedia(seatMap)
         setGalleryMedia(gallery)
       } catch (err) {
         if (!isMounted) return
@@ -128,6 +135,60 @@ export function MediaTab({ eventId, isDraft, onMediaChanged }: MediaTabProps) {
       setErrorMessage(getApiErrorMessage(apiErr, "Không thể xóa ảnh bìa."))
     } finally {
       setIsUploadingBanner(false)
+    }
+  }
+
+  const handleSeatMapSelect = async (file: File) => {
+    if (!isDraft) return
+    setErrorMessage(null)
+    setSuccessMessage(null)
+
+    const err = validateFile(file)
+    if (err) {
+      setErrorMessage(err)
+      return
+    }
+
+    const preview = URL.createObjectURL(file)
+    setSeatMapPreview(preview)
+    setIsUploadingSeatMap(true)
+    try {
+      const res = await organizerApi.uploadEventMedia(eventId, file, "SEAT_MAP")
+      const media = (res.data?.data ?? res.data) as EventMediaResponse
+      if (media) {
+        setSeatMapMedia(media)
+        setSeatMapPreview(null)
+        setSuccessMessage("Đã cập nhật ảnh sơ đồ phân khu & khán đài thành công.")
+        await onMediaChanged?.()
+      }
+    } catch (apiErr) {
+      setSeatMapPreview(null)
+      setErrorMessage(
+        getApiErrorMessage(apiErr, "Không thể tải ảnh sơ đồ phân khu lên. Vui lòng thử lại."),
+      )
+    } finally {
+      setIsUploadingSeatMap(false)
+    }
+  }
+
+  const handleDeleteSeatMap = async () => {
+    if (!isDraft) return
+    setErrorMessage(null)
+    setSuccessMessage(null)
+
+    setIsUploadingSeatMap(true)
+    try {
+      if (seatMapMedia?.eventFileId) {
+        await organizerApi.deleteEventMedia(eventId, seatMapMedia.eventFileId)
+      }
+      setSeatMapMedia(null)
+      setSeatMapPreview(null)
+      setSuccessMessage("Đã gỡ ảnh sơ đồ phân khu.")
+      await onMediaChanged?.()
+    } catch (apiErr) {
+      setErrorMessage(getApiErrorMessage(apiErr, "Không thể xóa ảnh sơ đồ phân khu."))
+    } finally {
+      setIsUploadingSeatMap(false)
     }
   }
 
@@ -350,7 +411,127 @@ export function MediaTab({ eventId, isDraft, onMediaChanged }: MediaTabProps) {
         )}
       </div>
 
-      {/* ─── 2. GALLERY SECTION (TÙY CHỌN) ────────────────── */}
+      {/* ─── 2. SEAT MAP SECTION (SƠ ĐỒ PHÂN KHU & KHÁN ĐÀI) ────────────────── */}
+      <div className="space-y-3 pt-4 border-t border-outline-variant/40">
+        <div className="flex items-center justify-between">
+          <div>
+            <label className="text-sm font-bold text-on-surface flex items-center gap-1.5">
+              Ảnh sơ đồ phân khu & khán đài (Seat Map)
+            </label>
+            <p className="text-xs text-on-surface-variant">
+              Tải lên sơ đồ bố trí sân khấu, khán đài và các phân khu để người mua vé dễ dàng đối chiếu vị trí.
+            </p>
+          </div>
+          {seatMapMedia && (
+            <span className="text-xs font-semibold text-emerald-600 flex items-center gap-1">
+              <CheckCircle2 className="size-3.5" /> Đã có sơ đồ phân khu
+            </span>
+          )}
+        </div>
+
+        <input
+          ref={seatMapInputRef}
+          type="file"
+          accept="image/jpeg,image/png,image/webp"
+          className="hidden"
+          disabled={!isDraft || isUploadingSeatMap}
+          onChange={(e) => {
+            const file = e.target.files?.[0]
+            if (file) handleSeatMapSelect(file)
+            e.target.value = ""
+          }}
+        />
+
+        {seatMapPreview || seatMapMedia ? (
+          <div className="relative group rounded-2xl overflow-hidden border border-outline-variant/60 max-h-[420px] bg-slate-900/5 p-2 flex items-center justify-center">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={seatMapPreview || seatMapMedia?.fileUrl}
+              alt="Seat Map"
+              className="max-h-[400px] w-auto object-contain rounded-xl"
+            />
+            {isDraft && (
+              <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center gap-3 p-4">
+                <button
+                  type="button"
+                  disabled={isUploadingSeatMap}
+                  onClick={() => seatMapInputRef.current?.click()}
+                  className="px-4 py-2 bg-white/95 hover:bg-white text-slate-800 rounded-xl text-xs font-bold shadow-sm transition cursor-pointer"
+                >
+                  Thay đổi sơ đồ
+                </button>
+                <button
+                  type="button"
+                  disabled={isUploadingSeatMap}
+                  onClick={handleDeleteSeatMap}
+                  className="p-2 bg-red-600/90 hover:bg-red-600 text-white rounded-xl shadow-sm transition cursor-pointer"
+                  title="Gỡ ảnh sơ đồ"
+                >
+                  <Trash2 className="size-4" />
+                </button>
+              </div>
+            )}
+            {isUploadingSeatMap && (
+              <div className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center gap-2 text-white">
+                <Loader2 className="size-6 animate-spin text-primary" />
+                <span className="text-xs font-medium">Đang xử lý ảnh sơ đồ...</span>
+              </div>
+            )}
+          </div>
+        ) : (
+          <div
+            onDragOver={(e) => {
+              if (!isDraft) return
+              e.preventDefault()
+              setIsDraggingSeatMap(true)
+            }}
+            onDragLeave={() => setIsDraggingSeatMap(false)}
+            onDrop={(e) => {
+              if (!isDraft) return
+              e.preventDefault()
+              setIsDraggingSeatMap(false)
+              const file = e.dataTransfer.files?.[0]
+              if (file) handleSeatMapSelect(file)
+            }}
+            onClick={() => {
+              if (isDraft && !isUploadingSeatMap) seatMapInputRef.current?.click()
+            }}
+            className={`border-2 border-dashed rounded-2xl p-8 text-center transition flex flex-col items-center justify-center min-h-[180px] ${
+              !isDraft
+                ? "border-outline-variant/60 bg-surface-container-low cursor-not-allowed opacity-60"
+                : isDraggingSeatMap
+                  ? "border-primary bg-primary/5 cursor-pointer"
+                  : "border-outline-variant/80 hover:border-primary hover:bg-surface-container-low cursor-pointer"
+            }`}
+          >
+            {isUploadingSeatMap ? (
+              <div className="flex flex-col items-center gap-2 text-on-surface-variant">
+                <Loader2 className="size-8 animate-spin text-primary" />
+                <span className="text-sm font-semibold">Đang tải ảnh sơ đồ lên...</span>
+                <span className="text-xs text-on-surface-variant">Vui lòng chờ trong giây lát</span>
+              </div>
+            ) : (
+              <div className="space-y-2">
+                <div className="size-12 rounded-full bg-primary/10 text-primary flex items-center justify-center mx-auto">
+                  <UploadCloud className="size-6" />
+                </div>
+                <div>
+                  <span className="text-sm font-bold text-on-surface">
+                    {isDraft
+                      ? "Nhấn để chọn ảnh sơ đồ hoặc kéo thả vào đây"
+                      : "Chưa có ảnh sơ đồ phân khu"}
+                  </span>
+                  <p className="text-xs text-on-surface-variant mt-1">
+                    Hình ảnh sơ đồ khán đài / vị trí ghế • Tối đa 10MB • JPG, PNG, WebP
+                  </p>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+
+      {/* ─── 3. GALLERY SECTION (TÙY CHỌN) ────────────────── */}
       <div className="space-y-4 pt-4 border-t border-outline-variant/40">
         <div className="flex items-center justify-between">
           <div>

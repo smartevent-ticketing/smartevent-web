@@ -11,6 +11,7 @@ import { useEventDetail } from "./hooks/use-event-detail"
 export function EventDetailView({ eventId }: { eventId: string }) {
   const {
     bannerUrl,
+    seatMapUrl,
     galleryUrls,
     minPrice,
     isLoading,
@@ -82,7 +83,14 @@ export function EventDetailView({ eventId }: { eventId: string }) {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         {/* Main Content (Left - 8 cols) */}
         <EventInformation
-          {...{ isSaleActive, categoryName, locationName, descriptionText, galleryUrls }}
+          {...{
+            isSaleActive,
+            categoryName,
+            locationName,
+            descriptionText,
+            seatMapUrl,
+            galleryUrls,
+          }}
         />
 
         {/* Sticky Sidebar Booking (Right - 4 cols) */}

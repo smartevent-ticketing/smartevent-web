@@ -33,6 +33,7 @@ export function useEventDetail({ eventId }: { eventId: string }) {
   }
   return {
     bannerUrl: data?.bannerUrl ?? "/images/concert-banner.jpg",
+    seatMapUrl: ((data as any)?.seatMapUrl as string | null) ?? null,
     galleryUrls: ((data as any)?.galleryUrls as string[]) ?? [],
     minPrice:
       availableTiers.length > 0 ? Math.min(...availableTiers.map((t) => t.price)) : 0,

@@ -36,6 +36,10 @@ export function EventCreateWizard() {
     handleProceedToMedia,
     handleUploadBanner,
     handleDeleteBanner,
+    seatMapMedia,
+    isUploadingSeatMap,
+    handleUploadSeatMap,
+    handleDeleteSeatMap,
     handleUploadGallery,
     handleDeleteGallery,
     ticketTiers,
@@ -172,12 +176,16 @@ export function EventCreateWizard() {
           <EventMediaStep
             setCurrentStep={setCurrentStep}
             bannerMedia={bannerMedia}
+            seatMapMedia={seatMapMedia}
             galleryMedia={galleryMedia}
             onUploadBanner={handleUploadBanner}
             onDeleteBanner={handleDeleteBanner}
+            onUploadSeatMap={handleUploadSeatMap}
+            onDeleteSeatMap={handleDeleteSeatMap}
             onUploadGallery={handleUploadGallery}
             onDeleteGallery={handleDeleteGallery}
             isUploadingBanner={isUploadingBanner}
+            isUploadingSeatMap={isUploadingSeatMap}
             isUploadingGallery={isUploadingGallery}
             mediaError={mediaError}
           />
@@ -209,6 +217,7 @@ export function EventCreateWizard() {
             selectedVenueId={selectedVenueId}
             ticketTiers={ticketTiers}
             bannerMedia={bannerMedia}
+            seatMapMedia={seatMapMedia}
             isSubmitting={isSubmitting}
             handleComplete={handleComplete}
           />

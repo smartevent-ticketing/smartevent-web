@@ -28,6 +28,18 @@ export async function loadEventCatalog(identifier: string, signal: AbortSignal) 
     }
   }
 
+  let seatMapUrl: string | null = null
+  const seatMap = event.files?.find((file) => file.fileType === "SEAT_MAP")
+  if (seatMap?.fileId) {
+    try {
+      seatMapUrl =
+        (await catalogApi.getMediaUrl({ params: { path: { fileId: seatMap.fileId } }, signal })).data
+          ?.data?.url ?? null
+    } catch (error) {
+      if (signal.aborted) throw error
+    }
+  }
+
   const galleryUrls: string[] = []
   const galleryFiles = (event.files?.filter((file) => file.fileType === "GALLERY") ?? []).sort(
     (a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0),
@@ -56,6 +68,7 @@ export async function loadEventCatalog(identifier: string, signal: AbortSignal) 
     phases: phases.data?.data ?? [],
     inventory: inventory.data?.data ?? [],
     bannerUrl,
+    seatMapUrl,
     galleryUrls,
   }
 }

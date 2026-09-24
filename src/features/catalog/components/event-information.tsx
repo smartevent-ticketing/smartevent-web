@@ -1,20 +1,26 @@
 "use client"
 
-import { AlertCircle, Building, Music, Tag, ImageIcon } from "lucide-react"
+import { useState } from "react"
+import { AlertCircle, Building, Music, Tag, ImageIcon, Maximize2, X, Armchair } from "lucide-react"
 import { useEventDetail } from "@/features/catalog/hooks/use-event-detail"
 
 type Props = Pick<
   ReturnType<typeof useEventDetail>,
   "isSaleActive" | "categoryName" | "locationName" | "descriptionText" | "galleryUrls"
->
+> & {
+  seatMapUrl?: string | null
+}
 
 export function EventInformation({
   isSaleActive,
   categoryName,
   locationName,
   descriptionText,
+  seatMapUrl,
   galleryUrls = [],
 }: Props) {
+  const [previewImage, setPreviewImage] = useState<string | null>(null)
+
   return (
     <>
       <div className="lg:col-span-8 space-y-8">
@@ -65,52 +71,79 @@ export function EventInformation({
           </div>
         </section>
 
-        {/* Gallery / Hình ảnh sự kiện */}
+        {/* Gallery / Hình ảnh sự kiện & Poster: Xếp hàng dọc 1 ảnh 1 dòng */}
         {galleryUrls && galleryUrls.length > 0 && (
           <section className="bg-white rounded-2xl p-6 sm:p-8 border border-outline-variant/60 shadow-xs space-y-4">
             <div className="flex items-center justify-between border-b border-outline-variant/40 pb-3">
               <h2 className="text-xl font-bold text-on-surface flex items-center gap-2">
                 <ImageIcon className="size-5 text-primary" />
-                <span>Hình ảnh sự kiện & Poster</span>
+                <span>Hình ảnh sự kiện & Poster thông tin</span>
               </h2>
               <span className="text-xs font-semibold text-on-surface-variant">
                 {galleryUrls.length} ảnh
               </span>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
+            <div className="flex flex-col gap-6 pt-2">
               {galleryUrls.map((url, idx) => (
                 <div
                   key={idx}
-                  className="rounded-2xl overflow-hidden border border-outline-variant/60 shadow-sm bg-slate-950 aspect-video group"
+                  onClick={() => setPreviewImage(url)}
+                  className="w-full max-w-2xl mx-auto rounded-2xl overflow-hidden border border-outline-variant/60 shadow-xs bg-slate-950 cursor-pointer group relative"
+                  title="Nhấn để xem ảnh phóng to"
                 >
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={url}
-                    alt={`Event photo ${idx + 1}`}
-                    className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
+                    alt={`Event poster ${idx + 1}`}
+                    className="w-full h-auto object-contain group-hover:scale-[1.01] transition duration-300 mx-auto"
                   />
+                  <div className="absolute inset-0 bg-black/25 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
+                    <span className="px-3.5 py-1.5 bg-black/70 text-white rounded-xl text-xs font-semibold backdrop-blur-xs flex items-center gap-1.5 shadow-md">
+                      <Maximize2 className="size-3.5" />
+                      <span>Xem phóng to</span>
+                    </span>
+                  </div>
                 </div>
               ))}
             </div>
           </section>
         )}
 
-        {/* Sơ đồ khu vực */}
+        {/* Sơ đồ phân khu & khán đài */}
         <section className="bg-white rounded-2xl p-6 sm:p-8 border border-outline-variant/60 shadow-xs space-y-4">
           <h2 className="text-xl font-bold text-on-surface">Sơ đồ phân khu & khán đài</h2>
           <p className="text-xs sm:text-sm text-on-surface-variant">
             Khán giả vui lòng kiểm tra kỹ vị trí cổng vào và phân khu tương ứng khi mua vé.
           </p>
-          <div className="rounded-xl overflow-hidden border border-outline-variant bg-surface-container-low p-4 text-center">
-            <img
-              src="/images/concert-banner.jpg"
-              alt="Seating Plan"
-              className="w-full max-h-[360px] object-cover rounded-lg"
-            />
-            <span className="text-xs text-on-surface-variant mt-2 block">
-              Sơ đồ phân khu: {locationName}
-            </span>
-          </div>
+
+          {seatMapUrl ? (
+            <div
+              onClick={() => setPreviewImage(seatMapUrl)}
+              className="rounded-2xl overflow-hidden border border-outline-variant/60 bg-slate-900/5 p-3 text-center cursor-pointer group relative max-w-3xl mx-auto"
+              title="Nhấn để xem sơ đồ phóng to"
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={seatMapUrl}
+                alt="Sơ đồ phân khu & khán đài"
+                className="w-full max-h-[540px] object-contain rounded-xl mx-auto group-hover:scale-[1.01] transition"
+              />
+              <div className="mt-2.5 flex items-center justify-center gap-1.5 text-xs text-primary font-semibold">
+                <Maximize2 className="size-3.5" />
+                <span>Nhấn vào ảnh để xem sơ đồ phóng to chi tiết</span>
+              </div>
+            </div>
+          ) : (
+            <div className="p-8 rounded-2xl bg-surface-container-low/60 border border-dashed border-outline-variant text-center space-y-2">
+              <Armchair className="size-8 text-on-surface-variant/40 mx-auto" />
+              <h4 className="text-sm font-bold text-on-surface">
+                Ban tổ chức đang cập nhật sơ đồ khán đài
+              </h4>
+              <p className="text-xs text-on-surface-variant max-w-md mx-auto">
+                Sơ đồ vị trí phân khu và chỗ ngồi chính thức sẽ được công bố sớm nhất trước khi mở bán.
+              </p>
+            </div>
+          )}
         </section>
 
         {/* Important Rules */}
@@ -127,6 +160,34 @@ export function EventInformation({
           </div>
         </section>
       </div>
+
+      {/* Lightbox Modal phóng to ảnh */}
+      {previewImage && (
+        <div
+          onClick={() => setPreviewImage(null)}
+          className="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm flex items-center justify-center p-4 cursor-zoom-out animate-in fade-in duration-200"
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="relative max-w-5xl max-h-[92vh] w-full flex items-center justify-center"
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={previewImage}
+              alt="Phóng to ảnh"
+              className="max-w-full max-h-[88vh] object-contain rounded-2xl shadow-2xl"
+            />
+            <button
+              type="button"
+              onClick={() => setPreviewImage(null)}
+              className="absolute -top-3 -right-3 p-2 bg-slate-800 hover:bg-slate-700 text-white rounded-full shadow-lg transition cursor-pointer border border-white/20"
+              title="Đóng ảnh"
+            >
+              <X className="size-5" />
+            </button>
+          </div>
+        </div>
+      )}
     </>
   )
 }

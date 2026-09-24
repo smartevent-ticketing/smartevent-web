@@ -336,7 +336,7 @@ export function EventManagementView({ eventId }: EventManagementViewProps) {
     }
   }
 
-  // 2. Thêm hạng vé: Chỉ tạo hạng vé, không sinh phase ngầm, nhận ID thật từ server
+  // 2. Thêm hạng vé: Tạo hạng vé và tự động khởi tạo đợt mở bán nếu có cấu hình giá & số lượng
   const handleAddTicketType = async (ticketType: {
     name: string
     price: number
@@ -360,16 +360,63 @@ export function EventManagementView({ eventId }: EventManagementViewProps) {
         description: ticketType.description,
       })
       const createdType = (createRes as any)?.data?.data ?? (createRes as any)?.data
-
+      const typeId = createdType?.id
       const area = areas.find((a) => a.id === targetAreaId)
-      // Lưu ý: Giá và hạn ngạch (quota) thuộc về SalePhase. TicketType trên server không lưu price/totalQuota.
+
+      let autoCreatedPhase = false
+      const phaseQuantity = ticketType.totalQuota || area?.capacity || 100
+      if (ticketType.price > 0 && typeId) {
+        try {
+          const nowIso = new Date().toISOString()
+          const endIso = eventData?.endTime
+            ? new Date(eventData.endTime).toISOString()
+            : new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
+
+          const phaseRes = await organizerApi.createSalePhase(typeId, {
+            name: "Mở bán chính thức",
+            price: ticketType.price,
+            quantity: phaseQuantity,
+            saleStartAt: nowIso,
+            saleEndAt: endIso,
+            maxPerOrder: 4,
+          })
+          const createdPhase =
+            (phaseRes as any)?.data?.data ?? (phaseRes as any)?.data ?? phaseRes
+          const newPhase: SalePhaseItem = {
+            id: createdPhase?.id || Math.random().toString(),
+            ticketTypeId: typeId,
+            name: createdPhase?.name || "Mở bán chính thức",
+            price: ticketType.price,
+            quantity: phaseQuantity,
+            saleStartAt: createdPhase?.saleStartAt || nowIso,
+            saleEndAt: createdPhase?.saleEndAt || endIso,
+            status: (createdPhase?.status as SalePhaseStatus) || "DRAFT",
+            maxPerOrder: 4,
+            ticketTypeName: createdType?.name || ticketType.name,
+          }
+          setSalePhases((prev) => [...prev, newPhase])
+          setEventData((prev) =>
+            prev
+              ? {
+                  ...prev,
+                  expectedRevenue: (prev.expectedRevenue || 0) + ticketType.price * phaseQuantity,
+                  totalTickets: (prev.totalTickets || 0) + phaseQuantity,
+                }
+              : prev,
+          )
+          autoCreatedPhase = true
+        } catch (phaseErr) {
+          console.warn("Could not auto-create initial sale phase:", phaseErr)
+        }
+      }
+
       setTicketTypes((prev) => [
         ...prev,
         {
-          id: createdType?.id,
+          id: typeId,
           name: createdType?.name || ticketType.name,
-          price: 0,
-          totalQuota: 0,
+          price: ticketType.price || 0,
+          totalQuota: phaseQuantity,
           soldCount: 0,
           areaName: area?.name || "Khu vực chung",
           description: createdType?.description || ticketType.description,
@@ -377,7 +424,9 @@ export function EventManagementView({ eventId }: EventManagementViewProps) {
       ])
       setFeedback({
         type: "success",
-        text: `Đã tạo hạng vé "${ticketType.name}" thành công. Vui lòng cấu hình đợt mở bán để định giá và phân bổ số lượng.`,
+        text: autoCreatedPhase
+          ? `Đã tạo hạng vé "${ticketType.name}" và khởi tạo đợt mở bán thành công!`
+          : `Đã tạo hạng vé "${ticketType.name}" thành công. Vui lòng cấu hình đợt mở bán để định giá và phân bổ số lượng.`,
       })
       fetchReadiness()
     } catch (error: any) {
@@ -428,6 +477,22 @@ export function EventManagementView({ eventId }: EventManagementViewProps) {
         ticketTypeName: matchedType?.name || created?.ticketTypeName,
       }
       setSalePhases((prev) => [...prev, newPhase])
+      setTicketTypes((prev) =>
+        prev.map((t) =>
+          t.id === phaseData.ticketTypeId && (t.price === 0 || t.totalQuota === 0)
+            ? { ...t, price: phaseData.price, totalQuota: (t.totalQuota || 0) + phaseData.quantity }
+            : t,
+        ),
+      )
+      setEventData((prev) =>
+        prev
+          ? {
+              ...prev,
+              expectedRevenue: (prev.expectedRevenue || 0) + phaseData.price * phaseData.quantity,
+              totalTickets: (prev.totalTickets || 0) + phaseData.quantity,
+            }
+          : prev,
+      )
       setFeedback({
         type: "success",
         text: `Đã tạo đợt mở bán "${newPhase.name}" thành công!`,

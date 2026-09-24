@@ -30,9 +30,11 @@ export function useEventSetup() {
   // Media states
   const [createdEventId, setCreatedEventId] = useState<string | null>(null)
   const [bannerMedia, setBannerMedia] = useState<EventMediaResponse | null>(null)
+  const [seatMapMedia, setSeatMapMedia] = useState<EventMediaResponse | null>(null)
   const [galleryMedia, setGalleryMedia] = useState<EventMediaResponse[]>([])
   const [isCreatingDraft, setIsCreatingDraft] = useState(false)
   const [isUploadingBanner, setIsUploadingBanner] = useState(false)
+  const [isUploadingSeatMap, setIsUploadingSeatMap] = useState(false)
   const [isUploadingGallery, setIsUploadingGallery] = useState(false)
   const [mediaError, setMediaError] = useState<string | null>(null)
 
@@ -76,8 +78,8 @@ export function useEventSetup() {
 
   async function handleProceedToMedia() {
     setErrorMessage(null)
-    if (!eventName.trim() || !selectedCategoryId || !selectedVenueId) {
-      setErrorMessage("Vui lòng nhập tên sự kiện, chọn danh mục và địa điểm.")
+    if (!eventName.trim() || !selectedCategoryId || !selectedVenueId || !description.trim()) {
+      setErrorMessage("Vui lòng nhập tên sự kiện, giới thiệu chi tiết sự kiện, chọn danh mục và địa điểm.")
       return
     }
     const now = Date.now()
@@ -150,6 +152,41 @@ export function useEventSetup() {
       setMediaError(getApiErrorMessage(err, "Không thể xóa ảnh bìa."))
     } finally {
       setIsUploadingBanner(false)
+    }
+  }
+
+  async function handleUploadSeatMap(file: File) {
+    if (!createdEventId) {
+      setMediaError("Chưa khởi tạo được sự kiện. Vui lòng quay lại Bước 2.")
+      return
+    }
+    setIsUploadingSeatMap(true)
+    setMediaError(null)
+    try {
+      const res = await organizerApi.uploadEventMedia(createdEventId, file, "SEAT_MAP")
+      const media = (res.data?.data ?? res.data) as EventMediaResponse
+      if (media) {
+        setSeatMapMedia(media)
+      }
+    } catch (err) {
+      setMediaError(getApiErrorMessage(err, "Không thể tải ảnh sơ đồ phân khu."))
+      throw err
+    } finally {
+      setIsUploadingSeatMap(false)
+    }
+  }
+
+  async function handleDeleteSeatMap() {
+    if (!createdEventId || !seatMapMedia?.eventFileId) return
+    setIsUploadingSeatMap(true)
+    setMediaError(null)
+    try {
+      await organizerApi.deleteEventMedia(createdEventId, seatMapMedia.eventFileId)
+      setSeatMapMedia(null)
+    } catch (err) {
+      setMediaError(getApiErrorMessage(err, "Không thể xóa ảnh sơ đồ phân khu."))
+    } finally {
+      setIsUploadingSeatMap(false)
     }
   }
 
@@ -335,14 +372,18 @@ export function useEventSetup() {
     setSelectedVenueId,
     createdEventId,
     bannerMedia,
+    seatMapMedia,
     galleryMedia,
     isCreatingDraft,
     isUploadingBanner,
+    isUploadingSeatMap,
     isUploadingGallery,
     mediaError,
     handleProceedToMedia,
     handleUploadBanner,
     handleDeleteBanner,
+    handleUploadSeatMap,
+    handleDeleteSeatMap,
     handleUploadGallery,
     handleDeleteGallery,
     ticketTiers,

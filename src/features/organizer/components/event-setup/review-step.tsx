@@ -15,6 +15,7 @@ type Props = Pick<
   | "isSubmitting"
   | "handleComplete"
   | "bannerMedia"
+  | "seatMapMedia"
 >
 export function EventReviewStep({
   setCurrentStep,
@@ -27,6 +28,7 @@ export function EventReviewStep({
   isSubmitting,
   handleComplete,
   bannerMedia,
+  seatMapMedia,
 }: Props) {
   return (
     <div className="bg-white p-6 sm:p-8 rounded-3xl border border-outline-variant/60 shadow-xs space-y-6">
@@ -50,12 +52,12 @@ export function EventReviewStep({
           </span>
         </div>
         <div className="py-1 space-y-2">
-          <span className="text-on-surface-variant font-medium block">Hạng vé phát hành:</span>
+          <span className="text-on-surface-variant font-medium block">Hạng vé / Khán đài phát hành:</span>
           <div className="space-y-1.5 pl-2">
             {ticketTiers.map((t, i) => (
               <div key={i} className="flex justify-between font-semibold text-xs text-on-surface">
                 <span>
-                  • {t.name} ({t.areaType === "STANDING" ? "Khu đứng" : "Khu ghế"})
+                  • {t.name} ({t.areaType === "STANDING" ? "Khu đứng" : "Khu ghế"} - {t.capacity?.toLocaleString("vi-VN") || 0} vé)
                 </span>
                 <span className="text-primary">{t.price.toLocaleString("vi-VN")} ₫</span>
               </div>
@@ -63,13 +65,24 @@ export function EventReviewStep({
           </div>
         </div>
         {bannerMedia && (
-          <div className="py-2 space-y-1.5">
+          <div className="py-2 space-y-1.5 border-t border-outline-variant/40">
             <span className="text-on-surface-variant font-medium block">
               Ảnh bìa sự kiện (Banner):
             </span>
             <div className="rounded-xl overflow-hidden aspect-video max-h-[160px] bg-slate-900 border border-outline-variant/60">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={bannerMedia.fileUrl} alt="Banner" className="w-full h-full object-cover" />
+            </div>
+          </div>
+        )}
+        {seatMapMedia && (
+          <div className="py-2 space-y-1.5 border-t border-outline-variant/40">
+            <span className="text-on-surface-variant font-medium block">
+              Sơ đồ phân khu & khán đài (Seat Map):
+            </span>
+            <div className="rounded-xl overflow-hidden max-h-[200px] bg-slate-100 border border-outline-variant/60 flex items-center justify-center">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={seatMapMedia.fileUrl} alt="Seat Map" className="w-full h-full object-contain max-h-[200px]" />
             </div>
           </div>
         )}

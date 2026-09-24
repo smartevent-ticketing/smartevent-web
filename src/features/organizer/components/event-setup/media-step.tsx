@@ -15,12 +15,16 @@ import type { EventMediaResponse } from "@/lib/api/event-setup-contract"
 interface Props {
   setCurrentStep: (step: number) => void
   bannerMedia: EventMediaResponse | null
+  seatMapMedia: EventMediaResponse | null
   galleryMedia: EventMediaResponse[]
   onUploadBanner: (file: File) => Promise<void>
   onDeleteBanner: () => Promise<void>
+  onUploadSeatMap: (file: File) => Promise<void>
+  onDeleteSeatMap: () => Promise<void>
   onUploadGallery: (file: File) => Promise<void>
   onDeleteGallery: (eventFileId: string) => Promise<void>
   isUploadingBanner: boolean
+  isUploadingSeatMap: boolean
   isUploadingGallery: boolean
   mediaError: string | null
 }
@@ -31,20 +35,27 @@ const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"]
 export function EventMediaStep({
   setCurrentStep,
   bannerMedia,
+  seatMapMedia,
   galleryMedia,
   onUploadBanner,
   onDeleteBanner,
+  onUploadSeatMap,
+  onDeleteSeatMap,
   onUploadGallery,
   onDeleteGallery,
   isUploadingBanner,
+  isUploadingSeatMap,
   isUploadingGallery,
   mediaError,
 }: Props) {
   const bannerInputRef = useRef<HTMLInputElement>(null)
+  const seatMapInputRef = useRef<HTMLInputElement>(null)
   const galleryInputRef = useRef<HTMLInputElement>(null)
   const [localError, setLocalError] = useState<string | null>(null)
   const [bannerPreview, setBannerPreview] = useState<string | null>(null)
+  const [seatMapPreview, setSeatMapPreview] = useState<string | null>(null)
   const [isDraggingBanner, setIsDraggingBanner] = useState(false)
+  const [isDraggingSeatMap, setIsDraggingSeatMap] = useState(false)
 
   function validateFile(file: File): string | null {
     if (!ALLOWED_TYPES.includes(file.type)) {
@@ -72,6 +83,22 @@ export function EventMediaStep({
     }
   }
 
+  async function handleSeatMapSelect(file: File) {
+    setLocalError(null)
+    const err = validateFile(file)
+    if (err) {
+      setLocalError(err)
+      return
+    }
+    const preview = URL.createObjectURL(file)
+    setSeatMapPreview(preview)
+    try {
+      await onUploadSeatMap(file)
+    } catch {
+      setSeatMapPreview(null)
+    }
+  }
+
   async function handleGallerySelect(file: File) {
     setLocalError(null)
     if (galleryMedia.length >= 10) {
@@ -92,6 +119,7 @@ export function EventMediaStep({
 
   const activeError = localError || mediaError
   const bannerDisplayUrl = bannerPreview || bannerMedia?.fileUrl
+  const seatMapDisplayUrl = seatMapPreview || seatMapMedia?.fileUrl
 
   return (
     <div className="bg-white p-6 sm:p-8 rounded-3xl border border-outline-variant/60 shadow-xs space-y-6">
@@ -219,7 +247,121 @@ export function EventMediaStep({
         )}
       </div>
 
-      {/* ─── 2. GALLERY UPLOAD (TÙY CHỌN) ────────────────── */}
+      {/* ─── 2. SEAT MAP UPLOAD (SƠ ĐỒ PHÂN KHU & KHÁN ĐÀI) ──── */}
+      <div className="space-y-2 pt-2 border-t border-outline-variant/40">
+        <div className="flex items-center justify-between">
+          <div>
+            <label className="text-sm font-bold text-on-surface">
+              Ảnh sơ đồ phân khu & khán đài (Seat Map)
+            </label>
+            <p className="text-xs text-on-surface-variant">
+              Tải lên sơ đồ khán đài chính thức để hiển thị trực tiếp cho khán giả đối chiếu vị trí khi mua vé.
+            </p>
+          </div>
+          {seatMapMedia && (
+            <span className="text-xs font-semibold text-emerald-600 flex items-center gap-1">
+              <CheckCircle2 className="size-3.5" /> Đã có sơ đồ phân khu
+            </span>
+          )}
+        </div>
+
+        <input
+          ref={seatMapInputRef}
+          type="file"
+          accept="image/jpeg,image/png,image/webp"
+          className="hidden"
+          onChange={(e) => {
+            const file = e.target.files?.[0]
+            if (file) handleSeatMapSelect(file)
+            e.target.value = ""
+          }}
+        />
+
+        {seatMapDisplayUrl ? (
+          <div className="relative group rounded-2xl overflow-hidden border border-outline-variant/60 max-h-[360px] bg-slate-900/5 p-2 flex items-center justify-center">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={seatMapDisplayUrl}
+              alt="Seat Map"
+              className="max-h-[340px] w-auto object-contain rounded-xl"
+            />
+            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center gap-3 p-4">
+              <button
+                type="button"
+                disabled={isUploadingSeatMap}
+                onClick={() => seatMapInputRef.current?.click()}
+                className="px-4 py-2 bg-white/90 hover:bg-white text-slate-800 rounded-xl text-xs font-bold shadow-sm transition"
+              >
+                Thay đổi sơ đồ
+              </button>
+              <button
+                type="button"
+                disabled={isUploadingSeatMap}
+                onClick={async () => {
+                  setSeatMapPreview(null)
+                  await onDeleteSeatMap()
+                }}
+                className="p-2 bg-red-600/90 hover:bg-red-600 text-white rounded-xl shadow-sm transition"
+                title="Gỡ ảnh sơ đồ"
+              >
+                <Trash2 className="size-4" />
+              </button>
+            </div>
+            {isUploadingSeatMap && (
+              <div className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center gap-2 text-white">
+                <Loader2 className="size-6 animate-spin text-primary" />
+                <span className="text-xs font-medium">Đang tải sơ đồ lên...</span>
+              </div>
+            )}
+          </div>
+        ) : (
+          <div
+            onDragOver={(e) => {
+              e.preventDefault()
+              setIsDraggingSeatMap(true)
+            }}
+            onDragLeave={() => setIsDraggingSeatMap(false)}
+            onDrop={(e) => {
+              e.preventDefault()
+              setIsDraggingSeatMap(false)
+              const file = e.dataTransfer.files?.[0]
+              if (file) handleSeatMapSelect(file)
+            }}
+            onClick={() => {
+              if (!isUploadingSeatMap) seatMapInputRef.current?.click()
+            }}
+            className={`cursor-pointer border-2 border-dashed rounded-2xl p-6 text-center transition flex flex-col items-center justify-center min-h-[160px] ${
+              isDraggingSeatMap
+                ? "border-primary bg-primary/5"
+                : "border-outline-variant/80 hover:border-primary hover:bg-surface-container-low"
+            }`}
+          >
+            {isUploadingSeatMap ? (
+              <div className="flex flex-col items-center gap-2 text-on-surface-variant">
+                <Loader2 className="size-8 animate-spin text-primary" />
+                <span className="text-sm font-semibold">Đang tải sơ đồ phân khu lên...</span>
+                <span className="text-xs text-on-surface-variant">Vui lòng chờ trong giây lát</span>
+              </div>
+            ) : (
+              <div className="space-y-2">
+                <div className="size-10 rounded-full bg-primary/10 text-primary flex items-center justify-center mx-auto">
+                  <UploadCloud className="size-5" />
+                </div>
+                <div>
+                  <span className="text-xs font-bold text-on-surface">
+                    Nhấn để chọn ảnh sơ đồ hoặc kéo thả vào đây
+                  </span>
+                  <p className="text-[11px] text-on-surface-variant mt-0.5">
+                    Hình ảnh sơ đồ khán đài / sân khấu • Tối đa 10MB • JPG, PNG, WebP
+                  </p>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+
+      {/* ─── 3. GALLERY UPLOAD (TÙY CHỌN) ────────────────── */}
       <div className="space-y-3 pt-2 border-t border-outline-variant/40">
         <div className="flex items-center justify-between">
           <div>
