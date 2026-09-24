@@ -6,7 +6,7 @@ import { accessTokenStore } from "@/lib/auth/access-token"
 import { refreshAccessToken } from "@/lib/auth/token-refresher"
 
 import type { paths } from "./schema"
-import type { EventSetupPaths, AdminEventPaths, SalePhasePaths } from "./event-setup-contract"
+import type { EventSetupPaths, AdminEventPaths, SalePhasePaths, EventMediaPaths } from "./event-setup-contract"
 
 // ─── Cấu hình ─────────────────────────────────────────────
 
@@ -97,7 +97,7 @@ const serializeQueryParams = (queryParams: Record<string, unknown>) => {
 
 // ─── Client instance ──────────────────────────────────────
 
-export const apiClient = createClient<paths & EventSetupPaths & AdminEventPaths & SalePhasePaths>({
+export const apiClient = createClient<paths & EventSetupPaths & AdminEventPaths & SalePhasePaths & EventMediaPaths>({
   baseUrl: apiBaseUrl,
   querySerializer: serializeQueryParams,
 })

@@ -1,10 +1,11 @@
-"use client"
+﻿"use client"
 
 import Link from "next/link"
 import { AlertCircle, ArrowLeft, Check, CheckCircle2 } from "lucide-react"
 import { useEventSetup } from "@/features/organizer/hooks/use-event-setup"
 import { EventBasicInfoStep } from "@/features/organizer/components/event-setup/basicinfo-step"
 import { EventScheduleStep } from "@/features/organizer/components/event-setup/schedule-step"
+import { EventMediaStep } from "@/features/organizer/components/event-setup/media-step"
 import { EventTicketsStep } from "@/features/organizer/components/event-setup/tickets-step"
 import { EventReviewStep } from "@/features/organizer/components/event-setup/review-step"
 
@@ -26,6 +27,18 @@ export function EventCreateWizard() {
     setStartTime,
     selectedVenueId,
     setSelectedVenueId,
+    createdEventId,
+    bannerMedia,
+    galleryMedia,
+    isCreatingDraft,
+    isUploadingBanner,
+    isUploadingGallery,
+    mediaError,
+    handleProceedToMedia,
+    handleUploadBanner,
+    handleDeleteBanner,
+    handleUploadGallery,
+    handleDeleteGallery,
     ticketTiers,
     setTicketTiers,
     isSubmitting,
@@ -36,6 +49,7 @@ export function EventCreateWizard() {
     handleComplete,
     steps,
   } = useEventSetup()
+
   if (isDone) {
     return (
       <div className="max-w-2xl mx-auto py-16 px-4 text-center space-y-6">
@@ -63,6 +77,7 @@ export function EventCreateWizard() {
       </div>
     )
   }
+
   return (
     <div className="max-w-4xl mx-auto py-8 px-4 sm:px-6 lg:px-8 space-y-8">
       {/* Top Header */}
@@ -79,8 +94,8 @@ export function EventCreateWizard() {
         </span>
       </div>
 
-      {/* Stepper Progress */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+      {/* Stepper Progress (5 steps) */}
+      <div className="grid grid-cols-2 sm:grid-cols-5 gap-2.5">
         {steps.map((step) => {
           const isPassed = step.num < currentStep
           const isCurrent = step.num === currentStep
@@ -88,7 +103,7 @@ export function EventCreateWizard() {
           return (
             <div
               key={step.num}
-              className={`p-3.5 rounded-2xl border transition ${
+              className={`p-3 rounded-2xl border transition ${
                 isCurrent
                   ? "border-primary bg-primary/5 text-primary"
                   : isPassed
@@ -98,13 +113,13 @@ export function EventCreateWizard() {
             >
               <div className="flex items-center gap-2 text-xs font-bold">
                 <span
-                  className={`size-5 rounded-full flex items-center justify-center text-[10px] text-white ${
+                  className={`size-5 shrink-0 rounded-full flex items-center justify-center text-[10px] text-white ${
                     isCurrent ? "bg-primary" : isPassed ? "bg-green-600" : "bg-gray-300"
                   }`}
                 >
                   {isPassed ? <Check className="size-3" /> : step.num}
                 </span>
-                <span>{step.label}</span>
+                <span className="truncate">{step.label}</span>
               </div>
             </div>
           )
@@ -136,7 +151,7 @@ export function EventCreateWizard() {
 
       {/* STEP 2: Time & Venue */}
       {currentStep === 2 && (
-        <fieldset disabled={isSubmitting}>
+        <fieldset disabled={isSubmitting || isCreatingDraft}>
           <EventScheduleStep
             setCurrentStep={setCurrentStep}
             venues={venues}
@@ -146,12 +161,33 @@ export function EventCreateWizard() {
             setStartTime={setStartTime}
             selectedVenueId={selectedVenueId}
             setSelectedVenueId={setSelectedVenueId}
+            handleProceedToMedia={handleProceedToMedia}
+            isCreatingDraft={isCreatingDraft}
           />
         </fieldset>
       )}
 
-      {/* STEP 3: Ticket Tiers Setup */}
+      {/* STEP 3: Media Upload (Banner & Gallery) */}
       {currentStep === 3 && (
+        <fieldset disabled={isSubmitting}>
+          <EventMediaStep
+            setCurrentStep={setCurrentStep}
+            createdEventId={createdEventId}
+            bannerMedia={bannerMedia}
+            galleryMedia={galleryMedia}
+            onUploadBanner={handleUploadBanner}
+            onDeleteBanner={handleDeleteBanner}
+            onUploadGallery={handleUploadGallery}
+            onDeleteGallery={handleDeleteGallery}
+            isUploadingBanner={isUploadingBanner}
+            isUploadingGallery={isUploadingGallery}
+            mediaError={mediaError}
+          />
+        </fieldset>
+      )}
+
+      {/* STEP 4: Ticket Tiers Setup */}
+      {currentStep === 4 && (
         <fieldset disabled={isSubmitting}>
           <EventTicketsStep
             setCurrentStep={setCurrentStep}
@@ -163,8 +199,8 @@ export function EventCreateWizard() {
         </fieldset>
       )}
 
-      {/* STEP 4: Review and Submit */}
-      {currentStep === 4 && (
+      {/* STEP 5: Review and Submit */}
+      {currentStep === 5 && (
         <fieldset disabled={isSubmitting}>
           <EventReviewStep
             setCurrentStep={setCurrentStep}
@@ -174,6 +210,7 @@ export function EventCreateWizard() {
             startTime={startTime}
             selectedVenueId={selectedVenueId}
             ticketTiers={ticketTiers}
+            bannerMedia={bannerMedia}
             isSubmitting={isSubmitting}
             handleComplete={handleComplete}
           />

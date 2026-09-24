@@ -1,10 +1,10 @@
 import type { FetchOptions } from "openapi-fetch"
 import { apiClient } from "@/lib/api/client"
 import { requireApiSuccess } from "@/lib/api/result"
-import type { paths } from "@/lib/api/schema"
-import type { EventSetupPaths } from "@/lib/api/event-setup-contract"
+import type { paths, components } from "@/lib/api/schema"
+import type { EventSetupPaths, EventMediaPaths, EventFileType } from "@/lib/api/event-setup-contract"
 
-type ApiPaths = paths & EventSetupPaths
+type ApiPaths = paths & EventSetupPaths & EventMediaPaths
 
 export const organizerApi = {
   createEventSetup: (
@@ -152,6 +152,44 @@ export const organizerApi = {
     requireApiSuccess(
       apiClient.DELETE("/api/v1/areas/{areaId}/seats", {
         params: { path: { areaId } },
+      }),
+    ),
+
+  createDraftEvent: (body: components["schemas"]["CreateEventRequest"]) =>
+    requireApiSuccess(
+      apiClient.POST("/api/v1/events", {
+        body,
+      }),
+    ),
+
+  uploadEventMedia: async (
+    eventId: string,
+    file: File | Blob,
+    type: EventFileType,
+  ) => {
+    const formData = new FormData()
+    formData.append("file", file)
+    formData.append("type", type)
+
+    return requireApiSuccess(
+      apiClient.POST("/api/v1/events/{eventId}/media", {
+        params: { path: { eventId }, query: { type } },
+        body: formData as any,
+      }),
+    )
+  },
+
+  getEventMedia: (eventId: string) =>
+    requireApiSuccess(
+      apiClient.GET("/api/v1/events/{eventId}/media", {
+        params: { path: { eventId } },
+      }),
+    ),
+
+  deleteEventMedia: (eventId: string, eventFileId: string) =>
+    requireApiSuccess(
+      apiClient.DELETE("/api/v1/events/{eventId}/media/{eventFileId}", {
+        params: { path: { eventId, eventFileId } },
       }),
     ),
 }
