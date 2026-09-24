@@ -230,64 +230,79 @@ export function useEventManagement(eventId: string) {
     }
   }
 
-  // Sale Phase Handler
-  const handleAddSalePhase = async (phaseData: CreateSalePhaseInput) => {
+  // Sale Phase Handler (supports single or multiple ticket types)
+  const handleAddSalePhase = async (phaseData: CreateSalePhaseInput | CreateSalePhaseInput[]) => {
+    const phases = Array.isArray(phaseData) ? phaseData : [phaseData]
+    if (phases.length === 0) return
+
     try {
-      const res = await organizerApi.createSalePhase(phaseData.ticketTypeId, {
-        name: phaseData.name,
-        price: phaseData.price,
-        quantity: phaseData.quantity,
-        saleStartAt: phaseData.saleStartAt,
-        saleEndAt: phaseData.saleEndAt,
-        maxPerOrder: phaseData.maxPerOrder,
-        maxPerUser: phaseData.maxPerUser,
-      })
-      const created = (res as any)?.data?.data ?? (res as any)?.data ?? res
-      const matchedType = ticketTypes.find((t) => t.id === phaseData.ticketTypeId)
-
-      const newPhase: SalePhaseItem = {
-        id: created?.id || Math.random().toString(),
-        ticketTypeId: phaseData.ticketTypeId,
-        name: created?.name || phaseData.name,
-        price: phaseData.price,
-        quantity: phaseData.quantity,
-        saleStartAt: created?.saleStartAt || phaseData.saleStartAt,
-        saleEndAt: created?.saleEndAt || phaseData.saleEndAt,
-        status: (created?.status as SalePhaseStatus) || "DRAFT",
-        maxPerOrder: phaseData.maxPerOrder || 4,
-        maxPerUser: phaseData.maxPerUser,
-        ticketTypeName: matchedType?.name || created?.ticketTypeName,
-      }
-
-      setSalePhases((prev) => [...prev, newPhase])
-
-      // Update ticket type display price/quota
-      setTicketTypes((prev) =>
-        prev.map((t) =>
-          t.id === phaseData.ticketTypeId
-            ? {
-                ...t,
-                price: t.price === 0 ? phaseData.price : t.price,
-                totalQuota: (t.totalQuota || 0) + phaseData.quantity,
-              }
-            : t,
+      const results = await Promise.all(
+        phases.map((p) =>
+          organizerApi.createSalePhase(p.ticketTypeId, {
+            name: p.name,
+            price: p.price,
+            quantity: p.quantity,
+            saleStartAt: p.saleStartAt,
+            saleEndAt: p.saleEndAt,
+            maxPerOrder: p.maxPerOrder,
+            maxPerUser: p.maxPerUser,
+          }),
         ),
       )
 
+      const newPhases: SalePhaseItem[] = phases.map((p, idx) => {
+        const res = results[idx]
+        const created = (res as any)?.data?.data ?? (res as any)?.data ?? res
+        const matchedType = ticketTypes.find((t) => t.id === p.ticketTypeId)
+        return {
+          id: created?.id || Math.random().toString(),
+          ticketTypeId: p.ticketTypeId,
+          name: created?.name || p.name,
+          price: p.price,
+          quantity: p.quantity,
+          saleStartAt: created?.saleStartAt || p.saleStartAt,
+          saleEndAt: created?.saleEndAt || p.saleEndAt,
+          status: (created?.status as SalePhaseStatus) || "DRAFT",
+          maxPerOrder: p.maxPerOrder || 4,
+          maxPerUser: p.maxPerUser,
+          ticketTypeName: matchedType?.name || created?.ticketTypeName,
+        }
+      })
+
+      setSalePhases((prev) => [...prev, ...newPhases])
+
+      // Update ticket type display price/quota
+      setTicketTypes((prev) =>
+        prev.map((t) => {
+          const added = phases.find((p) => p.ticketTypeId === t.id)
+          if (!added) return t
+          return {
+            ...t,
+            price: t.price === 0 ? added.price : t.price,
+            totalQuota: (t.totalQuota || 0) + added.quantity,
+          }
+        }),
+      )
+
       // Update event stats
+      const addedRevenue = phases.reduce((sum, p) => sum + p.price * p.quantity, 0)
+      const addedTickets = phases.reduce((sum, p) => sum + p.quantity, 0)
       setEventData((prev) =>
         prev
           ? {
               ...prev,
-              expectedRevenue: (prev.expectedRevenue || 0) + phaseData.price * phaseData.quantity,
-              totalTickets: (prev.totalTickets || 0) + phaseData.quantity,
+              expectedRevenue: (prev.expectedRevenue || 0) + addedRevenue,
+              totalTickets: (prev.totalTickets || 0) + addedTickets,
             }
           : prev,
       )
 
       setFeedback({
         type: "success",
-        text: `Đã tạo đợt mở bán "${newPhase.name}" thành công!`,
+        text:
+          phases.length > 1
+            ? `Đã tạo đợt mở bán "${phases[0]?.name}" cho ${phases.length} hạng vé thành công!`
+            : `Đã tạo đợt mở bán "${phases[0]?.name}" thành công!`,
       })
       refreshReadiness()
     } catch (error: any) {

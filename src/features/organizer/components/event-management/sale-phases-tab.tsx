@@ -33,18 +33,37 @@ export interface SalePhasesTabProps {
     price?: number
   }>
   areas?: Array<{ id: string; name: string; capacity?: number; type?: string }>
-  onAddSalePhase: (phase: {
-    ticketTypeId: string
-    name: string
-    price: number
-    quantity: number
-    saleStartAt: string
-    saleEndAt: string
-    maxPerOrder?: number
-    maxPerUser?: number
-  }) => Promise<void>
+  onAddSalePhase: (
+    phase:
+      | {
+          ticketTypeId: string
+          name: string
+          price: number
+          quantity: number
+          saleStartAt: string
+          saleEndAt: string
+          maxPerOrder?: number
+          maxPerUser?: number
+        }
+      | Array<{
+          ticketTypeId: string
+          name: string
+          price: number
+          quantity: number
+          saleStartAt: string
+          saleEndAt: string
+          maxPerOrder?: number
+          maxPerUser?: number
+        }>,
+  ) => Promise<void>
   onUpdatePhaseStatus: (phaseId: string, newStatus: SalePhaseStatus) => Promise<void>
   onDeleteSalePhase?: (phaseId: string) => Promise<void>
+}
+
+interface TierPhaseConfig {
+  selected: boolean
+  price: number | ""
+  quantity: number | ""
 }
 
 const STATUS_CONFIG: Record<SalePhaseStatus, { label: string; badgeClass: string; desc: string }> =
@@ -96,33 +115,14 @@ export function SalePhasesTab({
   const [deletingPhaseId, setDeletingPhaseId] = useState<string | null>(null)
 
   // Form State
-  const [selectedTicketTypeId, setSelectedTicketTypeId] = useState(ticketTypes[0]?.id || "")
   const [name, setName] = useState("")
-  const [price, setPrice] = useState<number | "">("")
-  const [quantity, setQuantity] = useState<number | "">("")
   const [saleStartAt, setSaleStartAt] = useState("")
   const [saleEndAt, setSaleEndAt] = useState("")
   const [maxTicketsPerCustomer, setMaxTicketsPerCustomer] = useState<number | "">(4)
   const [formError, setFormError] = useState<string | null>(null)
 
-  // Capacity calculation for selected ticket type
-  const selectedType = ticketTypes.find((t) => t.id === selectedTicketTypeId)
-  const matchedArea = areas.find((a) => a.id === selectedType?.areaId)
-  const totalAreaCapacity = matchedArea?.capacity ?? selectedType?.totalQuota ?? 0
-  const basePrice = selectedType?.price || 0
-
-  const configuredQty = salePhases
-    .filter((p) => {
-      if (p.status === "CLOSED") return false
-      if (p.ticketTypeId === selectedTicketTypeId) return true
-      const otherType = ticketTypes.find((t) => t.id === p.ticketTypeId)
-      return Boolean(
-        otherType?.areaId && selectedType?.areaId && otherType.areaId === selectedType.areaId,
-      )
-    })
-    .reduce((sum, p) => sum + p.quantity, 0)
-
-  const remainingCapacity = Math.max(0, totalAreaCapacity - configuredQty)
+  // Multi-tier configuration state
+  const [tierConfigs, setTierConfigs] = useState<Record<string, TierPhaseConfig>>({})
 
   // Helper check overlap locally
   const checkOverlap = (
@@ -142,35 +142,48 @@ export function SalePhasesTab({
     })
   }
 
-  // Handle Form Submit
+  // Open modal and pre-initialize tier configs
+  const handleOpenAddModal = () => {
+    const initial: Record<string, TierPhaseConfig> = {}
+    ticketTypes.forEach((t) => {
+      const matchedArea = areas.find((a) => a.id === t.areaId)
+      const totalAreaCapacity = matchedArea?.capacity ?? t.totalQuota ?? 0
+      const configuredQty = salePhases
+        .filter((p) => {
+          if (p.status === "CLOSED") return false
+          if (p.ticketTypeId === t.id) return true
+          const otherType = ticketTypes.find((ot) => ot.id === p.ticketTypeId)
+          return Boolean(otherType?.areaId && t.areaId && otherType.areaId === t.areaId)
+        })
+        .reduce((sum, p) => sum + p.quantity, 0)
+      const remaining = Math.max(0, totalAreaCapacity - configuredQty)
+
+      initial[t.id] = {
+        selected: true, // Default selected for speed
+        price: t.price && t.price > 0 ? t.price : "",
+        quantity: remaining > 0 ? Math.min(50, remaining) : "",
+      }
+    })
+
+    setTierConfigs(initial)
+    setName("")
+    setSaleStartAt("")
+    setSaleEndAt("")
+    setMaxTicketsPerCustomer(4)
+    setFormError(null)
+    setShowAddModal(true)
+  }
+
+  // Handle Form Submit (Multi-tier batch creation)
   const handleCreateSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setFormError(null)
 
-    if (!selectedTicketTypeId) {
-      setFormError("Vui lòng chọn hạng vé áp dụng.")
-      return
-    }
     if (!name.trim()) {
       setFormError("Vui lòng nhập tên đợt mở bán.")
       return
     }
-    const numPrice = Number(price)
-    if (isNaN(numPrice) || numPrice < 0) {
-      setFormError("Giá vé không hợp lệ.")
-      return
-    }
-    const numQty = Number(quantity)
-    if (isNaN(numQty) || numQty <= 0) {
-      setFormError("Số lượng vé phải lớn hơn 0.")
-      return
-    }
-    if (totalAreaCapacity > 0 && numQty > remainingCapacity) {
-      setFormError(
-        `Số lượng vé mở bán (${numQty.toLocaleString("vi-VN")}) vượt quá số lượng vé còn khả dụng của khán đài (${remainingCapacity.toLocaleString("vi-VN")} vé). Vui lòng điều chỉnh lại.`,
-      )
-      return
-    }
+
     if (!saleStartAt || !saleEndAt) {
       setFormError("Vui lòng chọn đầy đủ thời gian bắt đầu và kết thúc.")
       return
@@ -194,34 +207,71 @@ export function SalePhasesTab({
       }
     }
 
-    if (checkOverlap(selectedTicketTypeId, startDate.toISOString(), endDate.toISOString())) {
-      setFormError(
-        "Khoảng thời gian mở bán này bị trùng lặp với một đợt mở bán khác của cùng hạng vé.",
-      )
+    // Filter selected ticket types
+    const selectedTiers = ticketTypes.filter((t) => tierConfigs[t.id]?.selected)
+    if (selectedTiers.length === 0) {
+      setFormError("Vui lòng chọn ít nhất một hạng vé để mở bán trong đợt này.")
       return
+    }
+
+    // Validate each selected ticket type
+    for (const t of selectedTiers) {
+      const cfg = tierConfigs[t.id]
+      const numPrice = Number(cfg?.price)
+      if (isNaN(numPrice) || numPrice < 0) {
+        setFormError(`Giá vé của hạng vé "${t.name}" không hợp lệ.`)
+        return
+      }
+      const numQty = Number(cfg?.quantity)
+      if (isNaN(numQty) || numQty <= 0) {
+        setFormError(`Số lượng vé của hạng vé "${t.name}" phải lớn hơn 0.`)
+        return
+      }
+
+      // Capacity verification
+      const matchedArea = areas.find((a) => a.id === t.areaId)
+      const totalAreaCapacity = matchedArea?.capacity ?? t.totalQuota ?? 0
+      const configuredQty = salePhases
+        .filter((p) => {
+          if (p.status === "CLOSED") return false
+          if (p.ticketTypeId === t.id) return true
+          const otherType = ticketTypes.find((ot) => ot.id === p.ticketTypeId)
+          return Boolean(otherType?.areaId && t.areaId && otherType.areaId === t.areaId)
+        })
+        .reduce((sum, p) => sum + p.quantity, 0)
+      const remainingCapacity = Math.max(0, totalAreaCapacity - configuredQty)
+
+      if (totalAreaCapacity > 0 && numQty > remainingCapacity) {
+        setFormError(
+          `Số lượng vé mở bán của hạng vé "${t.name}" (${numQty.toLocaleString("vi-VN")}) vượt quá số lượng vé còn khả dụng (${remainingCapacity.toLocaleString("vi-VN")} vé). Vui lòng điều chỉnh lại.`,
+        )
+        return
+      }
+
+      if (checkOverlap(t.id, startDate.toISOString(), endDate.toISOString())) {
+        setFormError(
+          `Khoảng thời gian mở bán của hạng vé "${t.name}" bị trùng lặp với một đợt mở bán khác của cùng hạng vé.`,
+        )
+        return
+      }
     }
 
     const customerLimit = Number(maxTicketsPerCustomer) || 4
 
+    const phasesToCreate = selectedTiers.map((t) => ({
+      ticketTypeId: t.id,
+      name: name.trim(),
+      price: Number(tierConfigs[t.id]?.price || 0),
+      quantity: Number(tierConfigs[t.id]?.quantity || 0),
+      saleStartAt: startDate.toISOString(),
+      saleEndAt: endDate.toISOString(),
+      maxPerOrder: customerLimit,
+      maxPerUser: customerLimit,
+    }))
+
     setIsSubmitting(true)
     try {
-      await onAddSalePhase({
-        ticketTypeId: selectedTicketTypeId,
-        name: name.trim(),
-        price: numPrice,
-        quantity: numQty,
-        saleStartAt: startDate.toISOString(),
-        saleEndAt: endDate.toISOString(),
-        maxPerOrder: customerLimit,
-        maxPerUser: customerLimit,
-      })
-      // Reset form
-      setName("")
-      setPrice("")
-      setQuantity("")
-      setSaleStartAt("")
-      setSaleEndAt("")
-      setMaxTicketsPerCustomer(4)
+      await onAddSalePhase(phasesToCreate)
       setShowAddModal(false)
     } catch (err: unknown) {
       setFormError(
@@ -279,18 +329,7 @@ export function SalePhasesTab({
         <button
           type="button"
           disabled={ticketTypes.length === 0}
-          onClick={() => {
-            const firstType = ticketTypes[0]
-            setSelectedTicketTypeId(firstType?.id || "")
-            setPrice(firstType?.price || "")
-            setQuantity("")
-            setName("")
-            setSaleStartAt("")
-            setSaleEndAt("")
-            setMaxTicketsPerCustomer(4)
-            setFormError(null)
-            setShowAddModal(true)
-          }}
+          onClick={handleOpenAddModal}
           className={`inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold rounded-xl transition cursor-pointer shadow-xs ${
             ticketTypes.length === 0
               ? "bg-slate-200 text-slate-400 cursor-not-allowed"
@@ -299,7 +338,7 @@ export function SalePhasesTab({
           title={
             ticketTypes.length === 0
               ? "Vui lòng tạo ít nhất một hạng vé trước khi thêm đợt bán"
-              : "Thêm đợt mở bán mới"
+              : "Thêm đợt mở bán mới cho một hoặc nhiều hạng vé"
           }
         >
           <Plus className="size-4" />
@@ -324,7 +363,7 @@ export function SalePhasesTab({
             <Calendar className="size-10 text-primary/40 mx-auto" />
             <h4 className="text-sm font-bold text-on-surface">Chưa có đợt mở bán nào</h4>
             <p className="text-xs text-on-surface-variant max-w-sm mx-auto">
-              Hãy tạo đợt mở bán đầu tiên để phân bổ số lượng vé và ấn định giá vé cho từng hạng vé.
+              Hãy tạo đợt mở bán đầu tiên để phân bổ số lượng vé và ấn định giá vé cho các hạng vé.
             </p>
           </div>
         ) : (
@@ -594,10 +633,10 @@ export function SalePhasesTab({
         </ul>
       </div>
 
-      {/* Modal: Thêm đợt mở bán mới */}
+      {/* Modal: Thêm đợt mở bán mới (Hỗ trợ cấu hình nhiều hạng vé cùng lúc) */}
       {showAddModal && (
         <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl border border-outline-variant/60 shadow-xl max-w-lg w-full p-6 space-y-4 max-h-[90vh] overflow-y-auto">
+          <div className="bg-white rounded-3xl border border-outline-variant/60 shadow-xl max-w-2xl w-full p-6 space-y-4 max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between border-b border-outline-variant/40 pb-3">
               <div className="flex items-center gap-2">
                 <div className="p-2 rounded-xl bg-primary/10 text-primary">
@@ -606,7 +645,7 @@ export function SalePhasesTab({
                 <div>
                   <h4 className="text-sm font-bold text-on-surface">Thêm đợt mở bán mới</h4>
                   <p className="text-[11px] text-on-surface-variant">
-                    Phân bổ số lượng vé và thiết lập giá vé theo giai đoạn
+                    Thiết lập chiến dịch bán vé và áp dụng cho một hoặc nhiều hạng vé cùng lúc
                   </p>
                 </div>
               </div>
@@ -627,60 +666,7 @@ export function SalePhasesTab({
             )}
 
             <form onSubmit={handleCreateSubmit} className="space-y-4 text-xs">
-              {/* Chọn Hạng vé */}
-              <div className="space-y-1.5">
-                <label className="font-bold text-on-surface">Hạng vé áp dụng *</label>
-                <select
-                  value={selectedTicketTypeId}
-                  onChange={(e) => {
-                    const newId = e.target.value
-                    setSelectedTicketTypeId(newId)
-                    const targetType = ticketTypes.find((t) => t.id === newId)
-                    if (targetType?.price && targetType.price > 0) {
-                      setPrice(targetType.price)
-                    }
-                  }}
-                  className="w-full px-3 py-2 rounded-xl border border-outline-variant bg-white text-on-surface focus:outline-primary cursor-pointer"
-                  required
-                >
-                  {ticketTypes.map((t) => (
-                    <option key={t.id} value={t.id}>
-                      {t.name}
-                    </option>
-                  ))}
-                </select>
-
-                {/* Sức chứa khán đài & số lượng khả dụng */}
-                <div className="bg-surface-container-low/80 border border-outline-variant/60 rounded-xl p-3 flex flex-wrap items-center justify-between gap-2 text-xs">
-                  <div>
-                    <span className="text-on-surface-variant">Phân khu: </span>
-                    <strong className="text-on-surface">
-                      {matchedArea?.name || selectedType?.areaName || "Khu vực chung"}
-                    </strong>
-                    <span className="text-on-surface-variant font-mono">
-                      {" "}
-                      ({totalAreaCapacity.toLocaleString("vi-VN")} chỗ)
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <span className="text-on-surface-variant">
-                      Đã lên lịch:{" "}
-                      <strong className="font-mono text-on-surface">
-                        {configuredQty.toLocaleString("vi-VN")}
-                      </strong>
-                    </span>
-                    <span className="text-primary font-bold">
-                      Còn khả dụng:{" "}
-                      <strong className="font-mono">
-                        {remainingCapacity.toLocaleString("vi-VN")}
-                      </strong>{" "}
-                      vé
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Tên đợt */}
+              {/* 1. Tên đợt mở bán */}
               <div className="space-y-1">
                 <label className="font-bold text-on-surface">Tên đợt mở bán *</label>
                 <input
@@ -691,143 +677,27 @@ export function SalePhasesTab({
                   className="w-full px-3 py-2 rounded-xl border border-outline-variant text-on-surface focus:outline-primary"
                   required
                 />
-              </div>
-
-              {/* Giá vé & Số lượng */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div className="space-y-1">
-                  <div className="flex items-center justify-between">
-                    <label className="font-bold text-on-surface">Giá vé (VNĐ) *</label>
-                    {selectedType?.price && selectedType.price > 0 ? (
-                      <span className="text-[10px] text-on-surface-variant">
-                        Gốc: {selectedType.price.toLocaleString("vi-VN")} ₫
-                      </span>
-                    ) : null}
-                  </div>
-                  <input
-                    type="number"
-                    min="0"
-                    step="1000"
-                    placeholder="0"
-                    value={price}
-                    onChange={(e) =>
-                      setPrice(e.target.value === "" ? "" : Math.max(0, Number(e.target.value)))
-                    }
-                    className="w-full px-3 py-2 rounded-xl border border-outline-variant font-mono text-on-surface focus:outline-primary font-bold"
-                    required
-                  />
-
-                  {/* Nút chọn mức giá / giảm giá nhanh */}
-                  {basePrice > 0 && (
-                    <div className="flex items-center gap-1 pt-1 flex-wrap">
-                      <button
-                        type="button"
-                        onClick={() => setPrice(basePrice)}
-                        className={`px-2 py-0.5 rounded-lg text-[10px] font-mono font-bold transition cursor-pointer ${
-                          price === basePrice
-                            ? "bg-primary text-white"
-                            : "bg-surface-container hover:bg-surface-container-high text-on-surface"
-                        }`}
-                        title="Giữ nguyên giá vé gốc"
-                      >
-                        Giá gốc
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => setPrice(Math.round((basePrice * 0.95) / 1000) * 1000)}
-                        className={`px-2 py-0.5 rounded-lg text-[10px] font-mono font-bold transition cursor-pointer ${
-                          price === Math.round((basePrice * 0.95) / 1000) * 1000
-                            ? "bg-emerald-600 text-white"
-                            : "bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200"
-                        }`}
-                        title="Giảm 5% so với giá gốc"
-                      >
-                        -5%
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => setPrice(Math.round((basePrice * 0.9) / 1000) * 1000)}
-                        className={`px-2 py-0.5 rounded-lg text-[10px] font-mono font-bold transition cursor-pointer ${
-                          price === Math.round((basePrice * 0.9) / 1000) * 1000
-                            ? "bg-emerald-600 text-white"
-                            : "bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200"
-                        }`}
-                        title="Giảm 10% so với giá gốc"
-                      >
-                        -10%
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => setPrice(Math.round((basePrice * 0.85) / 1000) * 1000)}
-                        className={`px-2 py-0.5 rounded-lg text-[10px] font-mono font-bold transition cursor-pointer ${
-                          price === Math.round((basePrice * 0.85) / 1000) * 1000
-                            ? "bg-emerald-600 text-white"
-                            : "bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200"
-                        }`}
-                        title="Giảm 15% so với giá gốc"
-                      >
-                        -15%
-                      </button>
-                    </div>
-                  )}
-                </div>
-
-                <div className="space-y-1">
-                  <div className="flex items-center justify-between">
-                    <label className="font-bold text-on-surface">Số lượng vé *</label>
-                    {remainingCapacity > 0 && (
-                      <span className="text-[10px] text-primary font-semibold">
-                        Tối đa {remainingCapacity.toLocaleString("vi-VN")}
-                      </span>
-                    )}
-                  </div>
-                  <input
-                    type="number"
-                    min="1"
-                    max={remainingCapacity > 0 ? remainingCapacity : undefined}
-                    placeholder={remainingCapacity > 0 ? `Tối đa ${remainingCapacity}` : "100"}
-                    value={quantity}
-                    onChange={(e) =>
-                      setQuantity(e.target.value === "" ? "" : Math.max(1, Number(e.target.value)))
-                    }
-                    className="w-full px-3 py-2 rounded-xl border border-outline-variant font-mono text-on-surface focus:outline-primary"
-                    required
-                  />
-                  {/* Quick Select Buttons */}
-                  {remainingCapacity > 0 && (
-                    <div className="flex items-center gap-1.5 pt-1 flex-wrap">
-                      <span className="text-[10px] text-on-surface-variant">Nhanh:</span>
-                      {remainingCapacity >= 50 && (
-                        <button
-                          type="button"
-                          onClick={() => setQuantity(50)}
-                          className="px-2 py-0.5 rounded-lg bg-surface-container hover:bg-surface-container-high text-[10px] font-mono font-medium transition cursor-pointer"
-                        >
-                          50 vé (Early)
-                        </button>
-                      )}
-                      {remainingCapacity >= 100 && (
-                        <button
-                          type="button"
-                          onClick={() => setQuantity(100)}
-                          className="px-2 py-0.5 rounded-lg bg-surface-container hover:bg-surface-container-high text-[10px] font-mono font-medium transition cursor-pointer"
-                        >
-                          100 vé
-                        </button>
-                      )}
-                      <button
-                        type="button"
-                        onClick={() => setQuantity(remainingCapacity)}
-                        className="px-2 py-0.5 rounded-lg bg-primary/10 hover:bg-primary/20 text-primary text-[10px] font-mono font-bold transition cursor-pointer"
-                      >
-                        Toàn bộ ({remainingCapacity.toLocaleString("vi-VN")} vé)
-                      </button>
-                    </div>
-                  )}
+                <div className="flex items-center gap-1.5 pt-1 flex-wrap">
+                  <span className="text-[10px] text-on-surface-variant">Gợi ý:</span>
+                  {[
+                    "Early Bird",
+                    "Mở bán đợt 1",
+                    "Mở bán chính thức",
+                    "Chót giờ (Last Minute)",
+                  ].map((preset) => (
+                    <button
+                      key={preset}
+                      type="button"
+                      onClick={() => setName(preset)}
+                      className="px-2 py-0.5 rounded-lg bg-surface-container hover:bg-surface-container-high text-[10px] font-medium transition cursor-pointer"
+                    >
+                      {preset}
+                    </button>
+                  ))}
                 </div>
               </div>
 
-              {/* Thời gian bắt đầu & kết thúc */}
+              {/* 2. Thời gian bắt đầu & kết thúc */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div className="space-y-1">
                   <label className="font-bold text-on-surface">Thời gian bắt đầu *</label>
@@ -852,7 +722,7 @@ export function SalePhasesTab({
                 </div>
               </div>
 
-              {/* Hạn mức mua tối đa mỗi khách */}
+              {/* 3. Hạn mức mua tối đa mỗi khách */}
               <div className="space-y-1">
                 <div className="flex items-center justify-between">
                   <label className="font-bold text-on-surface">
@@ -876,7 +746,6 @@ export function SalePhasesTab({
                   placeholder="4"
                   required
                 />
-                {/* Chọn nhanh số vé giới hạn */}
                 <div className="flex items-center gap-1.5 pt-1">
                   <span className="text-[10px] text-on-surface-variant">Chọn nhanh:</span>
                   {[2, 4, 6, 10].map((num) => (
@@ -893,6 +762,294 @@ export function SalePhasesTab({
                       {num} vé
                     </button>
                   ))}
+                </div>
+              </div>
+
+              {/* 4. Danh sách chọn các hạng vé mở bán trong đợt này */}
+              <div className="space-y-2 pt-2 border-t border-outline-variant/40">
+                <div className="flex items-center justify-between">
+                  <label className="font-bold text-on-surface">
+                    Các hạng vé mở bán trong đợt này *
+                  </label>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const allSelected = ticketTypes.every((t) => tierConfigs[t.id]?.selected)
+                      const updated: Record<string, TierPhaseConfig> = {}
+                      ticketTypes.forEach((t) => {
+                        if (tierConfigs[t.id]) {
+                          updated[t.id] = { ...tierConfigs[t.id], selected: !allSelected }
+                        }
+                      })
+                      setTierConfigs(updated)
+                    }}
+                    className="text-[11px] text-primary hover:underline font-semibold cursor-pointer"
+                  >
+                    {ticketTypes.every((t) => tierConfigs[t.id]?.selected)
+                      ? "Bỏ chọn tất cả"
+                      : "Chọn tất cả"}
+                  </button>
+                </div>
+
+                <div className="space-y-2.5 max-h-[300px] overflow-y-auto pr-1">
+                  {ticketTypes.map((t) => {
+                    const cfg = tierConfigs[t.id] || { selected: false, price: "", quantity: "" }
+                    const matchedArea = areas.find((a) => a.id === t.areaId)
+                    const totalAreaCapacity = matchedArea?.capacity ?? t.totalQuota ?? 0
+                    const configuredQty = salePhases
+                      .filter((p) => {
+                        if (p.status === "CLOSED") return false
+                        if (p.ticketTypeId === t.id) return true
+                        const otherType = ticketTypes.find((ot) => ot.id === p.ticketTypeId)
+                        return Boolean(
+                          otherType?.areaId && t.areaId && otherType.areaId === t.areaId,
+                        )
+                      })
+                      .reduce((sum, p) => sum + p.quantity, 0)
+                    const remainingCapacity = Math.max(0, totalAreaCapacity - configuredQty)
+                    const basePrice = t.price || 0
+
+                    return (
+                      <div
+                        key={t.id}
+                        className={`border rounded-2xl p-3 transition ${
+                          cfg.selected
+                            ? "border-primary/50 bg-white shadow-2xs"
+                            : "border-outline-variant/60 bg-surface-container-low/40 opacity-70"
+                        }`}
+                      >
+                        {/* Checkbox & Tiêu đề Hạng vé */}
+                        <div className="flex items-start justify-between gap-3">
+                          <label className="flex items-center gap-2.5 cursor-pointer select-none">
+                            <input
+                              type="checkbox"
+                              checked={cfg.selected}
+                              onChange={(e) => {
+                                setTierConfigs((prev) => ({
+                                  ...prev,
+                                  [t.id]: { ...cfg, selected: e.target.checked },
+                                }))
+                              }}
+                              className="size-4 rounded text-primary focus:ring-primary accent-primary cursor-pointer"
+                            />
+                            <div>
+                              <span className="font-bold text-on-surface text-xs block">
+                                {t.name}
+                              </span>
+                              <span className="text-[11px] text-on-surface-variant font-medium">
+                                {matchedArea?.name || t.areaName || "Khán đài"} (
+                                {totalAreaCapacity.toLocaleString("vi-VN")} chỗ)
+                              </span>
+                            </div>
+                          </label>
+
+                          <span className="text-[11px] font-mono text-primary font-bold">
+                            Khả dụng: {remainingCapacity.toLocaleString("vi-VN")} vé
+                          </span>
+                        </div>
+
+                        {/* Chi tiết Giá vé & Số lượng khi được chọn */}
+                        {cfg.selected && (
+                          <div className="mt-2.5 pt-2.5 border-t border-outline-variant/40 space-y-2.5">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                              {/* Giá vé */}
+                              <div className="space-y-1">
+                                <div className="flex items-center justify-between">
+                                  <label className="text-[11px] font-bold text-on-surface">
+                                    Giá vé (VNĐ) *
+                                  </label>
+                                  {basePrice > 0 && (
+                                    <span className="text-[10px] text-on-surface-variant">
+                                      Gốc: {basePrice.toLocaleString("vi-VN")} ₫
+                                    </span>
+                                  )}
+                                </div>
+                                <input
+                                  type="number"
+                                  min="0"
+                                  step="1000"
+                                  placeholder="0"
+                                  value={cfg.price}
+                                  onChange={(e) => {
+                                    const val =
+                                      e.target.value === ""
+                                        ? ""
+                                        : Math.max(0, Number(e.target.value))
+                                    setTierConfigs((prev) => ({
+                                      ...prev,
+                                      [t.id]: { ...cfg, price: val },
+                                    }))
+                                  }}
+                                  className="w-full px-3 py-1.5 rounded-xl border border-outline-variant font-mono text-xs font-bold text-on-surface focus:outline-primary"
+                                  required
+                                />
+
+                                {/* Nút chiết khấu nhanh */}
+                                {basePrice > 0 && (
+                                  <div className="flex items-center gap-1 pt-0.5 flex-wrap">
+                                    <button
+                                      type="button"
+                                      onClick={() =>
+                                        setTierConfigs((prev) => ({
+                                          ...prev,
+                                          [t.id]: { ...cfg, price: basePrice },
+                                        }))
+                                      }
+                                      className={`px-1.5 py-0.5 rounded text-[10px] font-mono font-bold transition cursor-pointer ${
+                                        cfg.price === basePrice
+                                          ? "bg-primary text-white"
+                                          : "bg-surface-container hover:bg-surface-container-high text-on-surface"
+                                      }`}
+                                    >
+                                      Giá gốc
+                                    </button>
+                                    <button
+                                      type="button"
+                                      onClick={() =>
+                                        setTierConfigs((prev) => ({
+                                          ...prev,
+                                          [t.id]: {
+                                            ...cfg,
+                                            price: Math.round((basePrice * 0.95) / 1000) * 1000,
+                                          },
+                                        }))
+                                      }
+                                      className={`px-1.5 py-0.5 rounded text-[10px] font-mono font-bold transition cursor-pointer ${
+                                        cfg.price === Math.round((basePrice * 0.95) / 1000) * 1000
+                                          ? "bg-emerald-600 text-white"
+                                          : "bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200"
+                                      }`}
+                                    >
+                                      -5%
+                                    </button>
+                                    <button
+                                      type="button"
+                                      onClick={() =>
+                                        setTierConfigs((prev) => ({
+                                          ...prev,
+                                          [t.id]: {
+                                            ...cfg,
+                                            price: Math.round((basePrice * 0.9) / 1000) * 1000,
+                                          },
+                                        }))
+                                      }
+                                      className={`px-1.5 py-0.5 rounded text-[10px] font-mono font-bold transition cursor-pointer ${
+                                        cfg.price === Math.round((basePrice * 0.9) / 1000) * 1000
+                                          ? "bg-emerald-600 text-white"
+                                          : "bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200"
+                                      }`}
+                                    >
+                                      -10%
+                                    </button>
+                                    <button
+                                      type="button"
+                                      onClick={() =>
+                                        setTierConfigs((prev) => ({
+                                          ...prev,
+                                          [t.id]: {
+                                            ...cfg,
+                                            price: Math.round((basePrice * 0.85) / 1000) * 1000,
+                                          },
+                                        }))
+                                      }
+                                      className={`px-1.5 py-0.5 rounded text-[10px] font-mono font-bold transition cursor-pointer ${
+                                        cfg.price === Math.round((basePrice * 0.85) / 1000) * 1000
+                                          ? "bg-emerald-600 text-white"
+                                          : "bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200"
+                                      }`}
+                                    >
+                                      -15%
+                                    </button>
+                                  </div>
+                                )}
+                              </div>
+
+                              {/* Số lượng vé */}
+                              <div className="space-y-1">
+                                <div className="flex items-center justify-between">
+                                  <label className="text-[11px] font-bold text-on-surface">
+                                    Số lượng vé *
+                                  </label>
+                                  {remainingCapacity > 0 && (
+                                    <span className="text-[10px] text-primary font-semibold">
+                                      Tối đa {remainingCapacity.toLocaleString("vi-VN")}
+                                    </span>
+                                  )}
+                                </div>
+                                <input
+                                  type="number"
+                                  min="1"
+                                  max={remainingCapacity > 0 ? remainingCapacity : undefined}
+                                  placeholder={
+                                    remainingCapacity > 0 ? `Tối đa ${remainingCapacity}` : "100"
+                                  }
+                                  value={cfg.quantity}
+                                  onChange={(e) => {
+                                    const val =
+                                      e.target.value === ""
+                                        ? ""
+                                        : Math.max(1, Number(e.target.value))
+                                    setTierConfigs((prev) => ({
+                                      ...prev,
+                                      [t.id]: { ...cfg, quantity: val },
+                                    }))
+                                  }}
+                                  className="w-full px-3 py-1.5 rounded-xl border border-outline-variant font-mono text-xs text-on-surface focus:outline-primary"
+                                  required
+                                />
+
+                                {/* Chọn nhanh số lượng */}
+                                {remainingCapacity > 0 && (
+                                  <div className="flex items-center gap-1 pt-0.5 flex-wrap">
+                                    {remainingCapacity >= 50 && (
+                                      <button
+                                        type="button"
+                                        onClick={() =>
+                                          setTierConfigs((prev) => ({
+                                            ...prev,
+                                            [t.id]: { ...cfg, quantity: 50 },
+                                          }))
+                                        }
+                                        className="px-1.5 py-0.5 rounded bg-surface-container hover:bg-surface-container-high text-[10px] font-mono font-medium transition cursor-pointer"
+                                      >
+                                        50 vé
+                                      </button>
+                                    )}
+                                    {remainingCapacity >= 100 && (
+                                      <button
+                                        type="button"
+                                        onClick={() =>
+                                          setTierConfigs((prev) => ({
+                                            ...prev,
+                                            [t.id]: { ...cfg, quantity: 100 },
+                                          }))
+                                        }
+                                        className="px-1.5 py-0.5 rounded bg-surface-container hover:bg-surface-container-high text-[10px] font-mono font-medium transition cursor-pointer"
+                                      >
+                                        100 vé
+                                      </button>
+                                    )}
+                                    <button
+                                      type="button"
+                                      onClick={() =>
+                                        setTierConfigs((prev) => ({
+                                          ...prev,
+                                          [t.id]: { ...cfg, quantity: remainingCapacity },
+                                        }))
+                                      }
+                                      className="px-1.5 py-0.5 rounded bg-primary/10 hover:bg-primary/20 text-primary text-[10px] font-mono font-bold transition cursor-pointer"
+                                    >
+                                      Toàn bộ ({remainingCapacity} vé)
+                                    </button>
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    )
+                  })}
                 </div>
               </div>
 
