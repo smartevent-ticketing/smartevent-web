@@ -1,15 +1,6 @@
 "use client"
 
-import {
-  X,
-  Calendar,
-  MapPin,
-  Building,
-  Ticket,
-  CheckCircle2,
-  XCircle,
-  Layers,
-} from "lucide-react"
+import { X, Calendar, MapPin, Building, Ticket, CheckCircle2, XCircle, Layers } from "lucide-react"
 
 interface ApprovalDetailDialogProps {
   event: any | null

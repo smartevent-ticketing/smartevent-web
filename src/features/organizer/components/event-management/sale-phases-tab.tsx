@@ -46,7 +46,6 @@ export function SalePhasesTab({ salePhases }: SalePhasesTabProps) {
             const end = new Date(phase.endTime).getTime()
             const isActive = now >= start && now <= end
             const isUpcoming = now < start
-            const isExpired = now > end
 
             return (
               <div

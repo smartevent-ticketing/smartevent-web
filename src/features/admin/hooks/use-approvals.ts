@@ -32,8 +32,12 @@ export function useAdminApprovals() {
             id: ev.id!,
             name: ev.name || "Sự kiện chưa đặt tên",
             organizer: ev.organizerId ? `BTC (${ev.organizerId.slice(0, 8)})` : "Ban tổ chức",
-            venue: ev.venue?.name ? `${ev.venue.name}, ${ev.venue.city || ""}` : "Chưa chọn địa điểm",
-            submittedDate: ev.createdAt ? new Date(ev.createdAt).toLocaleDateString("vi-VN") : "Hôm nay",
+            venue: ev.venue?.name
+              ? `${ev.venue.name}, ${ev.venue.city || ""}`
+              : "Chưa chọn địa điểm",
+            submittedDate: ev.createdAt
+              ? new Date(ev.createdAt).toLocaleDateString("vi-VN")
+              : "Hôm nay",
             expectedTickets: 0,
             priceRange: "Chờ cập nhật",
           })),

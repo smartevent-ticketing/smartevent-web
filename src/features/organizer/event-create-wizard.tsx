@@ -1,4 +1,4 @@
-﻿"use client"
+"use client"
 
 import Link from "next/link"
 import { AlertCircle, ArrowLeft, Check, CheckCircle2 } from "lucide-react"
@@ -27,7 +27,6 @@ export function EventCreateWizard() {
     setStartTime,
     selectedVenueId,
     setSelectedVenueId,
-    createdEventId,
     bannerMedia,
     galleryMedia,
     isCreatingDraft,
@@ -172,7 +171,6 @@ export function EventCreateWizard() {
         <fieldset disabled={isSubmitting}>
           <EventMediaStep
             setCurrentStep={setCurrentStep}
-            createdEventId={createdEventId}
             bannerMedia={bannerMedia}
             galleryMedia={galleryMedia}
             onUploadBanner={handleUploadBanner}

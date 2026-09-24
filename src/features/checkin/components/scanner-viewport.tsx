@@ -11,7 +11,9 @@ interface ScannerViewportProps {
 
 export function ScannerViewport({ onScan, isScanning = false }: ScannerViewportProps) {
   const videoRef = useRef<HTMLVideoElement | null>(null)
-  const [cameraState, setCameraState] = useState<"idle" | "streaming" | "denied" | "unavailable">("idle")
+  const [cameraState, setCameraState] = useState<"idle" | "streaming" | "denied" | "unavailable">(
+    "idle",
+  )
   const [facingMode, setFacingMode] = useState<"environment" | "user">("environment")
   const streamRef = useRef<MediaStream | null>(null)
   const lastScannedCode = useRef<string>("")
@@ -121,20 +123,11 @@ export function ScannerViewport({ onScan, isScanning = false }: ScannerViewportP
   }
 
   if (cameraState === "denied") {
-    return (
-      <CameraPermissionDeniedView
-        onRetry={startCamera}
-        onSwitchToManual={() => {}}
-      />
-    )
+    return <CameraPermissionDeniedView onRetry={startCamera} onSwitchToManual={() => {}} />
   }
 
   if (cameraState === "unavailable") {
-    return (
-      <CameraUnavailableView
-        onSwitchToManual={() => {}}
-      />
-    )
+    return <CameraUnavailableView onSwitchToManual={() => {}} />
   }
 
   return (

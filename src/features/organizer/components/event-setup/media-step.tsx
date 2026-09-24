@@ -1,4 +1,4 @@
-﻿"use client"
+"use client"
 
 import { useRef, useState } from "react"
 import {
@@ -14,7 +14,6 @@ import type { EventMediaResponse } from "@/lib/api/event-setup-contract"
 
 interface Props {
   setCurrentStep: (step: number) => void
-  createdEventId: string | null
   bannerMedia: EventMediaResponse | null
   galleryMedia: EventMediaResponse[]
   onUploadBanner: (file: File) => Promise<void>
@@ -31,7 +30,6 @@ const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"]
 
 export function EventMediaStep({
   setCurrentStep,
-  createdEventId,
   bannerMedia,
   galleryMedia,
   onUploadBanner,
@@ -258,11 +256,7 @@ export function EventMediaStep({
                 className="relative group rounded-xl overflow-hidden border border-outline-variant/60 aspect-video bg-slate-900"
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={img.fileUrl}
-                  alt="Gallery item"
-                  className="w-full h-full object-cover"
-                />
+                <img src={img.fileUrl} alt="Gallery item" className="w-full h-full object-cover" />
                 <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center p-2">
                   <button
                     type="button"

@@ -64,7 +64,9 @@ export function EventReviewStep({
         </div>
         {bannerMedia && (
           <div className="py-2 space-y-1.5">
-            <span className="text-on-surface-variant font-medium block">Ảnh bìa sự kiện (Banner):</span>
+            <span className="text-on-surface-variant font-medium block">
+              Ảnh bìa sự kiện (Banner):
+            </span>
             <div className="rounded-xl overflow-hidden aspect-video max-h-[160px] bg-slate-900 border border-outline-variant/60">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={bannerMedia.fileUrl} alt="Banner" className="w-full h-full object-cover" />

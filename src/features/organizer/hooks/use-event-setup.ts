@@ -110,7 +110,9 @@ export function useEventSetup() {
       setCreatedEventId(id)
       setCurrentStep(3)
     } catch (err) {
-      setErrorMessage(getApiErrorMessage(err, "Không thể khởi tạo bản nháp sự kiện. Vui lòng thử lại."))
+      setErrorMessage(
+        getApiErrorMessage(err, "Không thể khởi tạo bản nháp sự kiện. Vui lòng thử lại."),
+      )
     } finally {
       setIsCreatingDraft(false)
     }
@@ -260,9 +262,7 @@ export function useEventSetup() {
       requireSubmittedEvent(submitRes.data?.data)
       setIsDone(true)
     } catch (error) {
-      setErrorMessage(
-        getApiErrorMessage(error, "Không thể gửi duyệt sự kiện. Vui lòng thử lại."),
-      )
+      setErrorMessage(getApiErrorMessage(error, "Không thể gửi duyệt sự kiện. Vui lòng thử lại."))
     } finally {
       submitInFlight.current = false
       setIsSubmitting(false)

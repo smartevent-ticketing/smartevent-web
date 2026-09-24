@@ -30,7 +30,11 @@ export type AdminEventPaths = {
         }
       }
       responses: {
-        200: { content: { "application/json": components["schemas"]["ApiResponsePageResponseEventResponse"] } }
+        200: {
+          content: {
+            "application/json": components["schemas"]["ApiResponsePageResponseEventResponse"]
+          }
+        }
         default: { content: { "application/json": { message?: string } } }
       }
     }
@@ -45,7 +49,11 @@ export type AdminEventPaths = {
         }
       }
       responses: {
-        200: { content: { "application/json": components["schemas"]["ApiResponsePageResponseEventResponse"] } }
+        200: {
+          content: {
+            "application/json": components["schemas"]["ApiResponsePageResponseEventResponse"]
+          }
+        }
         default: { content: { "application/json": { message?: string } } }
       }
     }
@@ -84,7 +92,9 @@ export type SalePhasePaths = {
         }
       }
       responses: {
-        200: { content: { "application/json": { success?: boolean; data?: any; message?: string } } }
+        200: {
+          content: { "application/json": { success?: boolean; data?: unknown; message?: string } }
+        }
         default: { content: { "application/json": { message?: string } } }
       }
     }
@@ -114,15 +124,25 @@ export type EventMediaPaths = {
       }
       requestBody?: {
         content: {
-          "multipart/form-data": {
-            file: Blob | File
-            type?: EventFileType
-          }
+          "multipart/form-data":
+            | {
+                file: Blob | File
+                type?: EventFileType
+              }
+            | FormData
         }
       }
       responses: {
-        201: { content: { "application/json": { success?: boolean; data?: EventMediaResponse; message?: string } } }
-        200: { content: { "application/json": { success?: boolean; data?: EventMediaResponse; message?: string } } }
+        201: {
+          content: {
+            "application/json": { success?: boolean; data?: EventMediaResponse; message?: string }
+          }
+        }
+        200: {
+          content: {
+            "application/json": { success?: boolean; data?: EventMediaResponse; message?: string }
+          }
+        }
         default: { content: { "application/json": { message?: string } } }
       }
     }
@@ -131,7 +151,11 @@ export type EventMediaPaths = {
         path: { eventId: string }
       }
       responses: {
-        200: { content: { "application/json": { success?: boolean; data?: EventMediaResponse[]; message?: string } } }
+        200: {
+          content: {
+            "application/json": { success?: boolean; data?: EventMediaResponse[]; message?: string }
+          }
+        }
         default: { content: { "application/json": { message?: string } } }
       }
     }
@@ -142,10 +166,11 @@ export type EventMediaPaths = {
         path: { eventId: string; eventFileId: string }
       }
       responses: {
-        200: { content: { "application/json": { success?: boolean; data?: void; message?: string } } }
+        200: {
+          content: { "application/json": { success?: boolean; data?: void; message?: string } }
+        }
         default: { content: { "application/json": { message?: string } } }
       }
     }
   }
 }
-

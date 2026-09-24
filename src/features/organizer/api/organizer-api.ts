@@ -2,7 +2,11 @@ import type { FetchOptions } from "openapi-fetch"
 import { apiClient } from "@/lib/api/client"
 import { requireApiSuccess } from "@/lib/api/result"
 import type { paths, components } from "@/lib/api/schema"
-import type { EventSetupPaths, EventMediaPaths, EventFileType } from "@/lib/api/event-setup-contract"
+import type {
+  EventSetupPaths,
+  EventMediaPaths,
+  EventFileType,
+} from "@/lib/api/event-setup-contract"
 
 type ApiPaths = paths & EventSetupPaths & EventMediaPaths
 
@@ -162,11 +166,7 @@ export const organizerApi = {
       }),
     ),
 
-  uploadEventMedia: async (
-    eventId: string,
-    file: File | Blob,
-    type: EventFileType,
-  ) => {
+  uploadEventMedia: async (eventId: string, file: File | Blob, type: EventFileType) => {
     const formData = new FormData()
     formData.append("file", file)
     formData.append("type", type)
@@ -174,7 +174,7 @@ export const organizerApi = {
     return requireApiSuccess(
       apiClient.POST("/api/v1/events/{eventId}/media", {
         params: { path: { eventId }, query: { type } },
-        body: formData as any,
+        body: formData,
       }),
     )
   },

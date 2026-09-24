@@ -53,7 +53,9 @@ export function AdminApprovalsPanel() {
               Hàng đợi phê duyệt sự kiện trực tuyến
             </span>
             <p className="leading-relaxed text-emerald-800">
-              Danh sách được tải tự động từ endpoint <code>GET /api/v1/admin/events/pending</code>. Quản trị viên có thể xem hồ sơ chi tiết, phê duyệt đưa vào hoạt động (PUBLISHED) hoặc từ chối kèm lý do trả về DRAFT.
+              Danh sách được tải tự động từ endpoint <code>GET /api/v1/admin/events/pending</code>.
+              Quản trị viên có thể xem hồ sơ chi tiết, phê duyệt đưa vào hoạt động (PUBLISHED) hoặc
+              từ chối kèm lý do trả về DRAFT.
             </p>
           </div>
         </div>

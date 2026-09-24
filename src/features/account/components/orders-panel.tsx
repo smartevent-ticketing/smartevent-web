@@ -7,8 +7,10 @@ import { ActionFeedback } from "@/components/shared/action-feedback"
 import { useCustomerOrders } from "@/features/account/hooks/use-orders"
 import { OrderDetailDialog } from "@/features/account/components/order-detail-dialog"
 import { CancelOrderDialog } from "@/features/account/components/cancel-order-dialog"
+import { useClock } from "@/hooks/use-clock"
 
 export function CustomerOrdersPanel() {
+  const now = useClock()
   const {
     orders,
     isLoadingOrders,
@@ -60,8 +62,7 @@ export function CustomerOrdersPanel() {
                 {orders.map((ord) => {
                   const isExpired =
                     ord.status === "EXPIRED" ||
-                    (Boolean(ord.paymentDeadline) &&
-                      new Date(ord.paymentDeadline!).getTime() < Date.now())
+                    (Boolean(ord.paymentDeadline) && new Date(ord.paymentDeadline!).getTime() < now)
                   const isPending =
                     ((ord.status as string) === "PENDING" || ord.status === "PENDING_PAYMENT") &&
                     !isExpired

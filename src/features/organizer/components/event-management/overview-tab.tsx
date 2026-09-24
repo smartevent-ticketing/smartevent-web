@@ -30,13 +30,16 @@ export function OverviewTab({
   const totalSold = ticketTypes.reduce((sum, t) => sum + (t.soldCount || 0), 0)
   const expectedRevenue = ticketTypes.reduce(
     (sum, t) => sum + (t.price || 0) * (t.totalQuota || 0),
-    0
+    0,
   )
 
   // 2. Tính toán tiến độ thiết lập thực tế (4 tiêu chí)
   const checklist = [
     { label: "Thông tin cơ bản & Thời gian", done: Boolean(event.name && event.date) },
-    { label: "Địa điểm tổ chức", done: Boolean(event.location && !event.location.includes("Chưa cấu hình")) },
+    {
+      label: "Địa điểm tổ chức",
+      done: Boolean(event.location && !event.location.includes("Chưa cấu hình")),
+    },
     { label: "Phân khu & Ghế ngồi", done: areas.length > 0 },
     { label: "Hạng vé & Đợt mở bán", done: ticketTypes.length > 0 && salePhases.length > 0 },
   ]
@@ -88,7 +91,7 @@ export function OverviewTab({
           </div>
         </div>
 
-                {/* Tổng vé thiết lập */}
+        {/* Tổng vé thiết lập */}
         <div className="bg-white border border-outline-variant/60 rounded-3xl p-6 shadow-xs flex flex-col justify-between">
           <div className="flex items-center gap-2 text-on-surface-variant mb-6">
             <Ticket className="size-4 text-primary" />
@@ -101,7 +104,11 @@ export function OverviewTab({
               {totalTickets.toLocaleString("vi-VN")} vé
             </p>
             <p className="text-xs text-on-surface-variant mt-1.5">
-              Đã bán: <span className="font-semibold text-primary">{totalSold.toLocaleString("vi-VN")}</span> vé
+              Đã bán:{" "}
+              <span className="font-semibold text-primary">
+                {totalSold.toLocaleString("vi-VN")}
+              </span>{" "}
+              vé
             </p>
           </div>
         </div>
@@ -117,7 +124,9 @@ export function OverviewTab({
           <div className="space-y-3">
             <div className="flex justify-between items-center text-xs">
               <span className="font-bold text-on-surface">{progressPercent}%</span>
-              <span className="text-on-surface-variant">{completedCount}/{checklist.length} Hạng mục</span>
+              <span className="text-on-surface-variant">
+                {completedCount}/{checklist.length} Hạng mục
+              </span>
             </div>
             <div className="w-full bg-surface-container-highest rounded-full h-2">
               <div

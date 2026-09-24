@@ -15,7 +15,6 @@ import {
   Ticket,
   Clock,
   QrCode,
-  CheckCircle2,
   Loader2,
 } from "lucide-react"
 import { ActionFeedback } from "@/components/shared/action-feedback"
@@ -38,7 +37,6 @@ export function EventManagementView({ eventId }: EventManagementViewProps) {
     "overview" | "areas" | "ticket-types" | "sale-phases" | "tickets"
   >("overview")
   const [feedback, setFeedback] = useState<ActionMessage | null>(null)
-  const [isLoading, setIsLoading] = useState(false)
   const [isSubmittingApproval, setIsSubmittingApproval] = useState(false)
   const [isCancellingEvent, setIsCancellingEvent] = useState(false)
   const [showSubmitModal, setShowSubmitModal] = useState(false)
@@ -64,7 +62,7 @@ export function EventManagementView({ eventId }: EventManagementViewProps) {
   // Fetch real event data on load
   useEffect(() => {
     let isMounted = true
-        async function loadEvent() {
+    async function loadEvent() {
       setIsLoadingEvent(true)
       setLoadError(null)
 
@@ -86,17 +84,22 @@ export function EventManagementView({ eventId }: EventManagementViewProps) {
           id: ev.id,
           name: ev.name,
           status: ev.status,
-          location: ev.venue?.name ? `${ev.venue.name}, ${ev.venue.city || ""}` : "Chưa cấu hình địa điểm",
-          date: ev.startTime ? new Date(ev.startTime).toLocaleString("vi-VN") : "Chưa cấu hình thời gian",
+          location: ev.venue?.name
+            ? `${ev.venue.name}, ${ev.venue.city || ""}`
+            : "Chưa cấu hình địa điểm",
+          date: ev.startTime
+            ? new Date(ev.startTime).toLocaleString("vi-VN")
+            : "Chưa cấu hình thời gian",
           startTime: ev.startTime,
           endTime: ev.endTime,
           expectedRevenue: 0,
           totalTickets: 0,
         })
       } else {
-        const errMsg = eventRes.status === "rejected"
-          ? (eventRes.reason?.message || "Không thể tải thông tin sự kiện.")
-          : "Dữ liệu sự kiện không hợp lệ."
+        const errMsg =
+          eventRes.status === "rejected"
+            ? eventRes.reason?.message || "Không thể tải thông tin sự kiện."
+            : "Dữ liệu sự kiện không hợp lệ."
         setLoadError(errMsg)
         setFeedback({ type: "error", text: errMsg })
       }
@@ -112,7 +115,7 @@ export function EventManagementView({ eventId }: EventManagementViewProps) {
                 type: a.areaType || a.type || "SEATED",
                 capacity: a.capacity || 0,
               }))
-            : []
+            : [],
         )
       } else if (areasRes.status === "rejected") {
         setFeedback({ type: "error", text: "Không thể tải danh sách phân khu." })
@@ -133,7 +136,7 @@ export function EventManagementView({ eventId }: EventManagementViewProps) {
               status: p.status,
               maxPerOrder: p.maxPerOrder || 4,
               ticketTypeName: p.ticketTypeName,
-            }))
+            })),
           )
         }
       } else if (phasesRes.status === "rejected") {
@@ -141,9 +144,14 @@ export function EventManagementView({ eventId }: EventManagementViewProps) {
       }
 
       // Tính revenue & tickets thực từ phases
-      const totalRevenue = rawPhases.reduce((sum, p) => sum + (Number(p.price) || 0) * (Number(p.quantity) || 0), 0)
+      const totalRevenue = rawPhases.reduce(
+        (sum, p) => sum + (Number(p.price) || 0) * (Number(p.quantity) || 0),
+        0,
+      )
       const totalTickets = rawPhases.reduce((sum, p) => sum + (Number(p.quantity) || 0), 0)
-      setEventData((prev) => prev ? { ...prev, expectedRevenue: totalRevenue, totalTickets } : prev)
+      setEventData((prev) =>
+        prev ? { ...prev, expectedRevenue: totalRevenue, totalTickets } : prev,
+      )
 
       // 4. Xử lý hạng vé (Ticket Types)
       if (typesRes.status === "fulfilled" && typesRes.value?.data) {
@@ -162,7 +170,7 @@ export function EventManagementView({ eventId }: EventManagementViewProps) {
                   description: t.description || "",
                 }
               })
-            : []
+            : [],
         )
       } else if (typesRes.status === "rejected") {
         setFeedback({ type: "error", text: "Không thể tải danh sách hạng vé." })
@@ -188,7 +196,7 @@ export function EventManagementView({ eventId }: EventManagementViewProps) {
                 checkedInAt: tk.usedAt || tk.checkedInAt,
                 issuedAt: tk.issuedAt || tk.createdAt,
               }))
-            : []
+            : [],
         )
       } else if (ticketsRes.status === "rejected") {
         setFeedback({ type: "error", text: "Không thể tải danh sách vé đã phát hành." })
@@ -203,7 +211,7 @@ export function EventManagementView({ eventId }: EventManagementViewProps) {
     }
   }, [eventId])
 
-    // 1. Thêm phân khu: Dùng ID thật từ response của server, lỗi thì báo lỗi thật
+  // 1. Thêm phân khu: Dùng ID thật từ response của server, lỗi thì báo lỗi thật
   const handleAddArea = async (area: {
     name: string
     type: "STANDING" | "SEATED"
@@ -280,7 +288,10 @@ export function EventManagementView({ eventId }: EventManagementViewProps) {
     } catch (error: any) {
       setFeedback({
         type: "error",
-        text: getApiErrorMessage(error, `Không thể tạo hạng vé "${ticketType.name}". Vui lòng thử lại.`),
+        text: getApiErrorMessage(
+          error,
+          `Không thể tạo hạng vé "${ticketType.name}". Vui lòng thử lại.`,
+        ),
       })
     }
   }
@@ -290,7 +301,7 @@ export function EventManagementView({ eventId }: EventManagementViewProps) {
     setIsSubmittingApproval(true)
     try {
       await organizerApi.submitEvent(eventId)
-      setEventData((prev) => prev ? { ...prev, status: "PENDING_APPROVAL" } : null)
+      setEventData((prev) => (prev ? { ...prev, status: "PENDING_APPROVAL" } : null))
       setFeedback({
         type: "success",
         text: "Sự kiện đã được gửi lên ban quản trị xét duyệt thành công.",
@@ -298,7 +309,10 @@ export function EventManagementView({ eventId }: EventManagementViewProps) {
     } catch (error: any) {
       setFeedback({
         type: "error",
-        text: getApiErrorMessage(error, "Gửi duyệt sự kiện thất bại. Vui lòng kiểm tra lại điều kiện sự kiện."),
+        text: getApiErrorMessage(
+          error,
+          "Gửi duyệt sự kiện thất bại. Vui lòng kiểm tra lại điều kiện sự kiện.",
+        ),
       })
     } finally {
       setIsSubmittingApproval(false)
@@ -311,7 +325,7 @@ export function EventManagementView({ eventId }: EventManagementViewProps) {
     setIsCancellingEvent(true)
     try {
       await organizerApi.cancelEvent(eventId, reason)
-      setEventData((prev) => prev ? { ...prev, status: "CANCELLED" } : null)
+      setEventData((prev) => (prev ? { ...prev, status: "CANCELLED" } : null))
       setFeedback({ type: "info", text: `Sự kiện đã được hủy: ${reason}` })
     } catch (error: any) {
       setFeedback({

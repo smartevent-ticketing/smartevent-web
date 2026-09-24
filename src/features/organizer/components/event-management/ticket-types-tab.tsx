@@ -200,7 +200,9 @@ export function TicketTypesTab({ ticketTypes, areas, onAddTicketType }: TicketTy
                     required
                     placeholder="100"
                     value={totalQuota}
-                    onChange={(e) => setTotalQuota(e.target.value === "" ? "" : Number(e.target.value))}
+                    onChange={(e) =>
+                      setTotalQuota(e.target.value === "" ? "" : Number(e.target.value))
+                    }
                     className="w-full px-4 py-2.5 rounded-xl border border-outline-variant text-xs font-mono"
                   />
                 </div>
