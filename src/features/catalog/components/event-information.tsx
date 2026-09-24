@@ -140,7 +140,8 @@ export function EventInformation({
                 Ban tổ chức đang cập nhật sơ đồ khán đài
               </h4>
               <p className="text-xs text-on-surface-variant max-w-md mx-auto">
-                Sơ đồ vị trí phân khu và chỗ ngồi chính thức sẽ được công bố sớm nhất trước khi mở bán.
+                Sơ đồ vị trí phân khu và chỗ ngồi chính thức sẽ được công bố sớm nhất trước khi mở
+                bán.
               </p>
             </div>
           )}

@@ -79,7 +79,9 @@ export function useEventSetup() {
   async function handleProceedToMedia() {
     setErrorMessage(null)
     if (!eventName.trim() || !selectedCategoryId || !selectedVenueId || !description.trim()) {
-      setErrorMessage("Vui lòng nhập tên sự kiện, giới thiệu chi tiết sự kiện, chọn danh mục và địa điểm.")
+      setErrorMessage(
+        "Vui lòng nhập tên sự kiện, giới thiệu chi tiết sự kiện, chọn danh mục và địa điểm.",
+      )
       return
     }
     const now = Date.now()

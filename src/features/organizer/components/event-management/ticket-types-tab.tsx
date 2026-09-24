@@ -206,8 +206,8 @@ export function TicketTypesTab({ ticketTypes, areas, onAddTicketType }: TicketTy
                   </select>
                 ) : (
                   <div className="p-3 bg-amber-50 border border-amber-200 rounded-xl text-xs text-amber-800">
-                    Sự kiện chưa có phân khu nào. Vui lòng tạo phân khu trước tại tab "Phân khu &
-                    Ghế ngồi".
+                    Sự kiện chưa có phân khu nào. Vui lòng tạo phân khu trước tại tab &quot;Phân khu
+                    &amp; Ghế ngồi&quot;.
                   </div>
                 )}
               </div>
@@ -249,7 +249,9 @@ export function TicketTypesTab({ ticketTypes, areas, onAddTicketType }: TicketTy
                     Sức chứa khán đài
                   </label>
                   <div className="px-4 py-2.5 rounded-xl bg-surface-container-low border border-outline-variant/60 text-xs font-mono font-bold text-primary flex items-center">
-                    {totalQuota ? `${Number(totalQuota).toLocaleString("vi-VN")} vé` : "Theo khán đài"}
+                    {totalQuota
+                      ? `${Number(totalQuota).toLocaleString("vi-VN")} vé`
+                      : "Theo khán đài"}
                   </div>
                 </div>
               </div>
@@ -270,9 +272,9 @@ export function TicketTypesTab({ ticketTypes, areas, onAddTicketType }: TicketTy
 
               {/* Ghi chú về đợt bán */}
               <div className="p-3 bg-blue-50/70 border border-blue-200/80 rounded-xl text-[11px] text-blue-900 leading-relaxed">
-                💡 <strong>Phân bổ số lượng theo đợt bán:</strong> Bạn có thể chia nhỏ số lượng vé để
-                bán theo từng đợt (ví dụ: đợt Early Bird bán 50 vé với giá ưu đãi, đợt Mở bán chính
-                thức bán số vé còn lại) tại tab <strong>"Đợt mở bán"</strong>.
+                💡 <strong>Phân bổ số lượng theo đợt bán:</strong> Bạn có thể chia nhỏ số lượng vé
+                để bán theo từng đợt (ví dụ: đợt Early Bird bán 50 vé với giá ưu đãi, đợt Mở bán
+                chính thức bán số vé còn lại) tại tab <strong>&quot;Đợt mở bán&quot;</strong>.
               </div>
 
               <div className="flex items-center justify-end gap-2 pt-2">

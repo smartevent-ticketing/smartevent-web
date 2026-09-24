@@ -419,7 +419,8 @@ export function MediaTab({ eventId, isDraft, onMediaChanged }: MediaTabProps) {
               Ảnh sơ đồ phân khu & khán đài (Seat Map)
             </label>
             <p className="text-xs text-on-surface-variant">
-              Tải lên sơ đồ bố trí sân khấu, khán đài và các phân khu để người mua vé dễ dàng đối chiếu vị trí.
+              Tải lên sơ đồ bố trí sân khấu, khán đài và các phân khu để người mua vé dễ dàng đối
+              chiếu vị trí.
             </p>
           </div>
           {seatMapMedia && (

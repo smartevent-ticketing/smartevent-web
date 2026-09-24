@@ -166,11 +166,7 @@ export function EventMediaStep({
         {bannerDisplayUrl ? (
           <div className="relative group rounded-2xl overflow-hidden border border-outline-variant/60 aspect-video max-h-[320px] bg-slate-900">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={bannerDisplayUrl}
-              alt="Event Banner"
-              className="w-full h-full object-cover"
-            />
+            <img src={bannerDisplayUrl} alt="Event Banner" className="w-full h-full object-cover" />
             <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center gap-3 p-4">
               <button
                 type="button"
@@ -255,7 +251,8 @@ export function EventMediaStep({
               Ảnh sơ đồ phân khu & khán đài (Seat Map)
             </label>
             <p className="text-xs text-on-surface-variant">
-              Tải lên sơ đồ khán đài chính thức để hiển thị trực tiếp cho khán giả đối chiếu vị trí khi mua vé.
+              Tải lên sơ đồ khán đài chính thức để hiển thị trực tiếp cho khán giả đối chiếu vị trí
+              khi mua vé.
             </p>
           </div>
           {seatMapMedia && (

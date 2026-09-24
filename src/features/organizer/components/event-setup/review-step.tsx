@@ -52,12 +52,15 @@ export function EventReviewStep({
           </span>
         </div>
         <div className="py-1 space-y-2">
-          <span className="text-on-surface-variant font-medium block">Hạng vé / Khán đài phát hành:</span>
+          <span className="text-on-surface-variant font-medium block">
+            Hạng vé / Khán đài phát hành:
+          </span>
           <div className="space-y-1.5 pl-2">
             {ticketTiers.map((t, i) => (
               <div key={i} className="flex justify-between font-semibold text-xs text-on-surface">
                 <span>
-                  • {t.name} ({t.areaType === "STANDING" ? "Khu đứng" : "Khu ghế"} - {t.capacity?.toLocaleString("vi-VN") || 0} vé)
+                  • {t.name} ({t.areaType === "STANDING" ? "Khu đứng" : "Khu ghế"} -{" "}
+                  {t.capacity?.toLocaleString("vi-VN") || 0} vé)
                 </span>
                 <span className="text-primary">{t.price.toLocaleString("vi-VN")} ₫</span>
               </div>
@@ -82,7 +85,11 @@ export function EventReviewStep({
             </span>
             <div className="rounded-xl overflow-hidden max-h-[200px] bg-slate-100 border border-outline-variant/60 flex items-center justify-center">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={seatMapMedia.fileUrl} alt="Seat Map" className="w-full h-full object-contain max-h-[200px]" />
+              <img
+                src={seatMapMedia.fileUrl}
+                alt="Seat Map"
+                className="w-full h-full object-contain max-h-[200px]"
+              />
             </div>
           </div>
         )}

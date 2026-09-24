@@ -35,8 +35,7 @@ export function useEventDetail({ eventId }: { eventId: string }) {
     bannerUrl: data?.bannerUrl ?? "/images/concert-banner.jpg",
     seatMapUrl: ((data as any)?.seatMapUrl as string | null) ?? null,
     galleryUrls: ((data as any)?.galleryUrls as string[]) ?? [],
-    minPrice:
-      availableTiers.length > 0 ? Math.min(...availableTiers.map((t) => t.price)) : 0,
+    minPrice: availableTiers.length > 0 ? Math.min(...availableTiers.map((t) => t.price)) : 0,
     isLoading: catalog.isLoading,
     isNotFound: catalog.isNotFound,
     loadError: catalog.error,

@@ -33,8 +33,8 @@ export async function loadEventCatalog(identifier: string, signal: AbortSignal) 
   if (seatMap?.fileId) {
     try {
       seatMapUrl =
-        (await catalogApi.getMediaUrl({ params: { path: { fileId: seatMap.fileId } }, signal })).data
-          ?.data?.url ?? null
+        (await catalogApi.getMediaUrl({ params: { path: { fileId: seatMap.fileId } }, signal }))
+          .data?.data?.url ?? null
     } catch (error) {
       if (signal.aborted) throw error
     }

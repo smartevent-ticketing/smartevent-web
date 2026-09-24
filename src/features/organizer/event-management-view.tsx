@@ -380,8 +380,7 @@ export function EventManagementView({ eventId }: EventManagementViewProps) {
             saleEndAt: endIso,
             maxPerOrder: 4,
           })
-          const createdPhase =
-            (phaseRes as any)?.data?.data ?? (phaseRes as any)?.data ?? phaseRes
+          const createdPhase = (phaseRes as any)?.data?.data ?? (phaseRes as any)?.data ?? phaseRes
           const newPhase: SalePhaseItem = {
             id: createdPhase?.id || Math.random().toString(),
             ticketTypeId: typeId,

@@ -5,7 +5,14 @@ import { useEventDetail } from "@/features/catalog/hooks/use-event-detail"
 
 type Props = Pick<
   ReturnType<typeof useEventDetail>,
-  "bannerUrl" | "isSaleActive" | "title" | "date" | "time" | "locationName" | "cityName" | "minPrice"
+  | "bannerUrl"
+  | "isSaleActive"
+  | "title"
+  | "date"
+  | "time"
+  | "locationName"
+  | "cityName"
+  | "minPrice"
 >
 
 export function EventHero({
@@ -45,7 +52,9 @@ export function EventHero({
                     : "bg-slate-800 text-slate-400 border border-slate-700"
                 }`}
               >
-                <span className={`size-2 rounded-full ${isSaleActive ? "bg-emerald-400 animate-pulse" : "bg-slate-400"}`} />
+                <span
+                  className={`size-2 rounded-full ${isSaleActive ? "bg-emerald-400 animate-pulse" : "bg-slate-400"}`}
+                />
                 {isSaleActive ? "Đang mở bán vé" : "Chưa mở bán"}
               </span>
             </div>

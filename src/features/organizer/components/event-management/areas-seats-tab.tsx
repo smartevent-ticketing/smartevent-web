@@ -43,7 +43,12 @@ interface AreasSeatsTabProps {
   onDeleteArea?: (areaId: string) => Promise<void>
 }
 
-export function AreasSeatsTab({ areas, onAddArea, onUpdateArea, onDeleteArea }: AreasSeatsTabProps) {
+export function AreasSeatsTab({
+  areas,
+  onAddArea,
+  onUpdateArea,
+  onDeleteArea,
+}: AreasSeatsTabProps) {
   const [showAddModal, setShowAddModal] = useState(false)
   const [name, setName] = useState("")
   const [type, setType] = useState<"STANDING" | "SEATED">("SEATED")
@@ -143,10 +148,9 @@ export function AreasSeatsTab({ areas, onAddArea, onUpdateArea, onDeleteArea }: 
     return calculatedRowCount * (Number(seatsPerRowInput) || 0)
   }, [calculatedRowCount, seatsPerRowInput])
 
-  const isExceedingCapacity = useMemo(() => {
-    if (!selectedArea?.capacity) return false
-    return calculatedTotalSeats > selectedArea.capacity
-  }, [calculatedTotalSeats, selectedArea?.capacity])
+  const isExceedingCapacity = Boolean(
+    selectedArea?.capacity && calculatedTotalSeats > selectedArea.capacity,
+  )
 
   const handleGenerateSeats = async (e: React.FormEvent) => {
     e.preventDefault()
