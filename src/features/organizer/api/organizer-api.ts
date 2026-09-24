@@ -226,6 +226,13 @@ export const organizerApi = {
       }),
     ),
 
+  deleteSalePhase: (id: string) =>
+    requireApiSuccess(
+      apiClient.DELETE("/api/v1/sale-phases/{id}", {
+        params: { path: { id } },
+      }),
+    ),
+
   getSubmissionReadiness: (id: string) =>
     requireApiSuccess(
       apiClient.GET("/api/v1/events/{id}/submission-readiness", {

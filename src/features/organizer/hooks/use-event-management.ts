@@ -204,7 +204,7 @@ export function useEventManagement(eventId: string) {
         {
           id: typeId,
           name: createdType?.name || ticketType.name,
-          price: 0,
+          price: ticketType.price || 0,
           totalQuota: area?.capacity || 0,
           soldCount: 0,
           areaName: area?.name || "Khu vực chung",
@@ -318,6 +318,43 @@ export function useEventManagement(eventId: string) {
     }
   }
 
+  // Delete Sale Phase Handler
+  const handleDeleteSalePhase = async (phaseId: string) => {
+    try {
+      await organizerApi.deleteSalePhase(phaseId)
+      const targetPhase = salePhases.find((p) => p.id === phaseId)
+      setSalePhases((prev) => prev.filter((p) => p.id !== phaseId))
+
+      // Recalculate event stats
+      if (targetPhase) {
+        setEventData((prev) =>
+          prev
+            ? {
+                ...prev,
+                expectedRevenue: Math.max(
+                  0,
+                  (prev.expectedRevenue || 0) - targetPhase.price * targetPhase.quantity,
+                ),
+                totalTickets: Math.max(0, (prev.totalTickets || 0) - targetPhase.quantity),
+              }
+            : prev,
+        )
+      }
+
+      setFeedback({
+        type: "success",
+        text: `Đã xóa đợt mở bán thành công. Số vé đã được hoàn trả về sức chứa khán đài.`,
+      })
+      refreshReadiness()
+    } catch (error: any) {
+      setFeedback({
+        type: "error",
+        text: getApiErrorMessage(error, "Không thể xóa đợt mở bán."),
+      })
+      throw error
+    }
+  }
+
   // Event Approval Submission
   const handleConfirmSubmit = async () => {
     setIsSubmittingApproval(true)
@@ -394,6 +431,7 @@ export function useEventManagement(eventId: string) {
     handleAddTicketType,
     handleAddSalePhase,
     handleUpdatePhaseStatus,
+    handleDeleteSalePhase,
     handleConfirmSubmit,
     handleConfirmCancel,
     refreshReadiness,

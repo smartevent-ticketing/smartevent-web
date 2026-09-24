@@ -13,6 +13,7 @@ import {
   Play,
   Pause,
   RotateCcw,
+  Trash2,
 } from "lucide-react"
 import type { SalePhaseStatus } from "@/lib/api/event-setup-contract"
 import type { SalePhaseItem } from "@/features/organizer/model/event-management.types"
@@ -43,6 +44,7 @@ export interface SalePhasesTabProps {
     maxPerUser?: number
   }) => Promise<void>
   onUpdatePhaseStatus: (phaseId: string, newStatus: SalePhaseStatus) => Promise<void>
+  onDeleteSalePhase?: (phaseId: string) => Promise<void>
 }
 
 const STATUS_CONFIG: Record<SalePhaseStatus, { label: string; badgeClass: string; desc: string }> =
@@ -86,10 +88,12 @@ export function SalePhasesTab({
   areas = [],
   onAddSalePhase,
   onUpdatePhaseStatus,
+  onDeleteSalePhase,
 }: SalePhasesTabProps) {
   const [showAddModal, setShowAddModal] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [updatingPhaseId, setUpdatingPhaseId] = useState<string | null>(null)
+  const [deletingPhaseId, setDeletingPhaseId] = useState<string | null>(null)
 
   // Form State
   const [selectedTicketTypeId, setSelectedTicketTypeId] = useState(ticketTypes[0]?.id || "")
@@ -98,14 +102,14 @@ export function SalePhasesTab({
   const [quantity, setQuantity] = useState<number | "">("")
   const [saleStartAt, setSaleStartAt] = useState("")
   const [saleEndAt, setSaleEndAt] = useState("")
-  const [maxPerOrder, setMaxPerOrder] = useState<number | "">(4)
-  const [maxPerUser, setMaxPerUser] = useState<number | "">("")
+  const [maxTicketsPerCustomer, setMaxTicketsPerCustomer] = useState<number | "">(4)
   const [formError, setFormError] = useState<string | null>(null)
 
   // Capacity calculation for selected ticket type
   const selectedType = ticketTypes.find((t) => t.id === selectedTicketTypeId)
   const matchedArea = areas.find((a) => a.id === selectedType?.areaId)
   const totalAreaCapacity = matchedArea?.capacity ?? selectedType?.totalQuota ?? 0
+  const basePrice = selectedType?.price || 0
 
   const configuredQty = salePhases
     .filter((p) => {
@@ -197,6 +201,8 @@ export function SalePhasesTab({
       return
     }
 
+    const customerLimit = Number(maxTicketsPerCustomer) || 4
+
     setIsSubmitting(true)
     try {
       await onAddSalePhase({
@@ -206,8 +212,8 @@ export function SalePhasesTab({
         quantity: numQty,
         saleStartAt: startDate.toISOString(),
         saleEndAt: endDate.toISOString(),
-        maxPerOrder: Number(maxPerOrder) || 4,
-        maxPerUser: maxPerUser ? Number(maxPerUser) : undefined,
+        maxPerOrder: customerLimit,
+        maxPerUser: customerLimit,
       })
       // Reset form
       setName("")
@@ -215,8 +221,7 @@ export function SalePhasesTab({
       setQuantity("")
       setSaleStartAt("")
       setSaleEndAt("")
-      setMaxPerOrder(4)
-      setMaxPerUser("")
+      setMaxTicketsPerCustomer(4)
       setShowAddModal(false)
     } catch (err: unknown) {
       setFormError(
@@ -237,6 +242,28 @@ export function SalePhasesTab({
     }
   }
 
+  // Handle delete phase
+  const handleDeletePhase = async (phase: SalePhaseItem) => {
+    if (
+      !window.confirm(
+        `Bạn có chắc chắn muốn xóa đợt mở bán "${phase.name}"?\nToàn bộ ${phase.quantity.toLocaleString(
+          "vi-VN",
+        )} vé sẽ được hoàn trả về sức chứa khán đài.`,
+      )
+    ) {
+      return
+    }
+
+    setDeletingPhaseId(phase.id)
+    try {
+      if (onDeleteSalePhase) {
+        await onDeleteSalePhase(phase.id)
+      }
+    } finally {
+      setDeletingPhaseId(null)
+    }
+  }
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -253,7 +280,14 @@ export function SalePhasesTab({
           type="button"
           disabled={ticketTypes.length === 0}
           onClick={() => {
-            setSelectedTicketTypeId(ticketTypes[0]?.id || "")
+            const firstType = ticketTypes[0]
+            setSelectedTicketTypeId(firstType?.id || "")
+            setPrice(firstType?.price || "")
+            setQuantity("")
+            setName("")
+            setSaleStartAt("")
+            setSaleEndAt("")
+            setMaxTicketsPerCustomer(4)
             setFormError(null)
             setShowAddModal(true)
           }}
@@ -309,6 +343,9 @@ export function SalePhasesTab({
             )
 
             const isUpdating = updatingPhaseId === phase.id
+            const isDeleting = deletingPhaseId === phase.id
+            const canDelete =
+              Boolean(onDeleteSalePhase) && status !== "ACTIVE" && status !== "SOLD_OUT"
 
             return (
               <div
@@ -381,17 +418,34 @@ export function SalePhasesTab({
                     </span>
                   </div>
                   <div className="flex justify-between items-center border-t border-outline-variant/40 pt-2">
-                    <span className="text-on-surface-variant">Hạn mức mua:</span>
+                    <span className="text-on-surface-variant">Giới hạn mua:</span>
                     <span className="text-on-surface font-medium">
-                      Tối đa {phase.maxPerOrder || 4} vé/đơn
-                      {phase.maxPerUser ? ` (tổng ${phase.maxPerUser} vé/khách)` : ""}
+                      Tối đa {phase.maxPerUser || phase.maxPerOrder || 4} vé / khách
                     </span>
                   </div>
                 </div>
 
                 {/* Actions / State Machine Transition */}
-                <div className="pt-2 border-t border-outline-variant/40 flex items-center justify-between gap-2">
-                  <span className="text-[11px] text-on-surface-variant">Thao tác:</span>
+                <div className="pt-2 border-t border-outline-variant/40 flex items-center justify-between gap-2 flex-wrap">
+                  <div className="flex items-center gap-2">
+                    <span className="text-[11px] text-on-surface-variant">Thao tác:</span>
+                    {canDelete && (
+                      <button
+                        type="button"
+                        disabled={isDeleting || isUpdating}
+                        onClick={() => handleDeletePhase(phase)}
+                        className="px-2 py-1 text-[11px] font-semibold text-red-600 hover:text-red-700 bg-red-50 hover:bg-red-100 rounded-lg border border-red-200 transition inline-flex items-center gap-1 cursor-pointer disabled:opacity-50"
+                        title="Xóa đợt mở bán này và hoàn trả vé về khán đài"
+                      >
+                        {isDeleting ? (
+                          <Loader2 className="size-3 animate-spin" />
+                        ) : (
+                          <Trash2 className="size-3" />
+                        )}
+                        <span>{isDeleting ? "Đang xóa..." : "Xóa đợt"}</span>
+                      </button>
+                    )}
+                  </div>
 
                   <div className="flex items-center gap-1.5 flex-wrap justify-end">
                     {isUpdating ? (
@@ -407,14 +461,14 @@ export function SalePhasesTab({
                             <button
                               type="button"
                               onClick={() => handleTransition(phase.id, "SCHEDULED")}
-                              className="px-2.5 py-1 text-[11px] font-semibold bg-blue-50 text-blue-700 hover:bg-blue-100 rounded-lg border border-blue-200 transition"
+                              className="px-2.5 py-1 text-[11px] font-semibold bg-blue-50 text-blue-700 hover:bg-blue-100 rounded-lg border border-blue-200 transition cursor-pointer"
                             >
                               Lên lịch
                             </button>
                             <button
                               type="button"
                               onClick={() => handleTransition(phase.id, "ACTIVE")}
-                              className="px-2.5 py-1 text-[11px] font-semibold bg-emerald-50 text-emerald-700 hover:bg-emerald-100 rounded-lg border border-emerald-200 transition inline-flex items-center gap-1"
+                              className="px-2.5 py-1 text-[11px] font-semibold bg-emerald-50 text-emerald-700 hover:bg-emerald-100 rounded-lg border border-emerald-200 transition inline-flex items-center gap-1 cursor-pointer"
                             >
                               <Play className="size-3" />
                               <span>Mở bán ngay</span>
@@ -428,7 +482,7 @@ export function SalePhasesTab({
                             <button
                               type="button"
                               onClick={() => handleTransition(phase.id, "DRAFT")}
-                              className="px-2.5 py-1 text-[11px] font-semibold bg-blue-50 text-blue-700 hover:bg-blue-100 rounded-lg border border-blue-200 transition inline-flex items-center gap-1"
+                              className="px-2.5 py-1 text-[11px] font-semibold bg-blue-50 text-blue-700 hover:bg-blue-100 rounded-lg border border-blue-200 transition inline-flex items-center gap-1 cursor-pointer"
                               title="Thu hồi về bản nháp để chỉnh sửa ngày giờ hoặc số lượng"
                             >
                               <RotateCcw className="size-3" />
@@ -437,7 +491,7 @@ export function SalePhasesTab({
                             <button
                               type="button"
                               onClick={() => handleTransition(phase.id, "ACTIVE")}
-                              className="px-2.5 py-1 text-[11px] font-semibold bg-emerald-50 text-emerald-700 hover:bg-emerald-100 rounded-lg border border-emerald-200 transition inline-flex items-center gap-1"
+                              className="px-2.5 py-1 text-[11px] font-semibold bg-emerald-50 text-emerald-700 hover:bg-emerald-100 rounded-lg border border-emerald-200 transition inline-flex items-center gap-1 cursor-pointer"
                             >
                               <Play className="size-3" />
                               <span>Kích hoạt</span>
@@ -445,7 +499,7 @@ export function SalePhasesTab({
                             <button
                               type="button"
                               onClick={() => handleTransition(phase.id, "CLOSED")}
-                              className="px-2.5 py-1 text-[11px] font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 rounded-lg border border-slate-300 transition"
+                              className="px-2.5 py-1 text-[11px] font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 rounded-lg border border-slate-300 transition cursor-pointer"
                             >
                               Đóng đợt
                             </button>
@@ -458,7 +512,7 @@ export function SalePhasesTab({
                             <button
                               type="button"
                               onClick={() => handleTransition(phase.id, "PAUSED")}
-                              className="px-2.5 py-1 text-[11px] font-semibold bg-amber-50 text-amber-700 hover:bg-amber-100 rounded-lg border border-amber-200 transition inline-flex items-center gap-1"
+                              className="px-2.5 py-1 text-[11px] font-semibold bg-amber-50 text-amber-700 hover:bg-amber-100 rounded-lg border border-amber-200 transition inline-flex items-center gap-1 cursor-pointer"
                             >
                               <Pause className="size-3" />
                               <span>Tạm dừng</span>
@@ -466,7 +520,7 @@ export function SalePhasesTab({
                             <button
                               type="button"
                               onClick={() => handleTransition(phase.id, "CLOSED")}
-                              className="px-2.5 py-1 text-[11px] font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 rounded-lg border border-slate-300 transition"
+                              className="px-2.5 py-1 text-[11px] font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 rounded-lg border border-slate-300 transition cursor-pointer"
                             >
                               Đóng cổng
                             </button>
@@ -479,7 +533,7 @@ export function SalePhasesTab({
                             <button
                               type="button"
                               onClick={() => handleTransition(phase.id, "ACTIVE")}
-                              className="px-2.5 py-1 text-[11px] font-semibold bg-emerald-50 text-emerald-700 hover:bg-emerald-100 rounded-lg border border-emerald-200 transition inline-flex items-center gap-1"
+                              className="px-2.5 py-1 text-[11px] font-semibold bg-emerald-50 text-emerald-700 hover:bg-emerald-100 rounded-lg border border-emerald-200 transition inline-flex items-center gap-1 cursor-pointer"
                             >
                               <Play className="size-3" />
                               <span>Tiếp tục bán</span>
@@ -487,7 +541,7 @@ export function SalePhasesTab({
                             <button
                               type="button"
                               onClick={() => handleTransition(phase.id, "CLOSED")}
-                              className="px-2.5 py-1 text-[11px] font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 rounded-lg border border-slate-300 transition"
+                              className="px-2.5 py-1 text-[11px] font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 rounded-lg border border-slate-300 transition cursor-pointer"
                             >
                               Đóng cổng
                             </button>
@@ -518,6 +572,11 @@ export function SalePhasesTab({
         </div>
         <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px] list-disc list-inside text-on-surface-variant leading-relaxed">
           <li>
+            <strong>Xóa đợt mở bán:</strong> Các đợt mở bán ở trạng thái Nháp, Đã lên lịch, Tạm dừng
+            hoặc Đã kết thúc đều có thể xóa. Khi xóa, toàn bộ số vé sẽ được trả lại sức chứa khán
+            đài.
+          </li>
+          <li>
             <strong>Thu hồi lịch hẹn:</strong> Đợt mở bán ở trạng thái &quot;Đã lên lịch&quot; có
             thể bấm <em>&quot;Thu hồi về nháp&quot;</em> bất cứ lúc nào để chỉnh sửa lại ngày giờ
             hoặc số lượng mà không bị hủy.
@@ -531,10 +590,6 @@ export function SalePhasesTab({
             <strong>Tạm dừng bán vé:</strong> Sử dụng trạng thái <em>&quot;Tạm dừng&quot;</em> khi
             cần kiểm tra lại đơn hàng hoặc nghẽn mạng, sau đó bấm <em>&quot;Tiếp tục bán&quot;</em>{" "}
             mà không làm gián đoạn kế hoạch.
-          </li>
-          <li>
-            <strong>Đóng cổng:</strong> Chỉ bấm <em>&quot;Đóng đợt/Đóng cổng&quot;</em> khi đợt bán
-            đó đã thực sự kết thúc chiến dịch và bạn không muốn nhận thêm đơn mua mới.
           </li>
         </ul>
       </div>
@@ -577,8 +632,15 @@ export function SalePhasesTab({
                 <label className="font-bold text-on-surface">Hạng vé áp dụng *</label>
                 <select
                   value={selectedTicketTypeId}
-                  onChange={(e) => setSelectedTicketTypeId(e.target.value)}
-                  className="w-full px-3 py-2 rounded-xl border border-outline-variant bg-white text-on-surface focus:outline-primary"
+                  onChange={(e) => {
+                    const newId = e.target.value
+                    setSelectedTicketTypeId(newId)
+                    const targetType = ticketTypes.find((t) => t.id === newId)
+                    if (targetType?.price && targetType.price > 0) {
+                      setPrice(targetType.price)
+                    }
+                  }}
+                  className="w-full px-3 py-2 rounded-xl border border-outline-variant bg-white text-on-surface focus:outline-primary cursor-pointer"
                   required
                 >
                   {ticketTypes.map((t) => (
@@ -634,7 +696,14 @@ export function SalePhasesTab({
               {/* Giá vé & Số lượng */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div className="space-y-1">
-                  <label className="font-bold text-on-surface">Giá vé (VNĐ) *</label>
+                  <div className="flex items-center justify-between">
+                    <label className="font-bold text-on-surface">Giá vé (VNĐ) *</label>
+                    {selectedType?.price && selectedType.price > 0 ? (
+                      <span className="text-[10px] text-on-surface-variant">
+                        Gốc: {selectedType.price.toLocaleString("vi-VN")} ₫
+                      </span>
+                    ) : null}
+                  </div>
                   <input
                     type="number"
                     min="0"
@@ -644,9 +713,63 @@ export function SalePhasesTab({
                     onChange={(e) =>
                       setPrice(e.target.value === "" ? "" : Math.max(0, Number(e.target.value)))
                     }
-                    className="w-full px-3 py-2 rounded-xl border border-outline-variant font-mono text-on-surface focus:outline-primary"
+                    className="w-full px-3 py-2 rounded-xl border border-outline-variant font-mono text-on-surface focus:outline-primary font-bold"
                     required
                   />
+
+                  {/* Nút chọn mức giá / giảm giá nhanh */}
+                  {basePrice > 0 && (
+                    <div className="flex items-center gap-1 pt-1 flex-wrap">
+                      <button
+                        type="button"
+                        onClick={() => setPrice(basePrice)}
+                        className={`px-2 py-0.5 rounded-lg text-[10px] font-mono font-bold transition cursor-pointer ${
+                          price === basePrice
+                            ? "bg-primary text-white"
+                            : "bg-surface-container hover:bg-surface-container-high text-on-surface"
+                        }`}
+                        title="Giữ nguyên giá vé gốc"
+                      >
+                        Giá gốc
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setPrice(Math.round((basePrice * 0.95) / 1000) * 1000)}
+                        className={`px-2 py-0.5 rounded-lg text-[10px] font-mono font-bold transition cursor-pointer ${
+                          price === Math.round((basePrice * 0.95) / 1000) * 1000
+                            ? "bg-emerald-600 text-white"
+                            : "bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200"
+                        }`}
+                        title="Giảm 5% so với giá gốc"
+                      >
+                        -5%
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setPrice(Math.round((basePrice * 0.9) / 1000) * 1000)}
+                        className={`px-2 py-0.5 rounded-lg text-[10px] font-mono font-bold transition cursor-pointer ${
+                          price === Math.round((basePrice * 0.9) / 1000) * 1000
+                            ? "bg-emerald-600 text-white"
+                            : "bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200"
+                        }`}
+                        title="Giảm 10% so với giá gốc"
+                      >
+                        -10%
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setPrice(Math.round((basePrice * 0.85) / 1000) * 1000)}
+                        className={`px-2 py-0.5 rounded-lg text-[10px] font-mono font-bold transition cursor-pointer ${
+                          price === Math.round((basePrice * 0.85) / 1000) * 1000
+                            ? "bg-emerald-600 text-white"
+                            : "bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200"
+                        }`}
+                        title="Giảm 15% so với giá gốc"
+                      >
+                        -15%
+                      </button>
+                    </div>
+                  )}
                 </div>
 
                 <div className="space-y-1">
@@ -729,34 +852,47 @@ export function SalePhasesTab({
                 </div>
               </div>
 
-              {/* Hạn mức mua */}
-              <div className="grid grid-cols-2 gap-3">
-                <div className="space-y-1">
-                  <label className="font-bold text-on-surface">Tối đa mỗi đơn</label>
-                  <input
-                    type="number"
-                    min="1"
-                    max="10"
-                    value={maxPerOrder}
-                    onChange={(e) =>
-                      setMaxPerOrder(e.target.value === "" ? "" : Number(e.target.value))
-                    }
-                    className="w-full px-3 py-2 rounded-xl border border-outline-variant font-mono text-on-surface focus:outline-primary"
-                  />
+              {/* Hạn mức mua tối đa mỗi khách */}
+              <div className="space-y-1">
+                <div className="flex items-center justify-between">
+                  <label className="font-bold text-on-surface">
+                    Số vé tối đa mỗi khách được mua *
+                  </label>
+                  <span className="text-[10px] text-on-surface-variant font-normal">
+                    (Giới hạn trên 1 tài khoản)
+                  </span>
                 </div>
-
-                <div className="space-y-1">
-                  <label className="font-bold text-on-surface">Tối đa mỗi khách (Tùy chọn)</label>
-                  <input
-                    type="number"
-                    min="1"
-                    placeholder="Không giới hạn"
-                    value={maxPerUser}
-                    onChange={(e) =>
-                      setMaxPerUser(e.target.value === "" ? "" : Number(e.target.value))
-                    }
-                    className="w-full px-3 py-2 rounded-xl border border-outline-variant font-mono text-on-surface focus:outline-primary"
-                  />
+                <input
+                  type="number"
+                  min="1"
+                  max="20"
+                  value={maxTicketsPerCustomer}
+                  onChange={(e) =>
+                    setMaxTicketsPerCustomer(
+                      e.target.value === "" ? "" : Math.max(1, Number(e.target.value)),
+                    )
+                  }
+                  className="w-full px-3 py-2 rounded-xl border border-outline-variant font-mono text-on-surface focus:outline-primary"
+                  placeholder="4"
+                  required
+                />
+                {/* Chọn nhanh số vé giới hạn */}
+                <div className="flex items-center gap-1.5 pt-1">
+                  <span className="text-[10px] text-on-surface-variant">Chọn nhanh:</span>
+                  {[2, 4, 6, 10].map((num) => (
+                    <button
+                      key={num}
+                      type="button"
+                      onClick={() => setMaxTicketsPerCustomer(num)}
+                      className={`px-2 py-0.5 rounded-lg text-[10px] font-mono font-medium transition cursor-pointer ${
+                        maxTicketsPerCustomer === num
+                          ? "bg-primary text-white"
+                          : "bg-surface-container hover:bg-surface-container-high text-on-surface"
+                      }`}
+                    >
+                      {num} vé
+                    </button>
+                  ))}
                 </div>
               </div>
 

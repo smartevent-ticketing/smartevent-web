@@ -57,6 +57,7 @@ export function EventManagementView({ eventId }: EventManagementViewProps) {
     handleAddTicketType,
     handleAddSalePhase,
     handleUpdatePhaseStatus,
+    handleDeleteSalePhase,
     handleConfirmSubmit,
     handleConfirmCancel,
     refreshReadiness,
@@ -439,6 +440,7 @@ export function EventManagementView({ eventId }: EventManagementViewProps) {
             areas={areas}
             onAddSalePhase={handleAddSalePhase}
             onUpdatePhaseStatus={handleUpdatePhaseStatus}
+            onDeleteSalePhase={handleDeleteSalePhase}
           />
         )}
 

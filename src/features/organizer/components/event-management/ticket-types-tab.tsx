@@ -20,6 +20,7 @@ interface TicketTypesTabProps {
   areas: Array<{ id: string; name: string; capacity?: number; type?: string }>
   onAddTicketType: (ticketType: {
     name: string
+    price?: number
     areaId?: string
     description?: string
   }) => Promise<void>
@@ -28,6 +29,7 @@ interface TicketTypesTabProps {
 export function TicketTypesTab({ ticketTypes, areas, onAddTicketType }: TicketTypesTabProps) {
   const [showAddModal, setShowAddModal] = useState(false)
   const [name, setName] = useState("")
+  const [price, setPrice] = useState<number | "">("")
   const [areaId, setAreaId] = useState(areas[0]?.id || "")
   const [description, setDescription] = useState("")
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -36,6 +38,7 @@ export function TicketTypesTab({ ticketTypes, areas, onAddTicketType }: TicketTy
     const defaultArea = areas[0]
     setAreaId(defaultArea?.id || "")
     setName(defaultArea?.name || "")
+    setPrice("")
     setDescription("")
     setShowAddModal(true)
   }
@@ -49,10 +52,12 @@ export function TicketTypesTab({ ticketTypes, areas, onAddTicketType }: TicketTy
     try {
       await onAddTicketType({
         name: name.trim(),
+        price: price === "" ? 0 : Number(price),
         areaId: areaId || undefined,
         description: description.trim() || undefined,
       })
       setName("")
+      setPrice("")
       setDescription("")
       setShowAddModal(false)
     } finally {
@@ -239,20 +244,42 @@ export function TicketTypesTab({ ticketTypes, areas, onAddTicketType }: TicketTy
                 />
               </div>
 
-              {/* Sức chứa khán đài info */}
-              <div className="space-y-1">
-                <label className="text-xs font-semibold text-on-surface-variant">
-                  Sức chứa khán đài
-                </label>
-                <div className="px-4 py-2.5 rounded-xl bg-surface-container-low border border-outline-variant/60 text-xs font-mono font-bold text-primary flex items-center justify-between">
-                  <span>
-                    {selectedArea?.capacity
-                      ? `${selectedArea.capacity.toLocaleString("vi-VN")} vé`
-                      : "Theo khán đài"}
-                  </span>
-                  <span className="text-[11px] font-normal text-on-surface-variant">
-                    {selectedArea?.type === "SEATED" ? "Ghế ngồi chỉ định" : "Vé đứng tự do"}
-                  </span>
+              {/* Đơn giá vé niêm yết & Sức chứa khán đài */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="space-y-1">
+                  <label className="text-xs font-semibold text-on-surface-variant">
+                    Giá vé gốc / niêm yết (VNĐ)
+                  </label>
+                  <input
+                    type="number"
+                    min={0}
+                    step={10000}
+                    placeholder="Ví dụ: 500000"
+                    value={price}
+                    onChange={(e) =>
+                      setPrice(e.target.value === "" ? "" : Math.max(0, Number(e.target.value)))
+                    }
+                    className="w-full px-4 py-2.5 rounded-xl border border-outline-variant text-xs font-mono font-bold"
+                  />
+                  <p className="text-[10px] text-on-surface-variant">
+                    Mức giá gốc để tính chiết khấu khi mở bán
+                  </p>
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-xs font-semibold text-on-surface-variant">
+                    Sức chứa khán đài
+                  </label>
+                  <div className="px-4 py-2.5 rounded-xl bg-surface-container-low border border-outline-variant/60 text-xs font-mono font-bold text-primary flex items-center justify-between">
+                    <span>
+                      {selectedArea?.capacity
+                        ? `${selectedArea.capacity.toLocaleString("vi-VN")} vé`
+                        : "Theo khán đài"}
+                    </span>
+                    <span className="text-[11px] font-normal text-on-surface-variant">
+                      {selectedArea?.type === "SEATED" ? "Có ghế" : "Vé đứng"}
+                    </span>
+                  </div>
                 </div>
               </div>
 
@@ -272,9 +299,9 @@ export function TicketTypesTab({ ticketTypes, areas, onAddTicketType }: TicketTy
 
               {/* Ghi chú về đợt bán */}
               <div className="p-3 bg-blue-50/70 border border-blue-200/80 rounded-xl text-[11px] text-blue-900 leading-relaxed">
-                💡 <strong>Định giá &amp; Số lượng:</strong> Không cần nhập giá vé ở bước này. Bạn
-                sẽ chia nhỏ số lượng vé theo từng đợt mở bán (ví dụ: đợt Early Bird bán 50 vé giá ưu
-                đãi, đợt Mở bán chính thức bán các vé còn lại) tại tab{" "}
+                💡 <strong>Định giá theo đợt mở bán:</strong> Giá vé gốc ở trên sẽ dùng làm mức giá
+                chuẩn. Khi tạo từng đợt mở bán (như Early Bird, Đợt 1), bạn có thể chọn giữ nguyên
+                giá hoặc áp dụng mức giảm <strong>5%, 10%, 15%</strong> tại tab{" "}
                 <strong>&quot;Đợt mở bán&quot;</strong>.
               </div>
 

@@ -70,6 +70,7 @@ export interface UpdateAreaInput {
 
 export interface CreateTicketTypeInput {
   name: string
+  price?: number
   areaId?: string
   description?: string
 }
