@@ -24,15 +24,9 @@ export function CustomerProfilePanel() {
             <span className="text-on-surface-variant font-medium">Email tài khoản:</span>
             <span className="font-mono text-on-surface">{user?.email || "Chưa cập nhật"}</span>
           </div>
-          <div className="flex justify-between py-1 border-b border-outline-variant/40">
+          <div className="flex justify-between py-1">
             <span className="text-on-surface-variant font-medium">Số điện thoại:</span>
             <span className="text-on-surface">{user?.phone || "Chưa thiết lập"}</span>
-          </div>
-          <div className="flex justify-between py-1">
-            <span className="text-on-surface-variant font-medium">Quyền hạn hệ thống:</span>
-            <span className="font-semibold text-primary">
-              {user?.roles?.join(", ") || "ROLE_CUSTOMER"}
-            </span>
           </div>
         </div>
 
