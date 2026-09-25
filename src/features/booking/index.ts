@@ -11,6 +11,7 @@ export { useActiveReservation } from "./hooks/use-active-reservation"
 export { useAvailableSeats } from "./hooks/use-available-seats"
 export { useCheckout } from "./hooks/use-checkout"
 export { useSeatSelection } from "./hooks/use-seat-selection"
+export { useBookingCart } from "./hooks/use-booking-cart"
 
 export { buildReservationItems } from "./model/reservation-selection"
 export { bookingApi } from "./api/booking-api"

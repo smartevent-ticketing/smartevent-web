@@ -1,18 +1,19 @@
 "use client"
 
 import { Loader2 } from "lucide-react"
-import { useSeatSelection } from "@/features/booking/hooks/use-seat-selection"
+import type { components } from "@/lib/api/schema"
 
-type Props = Pick<
-  ReturnType<typeof useSeatSelection>,
-  | "availableSeats"
-  | "isLoadingSeats"
-  | "selectedSeats"
-  | "selectedArea"
-  | "isSeated"
-  | "maxAllowed"
-  | "handleToggleSeat"
->
+type EventSeat = components["schemas"]["EventSeatResponse"]
+
+interface Props {
+  availableSeats: EventSeat[]
+  isLoadingSeats?: boolean
+  selectedSeats: EventSeat[]
+  selectedArea?: { name?: string } | null
+  isSeated?: boolean
+  maxAllowed?: number
+  handleToggleSeat: (seat: EventSeat) => void
+}
 
 export function SeatMap({
   availableSeats,
