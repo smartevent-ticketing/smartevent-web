@@ -55,8 +55,14 @@ export function OrganizerDashboardView() {
     totalEvents,
     publishedCount,
     pendingCount,
+    draftCount,
+    completedCount,
     totalRevenue,
     totalSold,
+    totalCapacity,
+    totalHeld,
+    overallOccupancyRate,
+    avgRevenuePerSoldTicket,
   } = useOrganizerEvents()
 
   if (isAuthLoading || !isAuthenticated || !isOrganizer) {
@@ -210,17 +216,25 @@ export function OrganizerDashboardView() {
             totalEvents={totalEvents}
             publishedCount={publishedCount}
             pendingCount={pendingCount}
+            draftCount={draftCount}
+            completedCount={completedCount}
             totalRevenue={totalRevenue}
             totalSold={totalSold}
+            totalCapacity={totalCapacity}
+            totalHeld={totalHeld}
+            overallOccupancyRate={overallOccupancyRate}
+            avgRevenuePerSoldTicket={avgRevenuePerSoldTicket}
             setActiveSection={setActiveSection}
           />
         )}
 
         {/* 2. Events Management Section */}
-        {activeSection === "events" && <OrganizerEventsPanel events={events} />}
+        {activeSection === "events" && (
+          <OrganizerEventsPanel events={events} isLoading={isLoading} />
+        )}
 
         {/* 3. Inventory Section */}
-        {activeSection === "inventory" && <OrganizerInventoryPanel />}
+        {activeSection === "inventory" && <OrganizerInventoryPanel events={events} />}
       </main>
     </div>
   )
