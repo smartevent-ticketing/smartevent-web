@@ -10,6 +10,7 @@ import {
   Inbox,
   LayoutDashboard,
   Menu,
+  HandCoins,
   ShieldCheck,
   Tag,
   X,
@@ -40,6 +41,12 @@ const sections = [
     label: "Quản lý địa điểm",
     title: "Quản lý địa điểm tổ chức",
     icon: Building,
+  },
+  {
+    href: "/admin/refund-reviews",
+    label: "Hỗ trợ hoàn tiền",
+    title: "Hồ sơ hỗ trợ hoàn tiền",
+    icon: HandCoins,
   },
   {
     href: "/admin/outbox",

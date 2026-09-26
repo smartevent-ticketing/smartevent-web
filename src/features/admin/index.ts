@@ -6,6 +6,7 @@ export { ApproveConfirmationModal, RejectModal } from "./components/approval-act
 export { AdminCategoriesPanel } from "./components/categories-panel"
 export { AdminDashboardPanel } from "./components/dashboard-panel"
 export { AdminOutboxPanel } from "./components/outbox-panel"
+export { RefundReviewsPanel } from "./components/refund-reviews-panel"
 export { AdminVenuesPanel } from "./components/venues-panel"
 
 export { useAdminApprovals } from "./hooks/use-approvals"

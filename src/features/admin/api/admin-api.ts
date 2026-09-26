@@ -3,10 +3,40 @@ import { apiClient } from "@/lib/api/client"
 import { requireApiSuccess } from "@/lib/api/result"
 import type { paths } from "@/lib/api/schema"
 import type { EventSetupPaths, AdminEventPaths } from "@/lib/api/event-setup-contract"
+import type { RefundReviewPaths, RefundReviewStatus } from "@/lib/api/refund-review-contract"
 
-type ApiPaths = paths & EventSetupPaths & AdminEventPaths
+type ApiPaths = paths & EventSetupPaths & AdminEventPaths & RefundReviewPaths
 
 export const adminApi = {
+  listRefundReviews: (status: RefundReviewStatus, page = 0) =>
+    requireApiSuccess(
+      apiClient.GET("/api/v1/admin/payment-refund-reviews", {
+        params: { query: { status, page, size: 20 } },
+      }),
+    ),
+
+  getRefundReviewHistory: (id: string) =>
+    requireApiSuccess(
+      apiClient.GET("/api/v1/admin/payment-refund-reviews/{id}/history", {
+        params: { path: { id } },
+      }),
+    ),
+
+  updateRefundReview: (
+    id: string,
+    body: {
+      status: RefundReviewStatus
+      note: string
+      evidenceReference?: string
+    },
+  ) =>
+    requireApiSuccess(
+      apiClient.PATCH("/api/v1/admin/payment-refund-reviews/{id}", {
+        params: { path: { id } },
+        body,
+      }),
+    ),
+
   getPendingEvents: (
     options?: Omit<FetchOptions<ApiPaths["/api/v1/admin/events/pending"]["get"]>, "parseAs"> & {
       parseAs?: "json"

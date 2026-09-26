@@ -6,6 +6,7 @@ import { accessTokenStore } from "@/lib/auth/access-token"
 import { refreshAccessToken } from "@/lib/auth/token-refresher"
 
 import type { paths } from "./schema"
+import type { RefundReviewPaths } from "./refund-review-contract"
 import type {
   EventSetupPaths,
   AdminEventPaths,
@@ -134,7 +135,7 @@ const serializeQueryParams = (queryParams: Record<string, unknown>) => {
 // ─── Client instance ──────────────────────────────────────
 
 export const apiClient = createClient<
-  paths & EventSetupPaths & AdminEventPaths & SalePhasePaths & EventMediaPaths
+  paths & EventSetupPaths & AdminEventPaths & SalePhasePaths & EventMediaPaths & RefundReviewPaths
 >({
   baseUrl: apiBaseUrl,
   querySerializer: serializeQueryParams,
