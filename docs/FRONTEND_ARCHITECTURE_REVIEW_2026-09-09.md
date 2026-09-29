@@ -1,5 +1,7 @@
 # Đánh giá kiến trúc frontend — 09/09/2026
 
+> Tài liệu này là ảnh chụp đánh giá tại ngày 09/09/2026. Một số đường dẫn, số dòng và vấn đề nêu dưới đây đã thay đổi sau các lượt sửa. Xem `README.md` và mã nguồn hiện tại để biết cấu trúc đang dùng.
+
 **Kết luận:** build production đạt, nhưng frontend chưa đủ vững để coi là sẵn sàng vận hành doanh nghiệp. Đây là đánh giá theo khả năng bảo trì, tính đúng của nghiệp vụ, kiểm thử và quy trình phát hành; không có một chứng nhận chung tên là “chuẩn doanh nghiệp” cho cấu trúc thư mục.
 
 Trong React, các khối đang được nói tới là function component. Vấn đề là một component sở hữu quá nhiều trách nhiệm. Không cần chuyển chúng thành JavaScript class.
