@@ -5,7 +5,6 @@ import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import {
   ArrowUpRight,
-  Building2,
   CalendarCheck2,
   ChevronRight,
   HandCoins,
@@ -60,14 +59,6 @@ const sections = [
     title: "Danh mục sự kiện",
     description: "Sắp xếp các chủ đề để khách hàng dễ khám phá sự kiện.",
     icon: Tags,
-    group: "configuration",
-  },
-  {
-    href: "/admin/venues",
-    label: "Địa điểm",
-    title: "Địa điểm tổ chức",
-    description: "Quản lý thông tin và sức chứa của các địa điểm.",
-    icon: Building2,
     group: "configuration",
   },
   {

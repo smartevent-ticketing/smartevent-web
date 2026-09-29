@@ -75,26 +75,6 @@ export const adminApi = {
     },
   ) => requireApiSuccess(apiClient.POST("/api/v1/events/{id}/reject", options)),
 
-  createVenue: (
-    options: Omit<FetchOptions<ApiPaths["/api/v1/venues"]["post"]>, "parseAs"> & {
-      parseAs?: "json"
-    },
-  ) => requireApiSuccess(apiClient.POST("/api/v1/venues", options)),
-
-  updateVenue: (id: string, body: components["schemas"]["VenueRequest"]) =>
-    requireApiSuccess(
-      apiClient.PUT("/api/v1/venues/{id}", {
-        params: { path: { id } },
-        body,
-      }),
-    ),
-
-  deleteVenue: (
-    options: Omit<FetchOptions<ApiPaths["/api/v1/venues/{id}"]["delete"]>, "parseAs"> & {
-      parseAs?: "json"
-    },
-  ) => requireApiSuccess(apiClient.DELETE("/api/v1/venues/{id}", options)),
-
   createCategory: (
     options: Omit<FetchOptions<ApiPaths["/api/v1/categories"]["post"]>, "parseAs"> & {
       parseAs?: "json"

@@ -25,7 +25,6 @@ export const ROUTES = {
     DASHBOARD: "/admin/dashboard",
     APPROVALS: "/admin/approvals",
     CATEGORIES: "/admin/categories",
-    VENUES: "/admin/venues",
     OUTBOX: "/admin/outbox",
     REFUND_REVIEWS: "/admin/refund-reviews",
   },

@@ -10,6 +10,9 @@ import type {
 } from "@/lib/api/event-setup-contract"
 
 export const organizerApi = {
+  createVenue: (body: components["schemas"]["VenueRequest"]) =>
+    requireApiSuccess(apiClient.POST("/api/v1/venues", { body })),
+
   createEventSetup: (
     options: Omit<FetchOptions<ApiPaths["/api/v1/events/setup"]["post"]>, "parseAs"> & {
       parseAs?: "json"

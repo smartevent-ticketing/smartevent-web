@@ -35,6 +35,8 @@ export function useEventSetup() {
   const [startDate, setStartDate] = useState("")
   const [startTime, setStartTime] = useState("19:00")
   const [selectedVenueId, setSelectedVenueId] = useState("")
+  const [isCreatingVenue, setIsCreatingVenue] = useState(false)
+  const [venueError, setVenueError] = useState<string | null>(null)
   const [maxTicketsPerUser, setMaxTicketsPerUser] = useState("")
 
   // Media states
@@ -84,6 +86,23 @@ export function useEventSetup() {
 
   function removeTier(id: string) {
     setTicketTiers(ticketTiers.filter((t) => t.id !== id))
+  }
+
+  async function createVenue(input: components["schemas"]["VenueRequest"]) {
+    setIsCreatingVenue(true)
+    setVenueError(null)
+    try {
+      const result = await organizerApi.createVenue(input)
+      const venue = result.data?.data
+      if (!venue?.id) throw new Error("Không nhận được mã địa điểm mới.")
+      setVenues((current) => [...current, venue])
+      setSelectedVenueId(venue.id)
+    } catch (error) {
+      setVenueError(getApiErrorMessage(error, "Không thể tạo địa điểm. Vui lòng thử lại."))
+      throw error
+    } finally {
+      setIsCreatingVenue(false)
+    }
   }
 
   async function handleProceedToMedia() {
@@ -330,9 +349,6 @@ export function useEventSetup() {
         if (venueRes.data?.data) {
           const vens = venueRes.data.data
           setVenues(vens)
-          if (vens.length > 0 && vens[0].id) {
-            setSelectedVenueId(vens[0].id)
-          }
         }
       } catch (error) {
         if (isMounted)
@@ -364,6 +380,9 @@ export function useEventSetup() {
     setStartTime,
     selectedVenueId,
     setSelectedVenueId,
+    createVenue,
+    isCreatingVenue,
+    venueError,
     maxTicketsPerUser,
     setMaxTicketsPerUser,
     createdEventId,

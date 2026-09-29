@@ -13,11 +13,9 @@ export interface paths {
         };
         /** Lấy thông tin chi tiết địa điểm theo ID */
         get: operations["getVenueById"];
-        /** Cập nhật thông tin địa điểm theo ID (Yêu cầu ADMIN) */
-        put: operations["updateVenue"];
+        put?: never;
         post?: never;
-        /** Xóa mềm địa điểm theo ID (Yêu cầu ADMIN) */
-        delete: operations["deleteVenue"];
+        delete?: never;
         options?: never;
         head?: never;
         patch?: never;
@@ -143,7 +141,7 @@ export interface paths {
         /** Lấy danh sách tất cả các địa điểm đang hoạt động */
         get: operations["getAllActiveVenues"];
         put?: never;
-        /** Tạo địa điểm tổ chức sự kiện mới (Yêu cầu ADMIN hoặc ORGANIZER) */
+        /** Ban tổ chức tạo địa điểm để chọn cho sự kiện */
         post: operations["createVenue"];
         delete?: never;
         options?: never;
@@ -2703,54 +2701,6 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["ApiResponseVenueResponse"];
-                };
-            };
-        };
-    };
-    updateVenue: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["VenueRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["ApiResponseVenueResponse"];
-                };
-            };
-        };
-    };
-    deleteVenue: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["ApiResponseVoid"];
                 };
             };
         };

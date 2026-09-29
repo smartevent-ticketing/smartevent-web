@@ -3,7 +3,6 @@ import type { components } from "@/lib/api/schema"
 // ── Re-export schema types used across admin hooks & components ──
 
 export type CategoryResponse = components["schemas"]["CategoryResponse"]
-export type VenueResponse = components["schemas"]["VenueResponse"]
 export type OutboxEvent = components["schemas"]["OutboxEvent"]
 
 // ── Admin-specific domain types ──

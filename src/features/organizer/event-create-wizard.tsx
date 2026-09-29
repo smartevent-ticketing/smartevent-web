@@ -27,6 +27,9 @@ export function EventCreateWizard() {
     setStartTime,
     selectedVenueId,
     setSelectedVenueId,
+    createVenue,
+    isCreatingVenue,
+    venueError,
     maxTicketsPerUser,
     setMaxTicketsPerUser,
     bannerMedia,
@@ -165,6 +168,9 @@ export function EventCreateWizard() {
             setStartTime={setStartTime}
             selectedVenueId={selectedVenueId}
             setSelectedVenueId={setSelectedVenueId}
+            createVenue={createVenue}
+            isCreatingVenue={isCreatingVenue}
+            venueError={venueError}
             handleProceedToMedia={handleProceedToMedia}
             isCreatingDraft={isCreatingDraft}
           />

@@ -6,7 +6,7 @@ import { adminApi } from "@/features/admin/api/admin-api"
 import { useEffect, useState } from "react"
 
 import { getApiErrorMessage } from "@/lib/api/result"
-import type { AdminNotification, CategoryResponse, VenueResponse } from "../model/admin-types"
+import type { AdminNotification, CategoryResponse } from "../model/admin-types"
 
 export function useAdminDashboard() {
   const [notification, setNotification] = useState<AdminNotification | null>(null)
@@ -19,10 +19,6 @@ export function useAdminDashboard() {
 
   const [isLoadingCategories, setIsLoadingCategories] = useState(true)
 
-  const [venues, setVenues] = useState<VenueResponse[]>([])
-
-  const [isLoadingVenues, setIsLoadingVenues] = useState(true)
-
   const [failedOutboxCount, setFailedOutboxCount] = useState(0)
 
   const [isLoadingOutbox, setIsLoadingOutbox] = useState(true)
@@ -33,15 +29,13 @@ export function useAdminDashboard() {
       try {
         const results = await Promise.all([
           catalogApi.getCategories(),
-          catalogApi.getVenues(),
           adminApi.getOutboxStats(),
           adminApi.getPendingEvents(),
         ])
         if (!mounted) return
         setCategories(results[0].data?.data ?? [])
-        setVenues(results[1].data?.data ?? [])
-        setFailedOutboxCount(results[2].data?.data?.failedCount ?? 0)
-        setPendingCount(results[3].data?.data?.totalElements ?? 0)
+        setFailedOutboxCount(results[1].data?.data?.failedCount ?? 0)
+        setPendingCount(results[2].data?.data?.totalElements ?? 0)
       } catch (error) {
         if (mounted)
           setNotification({
@@ -51,7 +45,6 @@ export function useAdminDashboard() {
       } finally {
         if (mounted) {
           setIsLoadingCategories(false)
-          setIsLoadingVenues(false)
           setIsLoadingOutbox(false)
           setIsLoadingPendingEvents(false)
         }
@@ -70,8 +63,6 @@ export function useAdminDashboard() {
     isLoadingPendingEvents,
     categories,
     isLoadingCategories,
-    venues,
-    isLoadingVenues,
     failedOutboxCount,
     isLoadingOutbox,
   }

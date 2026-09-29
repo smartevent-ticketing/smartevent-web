@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { ArrowRight, Building2, CalendarCheck2, Inbox, Tags } from "lucide-react"
+import { ArrowRight, CalendarCheck2, Inbox, Tags } from "lucide-react"
 import { ActionFeedback } from "@/components/shared/action-feedback"
 import { useAdminDashboard } from "@/features/admin/hooks/use-dashboard"
 
@@ -13,13 +13,10 @@ export function AdminDashboardPanel() {
     isLoadingPendingEvents,
     categories,
     isLoadingCategories,
-    venues,
-    isLoadingVenues,
     failedOutboxCount,
     isLoadingOutbox,
   } = useAdminDashboard()
-  const loading =
-    isLoadingPendingEvents || isLoadingCategories || isLoadingVenues || isLoadingOutbox
+  const loading = isLoadingPendingEvents || isLoadingCategories || isLoadingOutbox
 
   const metrics = [
     {
@@ -39,15 +36,6 @@ export function AdminDashboardPanel() {
       icon: Tags,
       color: "text-[#7653aa]",
       background: "bg-[#f3edfa]",
-    },
-    {
-      label: "Địa điểm",
-      value: venues.length,
-      detail: "Không gian tổ chức",
-      href: "/admin/venues",
-      icon: Building2,
-      color: "text-[#286c8b]",
-      background: "bg-[#eaf4fa]",
     },
     {
       label: "Gửi lỗi",
@@ -99,7 +87,7 @@ export function AdminDashboardPanel() {
             </span>
           )}
         </div>
-        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
           {metrics.map(({ label, value, detail, href, icon: Icon, color, background }) => (
             <Link
               key={href}
