@@ -1,6 +1,6 @@
 # Đối chiếu chức năng frontend và backend
 
-Tài liệu này ghi lại các commit local của đợt hoàn thiện ngày 29/09/2026. Mỗi hàng chỉ ra phần giao diện tương ứng với xử lý phía máy chủ. Dấu `—` nghĩa là đợt này chỉ thay đổi một phía; phía còn lại dùng API hoặc mã đã có trước đó. Hai repository có lịch sử Git riêng và hiện chưa được đẩy lên remote.
+Tài liệu này ghi lại các commit của đợt hoàn thiện từ ngày 29/09/2026. Mỗi hàng chỉ ra phần giao diện tương ứng với xử lý phía máy chủ. Dấu `—` nghĩa là đợt đó chỉ thay đổi một phía; phía còn lại dùng API hoặc mã đã có trước đó. Hai repository có lịch sử Git riêng.
 
 | Chức năng | Backend | Frontend | Điểm ghép / phạm vi |
 | --- | --- | --- | --- |
@@ -8,7 +8,9 @@ Tài liệu này ghi lại các commit local của đợt hoàn thiện ngày 29
 | Giới hạn vé mỗi tài khoản, chống mua đồng thời | `b127fef` | `dac400d`, `d722548` | `maxTicketsPerUser`, bộ đếm theo sự kiện/đợt bán, kiểm tra lại khi giữ chỗ. |
 | Hoàn tất bản nháp và gửi duyệt | `9b07652` | `2605769`, `d722548` | `POST /api/v1/events/{eventId}/complete-setup`; cấu hình vé trong một giao dịch. |
 | Sơ đồ ghế và trạng thái thực | `4c97be1` | `dac400d`, `b2f40a6` | `GET /api/v1/areas/{areaId}/seats/available`; chọn ghế và quản lý ghế. |
-| Chỉ Admin được sửa địa điểm chung | `a0df958` | `3ab62df` | `PUT /api/v1/venues/{id}`. |
+| Chỉ Admin được sửa địa điểm chung (hành vi cũ, đã thay thế) | `a0df958` | `3ab62df` | Không còn API ghi địa điểm cho Admin. |
+| Organizer chọn hoặc tạo địa điểm | `9282ddf` | `b4d81ca` | `GET/POST /api/v1/venues` trong wizard tạo sự kiện; bỏ màn quản lý địa điểm của Admin. |
+| Thêm đợt bán cho sự kiện đã xuất bản | `7689de2`, `62684b7` | `d4f90f9`, `cba6ef5` | Chỉ trước giờ bắt đầu và khi còn sức chứa; đợt đã đóng vẫn giữ số vé đã bán hoặc đang giữ chỗ; sự kiện đã hủy không được mở bán lại. |
 | Thanh toán mới qua VNPay | `0c8d86b` | `cb4fa99` | Tạo đơn và thanh toán chỉ nhận `VNPAY`; trang kết quả đọc trạng thái backend. |
 | Người mua gửi hồ sơ hỗ trợ hoàn tiền | `69358e8` | `79f9ca0`, `daf4bfa` | `GET/POST /api/v1/orders/{orderId}/refund-review`; Admin cập nhật thủ công. |
 | Cập nhật ảnh đại diện | `3f075cf` | `9b7fe07` | `PUT /api/v1/auth/me/avatar` và URL ảnh từ Storage. |

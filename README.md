@@ -14,8 +14,8 @@ Giao diện khám phá sự kiện, mua vé, quản lý chương trình và ki�
 | --- | --- |
 | Khách tham quan | Tìm kiếm sự kiện, xem hạng vé, đợt bán và số vé còn lại. |
 | Người mua | Đăng ký/đăng nhập, cập nhật ảnh đại diện, chọn vé đứng hoặc ghế, giữ chỗ, thanh toán VNPay, xem đơn, vé QR, hóa đơn và gửi yêu cầu hỗ trợ hoàn tiền. |
-| Ban tổ chức | Tạo sự kiện, tải ảnh, cấu hình khu vực/ghế/hạng vé/đợt bán, gửi duyệt và theo dõi tồn kho. |
-| Quản trị viên | Duyệt sự kiện, quản lý danh mục và địa điểm, tìm người dùng và cấp role, theo dõi outbox, xử lý yêu cầu hoàn tiền. |
+| Ban tổ chức | Tạo sự kiện, chọn hoặc tạo địa điểm, tải ảnh, cấu hình khu vực/ghế/hạng vé/đợt bán, gửi duyệt và theo dõi tồn kho. Có thể tạo thêm đợt bán khi sự kiện đã mở bán nhưng chưa bắt đầu và vẫn còn sức chứa. |
+| Quản trị viên | Duyệt sự kiện, quản lý danh mục, tìm người dùng và cấp role, theo dõi outbox, xử lý yêu cầu hoàn tiền. |
 | Nhân viên cổng | Chọn sự kiện/cổng, quét mã vé và xem lịch sử check-in. |
 
 ```mermaid
@@ -90,7 +90,7 @@ src/
 ├── app/                 # route group, page, layout và auth route handlers
 ├── features/
 │   ├── account/         # vé, đơn, hóa đơn, hồ sơ, hỗ trợ hoàn tiền
-│   ├── admin/           # duyệt, danh mục, địa điểm, outbox
+│   ├── admin/           # duyệt, danh mục, người dùng, outbox
 │   ├── auth/            # phiên đăng nhập và biểu mẫu xác thực
 │   ├── booking/         # chọn ghế, giỏ vé, giữ chỗ, checkout
 │   ├── catalog/         # danh mục và trang chi tiết sự kiện
@@ -132,7 +132,7 @@ flowchart LR
 
 Wizard tạo sự kiện lưu bản nháp bằng `POST /api/v1/events` để có mã sự kiện cho ảnh. Khi gửi duyệt, FE gọi một lần `POST /api/v1/events/{eventId}/complete-setup`; backend tạo khu vực, ghế, hạng vé, đợt bán và chuyển sang chờ duyệt trong cùng một giao dịch. Nếu lỗi, bản nháp và ảnh vẫn có thể mở để sửa; cấu hình vé của lần gửi lỗi không được lưu dở. FE cũng lấy giới hạn vé theo sự kiện và đợt bán của tài khoản trước khi đặt, còn backend kiểm tra lại lúc giữ chỗ.
 
-Màn quản trị có thao tác sửa danh mục, địa điểm và cấp thêm role cho người dùng. Quyền mới có hiệu lực sau khi tài khoản đăng nhập lại; màn hình hiện chỉ cấp thêm role, chưa thu hồi role. Ban tổ chức có thể sắp xếp ảnh bộ sưu tập, phân trang sơ đồ ghế, thêm hoặc xóa ghế lẻ khi sự kiện còn cho phép chỉnh sửa cấu hình. Các thao tác này gọi API thật và hiển thị lỗi từ máy chủ khi không đủ quyền hoặc vượt sức chứa.
+Màn quản trị có thao tác sửa danh mục và cấp thêm role cho người dùng. Quyền mới có hiệu lực sau khi tài khoản đăng nhập lại; màn hình hiện chỉ cấp thêm role, chưa thu hồi role. Ban tổ chức chọn địa điểm có sẵn hoặc tạo địa điểm ngay trong wizard sự kiện. Ban tổ chức cũng có thể tạo thêm đợt bán khi sự kiện đã xuất bản nhưng chưa bắt đầu; vé đã bán hoặc đang giữ chỗ của đợt đóng vẫn chiếm sức chứa. Các thao tác này gọi API thật và hiển thị lỗi từ máy chủ khi không đủ quyền hoặc vượt sức chứa.
 
 ## Kiểm thử
 
