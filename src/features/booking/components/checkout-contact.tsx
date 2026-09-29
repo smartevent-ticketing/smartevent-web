@@ -5,83 +5,55 @@ import { useCheckout } from "@/features/booking/hooks/use-checkout"
 
 type Props = Pick<
   ReturnType<typeof useCheckout>,
-  | "setEnteredFullName"
-  | "setEnteredEmail"
-  | "setEnteredPhone"
-  | "customerNote"
-  | "setCustomerNote"
-  | "fullName"
-  | "email"
-  | "phone"
+  "customerNote" | "setCustomerNote" | "fullName" | "email" | "phone"
 >
 
-export function CheckoutContact({
-  setEnteredFullName,
-  setEnteredEmail,
-  setEnteredPhone,
-  customerNote,
-  setCustomerNote,
-  fullName,
-  email,
-  phone,
-}: Props) {
+export function CheckoutContact({ customerNote, setCustomerNote, fullName, email, phone }: Props) {
   return (
     <>
       <div className="bg-white rounded-3xl p-6 border border-outline-variant/60 shadow-sm space-y-6">
         <div className="flex items-center justify-between border-b border-outline-variant/60 pb-4">
-          <h3 className="text-base font-bold text-on-surface">Thông tin người nhận vé</h3>
+          <h3 className="text-base font-bold text-on-surface">Thông tin tài khoản nhận vé</h3>
           <span className="text-xs text-primary font-semibold">
-            Vé điện tử sẽ gửi qua Email & SMS
+            Vé điện tử và hóa đơn được gửi qua email tài khoản
           </span>
         </div>
 
         <div className="space-y-4">
           <div>
             <label className="text-xs font-bold text-on-surface block mb-1.5">
-              Họ và tên người nhận <span className="text-red-500">*</span>
+              Họ và tên tài khoản
             </label>
             <div className="relative">
               <User className="absolute left-3.5 top-1/2 -translate-y-1/2 size-4 text-on-surface-variant" />
-              <input
-                type="text"
-                value={fullName}
-                onChange={(e) => setEnteredFullName(e.target.value)}
-                placeholder="Nguyễn Văn A"
-                className="w-full h-11 pl-10 pr-4 rounded-xl border border-outline-variant/80 bg-white text-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none transition"
-              />
+              <div className="h-11 pl-10 pr-4 rounded-xl border border-outline-variant/80 bg-surface-container-low text-sm flex items-center">
+                {fullName || "Chưa cập nhật"}
+              </div>
             </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="text-xs font-bold text-on-surface block mb-1.5">
-                Địa chỉ Email nhận vé <span className="text-red-500">*</span>
+                Email tài khoản nhận vé
               </label>
               <div className="relative">
                 <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 size-4 text-on-surface-variant" />
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEnteredEmail(e.target.value)}
-                  placeholder="email@domain.com"
-                  className="w-full h-11 pl-10 pr-4 rounded-xl border border-outline-variant/80 bg-white text-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none transition"
-                />
+                <div className="h-11 pl-10 pr-4 rounded-xl border border-outline-variant/80 bg-surface-container-low text-sm flex items-center break-all">
+                  {email || "Chưa cập nhật"}
+                </div>
               </div>
             </div>
 
             <div>
               <label className="text-xs font-bold text-on-surface block mb-1.5">
-                Số điện thoại liên hệ <span className="text-red-500">*</span>
+                Số điện thoại tài khoản
               </label>
               <div className="relative">
                 <Phone className="absolute left-3.5 top-1/2 -translate-y-1/2 size-4 text-on-surface-variant" />
-                <input
-                  type="tel"
-                  value={phone}
-                  onChange={(e) => setEnteredPhone(e.target.value)}
-                  placeholder="0912345678"
-                  className="w-full h-11 pl-10 pr-4 rounded-xl border border-outline-variant/80 bg-white text-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none transition"
-                />
+                <div className="h-11 pl-10 pr-4 rounded-xl border border-outline-variant/80 bg-surface-container-low text-sm flex items-center">
+                  {phone || "Chưa cập nhật"}
+                </div>
               </div>
             </div>
           </div>

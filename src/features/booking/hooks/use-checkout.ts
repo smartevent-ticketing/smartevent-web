@@ -9,6 +9,7 @@ import { useRouter, useSearchParams } from "next/navigation"
 
 import type { components } from "@/lib/api/schema"
 import { useAuth } from "@/features/auth"
+import { ApiRequestError, getApiErrorMessage } from "@/lib/api/result"
 type ReservationResponse = components["schemas"]["ReservationResponse"]
 
 export function useCheckout() {
@@ -30,19 +31,11 @@ export function useCheckout() {
 
   const inFlight = useRef(false)
 
-  const [enteredFullName, setEnteredFullName] = useState<string | null>(null)
-
-  const [enteredEmail, setEnteredEmail] = useState<string | null>(null)
-
-  const [enteredPhone, setEnteredPhone] = useState<string | null>(null)
-
   const [customerNote, setCustomerNote] = useState("")
 
-  const fullName = enteredFullName ?? (user?.fullName || "")
-
-  const email = enteredEmail ?? (user?.email || "")
-
-  const phone = enteredPhone ?? (user?.phone || "")
+  const fullName = user?.fullName || ""
+  const email = user?.email || ""
+  const phone = user?.phone || ""
 
   useEffect(() => {
     let isMounted = true
@@ -70,9 +63,13 @@ export function useCheckout() {
         } else if (isMounted) {
           setErrorMessage("Không tìm thấy phiên giữ chỗ hoặc phiên đã kết thúc.")
         }
-      } catch {
+      } catch (error) {
         if (isMounted) {
-          setErrorMessage("Lỗi kết nối máy chủ để tải thông tin giữ chỗ.")
+          setErrorMessage(
+            error instanceof ApiRequestError && error.status === 404
+              ? "Không tìm thấy phiên giữ chỗ hoặc phiên đã kết thúc."
+              : getApiErrorMessage(error, "Không thể tải thông tin giữ chỗ."),
+          )
         }
       } finally {
         if (isMounted) {
@@ -117,17 +114,18 @@ export function useCheckout() {
         },
       })
 
-      if (res.data?.data?.id) {
-        const order = res.data.data
-        router.push(
-          `/payment?orderId=${order.id}&orderCode=${order.orderCode}&amount=${order.totalAmount}`,
-        )
+      const orderId = res.data?.data?.id
+      if (orderId) {
+        router.push(`/payment?orderId=${encodeURIComponent(orderId)}`)
       } else {
         setErrorMessage("Không thể tạo đơn hàng từ phiên giữ chỗ này. Vui lòng thử lại.")
       }
-    } catch {
+    } catch (error) {
       setErrorMessage(
-        "Tạo đơn hàng thất bại. Phiên giữ chỗ có thể đã hết hạn hoặc vé không còn khả dụng.",
+        getApiErrorMessage(
+          error,
+          "Tạo đơn hàng thất bại. Phiên giữ chỗ có thể đã hết hạn hoặc vé không còn khả dụng.",
+        ),
       )
     } finally {
       inFlight.current = false
@@ -150,9 +148,6 @@ export function useCheckout() {
     errorMessage,
     setErrorMessage,
     isProcessing,
-    setEnteredFullName,
-    setEnteredEmail,
-    setEnteredPhone,
     customerNote,
     setCustomerNote,
     fullName,

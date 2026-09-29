@@ -1,12 +1,21 @@
 import type { FetchOptions } from "openapi-fetch"
-import { apiClient } from "@/lib/api/client"
+import { apiClient, type ApiPaths } from "@/lib/api/client"
 import { requireApiSuccess } from "@/lib/api/result"
-import type { paths } from "@/lib/api/schema"
-import type { EventSetupPaths } from "@/lib/api/event-setup-contract"
-
-type ApiPaths = paths & EventSetupPaths
 
 export const bookingApi = {
+  getMyPhaseCounter: (salePhaseId: string) =>
+    requireApiSuccess(
+      apiClient.GET("/api/v1/sale-phases/{salePhaseId}/my-counter", {
+        params: { path: { salePhaseId } },
+      }),
+    ),
+
+  getMyEventCounter: (eventId: string) =>
+    requireApiSuccess(
+      apiClient.GET("/api/v1/events/{eventId}/my-counter", {
+        params: { path: { eventId } },
+      }),
+    ),
   getAvailableSeats: (
     options: Omit<
       FetchOptions<ApiPaths["/api/v1/areas/{areaId}/seats/available"]["get"]>,

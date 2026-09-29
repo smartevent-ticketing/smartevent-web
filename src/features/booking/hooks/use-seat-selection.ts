@@ -1,5 +1,5 @@
 "use client"
-import { useRef, useState } from "react"
+import { useCallback, useRef, useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import type { components } from "@/lib/api/schema"
 import { getApiErrorMessage } from "@/lib/api/result"
@@ -7,6 +7,11 @@ import { useClock } from "@/hooks/use-clock"
 import { useAuth } from "@/features/auth"
 import { useEventCatalog, selectSalePhase } from "@/features/catalog"
 import { bookingApi } from "../api/booking-api"
+import {
+  isSeatSelectable,
+  sameSeatIds,
+  selectAvailableSeats,
+} from "../model/available-seat-selection"
 import { buildReservationItems } from "../model/reservation-selection"
 import { useAvailableSeats } from "./use-available-seats"
 import { useActiveReservation } from "./use-active-reservation"
@@ -37,12 +42,20 @@ export function useSeatSelection({ eventId }: { eventId: string }) {
     params.get("phase") ?? undefined,
     useClock(),
   )
-  const seats = useAvailableSeats(selectedAreaId, isSeated)
-  const active = useActiveReservation(event?.id, isAuthenticated)
   const [selection, setSelection] = useState<Seat[]>([])
-  const selectedSeats = selection.filter((seat) =>
-    seats.availableSeats.some((available) => available.id === seat.id),
+  const onSeatsLoaded = useCallback(
+    (loadedAreaId: string, refreshed: Seat[]) => {
+      if (loadedAreaId !== selectedAreaId) return
+      setSelection((previous) => {
+        const current = selectAvailableSeats(previous, refreshed)
+        return sameSeatIds(previous, current) ? previous : current
+      })
+    },
+    [selectedAreaId],
   )
+  const seats = useAvailableSeats(selectedAreaId, isSeated, onSeatsLoaded)
+  const active = useActiveReservation(event?.id, isAuthenticated)
+  const selectedSeats = selectAvailableSeats(selection, seats.availableSeats)
   const [quantity, setQuantity] = useState(() => {
     const value = Number(params.get("qty") ?? 1)
     return Number.isInteger(value) && value > 0 ? value : 1
@@ -58,10 +71,12 @@ export function useSeatSelection({ eventId }: { eventId: string }) {
     setErrorMessage(null)
   }
   function handleToggleSeat(seat: Seat) {
-    if (selectedSeats.some((item) => item.id === seat.id))
+    const current = seats.availableSeats.find((item) => item.id === seat.id)
+    if (!current || !isSeatSelectable(current) || seats.isLoadingSeats) return
+    if (selectedSeats.some((item) => item.id === current.id))
       setSelection(selectedSeats.filter((item) => item.id !== seat.id))
     else if (selectedSeats.length < maxAllowed) {
-      setSelection([...selectedSeats, seat])
+      setSelection([...selectedSeats, current])
       setErrorMessage(null)
     } else setErrorMessage(`Bạn đã chọn đủ số ghế tối đa (${maxAllowed} vé) cho đợt bán này.`)
   }
@@ -94,6 +109,16 @@ export function useSeatSelection({ eventId }: { eventId: string }) {
     setErrorMessage(null)
     try {
       if (!event?.id) throw new Error("Không tìm thấy sự kiện.")
+      if (isSeated && selectedSeats.length > 0) {
+        const response = await bookingApi.getAvailableSeats({
+          params: { path: { areaId: selectedAreaId } },
+        })
+        const current = selectAvailableSeats(selectedSeats, response.data?.data ?? [])
+        if (!sameSeatIds(selectedSeats, current)) {
+          setSelection(current)
+          throw new Error("Một số ghế vừa hết chỗ. Vui lòng chọn lại ghế còn trống.")
+        }
+      }
       const items = buildReservationItems({
         ticketTypeId: effectiveTicketTypeId,
         phase,

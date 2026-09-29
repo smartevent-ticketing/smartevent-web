@@ -18,9 +18,6 @@ export function CheckoutView() {
     errorMessage,
     setErrorMessage,
     isProcessing,
-    setEnteredFullName,
-    setEnteredEmail,
-    setEnteredPhone,
     customerNote,
     setCustomerNote,
     fullName,
@@ -116,11 +113,17 @@ export function CheckoutView() {
           <div className="flex items-center gap-2">
             <Timer className={`size-5 text-white ${!isExpired ? "animate-pulse" : ""}`} />
             <span className="text-sm font-semibold text-white">
-              {isExpired ? "Phiên giữ chỗ đã hết hạn!" : "Vé và ghế đang được bảo lưu trong:"}
+              {reservation.status === "CONFIRMED"
+                ? "Phiên giữ chỗ đã thanh toán"
+                : reservation.status === "CANCELLED"
+                  ? "Phiên giữ chỗ đã hủy"
+                  : isExpired
+                    ? "Phiên giữ chỗ đã hết hạn!"
+                    : "Vé và ghế đang được bảo lưu trong:"}
             </span>
           </div>
           <span className="font-mono text-xl font-bold text-white tracking-widest">
-            {isExpired ? "00:00" : timerDisplay}
+            {isExpired ? "—" : timerDisplay}
           </span>
         </div>
 
@@ -130,9 +133,6 @@ export function CheckoutView() {
             {/* Customer Info Card */}
             <CheckoutContact
               {...{
-                setEnteredFullName,
-                setEnteredEmail,
-                setEnteredPhone,
                 customerNote,
                 setCustomerNote,
                 fullName,

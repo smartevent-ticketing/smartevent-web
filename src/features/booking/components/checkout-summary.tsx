@@ -1,6 +1,6 @@
 "use client"
 
-import { Calendar, Loader2, MapPin, ShieldCheck } from "lucide-react"
+import { Calendar, Loader2, MapPin, ShieldCheck, Ticket } from "lucide-react"
 import { useCheckout } from "@/features/booking/hooks/use-checkout"
 
 type Props = Pick<
@@ -26,11 +26,9 @@ export function CheckoutSummary({
 
           {/* Event mini card */}
           <div className="flex items-center gap-3">
-            <img
-              src="https://images.unsplash.com/photo-1501386761578-eac5c94b800a?auto=format&fit=crop&q=80&w=300"
-              alt="Event thumbnail"
-              className="size-20 rounded-xl object-cover shrink-0"
-            />
+            <div className="size-20 rounded-xl bg-primary/10 text-primary flex items-center justify-center shrink-0">
+              <Ticket className="size-8" aria-hidden="true" />
+            </div>
             <div className="space-y-1 min-w-0">
               <h4 className="text-sm font-bold text-on-surface line-clamp-2">{eventName}</h4>
               <p className="text-xs text-on-surface-variant flex items-center gap-1">
@@ -79,10 +77,6 @@ export function CheckoutSummary({
               <span>{totalAmount.toLocaleString("vi-VN")} ₫</span>
             </div>
             <div className="flex justify-between">
-              <span>Thuế VAT (8%)</span>
-              <span>Đã bao gồm trong giá vé</span>
-            </div>
-            <div className="flex justify-between">
               <span>Phí cổng thanh toán VNPay</span>
               <span className="text-green-600 font-semibold">0 ₫ (Miễn phí)</span>
             </div>
@@ -107,7 +101,11 @@ export function CheckoutSummary({
                 <span>Đang tạo đơn & kết nối VNPay...</span>
               </>
             ) : (
-              <span>Thanh toán ngay qua VNPay</span>
+              <span>
+                {isExpired
+                  ? "Phiên giữ chỗ không còn thanh toán được"
+                  : "Thanh toán ngay qua VNPay"}
+              </span>
             )}
           </button>
 

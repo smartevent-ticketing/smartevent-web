@@ -34,5 +34,20 @@ export async function requireApiSuccess<T extends { response: Response; error?: 
 }
 
 export function getApiErrorMessage(error: unknown, fallback: string): string {
+  if (error && typeof error === "object") {
+    const code = "code" in error ? String((error as { code?: unknown }).code) : undefined
+    const message =
+      "message" in error ? String((error as { message?: unknown }).message) : undefined
+
+    if (
+      code === "EXCEEDED_TICKET_LIMIT" ||
+      code === "MAX_PER_USER_EXCEEDED" ||
+      message?.includes("EXCEEDED_TICKET_LIMIT") ||
+      message?.includes("vượt quá số lượng vé") ||
+      message?.includes("giới hạn số vé")
+    ) {
+      return "Bạn đã mua giới hạn số vé cho phép"
+    }
+  }
   return error instanceof Error ? error.message : fallback
 }
