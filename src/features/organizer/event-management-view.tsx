@@ -436,6 +436,8 @@ export function EventManagementView({ eventId }: EventManagementViewProps) {
 
         {activeTab === "sale-phases" && (
           <SalePhasesTab
+            eventStatus={eventData.status}
+            eventStartTime={eventData.startTime}
             eventEndTime={eventData.endTime}
             salePhases={salePhases}
             ticketTypes={ticketTypes}

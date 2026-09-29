@@ -39,6 +39,7 @@ export interface SalePhaseItem {
   name: string
   price: number
   quantity: number
+  occupiedQuantity?: number
   saleStartAt: string
   saleEndAt: string
   status?: SalePhaseStatus

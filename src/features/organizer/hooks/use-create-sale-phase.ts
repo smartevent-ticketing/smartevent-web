@@ -1,7 +1,11 @@
 "use client"
 
 import { useMemo, useState } from "react"
-import { hasSalePhaseOverlap, remainingCapacityForTier } from "../model/sale-phase-availability"
+import {
+  allocatedQuantityForPhase,
+  hasSalePhaseOverlap,
+  remainingCapacityForTier,
+} from "../model/sale-phase-availability"
 import type {
   CreateSalePhaseDialogProps,
   TierPhaseConfig,
@@ -55,7 +59,7 @@ export function useCreateSalePhase({
         const initialQty = maxAllowed > 0 ? Math.min(50, maxAllowed) : ""
 
         initial[t.id] = {
-          selected: true, // Default selected for speed
+          selected: maxAllowed > 0,
           basePrice: initialBase,
           discountPercent: 0,
           price: initialBase,
@@ -169,11 +173,10 @@ export function useCreateSalePhase({
         // Calculate remaining capacity for this area (considering already saved phases in DB)
         const existingAreaQty = salePhases
           .filter((p) => {
-            if (p.status === "CLOSED") return false
             const tier = ticketTypes.find((ot) => ot.id === p.ticketTypeId)
             return (tier?.areaId && tier.areaId === areaKey) || p.ticketTypeId === areaKey
           })
-          .reduce((sum, p) => sum + p.quantity, 0)
+          .reduce((sum, p) => sum + allocatedQuantityForPhase(p), 0)
 
         const remainingForArea = Math.max(0, group.totalAreaCapacity - existingAreaQty)
 

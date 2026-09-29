@@ -8,6 +8,7 @@ import type {
   EventManagementLoadResult,
 } from "../model/event-management.types"
 import type { EventSubmissionReadiness, SalePhaseStatus } from "@/lib/api/event-setup-contract"
+import type { components } from "@/lib/api/schema"
 
 export function parseEventData(raw: any): EventManagementData {
   return {
@@ -126,7 +127,7 @@ export function computePhaseStats(phases: SalePhaseItem[]): {
  * Service orchestrating parallel data retrieval and mapping for event management
  */
 export async function loadEventManagementData(eventId: string): Promise<EventManagementLoadResult> {
-  const [eventRes, areasRes, typesRes, phasesRes, ticketsRes, readinessRes] =
+  const [eventRes, areasRes, typesRes, phasesRes, ticketsRes, readinessRes, inventoryRes] =
     await Promise.allSettled([
       organizerApi.getEvent(eventId),
       organizerApi.getAreas(eventId),
@@ -134,6 +135,7 @@ export async function loadEventManagementData(eventId: string): Promise<EventMan
       organizerApi.getSalePhases(eventId),
       organizerApi.getEventTickets(eventId),
       organizerApi.getSubmissionReadiness(eventId),
+      organizerApi.getInventory(eventId),
     ])
 
   let event: EventManagementData | null = null
@@ -162,6 +164,19 @@ export async function loadEventManagementData(eventId: string): Promise<EventMan
       ? ((phasesRes.value.data as any)?.data ?? phasesRes.value.data)
       : []
   const salePhases = parseSalePhases(rawPhases)
+  const inventory: components["schemas"]["InventoryCounterResponse"][] =
+    inventoryRes.status === "fulfilled" ? (inventoryRes.value.data?.data ?? []) : []
+  const occupiedByPhase = new Map(
+    inventory
+      .filter((counter) => counter.salePhaseId)
+      .map((counter) => [
+        counter.salePhaseId,
+        (counter.soldQuantity ?? 0) + (counter.heldQuantity ?? 0),
+      ]),
+  )
+  for (const phase of salePhases) {
+    phase.occupiedQuantity = occupiedByPhase.get(phase.id)
+  }
 
   // Compute Revenue & Ticket Totals
   if (event) {

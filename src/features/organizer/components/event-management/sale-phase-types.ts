@@ -2,6 +2,8 @@ import type { SalePhaseStatus } from "@/lib/api/event-setup-contract"
 import type { CreateSalePhaseInput, SalePhaseItem } from "../../model/event-management.types"
 
 export interface SalePhasesTabProps {
+  eventStatus: string
+  eventStartTime?: string
   eventEndTime?: string
   salePhases: SalePhaseItem[]
   ticketTypes: Array<{

@@ -18,6 +18,8 @@ import {
 import { SalePhaseEditDialog } from "./sale-phase-edit-dialog"
 import { CreateSalePhaseDialog } from "./sale-phase-create-dialog"
 import { hasSalePhaseOverlap } from "../../model/sale-phase-availability"
+import { remainingCapacityForTier } from "../../model/sale-phase-availability"
+import { useClock } from "@/hooks/use-clock"
 import type { SalePhaseItem } from "../../model/event-management.types"
 import type { SalePhaseStatus } from "@/lib/api/event-setup-contract"
 import type { SalePhasesTabProps } from "./sale-phase-types"
@@ -57,6 +59,8 @@ const STATUS_CONFIG: Record<SalePhaseStatus, { label: string; badgeClass: string
   }
 
 export function SalePhasesTab({
+  eventStatus,
+  eventStartTime,
   eventEndTime,
   salePhases,
   ticketTypes,
@@ -67,6 +71,14 @@ export function SalePhasesTab({
   onUpdateSalePhase,
   canEditConfig,
 }: SalePhasesTabProps) {
+  const now = useClock(15000)
+  const beforeEventStart = Boolean(eventStartTime && Date.parse(eventStartTime) > now)
+  const publishedBeforeStart = eventStatus === "PUBLISHED" && beforeEventStart
+  const canCreatePhase = canEditConfig || publishedBeforeStart
+  const hasRemainingCapacity = ticketTypes.some(
+    (tier) => remainingCapacityForTier(tier.id, ticketTypes, areas, salePhases) > 0,
+  )
+  const canStartSales = eventStatus !== "PUBLISHED" || beforeEventStart
   const [showAddModal, setShowAddModal] = useState(false)
   const [updatingPhaseId, setUpdatingPhaseId] = useState<string | null>(null)
   const [deletingPhaseId, setDeletingPhaseId] = useState<string | null>(null)
@@ -116,20 +128,22 @@ export function SalePhasesTab({
           </p>
         </div>
 
-        {canEditConfig && (
+        {canCreatePhase && (
           <button
             type="button"
-            disabled={ticketTypes.length === 0}
+            disabled={ticketTypes.length === 0 || !hasRemainingCapacity}
             onClick={() => setShowAddModal(true)}
             className={`inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold rounded-xl transition cursor-pointer shadow-xs ${
-              ticketTypes.length === 0
+              ticketTypes.length === 0 || !hasRemainingCapacity
                 ? "bg-slate-200 text-slate-400 cursor-not-allowed"
                 : "bg-primary hover:bg-primary-hover text-white"
             }`}
             title={
               ticketTypes.length === 0
                 ? "Vui lòng tạo ít nhất một hạng vé trước khi thêm đợt bán"
-                : "Thêm đợt mở bán mới cho một hoặc nhiều hạng vé"
+                : !hasRemainingCapacity
+                  ? "Đã phân bổ hết sức chứa. Đóng đợt cũ để trả vé chưa bán về kho."
+                  : "Thêm đợt mở bán mới cho một hoặc nhiều hạng vé"
             }
           >
             <Plus className="size-4" />
@@ -146,6 +160,13 @@ export function SalePhasesTab({
             vé trước khi cấu hình đợt mở bán.
           </span>
         </div>
+      )}
+      {publishedBeforeStart && (
+        <p className="rounded-xl border border-blue-200 bg-blue-50 p-3 text-xs text-blue-800">
+          Sự kiện đang mở bán: bạn có thể thêm đợt mới khi còn vé chưa phân bổ. Nếu vé đang nằm
+          trong đợt cũ, hãy đóng đợt đó trước; vé đã bán hoặc đang giữ chỗ vẫn được tính vào sức
+          chứa.
+        </p>
       )}
 
       {/* Sale Phases List */}
@@ -177,7 +198,7 @@ export function SalePhasesTab({
             const isUpdating = updatingPhaseId === phase.id
             const isDeleting = deletingPhaseId === phase.id
             const canDelete =
-              canEditConfig &&
+              (canEditConfig || (publishedBeforeStart && status === "DRAFT")) &&
               Boolean(onDeleteSalePhase) &&
               status !== "ACTIVE" &&
               status !== "SOLD_OUT"
@@ -303,7 +324,7 @@ export function SalePhasesTab({
                 <div className="pt-2 border-t border-outline-variant/40 flex items-center justify-between gap-2 flex-wrap">
                   <div className="flex items-center gap-2">
                     <span className="text-[11px] text-on-surface-variant">Thao tác:</span>
-                    {canEditConfig && (
+                    {(canEditConfig || (publishedBeforeStart && status === "DRAFT")) && (
                       <button
                         type="button"
                         onClick={() => setEditingPhase(phase)}
@@ -339,7 +360,7 @@ export function SalePhasesTab({
                     ) : (
                       <>
                         {/* Transitions from DRAFT */}
-                        {status === "DRAFT" && (
+                        {status === "DRAFT" && canStartSales && (
                           <>
                             <button
                               type="button"
@@ -362,23 +383,27 @@ export function SalePhasesTab({
                         {/* Transitions from SCHEDULED */}
                         {status === "SCHEDULED" && (
                           <>
-                            <button
-                              type="button"
-                              onClick={() => handleTransition(phase.id, "DRAFT")}
-                              className="px-2.5 py-1 text-[11px] font-semibold bg-blue-50 text-blue-700 hover:bg-blue-100 rounded-lg border border-blue-200 transition inline-flex items-center gap-1 cursor-pointer"
-                              title="Thu hồi về bản nháp để chỉnh sửa ngày giờ hoặc số lượng"
-                            >
-                              <RotateCcw className="size-3" />
-                              <span>Thu hồi về nháp</span>
-                            </button>
-                            <button
-                              type="button"
-                              onClick={() => handleTransition(phase.id, "ACTIVE")}
-                              className="px-2.5 py-1 text-[11px] font-semibold bg-emerald-50 text-emerald-700 hover:bg-emerald-100 rounded-lg border border-emerald-200 transition inline-flex items-center gap-1 cursor-pointer"
-                            >
-                              <Play className="size-3" />
-                              <span>Kích hoạt</span>
-                            </button>
+                            {canStartSales && (
+                              <button
+                                type="button"
+                                onClick={() => handleTransition(phase.id, "DRAFT")}
+                                className="px-2.5 py-1 text-[11px] font-semibold bg-blue-50 text-blue-700 hover:bg-blue-100 rounded-lg border border-blue-200 transition inline-flex items-center gap-1 cursor-pointer"
+                                title="Thu hồi về bản nháp để chỉnh sửa ngày giờ hoặc số lượng"
+                              >
+                                <RotateCcw className="size-3" />
+                                <span>Thu hồi về nháp</span>
+                              </button>
+                            )}
+                            {canStartSales && (
+                              <button
+                                type="button"
+                                onClick={() => handleTransition(phase.id, "ACTIVE")}
+                                className="px-2.5 py-1 text-[11px] font-semibold bg-emerald-50 text-emerald-700 hover:bg-emerald-100 rounded-lg border border-emerald-200 transition inline-flex items-center gap-1 cursor-pointer"
+                              >
+                                <Play className="size-3" />
+                                <span>Kích hoạt</span>
+                              </button>
+                            )}
                             <button
                               type="button"
                               onClick={() => handleTransition(phase.id, "CLOSED")}
@@ -413,14 +438,16 @@ export function SalePhasesTab({
                         {/* Transitions from PAUSED */}
                         {status === "PAUSED" && (
                           <>
-                            <button
-                              type="button"
-                              onClick={() => handleTransition(phase.id, "ACTIVE")}
-                              className="px-2.5 py-1 text-[11px] font-semibold bg-emerald-50 text-emerald-700 hover:bg-emerald-100 rounded-lg border border-emerald-200 transition inline-flex items-center gap-1 cursor-pointer"
-                            >
-                              <Play className="size-3" />
-                              <span>Tiếp tục bán</span>
-                            </button>
+                            {canStartSales && (
+                              <button
+                                type="button"
+                                onClick={() => handleTransition(phase.id, "ACTIVE")}
+                                className="px-2.5 py-1 text-[11px] font-semibold bg-emerald-50 text-emerald-700 hover:bg-emerald-100 rounded-lg border border-emerald-200 transition inline-flex items-center gap-1 cursor-pointer"
+                              >
+                                <Play className="size-3" />
+                                <span>Tiếp tục bán</span>
+                              </button>
+                            )}
                             <button
                               type="button"
                               onClick={() => handleTransition(phase.id, "CLOSED")}
@@ -455,9 +482,8 @@ export function SalePhasesTab({
         </div>
         <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px] list-disc list-inside text-on-surface-variant leading-relaxed">
           <li>
-            <strong>Xóa đợt mở bán:</strong> Các đợt mở bán ở trạng thái Nháp, Đã lên lịch, Tạm dừng
-            hoặc Đã kết thúc đều có thể xóa. Khi xóa, toàn bộ số vé sẽ được trả lại sức chứa khán
-            đài.
+            <strong>Xóa đợt mở bán:</strong> Khi sự kiện đang mở bán, chỉ có thể sửa hoặc xóa đợt
+            còn ở trạng thái Nháp trước giờ bắt đầu sự kiện.
           </li>
           <li>
             <strong>Thu hồi lịch hẹn:</strong> Đợt mở bán ở trạng thái &quot;Đã lên lịch&quot; có
@@ -466,8 +492,8 @@ export function SalePhasesTab({
           </li>
           <li>
             <strong>Bảo toàn số lượng khi Đóng cổng:</strong> Khi một đợt đóng cổng, số vé chưa bán
-            không hề bị mất. Hệ thống tự động hoàn lại hạn ngạch vé chưa bán về sức chứa khán đài để
-            bạn tạo đợt mở bán tiếp theo.
+            được đưa lại vào sức chứa để tạo đợt tiếp theo. Vé đã bán hoặc đang giữ chỗ vẫn chiếm
+            sức chứa.
           </li>
           <li>
             <strong>Tạm dừng bán vé:</strong> Sử dụng trạng thái <em>&quot;Tạm dừng&quot;</em> khi

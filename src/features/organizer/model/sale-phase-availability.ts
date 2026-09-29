@@ -11,6 +11,10 @@ interface AreaCapacity {
   capacity?: number
 }
 
+export function allocatedQuantityForPhase(phase: SalePhaseItem): number {
+  return phase.status === "CLOSED" ? (phase.occupiedQuantity ?? phase.quantity) : phase.quantity
+}
+
 export function remainingCapacityForTier(
   ticketTypeId: string,
   ticketTypes: TicketCapacity[],
@@ -23,12 +27,11 @@ export function remainingCapacityForTier(
   const capacity = area?.capacity ?? tier.totalQuota ?? 0
   const configured = phases
     .filter((phase) => {
-      if (phase.status === "CLOSED") return false
       if (phase.ticketTypeId === tier.id) return true
       const other = ticketTypes.find((item) => item.id === phase.ticketTypeId)
       return Boolean(other?.areaId && tier.areaId && other.areaId === tier.areaId)
     })
-    .reduce((sum, phase) => sum + phase.quantity, 0)
+    .reduce((sum, phase) => sum + allocatedQuantityForPhase(phase), 0)
   return Math.max(0, capacity - configured)
 }
 
@@ -42,7 +45,12 @@ export function hasSalePhaseOverlap(
   const start = Date.parse(startIso)
   const end = Date.parse(endIso)
   return phases.some((phase) => {
-    if (phase.id === excludePhaseId || phase.ticketTypeId !== ticketTypeId) return false
+    if (
+      phase.id === excludePhaseId ||
+      phase.ticketTypeId !== ticketTypeId ||
+      phase.status === "CLOSED"
+    )
+      return false
     const phaseStart = Date.parse(phase.saleStartAt)
     const phaseEnd = Date.parse(phase.saleEndAt)
     return start < phaseEnd && end > phaseStart
