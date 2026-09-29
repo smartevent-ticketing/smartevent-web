@@ -1,6 +1,6 @@
 export function bannerResolutionError(width: number, height: number): string | null {
-  if (!Number.isFinite(width) || !Number.isFinite(height) || width < 1200 || height < 675) {
-    return "Ảnh bìa cần có độ phân giải tối thiểu 1200 × 675 px. Nên dùng 1920 × 1080 px để hiển thị sắc nét."
+  if (!Number.isFinite(width) || !Number.isFinite(height) || width < 1080 || height < 608) {
+    return "Ảnh bìa cần có độ phân giải tối thiểu 1080 × 608 px. Khuyến nghị ảnh ngang gần tỷ lệ 16:9."
   }
   return null
 }

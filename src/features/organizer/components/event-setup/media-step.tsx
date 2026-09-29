@@ -252,7 +252,7 @@ export function EventMediaStep({
                     Nhấn để chọn ảnh hoặc kéo thả vào đây
                   </span>
                   <p className="text-xs text-on-surface-variant mt-1">
-                    Tỷ lệ 16:9 • tối thiểu 1200 × 675 px, nên dùng 1920 × 1080 px • tối đa 10MB
+                    Khuyến nghị ảnh ngang gần 16:9 • tối thiểu 1080 × 608 px • tối đa 10MB
                   </p>
                 </div>
               </div>

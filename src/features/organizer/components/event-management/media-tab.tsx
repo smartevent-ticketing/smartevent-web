@@ -102,8 +102,8 @@ export function MediaTab(props: MediaTabProps) {
               Ảnh bìa sự kiện (Banner) <span className="text-red-500">*</span>
             </label>
             <p className="text-xs text-on-surface-variant">
-              Tỷ lệ khuyến nghị 16:9; tối thiểu 1200 × 675 px, đẹp nhất từ 1920 × 1080 px. Tối đa
-              10MB, định dạng JPG, PNG hoặc WebP.
+              Khuyến nghị ảnh ngang gần 16:9; tối thiểu 1080 × 608 px. Tối đa 10MB, định dạng JPG,
+              PNG hoặc WebP.
             </p>
           </div>
           {bannerMedia && (
@@ -206,7 +206,7 @@ export function MediaTab(props: MediaTabProps) {
                       : "Chưa có ảnh bìa được tải lên"}
                   </span>
                   <p className="text-xs text-on-surface-variant mt-1">
-                    Tỷ lệ 16:9 • Tối thiểu 1200 × 675 px • JPG, PNG, WebP
+                    Khuyến nghị ảnh ngang gần 16:9 • Tối thiểu 1080 × 608 px • JPG, PNG, WebP
                   </p>
                 </div>
               </div>
