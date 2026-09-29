@@ -7,10 +7,16 @@ import { usePaymentResult } from "@/features/payments/hooks/use-payment-result"
 
 type Props = Pick<
   ReturnType<typeof usePaymentResult>,
-  "orderCode" | "status" | "handleManualRetry" | "displayAmount"
+  "orderCode" | "status" | "handleManualRetry" | "displayAmount" | "hasVerifiedOrder"
 >
 
-export function PaymentPending({ orderCode, status, handleManualRetry, displayAmount }: Props) {
+export function PaymentPending({
+  orderCode,
+  status,
+  handleManualRetry,
+  displayAmount,
+  hasVerifiedOrder,
+}: Props) {
   return (
     <>
       {status === "pending_unconfirmed" && (
@@ -24,11 +30,12 @@ export function PaymentPending({ orderCode, status, handleManualRetry, displayAm
               Đang chờ đồng bộ
             </span>
             <h1 className="text-2xl sm:text-3xl font-black text-on-surface">
-              Chưa xác nhận thanh toán
+              {hasVerifiedOrder ? "Chưa xác nhận thanh toán" : "Chưa tải được trạng thái đơn hàng"}
             </h1>
             <p className="text-xs sm:text-sm text-on-surface-variant max-w-md mx-auto leading-relaxed">
-              Cổng thanh toán VNPay đang xử lý giao dịch hoặc hệ thống chưa nhận được thông báo IPN
-              từ ngân hàng.
+              {hasVerifiedOrder
+                ? "Đơn hàng vẫn đang chờ kết quả từ cổng thanh toán."
+                : "Không thể kiểm tra đơn hàng lúc này. Vui lòng đăng nhập và thử kiểm tra lại."}
               <strong> Vui lòng không thực hiện thanh toán lại</strong> để tránh bị trừ tiền nhiều
               lần.
             </p>
@@ -39,12 +46,14 @@ export function PaymentPending({ orderCode, status, handleManualRetry, displayAm
               <span>Mã đơn hàng:</span>
               <span className="font-mono font-bold">{orderCode}</span>
             </div>
-            <div className="flex justify-between">
-              <span>Số tiền:</span>
-              <span className="font-bold">{displayAmount.toLocaleString("vi-VN")} ₫</span>
-            </div>
+            {displayAmount !== undefined && (
+              <div className="flex justify-between">
+                <span>Giá trị đơn hàng:</span>
+                <span className="font-bold">{displayAmount.toLocaleString("vi-VN")} ₫</span>
+              </div>
+            )}
             <p className="text-amber-800 text-[11px] pt-1 border-t border-amber-200">
-              Giao dịch của bạn sẽ được tự động cập nhật ngay khi VNPay hoàn tất đối soát.
+              Chọn “Kiểm tra lại trạng thái” để tải kết quả mới nhất.
             </p>
           </div>
 

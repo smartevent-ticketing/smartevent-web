@@ -39,35 +39,13 @@ export function usePaymentResult() {
     return () => controller.abort()
   }, [orderCode, retryTrigger])
 
-  function formatPayDate(raw?: string | null) {
-    if (!raw || !/^\d{14}$/.test(raw)) return "Chưa có thông tin"
-    return (
-      raw.slice(8, 10) +
-      ":" +
-      raw.slice(10, 12) +
-      ":" +
-      raw.slice(12, 14) +
-      " - " +
-      raw.slice(6, 8) +
-      "/" +
-      raw.slice(4, 6) +
-      "/" +
-      raw.slice(0, 4)
-    )
-  }
-
   return {
     orderCode,
     status,
     pollCount,
-    displayAmount:
-      order?.totalAmount ?? (params.get("vnp_Amount") ? Number(params.get("vnp_Amount")) / 100 : 0),
+    displayAmount: order?.totalAmount,
+    hasVerifiedOrder: Boolean(order),
     errorMessage: orderCode ? null : "Không tìm thấy mã đơn hàng cần xác thực.",
     handleManualRetry: () => setRetryTrigger((value) => value + 1),
-    formatPayDate,
-    vnp_ResponseCode: params.get("vnp_ResponseCode"),
-    vnp_TransactionNo: params.get("vnp_TransactionNo"),
-    vnp_BankCode: params.get("vnp_BankCode"),
-    vnp_PayDate: params.get("vnp_PayDate"),
   }
 }

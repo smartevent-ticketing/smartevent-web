@@ -9,17 +9,13 @@ import { usePaymentResult } from "./hooks/use-payment-result"
 
 export function VNPayReturnView() {
   const {
-    vnp_ResponseCode,
-    vnp_TransactionNo,
-    vnp_BankCode,
-    vnp_PayDate,
     orderCode,
     status,
     pollCount,
     errorMessage,
     handleManualRetry,
     displayAmount,
-    formatPayDate,
+    hasVerifiedOrder,
   } = usePaymentResult()
   return (
     <div className="min-h-screen bg-surface flex items-center justify-center p-4 sm:p-6 lg:p-8">
@@ -30,24 +26,22 @@ export function VNPayReturnView() {
         {/* 2. TRẠNG THÁI: THÀNH CÔNG (PAID) */}
         <PaymentSuccess
           {...{
-            vnp_TransactionNo,
-            vnp_BankCode,
-            vnp_PayDate,
             orderCode,
             status,
             displayAmount,
-            formatPayDate,
           }}
         />
 
         {/* 3. TRẠNG THÁI: CHƯA XÁC NHẬN THANH TOÁN (SAU 5 LẦN VẪN PENDING) */}
-        <PaymentPending {...{ orderCode, status, handleManualRetry, displayAmount }} />
+        <PaymentPending
+          {...{ orderCode, status, handleManualRetry, displayAmount, hasVerifiedOrder }}
+        />
 
         {/* 4. TRẠNG THÁI: THANH TOÁN MUỘN (LATE PAYMENT) */}
-        <PaymentLate {...{ vnp_TransactionNo, orderCode, status, displayAmount }} />
+        <PaymentLate {...{ orderCode, status, displayAmount }} />
 
         {/* 5. TRẠNG THÁI: THẤT BẠI HOẶC BỊ HỦY */}
-        <PaymentFailed {...{ vnp_ResponseCode, orderCode, status, errorMessage }} />
+        <PaymentFailed {...{ orderCode, status, errorMessage }} />
       </div>
     </div>
   )

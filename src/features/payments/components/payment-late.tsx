@@ -5,12 +5,9 @@ import { AlertTriangle, Home } from "lucide-react"
 
 import { usePaymentResult } from "@/features/payments/hooks/use-payment-result"
 
-type Props = Pick<
-  ReturnType<typeof usePaymentResult>,
-  "vnp_TransactionNo" | "orderCode" | "status" | "displayAmount"
->
+type Props = Pick<ReturnType<typeof usePaymentResult>, "orderCode" | "status" | "displayAmount">
 
-export function PaymentLate({ vnp_TransactionNo, orderCode, status, displayAmount }: Props) {
+export function PaymentLate({ orderCode, status, displayAmount }: Props) {
   return (
     <>
       {status === "late_payment" && (
@@ -39,18 +36,14 @@ export function PaymentLate({ vnp_TransactionNo, orderCode, status, displayAmoun
               <span className="text-on-surface-variant">Mã đơn hàng:</span>
               <span className="font-mono font-bold text-on-surface">{orderCode}</span>
             </div>
-            {vnp_TransactionNo && (
+            {displayAmount !== undefined && (
               <div className="flex justify-between">
-                <span className="text-on-surface-variant">Mã giao dịch VNPay:</span>
-                <span className="font-mono text-on-surface">{vnp_TransactionNo}</span>
+                <span className="text-on-surface-variant">Giá trị đơn hàng:</span>
+                <span className="font-bold text-primary">
+                  {displayAmount.toLocaleString("vi-VN")} ₫
+                </span>
               </div>
             )}
-            <div className="flex justify-between">
-              <span className="text-on-surface-variant">Số tiền:</span>
-              <span className="font-bold text-primary">
-                {displayAmount.toLocaleString("vi-VN")} ₫
-              </span>
-            </div>
           </div>
 
           <div className="space-y-3 pt-2">
