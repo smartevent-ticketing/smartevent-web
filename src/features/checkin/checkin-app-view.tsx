@@ -1,4 +1,5 @@
 "use client"
+import { useRef } from "react"
 import { CheckinHistory } from "./components/checkin-history"
 import { ScanResult } from "./components/scan-result"
 import { ScanInput } from "./components/scan-input"
@@ -11,6 +12,11 @@ import { Home, QrCode } from "lucide-react"
 import { useCheckin } from "./hooks/use-checkin"
 
 export function CheckinAppView() {
+  const manualInputRef = useRef<HTMLInputElement>(null)
+  const focusManualInput = () => {
+    manualInputRef.current?.scrollIntoView({ behavior: "smooth", block: "center" })
+    manualInputRef.current?.focus()
+  }
   const {
     events,
     selectedEventId,
@@ -71,10 +77,17 @@ export function CheckinAppView() {
         />
 
         {/* Camera Scanner Viewport */}
-        <ScannerViewport onScan={handleScan} isScanning={isScanning} />
+        <ScannerViewport
+          onScan={handleScan}
+          isScanning={isScanning}
+          onSwitchToManual={focusManualInput}
+        />
 
         {/* Manual Code Entry Form */}
-        <ScanInput {...{ selectedEventId, manualCode, setManualCode, isScanning, handleScan }} />
+        <ScanInput
+          {...{ selectedEventId, manualCode, setManualCode, isScanning, handleScan }}
+          inputRef={manualInputRef}
+        />
 
         {/* Real-time Verification Result Banners */}
         <ScanResult {...{ resultStatus, lastScanned, handleScan }} />

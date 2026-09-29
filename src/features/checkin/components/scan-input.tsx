@@ -1,12 +1,13 @@
 "use client"
 
 import { Loader2 } from "lucide-react"
+import type { RefObject } from "react"
 import { useCheckin } from "@/features/checkin/hooks/use-checkin"
 
 type Props = Pick<
   ReturnType<typeof useCheckin>,
   "selectedEventId" | "manualCode" | "setManualCode" | "isScanning" | "handleScan"
->
+> & { inputRef: RefObject<HTMLInputElement | null> }
 
 export function ScanInput({
   selectedEventId,
@@ -14,11 +15,13 @@ export function ScanInput({
   setManualCode,
   isScanning,
   handleScan,
+  inputRef,
 }: Props) {
   return (
     <>
       <div className="flex gap-2">
         <input
+          ref={inputRef}
           type="text"
           placeholder="Nhập mã vé hoặc chuỗi token QR..."
           value={manualCode}

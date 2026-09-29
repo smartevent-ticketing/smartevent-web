@@ -59,9 +59,13 @@ export function CameraPermissionDeniedView({
 
 interface CameraUnavailableProps {
   onSwitchToManual: () => void
+  unsupportedScanner?: boolean
 }
 
-export function CameraUnavailableView({ onSwitchToManual }: CameraUnavailableProps) {
+export function CameraUnavailableView({
+  onSwitchToManual,
+  unsupportedScanner = false,
+}: CameraUnavailableProps) {
   return (
     <div className="bg-white border border-outline-variant/60 rounded-3xl p-8 sm:p-12 text-center space-y-5 max-w-lg mx-auto shadow-xs">
       <div className="size-16 rounded-2xl bg-slate-100 text-slate-600 flex items-center justify-center mx-auto">
@@ -69,9 +73,15 @@ export function CameraUnavailableView({ onSwitchToManual }: CameraUnavailablePro
       </div>
 
       <div className="space-y-2">
-        <h3 className="text-lg font-bold text-on-surface">Không tìm thấy thiết bị Camera</h3>
+        <h3 className="text-lg font-bold text-on-surface">
+          {unsupportedScanner
+            ? "Trình duyệt không hỗ trợ quét QR"
+            : "Không tìm thấy thiết bị Camera"}
+        </h3>
         <p className="text-xs text-on-surface-variant leading-relaxed">
-          Thiết bị của bạn không có máy ảnh khả dụng hoặc camera đang bị ứng dụng khác chiếm giữ.
+          {unsupportedScanner
+            ? "Trình duyệt này chưa hỗ trợ nhận diện mã QR bằng camera. Bạn vẫn có thể nhập mã vé thủ công để kiểm tra."
+            : "Thiết bị của bạn không có máy ảnh khả dụng hoặc camera đang bị ứng dụng khác chiếm giữ."}
         </p>
       </div>
 

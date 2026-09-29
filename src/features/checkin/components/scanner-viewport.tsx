@@ -7,34 +7,57 @@ import { CameraPermissionDeniedView, CameraUnavailableView } from "./checkin-err
 interface ScannerViewportProps {
   onScan?: (code: string) => void
   isScanning?: boolean
+  onSwitchToManual: () => void
 }
 
-export function ScannerViewport({ onScan, isScanning = false }: ScannerViewportProps) {
+type BarcodeDetectorLike = {
+  detect(source: HTMLVideoElement): Promise<{ rawValue?: string }[]>
+}
+
+type BarcodeDetectorWindow = Window & {
+  BarcodeDetector?: new (options: { formats: string[] }) => BarcodeDetectorLike
+}
+
+export function ScannerViewport({
+  onScan,
+  isScanning = false,
+  onSwitchToManual,
+}: ScannerViewportProps) {
   const videoRef = useRef<HTMLVideoElement | null>(null)
-  const [cameraState, setCameraState] = useState<"idle" | "streaming" | "denied" | "unavailable">(
-    "idle",
-  )
+  const [cameraState, setCameraState] = useState<
+    "idle" | "streaming" | "denied" | "unavailable" | "unsupported"
+  >("idle")
   const [facingMode, setFacingMode] = useState<"environment" | "user">("environment")
   const streamRef = useRef<MediaStream | null>(null)
+  const detectorRef = useRef<BarcodeDetectorLike | null>(null)
+  const cameraRequestId = useRef(0)
   const lastScannedCode = useRef<string>("")
   const lastScanTimestamp = useRef<number>(0)
-  const isDetecting = useRef<boolean>(false)
 
   const stopCamera = useCallback(() => {
+    cameraRequestId.current += 1
     if (streamRef.current) {
       streamRef.current.getTracks().forEach((track) => track.stop())
       streamRef.current = null
     }
+    if (videoRef.current) videoRef.current.srcObject = null
   }, [])
 
   const startCamera = useCallback(async () => {
     stopCamera()
+    const requestId = cameraRequestId.current
     if (typeof navigator === "undefined" || !navigator.mediaDevices?.getUserMedia) {
       setCameraState("unavailable")
       return
     }
+    const Detector = (window as BarcodeDetectorWindow).BarcodeDetector
+    if (!Detector) {
+      setCameraState("unsupported")
+      return
+    }
 
     try {
+      detectorRef.current = new Detector({ formats: ["qr_code"] })
       const stream = await navigator.mediaDevices.getUserMedia({
         video: {
           facingMode,
@@ -42,13 +65,20 @@ export function ScannerViewport({ onScan, isScanning = false }: ScannerViewportP
           height: { ideal: 720 },
         },
       })
+      if (cameraRequestId.current !== requestId) {
+        stream.getTracks().forEach((track) => track.stop())
+        return
+      }
       streamRef.current = stream
       if (videoRef.current) {
         videoRef.current.srcObject = stream
-        videoRef.current.play().catch(() => undefined)
+        await videoRef.current.play()
       }
+      if (cameraRequestId.current !== requestId) return
       setCameraState("streaming")
     } catch (err: unknown) {
+      if (cameraRequestId.current !== requestId) return
+      stopCamera()
       const errorName = (err as Error)?.name || ""
       if (errorName === "NotAllowedError" || errorName === "PermissionDeniedError") {
         setCameraState("denied")
@@ -58,31 +88,19 @@ export function ScannerViewport({ onScan, isScanning = false }: ScannerViewportP
     }
   }, [facingMode, stopCamera])
 
-  // Continuous Barcode Detection loop if BarcodeDetector is available
+  // Keep one detection request in flight and stop scheduling frames after cleanup.
   useEffect(() => {
-    if (cameraState !== "streaming" || !onScan) return
-
-    let animationFrameId: number
-    const barcodeDetectorSupported = typeof window !== "undefined" && "BarcodeDetector" in window
-    let detector: any = null
-
-    if (barcodeDetectorSupported) {
-      try {
-        detector = new (window as any).BarcodeDetector({
-          formats: ["qr_code", "code_128", "code_39"],
-        })
-      } catch {
-        detector = null
-      }
-    }
+    if (cameraState !== "streaming" || !onScan || !detectorRef.current) return
+    let active = true
+    let animationFrameId: number | undefined
 
     const scanFrame = async () => {
+      if (!active) return
       const video = videoRef.current
-      if (video && video.readyState >= 2 && detector && !isDetecting.current) {
-        isDetecting.current = true
+      if (video && video.readyState >= 2 && !isScanning) {
         try {
-          const barcodes = await detector.detect(video)
-          if (barcodes.length > 0) {
+          const barcodes = await detectorRef.current?.detect(video)
+          if (active && barcodes?.length) {
             const rawValue = barcodes[0].rawValue?.trim()
             const now = Date.now()
             if (
@@ -97,25 +115,28 @@ export function ScannerViewport({ onScan, isScanning = false }: ScannerViewportP
           }
         } catch {
           // Frame detect error ignored
-        } finally {
-          isDetecting.current = false
         }
       }
-      animationFrameId = requestAnimationFrame(scanFrame)
+      if (active) animationFrameId = requestAnimationFrame(scanFrame)
     }
 
-    if (detector) {
-      animationFrameId = requestAnimationFrame(scanFrame)
-    }
+    animationFrameId = requestAnimationFrame(scanFrame)
 
     return () => {
-      if (animationFrameId) cancelAnimationFrame(animationFrameId)
+      active = false
+      if (animationFrameId !== undefined) cancelAnimationFrame(animationFrameId)
     }
-  }, [cameraState, onScan])
+  }, [cameraState, isScanning, onScan])
 
   useEffect(() => {
-    startCamera()
-    return () => stopCamera()
+    let active = true
+    queueMicrotask(() => {
+      if (active) void startCamera()
+    })
+    return () => {
+      active = false
+      stopCamera()
+    }
   }, [startCamera, stopCamera])
 
   const toggleCamera = () => {
@@ -123,11 +144,15 @@ export function ScannerViewport({ onScan, isScanning = false }: ScannerViewportP
   }
 
   if (cameraState === "denied") {
-    return <CameraPermissionDeniedView onRetry={startCamera} onSwitchToManual={() => {}} />
+    return <CameraPermissionDeniedView onRetry={startCamera} onSwitchToManual={onSwitchToManual} />
   }
 
   if (cameraState === "unavailable") {
-    return <CameraUnavailableView onSwitchToManual={() => {}} />
+    return <CameraUnavailableView onSwitchToManual={onSwitchToManual} />
+  }
+
+  if (cameraState === "unsupported") {
+    return <CameraUnavailableView onSwitchToManual={onSwitchToManual} unsupportedScanner />
   }
 
   return (
