@@ -36,7 +36,10 @@ export function IssuedTicketsTab({ tickets }: IssuedTicketsTabProps) {
       {/* Header & Filter Controls */}
       <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
         <div>
-          <h3 className="text-base font-bold text-on-surface">Vé đã phát hành của sự kiện</h3>
+          <p className="workspace-kicker">Danh sách vé</p>
+          <h3 className="mt-1 text-lg font-extrabold text-[#251f29]">
+            Vé đã phát hành của sự kiện
+          </h3>
           <p className="text-xs text-on-surface-variant">
             Danh sách vé đã được khách hàng thanh toán thành công và có hiệu lực tham gia sự kiện.
           </p>
@@ -47,17 +50,19 @@ export function IssuedTicketsTab({ tickets }: IssuedTicketsTabProps) {
             <Search className="size-4 text-on-surface-variant absolute left-3 top-1/2 -translate-y-1/2" />
             <input
               type="text"
+              aria-label="Tìm vé theo mã hoặc hạng vé"
               placeholder="Tìm mã vé hoặc hạng vé..."
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              className="w-full pl-9 pr-4 py-2 rounded-xl border border-outline-variant text-xs bg-white"
+              className="workspace-input !pl-9"
             />
           </div>
 
           <select
+            aria-label="Lọc vé theo trạng thái"
             value={filterStatus}
             onChange={(e) => setFilterStatus(e.target.value)}
-            className="w-full sm:w-auto px-3 py-2 rounded-xl border border-outline-variant text-xs bg-white font-medium"
+            className="workspace-input w-full font-medium sm:w-auto"
           >
             <option value="ALL">Tất cả trạng thái</option>
             <option value="ACTIVE">Chưa soát vé (Hợp lệ)</option>
@@ -68,7 +73,7 @@ export function IssuedTicketsTab({ tickets }: IssuedTicketsTabProps) {
       </div>
 
       {/* Tickets Table */}
-      <div className="bg-white border border-outline-variant/60 rounded-3xl shadow-xs overflow-hidden">
+      <div className="workspace-card overflow-hidden">
         {filteredTickets.length === 0 ? (
           <div className="p-12 text-center space-y-3">
             <Ticket className="size-10 text-primary/40 mx-auto" />
@@ -79,8 +84,8 @@ export function IssuedTicketsTab({ tickets }: IssuedTicketsTabProps) {
           </div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-sm">
-              <thead className="bg-surface-container-low text-xs uppercase font-bold text-on-surface-variant border-b border-outline-variant/60">
+            <table className="workspace-table min-w-[760px]">
+              <thead>
                 <tr>
                   <th className="px-6 py-4">Mã vé (Ticket Code)</th>
                   <th className="px-6 py-4">Hạng vé</th>

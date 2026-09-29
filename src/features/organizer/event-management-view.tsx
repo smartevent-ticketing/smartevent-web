@@ -51,15 +51,20 @@ export function EventManagementView({ eventId }: EventManagementViewProps) {
     setFeedback,
     isSubmittingApproval,
     isCancellingEvent,
+    isSavingTicketLimit,
     handleAddArea,
     handleUpdateArea,
     handleDeleteArea,
     handleAddTicketType,
+    handleUpdateTicketType,
+    handleDeleteTicketType,
     handleAddSalePhase,
+    handleUpdateSalePhase,
     handleUpdatePhaseStatus,
     handleDeleteSalePhase,
     handleConfirmSubmit,
     handleConfirmCancel,
+    handleUpdateTicketLimit,
     refreshReadiness,
     refresh,
   } = useEventManagement(eventId)
@@ -73,7 +78,7 @@ export function EventManagementView({ eventId }: EventManagementViewProps) {
   // Loading state
   if (isAuthLoading || (isLoadingEvent && !eventData)) {
     return (
-      <div className="py-24 text-center space-y-4">
+      <div className="workspace-card space-y-4 py-24 text-center">
         <Loader2 className="size-8 animate-spin text-primary mx-auto" />
         <p className="text-sm font-medium text-on-surface-variant">Đang tải thông tin sự kiện...</p>
       </div>
@@ -94,7 +99,7 @@ export function EventManagementView({ eventId }: EventManagementViewProps) {
           </Link>
         </div>
         <ActionFeedback message={feedback} onDismiss={() => setFeedback(null)} />
-        <div className="bg-white border border-red-200 rounded-3xl p-12 text-center space-y-4 shadow-xs">
+        <div className="workspace-card space-y-4 border-[#f0cdcb] p-12 text-center">
           <Ban className="size-10 text-red-500 mx-auto" />
           <h3 className="text-base font-bold text-on-surface">Không thể tải thông tin sự kiện</h3>
           <p className="text-xs text-on-surface-variant max-w-md mx-auto">{loadError}</p>
@@ -106,14 +111,11 @@ export function EventManagementView({ eventId }: EventManagementViewProps) {
                 setIsLoadingEvent(true)
                 refresh()
               }}
-              className="px-5 py-2.5 bg-primary text-white text-xs font-bold rounded-xl hover:bg-primary-hover transition cursor-pointer shadow-xs"
+              className="workspace-primary-button"
             >
               Thử lại
             </button>
-            <Link
-              href="/organizer/events"
-              className="inline-block px-5 py-2.5 border border-outline-variant text-on-surface-variant text-xs font-bold rounded-xl hover:bg-surface-container transition"
-            >
+            <Link href="/organizer/events" className="workspace-secondary-button">
               Quay lại danh sách
             </Link>
           </div>
@@ -134,10 +136,7 @@ export function EventManagementView({ eventId }: EventManagementViewProps) {
       {/* Top Breadcrumb & Navigation */}
       <div className="flex flex-wrap items-center justify-between gap-3 text-xs">
         <div className="flex items-center gap-2 text-on-surface-variant">
-          <Link
-            href="/organizer/events"
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-outline-variant/60 hover:text-primary hover:border-primary/40 shadow-2xs font-semibold transition"
-          >
+          <Link href="/organizer/events" className="workspace-secondary-button !min-h-0 !py-2">
             <ArrowLeft className="size-3.5" />
             <span>Danh sách sự kiện</span>
           </Link>
@@ -151,7 +150,7 @@ export function EventManagementView({ eventId }: EventManagementViewProps) {
           <Link
             href={`/events/${eventId}`}
             target="_blank"
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-primary/10 text-primary hover:bg-primary/20 font-bold transition"
+            className="workspace-secondary-button !min-h-0 !py-2"
           >
             <span>Trang bán vé</span>
             <ExternalLink className="size-3.5" />
@@ -162,21 +161,21 @@ export function EventManagementView({ eventId }: EventManagementViewProps) {
       <ActionFeedback message={feedback} onDismiss={() => setFeedback(null)} />
 
       {/* Main Event Header Card */}
-      <div className="relative overflow-hidden bg-white border border-outline-variant/60 rounded-3xl p-6 sm:p-8 shadow-xs">
+      <div className="relative overflow-hidden rounded-[28px] bg-[#211e2b] p-6 text-white sm:p-8">
         {/* Soft background ambient gradient glow */}
-        <div className="absolute top-0 right-0 -mt-10 -mr-10 w-96 h-96 bg-gradient-to-br from-primary/10 via-indigo-500/5 to-transparent rounded-full blur-3xl pointer-events-none" />
+        <div className="pointer-events-none absolute -right-10 -top-10 size-96 rounded-full bg-[#a4486c]/25 blur-[75px]" />
 
         <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-5">
-            <div className="size-16 sm:size-20 rounded-2xl bg-gradient-to-br from-primary to-indigo-600 text-white flex items-center justify-center shrink-0 shadow-md shadow-primary/20">
+            <div className="flex size-16 shrink-0 items-center justify-center rounded-2xl bg-[#ff8063] text-[#291b25] sm:size-20">
               <Ticket className="size-8 sm:size-10" />
             </div>
 
             <div className="space-y-2.5">
               <div className="flex flex-wrap items-center gap-2.5">
-                <h1 className="text-xl sm:text-2xl font-black tracking-tight text-on-surface">
+                <h2 className="text-xl font-extrabold tracking-tight text-white sm:text-2xl">
                   {eventData.name}
-                </h1>
+                </h2>
                 <span
                   className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold ${
                     isPublished
@@ -209,13 +208,13 @@ export function EventManagementView({ eventId }: EventManagementViewProps) {
                 </span>
               </div>
 
-              <div className="flex flex-wrap items-center gap-2 text-xs text-on-surface-variant font-medium">
-                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-surface-container-low border border-outline-variant/40">
-                  <Calendar className="size-3.5 text-primary" />
+              <div className="flex flex-wrap items-center gap-2 text-xs font-medium text-[#e5dfe8]">
+                <span className="inline-flex items-center gap-1.5 rounded-lg border border-white/15 bg-white/8 px-2.5 py-1">
+                  <Calendar className="size-3.5 text-[#ffad95]" />
                   <span>{eventData.date}</span>
                 </span>
-                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-surface-container-low border border-outline-variant/40">
-                  <MapPin className="size-3.5 text-primary" />
+                <span className="inline-flex items-center gap-1.5 rounded-lg border border-white/15 bg-white/8 px-2.5 py-1">
+                  <MapPin className="size-3.5 text-[#ffad95]" />
                   <span className="max-w-[260px] sm:max-w-md truncate">{eventData.location}</span>
                 </span>
               </div>
@@ -223,7 +222,7 @@ export function EventManagementView({ eventId }: EventManagementViewProps) {
           </div>
 
           {/* Action buttons */}
-          <div className="flex items-center gap-3 self-end lg:self-center shrink-0">
+          <div className="flex flex-wrap items-center gap-2 self-stretch lg:self-center">
             {isDraft && (
               <button
                 type="button"
@@ -241,8 +240,8 @@ export function EventManagementView({ eventId }: EventManagementViewProps) {
                 }}
                 className={`px-5 py-2.5 text-xs font-bold rounded-xl transition cursor-pointer shadow-xs inline-flex items-center gap-2 ${
                   readiness && !readiness.ready
-                    ? "bg-slate-100 text-slate-400 border border-slate-200 hover:bg-slate-200"
-                    : "bg-primary hover:bg-primary-hover text-white shadow-primary/20"
+                    ? "border border-white/15 bg-white/10 text-[#aaa5b8]"
+                    : "bg-[#ff8063] text-[#291b25] hover:bg-[#ffa18a]"
                 }`}
               >
                 <Send className="size-3.5" />
@@ -254,7 +253,7 @@ export function EventManagementView({ eventId }: EventManagementViewProps) {
               <button
                 type="button"
                 onClick={() => setShowCancelModal(true)}
-                className="px-4 py-2.5 border border-red-200 text-red-600 hover:bg-red-50 text-xs font-bold rounded-xl transition cursor-pointer inline-flex items-center gap-1.5"
+                className="inline-flex items-center gap-1.5 rounded-xl border border-[#f7b2ae]/45 px-4 py-2.5 text-xs font-bold text-[#ffc1b8] transition hover:bg-white/10"
               >
                 <Ban className="size-3.5" />
                 <span>Hủy sự kiện</span>
@@ -264,38 +263,28 @@ export function EventManagementView({ eventId }: EventManagementViewProps) {
         </div>
 
         {/* Quick event stats bar */}
-        <div className="mt-6 pt-5 border-t border-outline-variant/40 grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs">
+        <div className="mt-6 grid grid-cols-2 gap-4 border-t border-white/15 pt-5 text-xs sm:grid-cols-4">
           <div>
-            <span className="text-[11px] text-on-surface-variant block font-medium">
-              Tổng số vé
-            </span>
-            <span className="text-sm font-bold font-mono text-on-surface">
+            <span className="block text-[11px] font-medium text-[#bdb6c7]">Tổng số vé</span>
+            <span className="font-mono text-sm font-bold text-white">
               {eventData.totalTickets?.toLocaleString("vi-VN") || 0} vé
             </span>
           </div>
           <div>
-            <span className="text-[11px] text-on-surface-variant block font-medium">
-              Doanh thu dự kiến
-            </span>
-            <span className="text-sm font-bold font-mono text-primary">
+            <span className="block text-[11px] font-medium text-[#bdb6c7]">Doanh thu dự kiến</span>
+            <span className="font-mono text-sm font-bold text-[#ffad95]">
               {eventData.expectedRevenue?.toLocaleString("vi-VN") || 0} ₫
             </span>
           </div>
           <div>
-            <span className="text-[11px] text-on-surface-variant block font-medium">
+            <span className="block text-[11px] font-medium text-[#bdb6c7]">
               Phân khu / Khán đài
             </span>
-            <span className="text-sm font-bold font-mono text-on-surface">
-              {areas.length} khu vực
-            </span>
+            <span className="font-mono text-sm font-bold text-white">{areas.length} khu vực</span>
           </div>
           <div>
-            <span className="text-[11px] text-on-surface-variant block font-medium">
-              Đợt mở bán
-            </span>
-            <span className="text-sm font-bold font-mono text-on-surface">
-              {salePhases.length} đợt
-            </span>
+            <span className="block text-[11px] font-medium text-[#bdb6c7]">Đợt mở bán</span>
+            <span className="font-mono text-sm font-bold text-white">{salePhases.length} đợt</span>
           </div>
         </div>
       </div>
@@ -311,14 +300,18 @@ export function EventManagementView({ eventId }: EventManagementViewProps) {
       />
 
       {/* Tabs Navigation */}
-      <div className="border-b border-outline-variant/60 flex items-center gap-2 overflow-x-auto">
+      <nav
+        aria-label="Mục quản lý sự kiện"
+        className="workspace-card flex items-center gap-1 overflow-x-auto p-2"
+      >
         <button
           type="button"
           onClick={() => setActiveTab("overview")}
+          aria-pressed={activeTab === "overview"}
           className={`px-4 py-3 text-xs font-bold transition flex items-center gap-2 border-b-2 cursor-pointer ${
             activeTab === "overview"
-              ? "border-primary text-primary"
-              : "border-transparent text-on-surface-variant hover:text-on-surface"
+              ? "border-[#bd443a] text-[#bd443a]"
+              : "border-transparent text-[#756d77] hover:text-[#251f29]"
           }`}
         >
           <LayoutDashboard className="size-4" />
@@ -328,10 +321,11 @@ export function EventManagementView({ eventId }: EventManagementViewProps) {
         <button
           type="button"
           onClick={() => setActiveTab("media")}
+          aria-pressed={activeTab === "media"}
           className={`px-4 py-3 text-xs font-bold transition flex items-center gap-2 border-b-2 cursor-pointer ${
             activeTab === "media"
-              ? "border-primary text-primary"
-              : "border-transparent text-on-surface-variant hover:text-on-surface"
+              ? "border-[#bd443a] text-[#bd443a]"
+              : "border-transparent text-[#756d77] hover:text-[#251f29]"
           }`}
         >
           <ImageIcon className="size-4" />
@@ -341,10 +335,11 @@ export function EventManagementView({ eventId }: EventManagementViewProps) {
         <button
           type="button"
           onClick={() => setActiveTab("areas")}
+          aria-pressed={activeTab === "areas"}
           className={`px-4 py-3 text-xs font-bold transition flex items-center gap-2 border-b-2 cursor-pointer ${
             activeTab === "areas"
-              ? "border-primary text-primary"
-              : "border-transparent text-on-surface-variant hover:text-on-surface"
+              ? "border-[#bd443a] text-[#bd443a]"
+              : "border-transparent text-[#756d77] hover:text-[#251f29]"
           }`}
         >
           <Layers className="size-4" />
@@ -354,10 +349,11 @@ export function EventManagementView({ eventId }: EventManagementViewProps) {
         <button
           type="button"
           onClick={() => setActiveTab("ticket-types")}
+          aria-pressed={activeTab === "ticket-types"}
           className={`px-4 py-3 text-xs font-bold transition flex items-center gap-2 border-b-2 cursor-pointer ${
             activeTab === "ticket-types"
-              ? "border-primary text-primary"
-              : "border-transparent text-on-surface-variant hover:text-on-surface"
+              ? "border-[#bd443a] text-[#bd443a]"
+              : "border-transparent text-[#756d77] hover:text-[#251f29]"
           }`}
         >
           <Ticket className="size-4" />
@@ -367,10 +363,11 @@ export function EventManagementView({ eventId }: EventManagementViewProps) {
         <button
           type="button"
           onClick={() => setActiveTab("sale-phases")}
+          aria-pressed={activeTab === "sale-phases"}
           className={`px-4 py-3 text-xs font-bold transition flex items-center gap-2 border-b-2 cursor-pointer ${
             activeTab === "sale-phases"
-              ? "border-primary text-primary"
-              : "border-transparent text-on-surface-variant hover:text-on-surface"
+              ? "border-[#bd443a] text-[#bd443a]"
+              : "border-transparent text-[#756d77] hover:text-[#251f29]"
           }`}
         >
           <Clock className="size-4" />
@@ -380,25 +377,29 @@ export function EventManagementView({ eventId }: EventManagementViewProps) {
         <button
           type="button"
           onClick={() => setActiveTab("tickets")}
+          aria-pressed={activeTab === "tickets"}
           className={`px-4 py-3 text-xs font-bold transition flex items-center gap-2 border-b-2 cursor-pointer ${
             activeTab === "tickets"
-              ? "border-primary text-primary"
-              : "border-transparent text-on-surface-variant hover:text-on-surface"
+              ? "border-[#bd443a] text-[#bd443a]"
+              : "border-transparent text-[#756d77] hover:text-[#251f29]"
           }`}
         >
           <QrCode className="size-4" />
           <span>Vé đã phát hành ({issuedTickets.length})</span>
         </button>
-      </div>
+      </nav>
 
       {/* Tab Panels */}
       <div>
         {activeTab === "overview" && (
           <OverviewTab
+            key={`${eventData.id}-${eventData.maxTicketsPerUser ?? "unlimited"}`}
             event={eventData}
             areas={areas}
             ticketTypes={ticketTypes}
             salePhases={salePhases}
+            isSavingTicketLimit={isSavingTicketLimit}
+            onUpdateTicketLimit={handleUpdateTicketLimit}
             onSwitchTab={(t) =>
               setActiveTab(
                 t as "overview" | "media" | "areas" | "ticket-types" | "sale-phases" | "tickets",
@@ -413,7 +414,7 @@ export function EventManagementView({ eventId }: EventManagementViewProps) {
 
         {activeTab === "areas" && (
           <AreasSeatsTab
-            eventId={eventId}
+            canEdit={eventData.status === "DRAFT" || eventData.status === "PENDING_APPROVAL"}
             areas={areas}
             onAddArea={handleAddArea}
             onUpdateArea={handleUpdateArea}
@@ -427,18 +428,21 @@ export function EventManagementView({ eventId }: EventManagementViewProps) {
             ticketTypes={ticketTypes}
             areas={areas}
             onAddTicketType={handleAddTicketType}
+            onUpdateTicketType={handleUpdateTicketType}
+            onDeleteTicketType={handleDeleteTicketType}
+            canEdit={eventData.status === "DRAFT" || eventData.status === "PENDING_APPROVAL"}
           />
         )}
 
         {activeTab === "sale-phases" && (
           <SalePhasesTab
-            eventId={eventId}
-            eventStartTime={eventData.startTime}
             eventEndTime={eventData.endTime}
             salePhases={salePhases}
             ticketTypes={ticketTypes}
             areas={areas}
             onAddSalePhase={handleAddSalePhase}
+            onUpdateSalePhase={handleUpdateSalePhase}
+            canEditConfig={eventData.status === "DRAFT" || eventData.status === "PENDING_APPROVAL"}
             onUpdatePhaseStatus={handleUpdatePhaseStatus}
             onDeleteSalePhase={handleDeleteSalePhase}
           />

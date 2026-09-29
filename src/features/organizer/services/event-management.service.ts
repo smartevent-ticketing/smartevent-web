@@ -24,6 +24,7 @@ export function parseEventData(raw: any): EventManagementData {
     endTime: raw?.endTime,
     expectedRevenue: 0,
     totalTickets: 0,
+    maxTicketsPerUser: raw?.maxTicketsPerUser ?? null,
   }
 }
 

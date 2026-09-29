@@ -20,14 +20,21 @@ export function SubmitConfirmationModal({
   if (!isOpen) return null
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4">
-      <div className="bg-white rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl space-y-5">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#171420]/75 p-4 backdrop-blur-sm">
+      <div
+        role="alertdialog"
+        aria-modal="true"
+        aria-labelledby="submit-event-title"
+        className="w-full max-w-md space-y-5 rounded-[28px] border border-[#e8ded8] bg-white p-6 shadow-2xl sm:p-8"
+      >
         <div className="size-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center">
           <Send className="size-6" />
         </div>
 
         <div className="space-y-1.5">
-          <h3 className="text-lg font-bold text-on-surface">Gửi duyệt sự kiện lên Ban quản trị?</h3>
+          <h2 id="submit-event-title" className="text-lg font-extrabold text-[#251f29]">
+            Gửi duyệt sự kiện lên Ban quản trị?
+          </h2>
           <p className="text-xs text-on-surface-variant leading-relaxed">
             Sự kiện <strong>&ldquo;{eventName}&rdquo;</strong> sẽ được gửi tới Quản trị viên để kiểm
             duyệt hồ sơ và sơ đồ vé trước khi xuất bản chính thức.
@@ -64,7 +71,7 @@ export function SubmitConfirmationModal({
             type="button"
             onClick={onClose}
             disabled={isSubmitting}
-            className="px-4 py-2 text-xs font-bold text-on-surface-variant hover:bg-surface-container rounded-xl transition cursor-pointer"
+            className="workspace-secondary-button"
           >
             Quay lại kiểm tra
           </button>
@@ -72,7 +79,7 @@ export function SubmitConfirmationModal({
             type="button"
             onClick={onConfirm}
             disabled={isSubmitting}
-            className="px-5 py-2 bg-primary hover:bg-primary-hover text-white text-xs font-bold rounded-xl transition cursor-pointer disabled:opacity-50 inline-flex items-center gap-1.5 shadow-xs"
+            className="workspace-primary-button"
           >
             {isSubmitting && <Loader2 className="size-3.5 animate-spin" />}
             <span>Xác nhận gửi duyệt</span>

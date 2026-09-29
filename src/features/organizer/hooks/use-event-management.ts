@@ -14,14 +14,17 @@ import type {
   EventManagementData,
   AreaItem,
   TicketTypeItem,
+  SalePhaseItem,
   IssuedTicketItem,
   CreateAreaInput,
   UpdateAreaInput,
   CreateTicketTypeInput,
   CreateSalePhaseInput,
 } from "../model/event-management.types"
-import type { SalePhaseItem } from "../components/event-management/sale-phases-tab"
 import type { EventSubmissionReadiness, SalePhaseStatus } from "@/lib/api/event-setup-contract"
+import type { EventDetails } from "@/lib/api/event-setup-contract"
+import type { components } from "@/lib/api/schema"
+import { buildTicketLimitUpdateRequest } from "../model/ticket-purchase-limit"
 
 export function useEventManagement(eventId: string) {
   const { isAuthenticated, isLoading: isAuthLoading } = useAuth()
@@ -31,6 +34,7 @@ export function useEventManagement(eventId: string) {
   const [feedback, setFeedback] = useState<ActionMessage | null>(null)
   const [isSubmittingApproval, setIsSubmittingApproval] = useState(false)
   const [isCancellingEvent, setIsCancellingEvent] = useState(false)
+  const [isSavingTicketLimit, setIsSavingTicketLimit] = useState(false)
 
   const [readiness, setReadiness] = useState<EventSubmissionReadiness | null>(null)
   const [isLoadingReadiness, setIsLoadingReadiness] = useState(false)
@@ -79,7 +83,7 @@ export function useEventManagement(eventId: string) {
         setTicketTypes(result.ticketTypes)
         setIssuedTickets(result.issuedTickets)
         setReadiness(result.readiness)
-      } catch (err: any) {
+      } catch (err: unknown) {
         if (!isMounted) return
         const msg = getApiErrorMessage(err, "Không thể tải dữ liệu sự kiện.")
         setLoadError(msg)
@@ -107,6 +111,34 @@ export function useEventManagement(eventId: string) {
     }
   }, [eventId])
 
+  const handleUpdateTicketLimit = async (limit: number | undefined) => {
+    setIsSavingTicketLimit(true)
+    try {
+      const currentResponse = await organizerApi.getEvent(eventId)
+      const current = currentResponse.data?.data as EventDetails | undefined
+      if (!current) throw new Error("Không thể tải thông tin sự kiện để cập nhật giới hạn vé.")
+      const updatedResponse = await organizerApi.updateEvent(
+        eventId,
+        buildTicketLimitUpdateRequest(current, limit),
+      )
+      const updated = updatedResponse.data?.data as EventDetails | undefined
+      setEventData((previous) =>
+        previous
+          ? { ...previous, maxTicketsPerUser: updated?.maxTicketsPerUser ?? limit ?? null }
+          : previous,
+      )
+      setFeedback({ type: "success", text: "Đã cập nhật giới hạn vé mỗi tài khoản." })
+    } catch (error) {
+      setFeedback({
+        type: "error",
+        text: getApiErrorMessage(error, "Không thể cập nhật giới hạn vé. Vui lòng thử lại."),
+      })
+      throw error
+    } finally {
+      setIsSavingTicketLimit(false)
+    }
+  }
+
   // Area Handlers
   const handleAddArea = async (area: CreateAreaInput) => {
     try {
@@ -115,11 +147,13 @@ export function useEventManagement(eventId: string) {
         areaType: area.type,
         capacity: area.capacity,
       })
-      const created = (res.data as any)?.data ?? res.data
+      const created = res.data?.data
+      const createdId = created?.id
+      if (!createdId) throw new Error("Máy chủ chưa xác nhận phân khu vừa tạo.")
       setAreas((prev) => [
         ...prev,
         {
-          id: created?.id,
+          id: createdId,
           name: created?.name || area.name,
           type: created?.areaType || area.type,
           capacity: created?.capacity || area.capacity,
@@ -127,7 +161,7 @@ export function useEventManagement(eventId: string) {
       ])
       setFeedback({ type: "success", text: `Đã thêm phân khu "${area.name}" thành công.` })
       refreshReadiness()
-    } catch (error: any) {
+    } catch (error: unknown) {
       setFeedback({
         type: "error",
         text: getApiErrorMessage(error, `Không thể tạo phân khu "${area.name}". Vui lòng thử lại.`),
@@ -143,7 +177,7 @@ export function useEventManagement(eventId: string) {
         areaType: area.type,
         capacity: area.capacity,
       })
-      const updated = (res.data as any)?.data ?? res.data
+      const updated = res.data?.data
       setAreas((prev) =>
         prev.map((a) =>
           a.id === areaId
@@ -158,7 +192,7 @@ export function useEventManagement(eventId: string) {
       )
       setFeedback({ type: "success", text: `Đã cập nhật phân khu "${area.name}" thành công.` })
       refreshReadiness()
-    } catch (error: any) {
+    } catch (error: unknown) {
       const msg = getApiErrorMessage(error, `Không thể cập nhật phân khu "${area.name}".`)
       setFeedback({ type: "error", text: msg })
       throw error
@@ -171,7 +205,7 @@ export function useEventManagement(eventId: string) {
       setAreas((prev) => prev.filter((a) => a.id !== areaId))
       setFeedback({ type: "success", text: "Đã xóa phân khu thành công." })
       refreshReadiness()
-    } catch (error: any) {
+    } catch (error: unknown) {
       const msg = getApiErrorMessage(error, "Không thể xóa phân khu.")
       setFeedback({ type: "error", text: msg })
       throw error
@@ -200,8 +234,9 @@ export function useEventManagement(eventId: string) {
         eventAreaId: targetAreaId,
         description: combinedDesc,
       })
-      const createdType = (createRes as any)?.data?.data ?? (createRes as any)?.data
+      const createdType = createRes.data?.data
       const typeId = createdType?.id
+      if (!typeId) throw new Error("Backend không trả mã hạng vé vừa tạo.")
       const area = areas.find((a) => a.id === targetAreaId)
 
       setTicketTypes((prev) => [
@@ -224,7 +259,7 @@ export function useEventManagement(eventId: string) {
         text: `Đã tạo hạng vé "${ticketType.name}" thành công! Vui lòng vào tab "Đợt mở bán" để phân bổ số lượng vé và định giá.`,
       })
       refreshReadiness()
-    } catch (error: any) {
+    } catch (error: unknown) {
       setFeedback({
         type: "error",
         text: getApiErrorMessage(
@@ -232,6 +267,35 @@ export function useEventManagement(eventId: string) {
           `Không thể tạo hạng vé "${ticketType.name}". Vui lòng thử lại.`,
         ),
       })
+      throw error
+    }
+  }
+
+  const handleUpdateTicketType = async (id: string, ticketType: CreateTicketTypeInput) => {
+    try {
+      if (!ticketType.areaId) throw new Error("Vui lòng chọn phân khu.")
+      const priceTag = ticketType.price && ticketType.price > 0 ? `[PRICE:${ticketType.price}]` : ""
+      const description = [ticketType.description?.trim(), priceTag].filter(Boolean).join("\n")
+      await organizerApi.updateTicketType(id, {
+        eventAreaId: ticketType.areaId,
+        name: ticketType.name.trim(),
+        description: description || undefined,
+      })
+      setRefreshTrigger((previous) => previous + 1)
+      setFeedback({ type: "success", text: "Đã cập nhật hạng vé." })
+    } catch (error) {
+      setFeedback({ type: "error", text: getApiErrorMessage(error, "Không thể cập nhật hạng vé.") })
+      throw error
+    }
+  }
+
+  const handleDeleteTicketType = async (id: string) => {
+    try {
+      await organizerApi.deleteTicketType(id)
+      setRefreshTrigger((previous) => previous + 1)
+      setFeedback({ type: "success", text: "Đã xóa hạng vé." })
+    } catch (error) {
+      setFeedback({ type: "error", text: getApiErrorMessage(error, "Không thể xóa hạng vé.") })
       throw error
     }
   }
@@ -244,7 +308,7 @@ export function useEventManagement(eventId: string) {
     const createdPhaseIds: string[] = []
 
     try {
-      const results: any[] = []
+      const results: components["schemas"]["TicketSalePhaseResponse"][] = []
       for (const p of phases) {
         const res = await organizerApi.createSalePhase(p.ticketTypeId, {
           name: p.name,
@@ -255,19 +319,17 @@ export function useEventManagement(eventId: string) {
           maxPerOrder: p.maxPerOrder,
           maxPerUser: p.maxPerUser,
         })
-        const created = (res as any)?.data?.data ?? (res as any)?.data ?? res
-        if (created?.id) {
-          createdPhaseIds.push(created.id)
-        }
-        results.push(res)
+        const created = res.data?.data
+        if (!created?.id) throw new Error("Backend không trả mã đợt bán vừa tạo.")
+        createdPhaseIds.push(created.id)
+        results.push(created)
       }
 
       const newPhases: SalePhaseItem[] = phases.map((p, idx) => {
-        const res = results[idx]
-        const created = (res as any)?.data?.data ?? (res as any)?.data ?? res
+        const created = results[idx]
         const matchedType = ticketTypes.find((t) => t.id === p.ticketTypeId)
         return {
-          id: created?.id || Math.random().toString(),
+          id: created!.id!,
           ticketTypeId: p.ticketTypeId,
           name: created?.name || p.name,
           price: p.price,
@@ -319,7 +381,7 @@ export function useEventManagement(eventId: string) {
             : `Đã tạo đợt mở bán "${phases[0]?.name}" thành công!`,
       })
       refreshReadiness()
-    } catch (error: any) {
+    } catch (error: unknown) {
       // Revert partially created phases in this batch so the database is never left dirty
       if (createdPhaseIds.length > 0) {
         console.warn(
@@ -327,10 +389,30 @@ export function useEventManagement(eventId: string) {
         )
         await Promise.allSettled(createdPhaseIds.map((id) => organizerApi.deleteSalePhase(id)))
       }
+      setRefreshTrigger((prev) => prev + 1)
       setFeedback({
         type: "error",
         text: getApiErrorMessage(error, "Không thể tạo đợt mở bán. Vui lòng thử lại."),
       })
+      throw error
+    }
+  }
+
+  const handleUpdateSalePhase = async (id: string, phase: CreateSalePhaseInput) => {
+    try {
+      await organizerApi.updateSalePhase(id, {
+        name: phase.name.trim(),
+        price: phase.price,
+        quantity: phase.quantity,
+        saleStartAt: phase.saleStartAt,
+        saleEndAt: phase.saleEndAt,
+        maxPerOrder: phase.maxPerOrder,
+        maxPerUser: phase.maxPerUser,
+      })
+      setRefreshTrigger((previous) => previous + 1)
+      setFeedback({ type: "success", text: "Đã cập nhật đợt bán." })
+    } catch (error) {
+      setFeedback({ type: "error", text: getApiErrorMessage(error, "Không thể cập nhật đợt bán.") })
       throw error
     }
   }
@@ -345,7 +427,7 @@ export function useEventManagement(eventId: string) {
         text: "Đã cập nhật trạng thái đợt mở bán thành công.",
       })
       refreshReadiness()
-    } catch (error: any) {
+    } catch (error: unknown) {
       setFeedback({
         type: "error",
         text: getApiErrorMessage(error, "Không thể cập nhật trạng thái đợt mở bán."),
@@ -382,7 +464,7 @@ export function useEventManagement(eventId: string) {
         text: `Đã xóa đợt mở bán thành công. Số vé đã được hoàn trả về sức chứa khán đài.`,
       })
       refreshReadiness()
-    } catch (error: any) {
+    } catch (error: unknown) {
       setFeedback({
         type: "error",
         text: getApiErrorMessage(error, "Không thể xóa đợt mở bán."),
@@ -401,7 +483,7 @@ export function useEventManagement(eventId: string) {
         type: "success",
         text: "Sự kiện đã được gửi lên ban quản trị xét duyệt thành công.",
       })
-    } catch (error: any) {
+    } catch (error: unknown) {
       setFeedback({
         type: "error",
         text: getApiErrorMessage(
@@ -422,7 +504,7 @@ export function useEventManagement(eventId: string) {
       await organizerApi.cancelEvent(eventId, reason)
       setEventData((prev) => (prev ? { ...prev, status: "CANCELLED" } : null))
       setFeedback({ type: "info", text: `Sự kiện đã được hủy: ${reason}` })
-    } catch (error: any) {
+    } catch (error: unknown) {
       setFeedback({
         type: "error",
         text: getApiErrorMessage(error, "Hủy sự kiện thất bại. Vui lòng thử lại."),
@@ -459,17 +541,22 @@ export function useEventManagement(eventId: string) {
     // Modals & Action states
     isSubmittingApproval,
     isCancellingEvent,
+    isSavingTicketLimit,
 
     // Handlers
     handleAddArea,
     handleUpdateArea,
     handleDeleteArea,
     handleAddTicketType,
+    handleUpdateTicketType,
+    handleDeleteTicketType,
     handleAddSalePhase,
+    handleUpdateSalePhase,
     handleUpdatePhaseStatus,
     handleDeleteSalePhase,
     handleConfirmSubmit,
     handleConfirmCancel,
+    handleUpdateTicketLimit,
     refreshReadiness,
     refresh,
   }

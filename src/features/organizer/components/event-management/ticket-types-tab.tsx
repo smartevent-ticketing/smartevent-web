@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Ticket, Plus, Tag, Loader2, Sparkles } from "lucide-react"
+import { Ticket, Plus, Tag, Loader2, Sparkles, Pencil, Trash2 } from "lucide-react"
 
 interface TicketTypeItem {
   id: string
@@ -24,10 +24,31 @@ interface TicketTypesTabProps {
     areaId?: string
     description?: string
   }) => Promise<void>
+  onUpdateTicketType: (
+    id: string,
+    ticketType: {
+      name: string
+      price?: number
+      areaId?: string
+      description?: string
+    },
+  ) => Promise<void>
+  onDeleteTicketType: (id: string) => Promise<void>
+  canEdit: boolean
 }
 
-export function TicketTypesTab({ ticketTypes, areas, onAddTicketType }: TicketTypesTabProps) {
+export function TicketTypesTab({
+  ticketTypes,
+  areas,
+  onAddTicketType,
+  onUpdateTicketType,
+  onDeleteTicketType,
+  canEdit,
+}: TicketTypesTabProps) {
   const [showAddModal, setShowAddModal] = useState(false)
+  const [editing, setEditing] = useState<TicketTypeItem | null>(null)
+  const [deleting, setDeleting] = useState<TicketTypeItem | null>(null)
+  const [formError, setFormError] = useState<string | null>(null)
   const [name, setName] = useState("")
   const [price, setPrice] = useState<number | "">("")
   const [areaId, setAreaId] = useState(areas[0]?.id || "")
@@ -35,11 +56,23 @@ export function TicketTypesTab({ ticketTypes, areas, onAddTicketType }: TicketTy
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const handleOpenAddModal = () => {
+    setEditing(null)
+    setFormError(null)
     const defaultArea = areas[0]
     setAreaId(defaultArea?.id || "")
     setName(defaultArea?.name || "")
     setPrice("")
     setDescription("")
+    setShowAddModal(true)
+  }
+
+  const handleOpenEditModal = (ticketType: TicketTypeItem) => {
+    setEditing(ticketType)
+    setFormError(null)
+    setAreaId(ticketType.areaId || areas[0]?.id || "")
+    setName(ticketType.name)
+    setPrice(ticketType.price)
+    setDescription(ticketType.description || "")
     setShowAddModal(true)
   }
 
@@ -50,16 +83,22 @@ export function TicketTypesTab({ ticketTypes, areas, onAddTicketType }: TicketTy
     if (!name.trim() || !areaId) return
     setIsSubmitting(true)
     try {
-      await onAddTicketType({
+      const values = {
         name: name.trim(),
         price: price === "" ? 0 : Number(price),
         areaId: areaId || undefined,
         description: description.trim() || undefined,
-      })
+      }
+      if (editing) await onUpdateTicketType(editing.id, values)
+      else await onAddTicketType(values)
       setName("")
       setPrice("")
       setDescription("")
       setShowAddModal(false)
+      setEditing(null)
+      setFormError(null)
+    } catch {
+      setFormError("Không lưu được hạng vé. Kiểm tra thông báo lỗi phía trên rồi thử lại.")
     } finally {
       setIsSubmitting(false)
     }
@@ -76,18 +115,20 @@ export function TicketTypesTab({ ticketTypes, areas, onAddTicketType }: TicketTy
             bổ tại tab <strong>&quot;Đợt mở bán&quot;</strong>.
           </p>
         </div>
-        <button
-          type="button"
-          onClick={handleOpenAddModal}
-          className="inline-flex items-center gap-1.5 px-4 py-2 bg-primary hover:bg-primary-hover text-white text-xs font-bold rounded-xl transition cursor-pointer shadow-xs"
-        >
-          <Plus className="size-4" />
-          <span>Thêm hạng vé</span>
-        </button>
+        {canEdit && (
+          <button
+            type="button"
+            onClick={handleOpenAddModal}
+            className="inline-flex items-center gap-1.5 px-4 py-2 bg-primary hover:bg-primary-hover text-white text-xs font-bold rounded-xl transition cursor-pointer shadow-xs"
+          >
+            <Plus className="size-4" />
+            <span>Thêm hạng vé</span>
+          </button>
+        )}
       </div>
 
       {/* Ticket Types Table */}
-      <div className="bg-white border border-outline-variant/60 rounded-3xl shadow-xs overflow-hidden">
+      <div className="workspace-card overflow-hidden">
         {ticketTypes.length === 0 ? (
           <div className="p-12 text-center space-y-3">
             <Ticket className="size-10 text-primary/40 mx-auto" />
@@ -108,6 +149,7 @@ export function TicketTypesTab({ ticketTypes, areas, onAddTicketType }: TicketTy
                   <th className="px-6 py-4">Sức chứa khán đài</th>
                   <th className="px-6 py-4">Đã bán</th>
                   <th className="px-6 py-4 text-right">Trạng thái</th>
+                  {canEdit && <th className="px-6 py-4 text-right">Thao tác</th>}
                 </tr>
               </thead>
               <tbody className="divide-y divide-outline-variant/40">
@@ -167,6 +209,26 @@ export function TicketTypesTab({ ticketTypes, areas, onAddTicketType }: TicketTy
                           {isSoldOut ? "Hết vé" : hasActiveSale ? "Đã định giá" : "Chưa định giá"}
                         </span>
                       </td>
+                      {canEdit && (
+                        <td className="px-6 py-4 text-right whitespace-nowrap">
+                          <button
+                            type="button"
+                            onClick={() => handleOpenEditModal(t)}
+                            aria-label={`Sửa ${t.name}`}
+                            className="p-2 text-primary cursor-pointer"
+                          >
+                            <Pencil className="size-4" />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setDeleting(t)}
+                            aria-label={`Xóa ${t.name}`}
+                            className="p-2 text-red-600 cursor-pointer"
+                          >
+                            <Trash2 className="size-4" />
+                          </button>
+                        </td>
+                      )}
                     </tr>
                   )
                 })}
@@ -194,13 +256,20 @@ export function TicketTypesTab({ ticketTypes, areas, onAddTicketType }: TicketTy
         <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4">
           <div className="bg-white rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl space-y-5">
             <div>
-              <h3 className="text-lg font-bold text-on-surface">Thêm hạng vé sự kiện</h3>
+              <h3 className="text-lg font-bold text-on-surface">
+                {editing ? "Sửa hạng vé" : "Thêm hạng vé sự kiện"}
+              </h3>
               <p className="text-xs text-on-surface-variant mt-0.5">
                 Hạng vé gắn liền với từng phân khu khán đài đã thiết lập.
               </p>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-4">
+              {formError && (
+                <p role="alert" className="text-xs text-red-700">
+                  {formError}
+                </p>
+              )}
               {/* 1. Chọn Khán đài trước */}
               <div className="space-y-1">
                 <label className="text-xs font-semibold text-on-surface-variant">
@@ -328,6 +397,44 @@ export function TicketTypesTab({ ticketTypes, areas, onAddTicketType }: TicketTy
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+      {deleting && (
+        <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl p-6 max-w-sm w-full space-y-4">
+            <h3 className="font-bold">Xóa hạng vé “{deleting.name}”?</h3>
+            <p className="text-sm text-on-surface-variant">
+              Hạng vé đã có đợt bán hoặc vé phát hành có thể không xóa được.
+            </p>
+            <div className="flex justify-end gap-3">
+              <button
+                type="button"
+                onClick={() => setDeleting(null)}
+                className="px-4 py-2 rounded-lg border"
+              >
+                Hủy
+              </button>
+              <button
+                type="button"
+                onClick={async () => {
+                  try {
+                    await onDeleteTicketType(deleting.id)
+                    setDeleting(null)
+                  } catch {
+                    setFormError("Không thể xóa hạng vé này.")
+                  }
+                }}
+                className="px-4 py-2 rounded-lg bg-red-600 text-white"
+              >
+                Xóa
+              </button>
+            </div>
+            {formError && (
+              <p role="alert" className="text-xs text-red-700">
+                {formError}
+              </p>
+            )}
           </div>
         </div>
       )}

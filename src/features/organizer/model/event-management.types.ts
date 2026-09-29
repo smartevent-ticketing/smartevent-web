@@ -10,6 +10,7 @@ export interface EventManagementData {
   endTime?: string
   expectedRevenue?: number
   totalTickets?: number
+  maxTicketsPerUser?: number | null
 }
 
 export interface AreaItem {
