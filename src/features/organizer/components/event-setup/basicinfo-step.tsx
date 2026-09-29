@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { ArrowRight, AlertCircle } from "lucide-react"
 import type { useEventSetup } from "@/features/organizer/hooks/use-event-setup"
+import { parseTicketPurchaseLimit } from "@/features/organizer/model/ticket-purchase-limit"
 
 type Props = Pick<
   ReturnType<typeof useEventSetup>,
@@ -14,6 +15,8 @@ type Props = Pick<
   | "setSelectedCategoryId"
   | "description"
   | "setDescription"
+  | "maxTicketsPerUser"
+  | "setMaxTicketsPerUser"
 >
 export function EventBasicInfoStep({
   setCurrentStep,
@@ -24,6 +27,8 @@ export function EventBasicInfoStep({
   setSelectedCategoryId,
   description,
   setDescription,
+  maxTicketsPerUser,
+  setMaxTicketsPerUser,
 }: Props) {
   const [errorMsg, setErrorMsg] = useState<string | null>(null)
 
@@ -37,12 +42,18 @@ export function EventBasicInfoStep({
       setErrorMsg("Vui lòng nhập mô tả / giới thiệu chi tiết cho sự kiện trước khi tiếp tục.")
       return
     }
+    try {
+      parseTicketPurchaseLimit(maxTicketsPerUser)
+    } catch (error) {
+      setErrorMsg(error instanceof Error ? error.message : "Giới hạn vé không hợp lệ.")
+      return
+    }
     setCurrentStep(2)
   }
 
   return (
-    <div className="bg-white p-6 sm:p-8 rounded-3xl border border-outline-variant/60 shadow-xs space-y-5">
-      <h2 className="text-xl font-bold text-on-surface">Bước 1: Thông tin sự kiện cơ bản</h2>
+    <div className="workspace-card space-y-5 p-5 sm:p-8">
+      <h2 className="text-xl font-extrabold text-[#251f29]">Bước 1: Thông tin sự kiện cơ bản</h2>
 
       {errorMsg && (
         <div className="p-3.5 bg-red-50 border border-red-200 rounded-xl text-xs text-red-600 flex items-center gap-2">
@@ -104,6 +115,31 @@ export function EventBasicInfoStep({
           />
           <p className="text-[11px] text-on-surface-variant mt-1">
             * Bắt buộc có thông tin giới thiệu để hiển thị trên trang bán vé cho khán giả theo dõi.
+          </p>
+        </div>
+
+        <div>
+          <label
+            htmlFor="max-tickets-per-user"
+            className="block text-xs font-bold text-on-surface mb-1"
+          >
+            Giới hạn số vé tối đa mỗi tài khoản
+          </label>
+          <input
+            id="max-tickets-per-user"
+            type="number"
+            min={1}
+            max={2147483647}
+            step={1}
+            value={maxTicketsPerUser}
+            onChange={(e) => setMaxTicketsPerUser(e.target.value)}
+            placeholder="Mặc định: Không giới hạn (hoặc nhập số vé tối đa, ví dụ: 4)"
+            aria-describedby="max-tickets-per-user-help"
+            className="w-full px-4 py-2.5 bg-surface-container-low border border-outline-variant/60 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+          />
+          <p id="max-tickets-per-user-help" className="text-[11px] text-on-surface-variant mt-1">
+            Giới hạn số vé tối đa một tài khoản được phép mua cho toàn bộ sự kiện (cơ chế chống phe
+            vé).
           </p>
         </div>
       </div>

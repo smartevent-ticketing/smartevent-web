@@ -6,9 +6,18 @@ import { catalogApi } from "@/features/catalog"
 import { useEffect, useRef, useState } from "react"
 
 import type { components } from "@/lib/api/schema"
-import type { EventMediaResponse } from "@/lib/api/event-setup-contract"
+import type { EventDetails, EventMediaResponse } from "@/lib/api/event-setup-contract"
 import { getApiErrorMessage } from "@/lib/api/result"
-import { requireSubmittedEvent, type TicketTierSetup } from "../model/event-setup-input"
+import {
+  buildEventSetupRequest,
+  requireSubmittedEvent,
+  type TicketTierSetup,
+} from "../model/event-setup-input"
+import {
+  buildTicketLimitUpdateRequest,
+  parseTicketPurchaseLimit,
+} from "../model/ticket-purchase-limit"
+import { bannerResolutionError, readImageDimensions } from "../model/banner-dimensions"
 
 type CategoryResponse = components["schemas"]["CategoryResponse"]
 type VenueResponse = components["schemas"]["VenueResponse"]
@@ -26,6 +35,7 @@ export function useEventSetup() {
   const [startDate, setStartDate] = useState("")
   const [startTime, setStartTime] = useState("19:00")
   const [selectedVenueId, setSelectedVenueId] = useState("")
+  const [maxTicketsPerUser, setMaxTicketsPerUser] = useState("")
 
   // Media states
   const [createdEventId, setCreatedEventId] = useState<string | null>(null)
@@ -92,14 +102,27 @@ export function useEventSetup() {
       return
     }
 
-    if (createdEventId) {
-      setCurrentStep(3)
-      return
-    }
-
     setIsCreatingDraft(true)
     try {
+      const limit = parseTicketPurchaseLimit(maxTicketsPerUser)
       const venue = venues.find((v) => v.id === selectedVenueId)
+      if (createdEventId) {
+        const currentResponse = await organizerApi.getEvent(createdEventId)
+        const current = currentResponse.data?.data as EventDetails | undefined
+        if (!current) throw new Error("Không thể tải bản nháp sự kiện để lưu thay đổi.")
+        await organizerApi.updateEvent(createdEventId, {
+          ...buildTicketLimitUpdateRequest(current, limit),
+          name: eventName.trim(),
+          description: description.trim(),
+          venueId: selectedVenueId,
+          categoryIds: [selectedCategoryId],
+          city: venue?.city || current.city || "Hà Nội",
+          startTime: start.toISOString(),
+          endTime: end.toISOString(),
+        })
+        setCurrentStep(3)
+        return
+      }
       const res = await organizerApi.createDraftEvent({
         name: eventName.trim(),
         description: description.trim(),
@@ -108,6 +131,7 @@ export function useEventSetup() {
         city: venue?.city || "Hà Nội",
         startTime: start.toISOString(),
         endTime: end.toISOString(),
+        ...(limit !== undefined ? { maxTicketsPerUser: limit } : {}),
       })
       const id = res.data?.data?.id
       if (!id) throw new Error("Không nhận được mã sự kiện sau khi tạo bản nháp.")
@@ -130,6 +154,12 @@ export function useEventSetup() {
     setIsUploadingBanner(true)
     setMediaError(null)
     try {
+      const { width, height } = await readImageDimensions(file)
+      const resolutionError = bannerResolutionError(width, height)
+      if (resolutionError) {
+        setMediaError(resolutionError)
+        return
+      }
       const res = await organizerApi.uploadEventMedia(createdEventId, file, "BANNER")
       const media = (res.data?.data ?? res.data) as EventMediaResponse
       if (media) {
@@ -240,63 +270,25 @@ export function useEventSetup() {
         throw new Error("Sự kiện bắt buộc phải có ít nhất 1 ảnh bìa (Banner) trước khi gửi duyệt.")
       }
       const venue = venues.find((v) => v.id === selectedVenueId)
+      const setup = buildEventSetupRequest({
+        eventName,
+        description,
+        startDate,
+        startTime,
+        selectedVenueId,
+        selectedCategoryId,
+        city: venue?.city || "Hà Nội",
+        ticketTiers,
+        maxTicketsPerUser: parseTicketPurchaseLimit(maxTicketsPerUser),
+      })
       if (
         venue?.capacity != null &&
-        ticketTiers.reduce((sum, tier) => sum + tier.capacity, 0) > venue.capacity
+        setup.tiers.reduce((sum, tier) => sum + tier.capacity, 0) > venue.capacity
       ) {
         throw new Error("Tổng sức chứa các hạng vé vượt quá sức chứa địa điểm.")
       }
 
-      // 1. Tạo các Area, Seat & Ticket Types theo từng tier
-      let sortOrder = 0
-      for (const tier of ticketTiers) {
-        const areaRes = await organizerApi.createArea(createdEventId, {
-          name: tier.name.trim(),
-          areaType: tier.areaType,
-          capacity: tier.capacity,
-          sortOrder: sortOrder++,
-        })
-        const areaId = areaRes.data?.data?.id
-        if (!areaId) {
-          throw new Error(`Không thể tạo khu vực vé "${tier.name}".`)
-        }
-
-        if (tier.areaType === "SEATED") {
-          const capacity = tier.capacity
-          const rows = Math.min(26, Math.floor((capacity - 1) / 25) + 1)
-          const seatsPerRow = Math.floor(capacity / rows)
-          const fromRow = "A"
-          const toRow = String.fromCharCode(65 + rows - 1)
-          await organizerApi.generateSeats(areaId, {
-            fromRow,
-            toRow,
-            seatsPerRow: seatsPerRow > 0 ? seatsPerRow : capacity,
-          })
-        }
-
-        const typeRes = await organizerApi.createTicketType(createdEventId, {
-          eventAreaId: areaId,
-          name: tier.name.trim(),
-          status: "ACTIVE",
-        })
-        const typeId = typeRes.data?.data?.id
-        if (!typeId) {
-          throw new Error(`Không thể tạo hạng vé "${tier.name}".`)
-        }
-
-        const end = new Date(`${startDate}T23:59:00+07:00`)
-        await organizerApi.createSalePhase(typeId, {
-          name: "Mở bán chính thức",
-          price: tier.price,
-          quantity: tier.capacity,
-          saleStartAt: new Date().toISOString(),
-          saleEndAt: end.toISOString(),
-          maxPerOrder: 4,
-        })
-      }
-
-      // 2. Gửi duyệt sự kiện lên Admin
-      const submitRes = await organizerApi.submitEvent(createdEventId)
+      const submitRes = await organizerApi.completeDraftSetup(createdEventId, setup.tiers)
       requireSubmittedEvent(submitRes.data?.data)
       setIsDone(true)
     } catch (error) {
@@ -372,6 +364,8 @@ export function useEventSetup() {
     setStartTime,
     selectedVenueId,
     setSelectedVenueId,
+    maxTicketsPerUser,
+    setMaxTicketsPerUser,
     createdEventId,
     bannerMedia,
     seatMapMedia,

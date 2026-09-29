@@ -16,6 +16,7 @@ type Props = Pick<
   | "handleComplete"
   | "bannerMedia"
   | "seatMapMedia"
+  | "maxTicketsPerUser"
 >
 export function EventReviewStep({
   setCurrentStep,
@@ -29,10 +30,11 @@ export function EventReviewStep({
   handleComplete,
   bannerMedia,
   seatMapMedia,
+  maxTicketsPerUser,
 }: Props) {
   return (
-    <div className="bg-white p-6 sm:p-8 rounded-3xl border border-outline-variant/60 shadow-xs space-y-6">
-      <h2 className="text-xl font-bold text-on-surface">Bước 5: Rà soát & Gửi duyệt sự kiện</h2>
+    <div className="workspace-card space-y-6 p-5 sm:p-8">
+      <h2 className="text-xl font-extrabold text-[#251f29]">Bước 5: Rà soát & Gửi duyệt sự kiện</h2>
 
       <div className="p-5 rounded-2xl bg-surface-container-low border border-outline-variant/60 text-xs sm:text-sm space-y-3">
         <div className="flex justify-between py-1 border-b border-outline-variant/40">
@@ -49,6 +51,12 @@ export function EventReviewStep({
           <span className="text-on-surface-variant font-medium">Địa điểm:</span>
           <span className="text-on-surface">
             {venues.find((v) => v.id === selectedVenueId)?.name || "Địa điểm theo đăng ký"}
+          </span>
+        </div>
+        <div className="flex justify-between py-1 border-b border-outline-variant/40">
+          <span className="text-on-surface-variant font-medium">Giới hạn vé mỗi tài khoản:</span>
+          <span className="text-on-surface">
+            {maxTicketsPerUser ? `${maxTicketsPerUser} vé` : "Không giới hạn"}
           </span>
         </div>
         <div className="py-1 space-y-2">

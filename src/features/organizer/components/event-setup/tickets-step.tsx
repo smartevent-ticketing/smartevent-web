@@ -15,10 +15,10 @@ export function EventTicketsStep({
   removeTier,
 }: Props) {
   return (
-    <div className="bg-white p-6 sm:p-8 rounded-3xl border border-outline-variant/60 shadow-xs space-y-5">
+    <div className="workspace-card space-y-5 p-5 sm:p-8">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-xl font-bold text-on-surface">Bước 4: Thiết lập các hạng vé</h2>
+          <h2 className="text-xl font-extrabold text-[#251f29]">Bước 4: Thiết lập các hạng vé</h2>
           <p className="text-xs text-on-surface-variant mt-0.5">
             Mỗi hạng vé tương ứng với một khán đài/phân khu. Quy định:{" "}
             <strong>Khu đứng (STANDING)</strong> và <strong>Khu có ghế (SEATED)</strong>.

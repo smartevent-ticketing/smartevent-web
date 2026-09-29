@@ -29,8 +29,10 @@ export function EventScheduleStep({
   isCreatingDraft,
 }: Props) {
   return (
-    <div className="bg-white p-6 sm:p-8 rounded-3xl border border-outline-variant/60 shadow-xs space-y-5">
-      <h2 className="text-xl font-bold text-on-surface">Bước 2: Thời gian & Địa điểm tổ chức</h2>
+    <div className="workspace-card space-y-5 p-5 sm:p-8">
+      <h2 className="text-xl font-extrabold text-[#251f29]">
+        Bước 2: Thời gian & Địa điểm tổ chức
+      </h2>
 
       <div className="space-y-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

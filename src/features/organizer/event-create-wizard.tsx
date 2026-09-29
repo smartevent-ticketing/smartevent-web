@@ -27,6 +27,8 @@ export function EventCreateWizard() {
     setStartTime,
     selectedVenueId,
     setSelectedVenueId,
+    maxTicketsPerUser,
+    setMaxTicketsPerUser,
     bannerMedia,
     galleryMedia,
     isCreatingDraft,
@@ -55,26 +57,25 @@ export function EventCreateWizard() {
 
   if (isDone) {
     return (
-      <div className="max-w-2xl mx-auto py-16 px-4 text-center space-y-6">
-        <div className="size-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto shadow-sm">
+      <div className="workspace-card mx-auto max-w-2xl space-y-6 px-6 py-14 text-center sm:px-10">
+        <div className="mx-auto flex size-20 items-center justify-center rounded-3xl bg-[#eaf7ee] text-[#257555]">
           <CheckCircle2 className="size-10" />
         </div>
         <div className="space-y-2">
-          <h1 className="text-3xl font-extrabold text-on-surface">
+          <h2 className="text-3xl font-extrabold text-[#251f29]">
             Gửi yêu cầu phê duyệt thành công!
-          </h1>
+          </h2>
           <p className="text-sm text-on-surface-variant max-w-md mx-auto">
-            Sự kiện của bạn đã được chuyển sang trạng thái{" "}
-            <strong>CHỜ PHÊ DUYỆT (PENDING_APPROVAL)</strong>. Đội ngũ kiểm duyệt SmartEvent sẽ xem
-            xét trong vòng 24 giờ.
+            Sự kiện của bạn đã được chuyển sang trạng thái <strong>Chờ phê duyệt</strong>. Bạn có
+            thể theo dõi trạng thái trong danh sách sự kiện.
           </p>
         </div>
-        <div className="pt-4 flex justify-center gap-4">
-          <Link
-            href="/organizer"
-            className="px-6 py-2.5 bg-primary hover:bg-primary-hover text-white font-bold rounded-xl shadow-xs transition"
-          >
-            Quay lại Dashboard
+        <div className="flex flex-wrap justify-center gap-3 pt-4">
+          <Link href="/organizer/events" className="workspace-primary-button">
+            Xem sự kiện của tôi
+          </Link>
+          <Link href="/organizer/dashboard" className="workspace-secondary-button">
+            Về tổng quan
           </Link>
         </div>
       </div>
@@ -82,52 +83,50 @@ export function EventCreateWizard() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto py-8 px-4 sm:px-6 lg:px-8 space-y-8">
+    <div className="mx-auto max-w-5xl space-y-7">
       {/* Top Header */}
-      <div className="flex items-center justify-between border-b border-outline-variant/60 pb-4">
-        <Link
-          href="/organizer"
-          className="inline-flex items-center gap-2 text-xs sm:text-sm font-semibold text-on-surface-variant hover:text-primary transition"
-        >
+      <div className="flex items-center justify-between gap-3">
+        <Link href="/organizer/events" className="workspace-secondary-button">
           <ArrowLeft className="size-4" />
-          <span>Hủy & Thoát</span>
+          <span>Về danh sách</span>
         </Link>
-        <span className="text-xs font-bold uppercase tracking-wider text-primary">
+        <span className="rounded-full bg-[#fff1e9] px-3 py-2 text-xs font-extrabold text-[#bd443a]">
           Bước {currentStep} / {steps.length}
         </span>
       </div>
 
       {/* Stepper Progress (5 steps) */}
-      <div className="grid grid-cols-2 sm:grid-cols-5 gap-2.5">
+      <ol aria-label="Tiến độ tạo sự kiện" className="flex gap-2 overflow-x-auto pb-1">
         {steps.map((step) => {
           const isPassed = step.num < currentStep
           const isCurrent = step.num === currentStep
 
           return (
-            <div
+            <li
               key={step.num}
-              className={`p-3 rounded-2xl border transition ${
+              aria-current={isCurrent ? "step" : undefined}
+              className={`min-w-36 flex-1 rounded-2xl border p-3 transition ${
                 isCurrent
-                  ? "border-primary bg-primary/5 text-primary"
+                  ? "border-[#bd443a] bg-[#fff1e9] text-[#a73530]"
                   : isPassed
-                    ? "border-green-300 bg-green-50 text-green-700"
-                    : "border-outline-variant/60 bg-white text-on-surface-variant"
+                    ? "border-[#c7dfce] bg-[#eaf7ee] text-[#257555]"
+                    : "border-[#e8ded8] bg-white text-[#837780]"
               }`}
             >
               <div className="flex items-center gap-2 text-xs font-bold">
                 <span
                   className={`size-5 shrink-0 rounded-full flex items-center justify-center text-[10px] text-white ${
-                    isCurrent ? "bg-primary" : isPassed ? "bg-green-600" : "bg-gray-300"
+                    isCurrent ? "bg-[#bd443a]" : isPassed ? "bg-[#257555]" : "bg-[#b7abb2]"
                   }`}
                 >
                   {isPassed ? <Check className="size-3" /> : step.num}
                 </span>
                 <span className="truncate">{step.label}</span>
               </div>
-            </div>
+            </li>
           )
         })}
-      </div>
+      </ol>
 
       {errorMessage && (
         <div className="p-4 rounded-2xl bg-red-50 border border-red-200 text-xs sm:text-sm text-red-700 flex items-center gap-2">
@@ -148,6 +147,8 @@ export function EventCreateWizard() {
             setSelectedCategoryId={setSelectedCategoryId}
             description={description}
             setDescription={setDescription}
+            maxTicketsPerUser={maxTicketsPerUser}
+            setMaxTicketsPerUser={setMaxTicketsPerUser}
           />
         </fieldset>
       )}
@@ -218,6 +219,7 @@ export function EventCreateWizard() {
             ticketTiers={ticketTiers}
             bannerMedia={bannerMedia}
             seatMapMedia={seatMapMedia}
+            maxTicketsPerUser={maxTicketsPerUser}
             isSubmitting={isSubmitting}
             handleComplete={handleComplete}
           />

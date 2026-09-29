@@ -11,6 +11,7 @@ import {
   AlertCircle,
 } from "lucide-react"
 import type { EventMediaResponse } from "@/lib/api/event-setup-contract"
+import { bannerResolutionError, readImageDimensions } from "../../model/banner-dimensions"
 
 interface Props {
   setCurrentStep: (step: number) => void
@@ -74,12 +75,26 @@ export function EventMediaStep({
       setLocalError(err)
       return
     }
+    try {
+      const { width, height } = await readImageDimensions(file)
+      const resolutionError = bannerResolutionError(width, height)
+      if (resolutionError) {
+        setLocalError(resolutionError)
+        return
+      }
+    } catch {
+      setLocalError("Không thể đọc kích thước ảnh bìa. Vui lòng chọn ảnh khác.")
+      return
+    }
     const preview = URL.createObjectURL(file)
     setBannerPreview(preview)
     try {
       await onUploadBanner(file)
     } catch {
+      // The upload hook displays the error above the media picker.
+    } finally {
       setBannerPreview(null)
+      URL.revokeObjectURL(preview)
     }
   }
 
@@ -95,7 +110,10 @@ export function EventMediaStep({
     try {
       await onUploadSeatMap(file)
     } catch {
+      // The upload hook displays the error above the media picker.
+    } finally {
       setSeatMapPreview(null)
+      URL.revokeObjectURL(preview)
     }
   }
 
@@ -122,9 +140,9 @@ export function EventMediaStep({
   const seatMapDisplayUrl = seatMapPreview || seatMapMedia?.fileUrl
 
   return (
-    <div className="bg-white p-6 sm:p-8 rounded-3xl border border-outline-variant/60 shadow-xs space-y-6">
+    <div className="workspace-card space-y-6 p-5 sm:p-8">
       <div>
-        <h2 className="text-xl font-bold text-on-surface">Bước 3: Ảnh sự kiện & Bộ sưu tập</h2>
+        <h2 className="text-xl font-extrabold text-[#251f29]">Bước 3: Ảnh sự kiện & Bộ sưu tập</h2>
         <p className="text-xs text-on-surface-variant mt-1">
           Ảnh bìa đẹp mắt giúp thu hút người mua vé. Sự kiện bắt buộc phải có ít nhất 1 ảnh bìa
           (Banner) trước khi gửi phê duyệt.
@@ -234,7 +252,7 @@ export function EventMediaStep({
                     Nhấn để chọn ảnh hoặc kéo thả vào đây
                   </span>
                   <p className="text-xs text-on-surface-variant mt-1">
-                    Tỷ lệ chuẩn 16:9 (1200x675px) • Tối đa 10MB • JPG, PNG, WebP
+                    Tỷ lệ 16:9 • tối thiểu 1200 × 675 px, nên dùng 1920 × 1080 px • tối đa 10MB
                   </p>
                 </div>
               </div>
