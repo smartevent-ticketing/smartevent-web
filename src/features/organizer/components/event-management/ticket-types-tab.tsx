@@ -327,7 +327,7 @@ export function TicketTypesTab({
                   <input
                     type="number"
                     min={0}
-                    step={10000}
+                    step={1}
                     placeholder="Ví dụ: 500000"
                     value={price}
                     onChange={(e) =>

@@ -92,7 +92,7 @@ export function SalePhaseTierCard({
                 <input
                   type="number"
                   min="0"
-                  step="10000"
+                  step="1"
                   placeholder="500000"
                   value={cfg.basePrice}
                   onChange={(e) => {
@@ -153,7 +153,7 @@ export function SalePhaseTierCard({
                 <input
                   type="number"
                   min="0"
-                  step="1000"
+                  step="1"
                   placeholder="0"
                   value={cfg.price}
                   onChange={(e) => {
