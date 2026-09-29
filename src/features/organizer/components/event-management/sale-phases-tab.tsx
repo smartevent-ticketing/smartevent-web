@@ -78,7 +78,7 @@ export function SalePhasesTab({
   const hasRemainingCapacity = ticketTypes.some(
     (tier) => remainingCapacityForTier(tier.id, ticketTypes, areas, salePhases) > 0,
   )
-  const canStartSales = eventStatus !== "PUBLISHED" || beforeEventStart
+  const canStartSales = canEditConfig || publishedBeforeStart
   const [showAddModal, setShowAddModal] = useState(false)
   const [updatingPhaseId, setUpdatingPhaseId] = useState<string | null>(null)
   const [deletingPhaseId, setDeletingPhaseId] = useState<string | null>(null)
@@ -487,8 +487,8 @@ export function SalePhasesTab({
           </li>
           <li>
             <strong>Thu hồi lịch hẹn:</strong> Đợt mở bán ở trạng thái &quot;Đã lên lịch&quot; có
-            thể bấm <em>&quot;Thu hồi về nháp&quot;</em> bất cứ lúc nào để chỉnh sửa lại ngày giờ
-            hoặc số lượng mà không bị hủy.
+            thể bấm <em>&quot;Thu hồi về nháp&quot;</em> trước giờ bắt đầu sự kiện để chỉnh sửa ngày
+            giờ hoặc số lượng mà không bị hủy.
           </li>
           <li>
             <strong>Bảo toàn số lượng khi Đóng cổng:</strong> Khi một đợt đóng cổng, số vé chưa bán
