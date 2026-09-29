@@ -2,8 +2,8 @@
 
 import { useMemo, useState } from "react"
 import Link from "next/link"
-import { ArrowUpRight, Calendar, Clock, ExternalLink, MapPin, Plus, Search, X } from "lucide-react"
-import type { DisplayEvent } from "@/features/organizer/hooks/use-organizer-events"
+import { ArrowUpRight, Calendar, Clock, ExternalLink, MapPin, Search, X } from "lucide-react"
+import type { DisplayEvent } from "../model/organizer-event"
 
 type Props = {
   events: DisplayEvent[]
@@ -33,37 +33,30 @@ export function OrganizerEventsPanel({ events, isLoading }: Props) {
   const completedCount = events.filter((e) => e.status === "COMPLETED").length
 
   return (
-    <div className="bg-white rounded-3xl border border-outline-variant/60 shadow-xs overflow-hidden space-y-6 p-6">
+    <div className="workspace-card space-y-6 overflow-hidden p-5 sm:p-7">
       {/* Header and Toolbar */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h2 className="text-xl font-bold text-on-surface">
+          <p className="workspace-kicker">Danh sách hiện có</p>
+          <h2 className="mt-1 text-xl font-extrabold text-[#251f29]">
             Danh sách tất cả sự kiện ({events.length})
           </h2>
-          <p className="text-xs text-on-surface-variant mt-0.5">
+          <p className="mt-1 text-sm text-[#756d77]">
             Quản lý vòng đời sự kiện, cấu hình phân khu, vé và theo dõi bán vé theo thời gian thực.
           </p>
         </div>
-
-        <Link
-          href="/organizer/events/new"
-          className="inline-flex items-center gap-1.5 px-4 py-2.5 bg-primary hover:bg-primary-hover text-white text-xs font-bold rounded-xl shadow-xs transition self-start md:self-auto"
-        >
-          <Plus className="size-4" />
-          <span>Tạo sự kiện mới</span>
-        </Link>
       </div>
 
       {/* Filter and Search */}
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-2 border-t border-outline-variant/40">
+      <div className="flex flex-col justify-between gap-3 border-t border-[#eee6e1] pt-5 sm:flex-row sm:items-center">
         <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0 text-xs font-semibold scrollbar-none">
           <button
             type="button"
             onClick={() => setStatusFilter("ALL")}
             className={`px-3 py-1.5 rounded-xl transition whitespace-nowrap cursor-pointer ${
               statusFilter === "ALL"
-                ? "bg-on-surface text-surface"
-                : "bg-surface-container-low text-on-surface-variant hover:bg-surface-container"
+                ? "bg-[#bd443a] text-white"
+                : "bg-[#f7f3f0] text-[#756d77] hover:bg-[#ede4de]"
             }`}
           >
             Tất cả ({events.length})
@@ -73,19 +66,19 @@ export function OrganizerEventsPanel({ events, isLoading }: Props) {
             onClick={() => setStatusFilter("PUBLISHED")}
             className={`px-3 py-1.5 rounded-xl transition whitespace-nowrap cursor-pointer ${
               statusFilter === "PUBLISHED"
-                ? "bg-emerald-700 text-white"
-                : "bg-surface-container-low text-on-surface-variant hover:bg-surface-container"
+                ? "bg-[#257555] text-white"
+                : "bg-[#f7f3f0] text-[#756d77] hover:bg-[#ede4de]"
             }`}
           >
-            Đang mở bán ({publishedCount})
+            Đã xuất bản ({publishedCount})
           </button>
           <button
             type="button"
             onClick={() => setStatusFilter("PENDING_APPROVAL")}
             className={`px-3 py-1.5 rounded-xl transition whitespace-nowrap cursor-pointer ${
               statusFilter === "PENDING_APPROVAL"
-                ? "bg-amber-600 text-white"
-                : "bg-surface-container-low text-on-surface-variant hover:bg-surface-container"
+                ? "bg-[#b87a38] text-white"
+                : "bg-[#f7f3f0] text-[#756d77] hover:bg-[#ede4de]"
             }`}
           >
             Chờ duyệt ({pendingCount})
@@ -95,8 +88,8 @@ export function OrganizerEventsPanel({ events, isLoading }: Props) {
             onClick={() => setStatusFilter("DRAFT")}
             className={`px-3 py-1.5 rounded-xl transition whitespace-nowrap cursor-pointer ${
               statusFilter === "DRAFT"
-                ? "bg-slate-700 text-white"
-                : "bg-surface-container-low text-on-surface-variant hover:bg-surface-container"
+                ? "bg-[#6b6070] text-white"
+                : "bg-[#f7f3f0] text-[#756d77] hover:bg-[#ede4de]"
             }`}
           >
             Bản nháp ({draftCount})
@@ -107,8 +100,8 @@ export function OrganizerEventsPanel({ events, isLoading }: Props) {
               onClick={() => setStatusFilter("COMPLETED")}
               className={`px-3 py-1.5 rounded-xl transition whitespace-nowrap cursor-pointer ${
                 statusFilter === "COMPLETED"
-                  ? "bg-blue-700 text-white"
-                  : "bg-surface-container-low text-on-surface-variant hover:bg-surface-container"
+                  ? "bg-[#286c8b] text-white"
+                  : "bg-[#f7f3f0] text-[#756d77] hover:bg-[#ede4de]"
               }`}
             >
               Đã kết thúc ({completedCount})
@@ -116,20 +109,22 @@ export function OrganizerEventsPanel({ events, isLoading }: Props) {
           )}
         </div>
 
-        <div className="relative min-w-[240px]">
+        <div className="relative min-w-0 sm:min-w-[240px]">
           <Search className="size-4 absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant" />
           <input
             type="text"
+            aria-label="Tìm sự kiện"
             placeholder="Tìm kiếm sự kiện, địa điểm..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-9 pr-8 py-1.5 text-xs bg-surface-container-low border border-outline-variant/60 rounded-xl focus:outline-hidden focus:border-primary text-on-surface placeholder:text-on-surface-variant/70"
+            className="workspace-input !pl-9 !pr-8"
           />
           {searchTerm && (
             <button
               type="button"
               onClick={() => setSearchTerm("")}
-              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-on-surface-variant hover:text-on-surface"
+              aria-label="Xóa tìm kiếm"
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[#756d77] hover:text-[#251f29]"
             >
               <X className="size-3.5" />
             </button>
@@ -168,34 +163,34 @@ export function OrganizerEventsPanel({ events, isLoading }: Props) {
         </div>
       ) : (
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-sm border-collapse">
-            <thead className="bg-surface-container-low text-[11px] uppercase font-bold text-on-surface-variant border-b border-outline-variant/60 tracking-wider">
+          <table className="workspace-table min-w-[980px]">
+            <thead>
               <tr>
                 <th className="px-5 py-3.5">Tên sự kiện</th>
                 <th className="px-5 py-3.5">Thời gian & Địa điểm</th>
                 <th className="px-5 py-3.5">Vé đã bán</th>
-                <th className="px-5 py-3.5">Doanh thu</th>
+                <th className="px-5 py-3.5">Doanh thu ước tính</th>
                 <th className="px-5 py-3.5">Trạng thái</th>
                 <th className="px-5 py-3.5 text-right">Thao tác</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-outline-variant/40 text-xs sm:text-sm">
+            <tbody>
               {filteredEvents.map((ev) => (
-                <tr key={ev.id} className="hover:bg-surface-container-low/50 transition">
+                <tr key={ev.id}>
                   <td className="px-5 py-4">
                     <div className="flex items-center gap-3">
-                      <div className="size-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center shrink-0 font-black text-sm">
+                      <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-[#fff1e9] text-sm font-black text-[#bd443a]">
                         {ev.name.charAt(0).toUpperCase()}
                       </div>
                       <div className="min-w-0 max-w-xs">
                         <Link
                           href={`/organizer/events/${ev.id}`}
-                          className="font-bold text-on-surface hover:text-primary transition line-clamp-1 block"
+                          className="block line-clamp-1 font-extrabold text-[#251f29] transition hover:text-[#bd443a]"
                           title={ev.name}
                         >
                           {ev.name}
                         </Link>
-                        <span className="text-[11px] font-semibold text-primary">
+                        <span className="text-[11px] font-semibold text-[#bd443a]">
                           {ev.category}
                         </span>
                       </div>
@@ -228,13 +223,13 @@ export function OrganizerEventsPanel({ events, isLoading }: Props) {
                       </div>
                       <div className="w-full h-1.5 bg-surface-container rounded-full overflow-hidden">
                         <div
-                          className="h-full bg-blue-600 rounded-full"
+                          className="h-full rounded-full bg-[#ff8063]"
                           style={{
                             width: `${Math.min(100, Math.max(ev.occupancyRate, ev.ticketsSold > 0 ? 3 : 0))}%`,
                           }}
                         />
                       </div>
-                      <span className="text-[11px] font-semibold text-blue-700 block">
+                      <span className="block text-[11px] font-semibold text-[#bd443a]">
                         {ev.occupancyRate}% lấp đầy
                       </span>
                     </div>
@@ -248,7 +243,7 @@ export function OrganizerEventsPanel({ events, isLoading }: Props) {
                     {ev.status === "PUBLISHED" ? (
                       <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
                         <span className="size-1.5 rounded-full bg-emerald-500" />
-                        Đang mở bán
+                        Đã xuất bản
                       </span>
                     ) : ev.status === "PENDING_APPROVAL" ? (
                       <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200">
@@ -286,7 +281,7 @@ export function OrganizerEventsPanel({ events, isLoading }: Props) {
                     )}
                     <Link
                       href={`/organizer/events/${ev.id}`}
-                      className="inline-flex items-center gap-1 px-3.5 py-1.5 text-xs font-bold text-white bg-primary hover:bg-primary-hover rounded-xl transition shadow-xs"
+                      className="workspace-primary-button !min-h-0 !py-2"
                     >
                       <span>Quản lý</span>
                       <ArrowUpRight className="size-3.5" />

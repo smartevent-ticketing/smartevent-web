@@ -4,31 +4,17 @@ import { useEffect, useState } from "react"
 import { catalogApi } from "@/features/catalog"
 import { organizerApi } from "@/features/organizer/api/organizer-api"
 import type { components } from "@/lib/api/schema"
+import type { DisplayEvent } from "../model/organizer-event"
+import { readApiResponseList } from "../model/api-response-list"
 
 type EventResponse = components["schemas"]["EventResponse"]
 type InventoryCounterResponse = components["schemas"]["InventoryCounterResponse"]
 type TicketSalePhaseResponse = components["schemas"]["TicketSalePhaseResponse"]
 
-export interface DisplayEvent {
-  id: string
-  name: string
-  category: string
-  venue: string
-  date: string
-  rawDate?: string
-  ticketsSold: number
-  totalTickets: number
-  heldTickets: number
-  availableTickets: number
-  revenue: number
-  status: string
-  occupancyRate: number
-  phasesCount: number
-}
-
 export function useOrganizerEvents() {
   const [events, setEvents] = useState<DisplayEvent[]>([])
   const [isLoading, setIsLoading] = useState(true)
+  const [loadError, setLoadError] = useState<string | null>(null)
   const [refreshTrigger, setRefreshTrigger] = useState(0)
 
   const totalEvents = events.length
@@ -52,95 +38,130 @@ export function useOrganizerEvents() {
     async function fetchMyEvents() {
       try {
         setIsLoading(true)
-        const res = await catalogApi.getMyEvents({
-          params: { query: { pageable: { page: 0, size: 50 } } },
-        })
-
-        if (!isMounted) return
-
-        const rawList = res.data?.data?.content || []
+        setLoadError(null)
+        const rawList: EventResponse[] = []
+        for (let page = 0; ; page++) {
+          const response = await catalogApi.getMyEvents({
+            params: { query: { pageable: { page, size: 50 } } },
+          })
+          if (!isMounted) return
+          const result = response.data?.data
+          rawList.push(...(result?.content ?? []))
+          if (!result || page + 1 >= (result.totalPages ?? 0)) break
+        }
         if (rawList.length === 0) {
           setEvents([])
           return
         }
 
         // Concurrently fetch inventory counters and sale phases for each event to aggregate real metrics
-        const metricsList = await Promise.allSettled(
-          rawList.map(async (ev: EventResponse) => {
-            if (!ev.id) {
-              return { sold: 0, total: 0, held: 0, available: 0, revenue: 0, phasesCount: 0 }
-            }
-
-            const [invSettled, phasesSettled] = await Promise.allSettled([
-              organizerApi.getInventory(ev.id),
-              organizerApi.getSalePhases(ev.id),
-            ])
-
-            const counters: InventoryCounterResponse[] =
-              invSettled.status === "fulfilled" && Array.isArray(invSettled.value?.data)
-                ? (invSettled.value.data as InventoryCounterResponse[])
-                : []
-
-            const phases: TicketSalePhaseResponse[] =
-              phasesSettled.status === "fulfilled" && Array.isArray(phasesSettled.value?.data)
-                ? (phasesSettled.value.data as TicketSalePhaseResponse[])
-                : []
-
-            // Build price map: salePhaseId -> price
-            const priceMap = new Map<string, number>()
-            for (const p of phases) {
-              if (p.id && p.price != null) {
-                priceMap.set(p.id, Number(p.price))
-              }
-            }
-
-            let sold = 0
-            let total = 0
-            let held = 0
-            let available = 0
-            let revenue = 0
-
-            if (counters.length > 0) {
-              for (const c of counters) {
-                const s = Number(c.soldQuantity) || 0
-                const t = Number(c.totalQuantity) || 0
-                const h = Number(c.heldQuantity) || 0
-                const a =
-                  c.availableQuantity != null ? Number(c.availableQuantity) : Math.max(0, t - s - h)
-                sold += s
-                total += t
-                held += h
-                available += a
-
-                if (c.salePhaseId && priceMap.has(c.salePhaseId)) {
-                  revenue += s * (priceMap.get(c.salePhaseId) || 0)
+        const metricsList: PromiseSettledResult<{
+          sold: number
+          total: number
+          held: number
+          available: number
+          revenue: number
+          phasesCount: number
+          partial: boolean
+        }>[] = []
+        for (let offset = 0; offset < rawList.length; offset += 10) {
+          const batch = await Promise.allSettled(
+            rawList.slice(offset, offset + 10).map(async (ev: EventResponse) => {
+              if (!ev.id) {
+                return {
+                  sold: 0,
+                  total: 0,
+                  held: 0,
+                  available: 0,
+                  revenue: 0,
+                  phasesCount: 0,
+                  partial: false,
                 }
               }
-            } else if (phases.length > 0) {
-              // If no inventory counter initialized yet, aggregate capacity from configured phases
-              for (const p of phases) {
-                total += Number(p.quantity) || 0
-              }
-            }
 
-            return {
-              sold,
-              total,
-              held,
-              available,
-              revenue,
-              phasesCount: phases.length,
-            }
-          }),
-        )
+              const [invSettled, phasesSettled] = await Promise.allSettled([
+                organizerApi.getInventory(ev.id),
+                organizerApi.getSalePhases(ev.id),
+              ])
+
+              const counters: InventoryCounterResponse[] =
+                invSettled.status === "fulfilled" ? readApiResponseList(invSettled.value) : []
+
+              const phases: TicketSalePhaseResponse[] =
+                phasesSettled.status === "fulfilled" ? readApiResponseList(phasesSettled.value) : []
+
+              // Build price map: salePhaseId -> price
+              const priceMap = new Map<string, number>()
+              for (const p of phases) {
+                if (p.id && p.price != null) {
+                  priceMap.set(p.id, Number(p.price))
+                }
+              }
+
+              let sold = 0
+              let total = 0
+              let held = 0
+              let available = 0
+              let revenue = 0
+
+              if (counters.length > 0) {
+                for (const c of counters) {
+                  const s = Number(c.soldQuantity) || 0
+                  const t = Number(c.totalQuantity) || 0
+                  const h = Number(c.heldQuantity) || 0
+                  const a =
+                    c.availableQuantity != null
+                      ? Number(c.availableQuantity)
+                      : Math.max(0, t - s - h)
+                  sold += s
+                  total += t
+                  held += h
+                  available += a
+
+                  if (c.salePhaseId && priceMap.has(c.salePhaseId)) {
+                    revenue += s * (priceMap.get(c.salePhaseId) || 0)
+                  }
+                }
+              } else if (phases.length > 0) {
+                // If no inventory counter initialized yet, aggregate capacity from configured phases
+                for (const p of phases) {
+                  total += Number(p.quantity) || 0
+                }
+              }
+
+              return {
+                sold,
+                total,
+                held,
+                available,
+                revenue,
+                phasesCount: phases.length,
+                partial: invSettled.status === "rejected" || phasesSettled.status === "rejected",
+              }
+            }),
+          )
+          metricsList.push(...batch)
+        }
 
         if (!isMounted) return
+
+        if (metricsList.some((result) => result.status === "rejected" || result.value.partial)) {
+          setLoadError("Một số số liệu vé chưa tải được. Vui lòng bấm Làm mới để thử lại.")
+        }
 
         const mapped: DisplayEvent[] = rawList.map((ev: EventResponse, idx: number) => {
           const metric =
             metricsList[idx].status === "fulfilled"
               ? metricsList[idx].value
-              : { sold: 0, total: 0, held: 0, available: 0, revenue: 0, phasesCount: 0 }
+              : {
+                  sold: 0,
+                  total: 0,
+                  held: 0,
+                  available: 0,
+                  revenue: 0,
+                  phasesCount: 0,
+                  partial: true,
+                }
 
           const occupancyRate =
             metric.total > 0
@@ -177,6 +198,7 @@ export function useOrganizerEvents() {
       } catch {
         if (isMounted) {
           setEvents([])
+          setLoadError("Không thể tải danh sách sự kiện. Vui lòng bấm Làm mới để thử lại.")
         }
       } finally {
         if (isMounted) {
@@ -195,6 +217,7 @@ export function useOrganizerEvents() {
   return {
     events,
     isLoading,
+    loadError,
     setIsLoading,
     refreshTrigger,
     setRefreshTrigger,
