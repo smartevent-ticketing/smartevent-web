@@ -1,175 +1,188 @@
 "use client"
 
-import { X, Calendar, MapPin, Building, Ticket, CheckCircle2, XCircle, Layers } from "lucide-react"
+import { CheckCircle2, X, XCircle } from "lucide-react"
+import type { ApprovalDossier } from "../hooks/use-approvals"
 
 interface ApprovalDetailDialogProps {
-  event: any | null
-  isOpen: boolean
+  dossier: ApprovalDossier | null
   onClose: () => void
-  onApprove: (event: any) => void
-  onReject: (event: any) => void
+  onApprove: (dossier: ApprovalDossier) => void
+  onReject: (dossier: ApprovalDossier) => void
 }
 
+const dateLabel = (value?: string) =>
+  value ? new Date(value).toLocaleString("vi-VN") : "Chưa thiết lập"
+
 export function ApprovalDetailDialog({
-  event,
-  isOpen,
+  dossier,
   onClose,
   onApprove,
   onReject,
 }: ApprovalDetailDialogProps) {
-  if (!isOpen || !event) return null
+  if (!dossier) return null
 
-  const ticketTiers: Array<{ name: string; area?: string; price: number; quota: number }> =
-    Array.isArray(event.ticketTiers) ? event.ticketTiers : []
+  const { event, areas, ticketTypes, salePhases, media } = dossier
+  const totalCapacity = areas.reduce((sum, area) => sum + (area.capacity ?? 0), 0)
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
-      <div className="bg-white rounded-3xl max-w-3xl w-full shadow-2xl border border-outline-variant/60 overflow-hidden my-8 flex flex-col max-h-[90vh]">
-        {/* Header */}
-        <div className="p-6 border-b border-outline-variant/60 flex items-center justify-between bg-surface-container-low/40">
+    <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-[#171420]/75 p-3 backdrop-blur-sm sm:p-6">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="approval-detail-title"
+        className="my-6 flex max-h-[92vh] w-full max-w-5xl flex-col overflow-hidden rounded-[28px] border border-[#e8ded8] bg-white shadow-2xl"
+      >
+        <div className="flex items-start justify-between gap-4 border-b border-[#eee6e1] bg-[#faf7f5] p-5 sm:p-7">
           <div className="space-y-1">
-            <div className="flex items-center gap-2.5">
-              <span className="text-xs font-mono font-bold text-primary bg-primary/10 px-2 py-0.5 rounded-md">
-                {event.id}
-              </span>
-              <span className="px-3 py-0.5 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200">
-                Chờ duyệt (PENDING_APPROVAL)
-              </span>
-            </div>
-            <h3 className="text-lg font-bold text-on-surface">{event.name}</h3>
+            <p className="admin-kicker">Hồ sơ phê duyệt</p>
+            <h2
+              id="approval-detail-title"
+              className="mt-2 text-xl font-extrabold text-[#251f29] sm:text-2xl"
+            >
+              {event.name}
+            </h2>
+            <p className="text-xs text-[#756d77]">
+              Chờ duyệt · Tạo lúc {dateLabel(event.createdAt)}
+            </p>
+            <p className="break-all font-mono text-[11px] text-[#9b8f96]">ID: {event.id}</p>
           </div>
           <button
             type="button"
             onClick={onClose}
-            className="p-2 rounded-full hover:bg-surface-container text-on-surface-variant transition cursor-pointer"
+            aria-label="Đóng hồ sơ"
+            className="admin-secondary-button !min-h-0 !p-2"
           >
             <X className="size-5" />
           </button>
         </div>
 
-        {/* Dossier Content */}
-        <div className="p-6 sm:p-8 overflow-y-auto space-y-6 flex-1 text-xs">
-          {/* Organizer & Venue Card */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="p-5 rounded-2xl bg-surface-container-low/60 border border-outline-variant/60 space-y-2">
-              <div className="flex items-center gap-2 text-primary font-bold">
-                <Building className="size-4" />
-                <span>Đơn vị tổ chức sự kiện</span>
-              </div>
-              <p className="font-bold text-sm text-on-surface">
-                {event.organizer || "Chưa có thông tin đơn vị tổ chức"}
-              </p>
-              <p className="text-on-surface-variant">
-                Ngày gửi hồ sơ: {event.submittedDate || "Chưa ghi nhận"}
-              </p>
-            </div>
-
-            <div className="p-5 rounded-2xl bg-surface-container-low/60 border border-outline-variant/60 space-y-2">
-              <div className="flex items-center gap-2 text-primary font-bold">
-                <MapPin className="size-4" />
-                <span>Địa điểm & Thời gian</span>
-              </div>
-              <p className="font-bold text-sm text-on-surface">
-                {event.venue || "Chưa chọn địa điểm"}
-              </p>
-              <p className="text-on-surface-variant flex items-center gap-1.5">
-                <Calendar className="size-3.5 text-primary" />
-                <span>
-                  {event.startTime
-                    ? new Date(event.startTime).toLocaleString("vi-VN")
-                    : event.date || "Chưa thiết lập"}
-                </span>
-              </p>
-              <p className="text-on-surface-variant flex items-center gap-1.5">
-                <Layers className="size-3.5 text-primary" />
-                <span>
-                  Sức chứa:{" "}
-                  {event.totalCapacity
-                    ? `${event.totalCapacity.toLocaleString("vi-VN")} chỗ`
-                    : "Chưa xác định"}
-                </span>
+        <div className="flex-1 space-y-7 overflow-y-auto p-5 text-sm sm:p-8">
+          <section className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="space-y-2 rounded-2xl border border-[#eee6e1] bg-[#fbf9f7] p-5">
+              <h3 className="font-extrabold">Ban tổ chức và địa điểm</h3>
+              <p>BTC: {event.organizerId ?? "Chưa có ID"}</p>
+              <p>{event.venue?.name ?? "Chưa chọn địa điểm"}</p>
+              <p>{event.venue?.address ?? event.city ?? "Chưa có địa chỉ"}</p>
+              <p>
+                Danh mục:{" "}
+                {event.categories
+                  ?.map((category) => category.name)
+                  .filter(Boolean)
+                  .join(", ") || "Chưa có"}
               </p>
             </div>
-          </div>
-
-          {/* Description */}
-          <div className="space-y-2">
-            <h4 className="font-bold text-on-surface text-xs uppercase tracking-wider">
-              Mô tả & Nội dung chương trình
-            </h4>
-            <div className="p-4 rounded-2xl bg-surface-container-low/40 border border-outline-variant/60 text-on-surface leading-relaxed">
-              {event.description || "Chưa có mô tả cho sự kiện này."}
+            <div className="space-y-2 rounded-2xl border border-[#eee6e1] bg-[#fbf9f7] p-5">
+              <h3 className="font-extrabold">Thời gian và sức chứa</h3>
+              <p>Bắt đầu: {dateLabel(event.startTime)}</p>
+              <p>Kết thúc: {dateLabel(event.endTime)}</p>
+              <p>Tổng sức chứa: {totalCapacity.toLocaleString("vi-VN")} chỗ</p>
+              <p>Giới hạn mỗi người: {event.maxTicketsPerUser ?? "Không giới hạn"}</p>
             </div>
-          </div>
+          </section>
 
-          {/* Proposed Ticket Tiers */}
-          <div className="space-y-3">
-            <h4 className="font-bold text-on-surface text-xs uppercase tracking-wider flex items-center gap-1.5">
-              <Ticket className="size-4 text-primary" />
-              <span>Cơ cấu các hạng vé phát hành</span>
-            </h4>
-            {ticketTiers.length === 0 ? (
-              <div className="p-6 text-center text-on-surface-variant bg-surface-container-low/40 rounded-2xl border border-outline-variant/60">
-                Chưa có thông tin hạng vé chi tiết
-              </div>
-            ) : (
-              <div className="border border-outline-variant/60 rounded-2xl overflow-hidden">
-                <table className="w-full text-left text-xs">
-                  <thead className="bg-surface-container-low text-on-surface-variant uppercase font-bold border-b border-outline-variant/60">
-                    <tr>
-                      <th className="px-4 py-3">Hạng vé</th>
-                      <th className="px-4 py-3">Phân khu</th>
-                      <th className="px-4 py-3 text-right">Đơn giá niêm yết</th>
-                      <th className="px-4 py-3 text-right">Số lượng phát hành</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-outline-variant/40">
-                    {ticketTiers.map((tier: any, idx: number) => (
-                      <tr key={idx} className="hover:bg-surface-container-low/30">
-                        <td className="px-4 py-3 font-bold text-on-surface">{tier.name}</td>
-                        <td className="px-4 py-3 text-on-surface-variant">{tier.area || "—"}</td>
-                        <td className="px-4 py-3 text-right font-mono font-bold text-primary">
-                          {tier.price.toLocaleString("vi-VN")} ₫
+          <section className="space-y-2">
+            <h3 className="font-extrabold">Mô tả sự kiện</h3>
+            <p className="whitespace-pre-wrap rounded-2xl border border-[#eee6e1] bg-[#fbf9f7] p-5 leading-6">
+              {event.description || "Chưa có mô tả"}
+            </p>
+          </section>
+
+          <section className="space-y-3">
+            <h3 className="font-extrabold">
+              Phân khu và đợt bán ({areas.length} khu, {salePhases.length} đợt)
+            </h3>
+            <div className="overflow-x-auto rounded-2xl border border-[#eee6e1]">
+              <table className="admin-table min-w-[580px]">
+                <thead>
+                  <tr>
+                    <th className="px-4 py-3">Phân khu / Hạng vé</th>
+                    <th className="px-4 py-3">Đợt bán</th>
+                    <th className="px-4 py-3 text-right">Giá</th>
+                    <th className="px-4 py-3 text-right">Số vé</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-outline-variant/40">
+                  {salePhases.map((phase) => {
+                    const ticketType = ticketTypes.find((type) => type.id === phase.ticketTypeId)
+                    const area = areas.find((item) => item.id === ticketType?.eventAreaId)
+                    return (
+                      <tr key={phase.id}>
+                        <td className="px-4 py-3">
+                          {area?.name ?? "Chưa có khu"} / {ticketType?.name ?? "Chưa có hạng vé"}
                         </td>
-                        <td className="px-4 py-3 text-right font-mono">
-                          {tier.quota.toLocaleString("vi-VN")} vé
+                        <td className="px-4 py-3">{phase.name ?? "—"}</td>
+                        <td className="px-4 py-3 text-right">
+                          {phase.price?.toLocaleString("vi-VN") ?? "—"} ₫
+                        </td>
+                        <td className="px-4 py-3 text-right">
+                          {phase.quantity?.toLocaleString("vi-VN") ?? "—"}
                         </td>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
+                    )
+                  })}
+                </tbody>
+              </table>
+              {salePhases.length === 0 && (
+                <p className="p-4 text-on-surface-variant">Chưa có đợt bán vé.</p>
+              )}
+            </div>
+          </section>
+
+          <section className="space-y-3">
+            <h3 className="font-extrabold">Ảnh và tài liệu ({media.length})</h3>
+            {media.length === 0 ? (
+              <p className="text-on-surface-variant">Chưa có tệp nào.</p>
+            ) : (
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                {media.map((file) => (
+                  <div key={file.id} className="overflow-hidden rounded-xl border border-[#eee6e1]">
+                    {file.url ? (
+                      <a href={file.url} target="_blank" rel="noreferrer" className="block">
+                        {file.type === "DOCUMENT" ? (
+                          <span className="h-28 flex items-center justify-center text-primary">
+                            Mở tài liệu
+                          </span>
+                        ) : (
+                          // Remote presigned URLs have a dynamic MinIO host.
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img
+                            src={file.url}
+                            alt={`Tệp ${file.type}`}
+                            className="h-28 w-full object-cover"
+                          />
+                        )}
+                      </a>
+                    ) : (
+                      <p className="h-28 flex items-center justify-center text-red-700 text-xs p-3">
+                        Không tải được tệp
+                      </p>
+                    )}
+                    <p className="p-2 text-xs font-semibold">{file.type}</p>
+                  </div>
+                ))}
               </div>
             )}
-          </div>
+          </section>
         </div>
 
-        {/* Footer Actions */}
-        <div className="p-6 border-t border-outline-variant/60 bg-surface-container-low/40 flex items-center justify-between gap-4">
-          <button
-            type="button"
-            onClick={onClose}
-            className="px-5 py-2 text-xs font-bold text-on-surface-variant hover:bg-surface-container rounded-xl transition cursor-pointer"
-          >
+        <div className="flex flex-wrap items-center justify-between gap-3 border-t border-[#eee6e1] bg-[#faf7f5] p-5 sm:p-6">
+          <button type="button" onClick={onClose} className="admin-secondary-button">
             Đóng
           </button>
-
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center gap-2">
             <button
               type="button"
-              onClick={() => onReject(event)}
-              className="px-5 py-2.5 border border-red-200 text-red-600 hover:bg-red-50 text-xs font-bold rounded-xl transition cursor-pointer inline-flex items-center gap-1.5"
+              onClick={() => onReject(dossier)}
+              className="admin-secondary-button !border-[#f0cdcb] !text-[#b7474f]"
             >
-              <XCircle className="size-4" />
-              <span>Từ chối (Draft)</span>
+              <XCircle className="size-4" /> Từ chối
             </button>
-
             <button
               type="button"
-              onClick={() => onApprove(event)}
-              className="px-6 py-2.5 bg-green-600 hover:bg-green-700 text-white text-xs font-bold rounded-xl transition cursor-pointer shadow-xs inline-flex items-center gap-1.5"
+              onClick={() => onApprove(dossier)}
+              className="admin-primary-button !bg-[#257555] hover:!bg-[#1b6046]"
             >
-              <CheckCircle2 className="size-4" />
-              <span>Phê duyệt (Publish)</span>
+              <CheckCircle2 className="size-4" /> Phê duyệt
             </button>
           </div>
         </div>
