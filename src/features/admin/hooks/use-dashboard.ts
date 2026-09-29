@@ -1,23 +1,17 @@
 "use client"
 
-import { catalogApi } from "@/features/catalog/api/catalog-api"
+import { catalogApi } from "@/features/catalog"
 import { adminApi } from "@/features/admin/api/admin-api"
 
 import { useEffect, useState } from "react"
 
 import { getApiErrorMessage } from "@/lib/api/result"
-import type {
-  AdminNotification,
-  CategoryResponse,
-  VenueResponse,
-  OutboxEvent,
-  PendingEvent,
-} from "../model/admin-types"
+import type { AdminNotification, CategoryResponse, VenueResponse } from "../model/admin-types"
 
 export function useAdminDashboard() {
   const [notification, setNotification] = useState<AdminNotification | null>(null)
 
-  const [pendingEvents, setPendingEvents] = useState<PendingEvent[]>([])
+  const [pendingCount, setPendingCount] = useState(0)
 
   const [isLoadingPendingEvents, setIsLoadingPendingEvents] = useState(true)
 
@@ -29,7 +23,7 @@ export function useAdminDashboard() {
 
   const [isLoadingVenues, setIsLoadingVenues] = useState(true)
 
-  const [failedOutbox, setFailedOutbox] = useState<OutboxEvent[]>([])
+  const [failedOutboxCount, setFailedOutboxCount] = useState(0)
 
   const [isLoadingOutbox, setIsLoadingOutbox] = useState(true)
 
@@ -40,32 +34,14 @@ export function useAdminDashboard() {
         const results = await Promise.all([
           catalogApi.getCategories(),
           catalogApi.getVenues(),
-          adminApi.getFailedOutbox(),
+          adminApi.getOutboxStats(),
           adminApi.getPendingEvents(),
         ])
         if (!mounted) return
         setCategories(results[0].data?.data ?? [])
         setVenues(results[1].data?.data ?? [])
-        setFailedOutbox(results[2].data?.data ?? [])
-        const rawPending =
-          (results[3] as any)?.data?.data?.content ?? (results[3] as any)?.data?.data ?? []
-        setPendingEvents(
-          Array.isArray(rawPending)
-            ? rawPending.map((ev: any) => ({
-                id: ev.id,
-                name: ev.name || "Sự kiện chưa đặt tên",
-                organizer: ev.organizerId ? `BTC (${ev.organizerId.slice(0, 8)})` : "Ban tổ chức",
-                venue: ev.venue?.name
-                  ? `${ev.venue.name}, ${ev.venue.city || ""}`
-                  : "Chưa chọn địa điểm",
-                submittedDate: ev.createdAt
-                  ? new Date(ev.createdAt).toLocaleDateString("vi-VN")
-                  : "Hôm nay",
-                expectedTickets: 0,
-                priceRange: "Chờ cập nhật",
-              }))
-            : [],
-        )
+        setFailedOutboxCount(results[2].data?.data?.failedCount ?? 0)
+        setPendingCount(results[3].data?.data?.totalElements ?? 0)
       } catch (error) {
         if (mounted)
           setNotification({
@@ -90,13 +66,13 @@ export function useAdminDashboard() {
   return {
     notification,
     setNotification,
-    pendingEvents,
+    pendingCount,
     isLoadingPendingEvents,
     categories,
     isLoadingCategories,
     venues,
     isLoadingVenues,
-    failedOutbox,
+    failedOutboxCount,
     isLoadingOutbox,
   }
 }
