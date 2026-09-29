@@ -1,4 +1,4 @@
-import { RefundReviewsPanel } from "@/features/admin/components/refund-reviews-panel"
+import { RefundReviewsPanel } from "@/features/admin"
 
 export default function Page() {
   return <RefundReviewsPanel />

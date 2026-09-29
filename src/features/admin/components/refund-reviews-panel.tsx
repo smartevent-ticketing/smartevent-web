@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState, type FormEvent } from "react"
+import { ClipboardList, HandCoins, ShieldCheck, X } from "lucide-react"
 import { ActionFeedback, type ActionMessage } from "@/components/shared/action-feedback"
 import { adminApi } from "@/features/admin/api/admin-api"
 import { getApiErrorMessage } from "@/lib/api/result"
@@ -112,11 +113,13 @@ export function RefundReviewsPanel() {
   return (
     <div className="space-y-6">
       <ActionFeedback message={message} onDismiss={() => setMessage(null)} />
-      <p className="text-sm text-on-surface-variant">
-        Hệ thống chỉ ghi nhận hồ sơ và quyết định của Admin. Việc chuyển tiền hoàn được kiểm tra và
-        thực hiện thủ công qua kênh thanh toán; chỉ chọn “Đã xác nhận hoàn tiền” sau khi có bằng
-        chứng.
-      </p>
+      <div className="flex items-start gap-3 rounded-2xl border border-[#ead6c4] bg-[#fff8ef] p-4 text-sm leading-6 text-[#76543e]">
+        <ShieldCheck className="mt-0.5 size-5 shrink-0" />
+        <p>
+          Admin kiểm tra và thực hiện chuyển tiền thủ công qua kênh thanh toán. Chỉ chọn “Đã xác
+          nhận hoàn tiền” sau khi có bằng chứng giao dịch.
+        </p>
+      </div>
       <div className="flex flex-wrap gap-2" aria-label="Lọc hồ sơ theo trạng thái">
         {statuses.map((item) => (
           <button
@@ -128,27 +131,38 @@ export function RefundReviewsPanel() {
               setSelected(null)
               setLoading(true)
             }}
-            className={`rounded-xl px-4 py-2 text-sm font-semibold ${
+            aria-pressed={status === item.value}
+            className={`rounded-xl border px-4 py-2.5 text-xs font-bold transition ${
               status === item.value
-                ? "bg-primary text-white"
-                : "bg-white border border-outline-variant/60 text-on-surface-variant"
+                ? "border-[#bd443a] bg-[#bd443a] text-white shadow-sm"
+                : "border-[#e8ded8] bg-white text-[#6d626d] hover:border-[#bd443a]"
             }`}
           >
             {item.label}
           </button>
         ))}
       </div>
-      <section className="rounded-3xl border border-outline-variant/60 bg-white p-5 shadow-xs">
-        <h2 className="mb-4 font-bold">Danh sách hồ sơ ({totalElements})</h2>
+      <section className="admin-card overflow-hidden">
+        <div className="flex items-center justify-between gap-3 border-b border-[#eee6e1] px-5 py-5 sm:px-7">
+          <div>
+            <p className="admin-kicker">Danh sách yêu cầu</p>
+            <h2 className="mt-1 text-lg font-extrabold">Hồ sơ ({totalElements})</h2>
+          </div>
+          <ClipboardList className="size-5 text-[#bd443a]" />
+        </div>
         {loading ? (
-          <p className="text-sm text-on-surface-variant">Đang tải...</p>
+          <p role="status" className="px-6 py-12 text-center text-sm text-[#756d77]">
+            Đang tải hồ sơ...
+          </p>
         ) : reviews.length === 0 ? (
-          <p className="text-sm text-on-surface-variant">Không có hồ sơ ở trạng thái này.</p>
+          <p className="px-6 py-12 text-center text-sm text-[#756d77]">
+            Không có hồ sơ ở trạng thái này.
+          </p>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-sm">
+            <table className="admin-table min-w-[720px]">
               <thead>
-                <tr className="border-b border-outline-variant/60 text-on-surface-variant">
+                <tr>
                   <th className="p-3">Đơn hàng</th>
                   <th className="p-3">Số tiền</th>
                   <th className="p-3">Lý do</th>
@@ -158,7 +172,7 @@ export function RefundReviewsPanel() {
               </thead>
               <tbody>
                 {reviews.map((review) => (
-                  <tr key={review.id} className="border-b border-outline-variant/40">
+                  <tr key={review.id}>
                     <td className="p-3 font-mono text-xs">{review.orderId}</td>
                     <td className="p-3 whitespace-nowrap">
                       {new Intl.NumberFormat("vi-VN", {
@@ -172,7 +186,7 @@ export function RefundReviewsPanel() {
                       <button
                         type="button"
                         onClick={() => void selectReview(review)}
-                        className="font-semibold text-primary hover:underline"
+                        className="admin-secondary-button !min-h-0 !py-2"
                       >
                         Xem hồ sơ
                       </button>
@@ -183,7 +197,7 @@ export function RefundReviewsPanel() {
             </table>
           </div>
         )}
-        <div className="mt-4 flex items-center justify-end gap-3 text-sm">
+        <div className="flex items-center justify-end gap-3 border-t border-[#eee6e1] px-5 py-4 text-xs sm:px-7">
           <button
             type="button"
             disabled={page === 0}
@@ -191,7 +205,7 @@ export function RefundReviewsPanel() {
               setPage(page - 1)
               setLoading(true)
             }}
-            className="disabled:opacity-40"
+            className="admin-secondary-button !min-h-0 !py-2"
           >
             Trước
           </button>
@@ -205,36 +219,38 @@ export function RefundReviewsPanel() {
               setPage(page + 1)
               setLoading(true)
             }}
-            className="disabled:opacity-40"
+            className="admin-secondary-button !min-h-0 !py-2"
           >
             Sau
           </button>
         </div>
       </section>
       {selected && (
-        <section className="rounded-3xl border border-outline-variant/60 bg-white p-5 shadow-xs space-y-5">
+        <section className="admin-card space-y-6 p-5 sm:p-7">
           <div className="flex justify-between gap-4">
             <div>
-              <h2 className="font-bold">Hồ sơ {selected.id}</h2>
-              <p className="text-sm text-on-surface-variant">
+              <p className="admin-kicker">Chi tiết xử lý</p>
+              <h2 className="mt-1 text-lg font-extrabold">Hồ sơ {selected.id}</h2>
+              <p className="mt-1 text-sm text-[#756d77]">
                 Thanh toán: {selected.paymentId} · {statusLabel(selected.status)}
               </p>
             </div>
             <button
               type="button"
               onClick={() => setSelected(null)}
-              className="text-sm text-on-surface-variant"
+              aria-label="Đóng hồ sơ hoàn tiền"
+              className="admin-secondary-button !min-h-0 !p-2"
             >
-              Đóng
+              <X className="size-4" />
             </button>
           </div>
-          <form onSubmit={(event) => void submit(event)} className="grid gap-4 max-w-2xl">
+          <form onSubmit={(event) => void submit(event)} className="grid max-w-2xl gap-4">
             <label className="grid gap-1 text-sm font-semibold">
               Trạng thái mới
               <select
                 value={nextStatus}
                 onChange={(event) => setNextStatus(event.target.value as RefundReviewStatus)}
-                className="rounded-xl border border-outline-variant p-2 font-normal"
+                className="admin-input font-normal"
               >
                 {statuses.map((item) => (
                   <option key={item.value} value={item.value}>
@@ -251,7 +267,7 @@ export function RefundReviewsPanel() {
                 value={note}
                 onChange={(event) => setNote(event.target.value)}
                 rows={3}
-                className="rounded-xl border border-outline-variant p-2 font-normal"
+                className="admin-input font-normal"
               />
             </label>
             <label className="grid gap-1 text-sm font-semibold">
@@ -262,19 +278,20 @@ export function RefundReviewsPanel() {
                 onChange={(event) => setEvidence(event.target.value)}
                 maxLength={200}
                 required={nextStatus === "REFUNDED_CONFIRMED"}
-                className="rounded-xl border border-outline-variant p-2 font-normal"
+                className="admin-input font-normal"
               />
             </label>
             <button
               type="submit"
               disabled={saving || nextStatus === selected.status || !note.trim()}
-              className="w-fit rounded-xl bg-primary px-5 py-2 text-sm font-bold text-white disabled:opacity-40"
+              className="admin-primary-button w-fit"
             >
+              <HandCoins className="size-4" />
               {saving ? "Đang lưu..." : "Lưu quyết định"}
             </button>
           </form>
           <div>
-            <h3 className="font-semibold">Lịch sử xử lý</h3>
+            <h3 className="border-t border-[#eee6e1] pt-5 font-extrabold">Lịch sử xử lý</h3>
             {historyLoading ? (
               <p className="text-sm">Đang tải...</p>
             ) : history.length === 0 ? (
@@ -282,7 +299,7 @@ export function RefundReviewsPanel() {
             ) : (
               <ol className="mt-2 space-y-3">
                 {history.map((action) => (
-                  <li key={action.id} className="border-l-2 border-primary pl-3 text-sm">
+                  <li key={action.id} className="border-l-2 border-[#bd443a] pl-3 text-sm">
                     <p className="font-semibold">
                       {statusLabel(action.previousStatus)} → {statusLabel(action.newStatus)}
                     </p>
