@@ -1,13 +1,26 @@
 import type { FetchOptions } from "openapi-fetch"
-import { apiClient } from "@/lib/api/client"
+import { apiClient, type ApiPaths } from "@/lib/api/client"
 import { requireApiSuccess } from "@/lib/api/result"
-import type { paths } from "@/lib/api/schema"
-import type { EventSetupPaths, AdminEventPaths } from "@/lib/api/event-setup-contract"
-import type { RefundReviewPaths, RefundReviewStatus } from "@/lib/api/refund-review-contract"
-
-type ApiPaths = paths & EventSetupPaths & AdminEventPaths & RefundReviewPaths
+import type { RefundReviewStatus } from "@/lib/api/refund-review-contract"
+import type { components } from "@/lib/api/schema"
+import type { GrantableRole } from "@/lib/api/admin-users-contract"
 
 export const adminApi = {
+  listUsers: (search: string, page: number) =>
+    requireApiSuccess(
+      apiClient.GET("/api/v1/admin/users", {
+        params: { query: { search: search || undefined, page, size: 20 } },
+      }),
+    ),
+
+  grantUserRole: (userId: string, roleName: GrantableRole) =>
+    requireApiSuccess(
+      apiClient.POST("/api/v1/admin/users/{userId}/roles", {
+        params: { path: { userId } },
+        body: { roleName },
+      }),
+    ),
+
   listRefundReviews: (status: RefundReviewStatus, page = 0) =>
     requireApiSuccess(
       apiClient.GET("/api/v1/admin/payment-refund-reviews", {
@@ -68,6 +81,14 @@ export const adminApi = {
     },
   ) => requireApiSuccess(apiClient.POST("/api/v1/venues", options)),
 
+  updateVenue: (id: string, body: components["schemas"]["VenueRequest"]) =>
+    requireApiSuccess(
+      apiClient.PUT("/api/v1/venues/{id}", {
+        params: { path: { id } },
+        body,
+      }),
+    ),
+
   deleteVenue: (
     options: Omit<FetchOptions<ApiPaths["/api/v1/venues/{id}"]["delete"]>, "parseAs"> & {
       parseAs?: "json"
@@ -79,6 +100,14 @@ export const adminApi = {
       parseAs?: "json"
     },
   ) => requireApiSuccess(apiClient.POST("/api/v1/categories", options)),
+
+  updateCategory: (id: string, body: components["schemas"]["CategoryRequest"]) =>
+    requireApiSuccess(
+      apiClient.PUT("/api/v1/categories/{id}", {
+        params: { path: { id } },
+        body,
+      }),
+    ),
 
   deleteCategory: (
     options: Omit<FetchOptions<ApiPaths["/api/v1/categories/{id}"]["delete"]>, "parseAs"> & {
