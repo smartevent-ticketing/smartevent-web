@@ -1,6 +1,6 @@
 "use client"
 
-import { ordersApi } from "@/features/orders/api/orders-api"
+import { ordersApi } from "@/features/orders"
 
 import { useEffect, useState } from "react"
 
@@ -20,15 +20,31 @@ export function useCustomerOrders() {
   } | null>(null)
 
   const [cancellingOrderId, setCancellingOrderId] = useState<string | null>(null)
+  const [nextPage, setNextPage] = useState<number | null>(null)
+  const [isLoadingMore, setIsLoadingMore] = useState(false)
 
-  async function refreshOrders() {
+  async function loadMoreOrders() {
+    if (nextPage === null || isLoadingMore) return
+    const pageNumber = nextPage
+    setIsLoadingMore(true)
     try {
       const res = await ordersApi.getMyOrders({
-        params: { query: { page: 0, size: 20 } },
+        params: { query: { page: pageNumber, size: 20 } },
       })
-      if (res.data?.data?.content) setOrders(res.data.data.content)
-    } catch {
-      // ignore
+      const page = res.data?.data
+      if (!page) throw new Error("Không thể tải thêm đơn hàng.")
+      setOrders((current) => {
+        const seen = new Set(current.map((order) => order.id))
+        return [...current, ...(page.content ?? []).filter((order) => !seen.has(order.id))]
+      })
+      setNextPage(pageNumber + 1 < (page.totalPages ?? 0) ? pageNumber + 1 : null)
+    } catch (error) {
+      setFeedbackMessage({
+        type: "error",
+        text: getApiErrorMessage(error, "Không thể tải thêm đơn hàng. Vui lòng thử lại."),
+      })
+    } finally {
+      setIsLoadingMore(false)
     }
   }
 
@@ -38,11 +54,13 @@ export function useCustomerOrders() {
       await ordersApi.cancelOrder({
         params: { path: { id: orderId } },
       })
+      setOrders((current) =>
+        current.map((order) => (order.id === orderId ? { ...order, status: "CANCELLED" } : order)),
+      )
       setFeedbackMessage({
         type: "success",
         text: "Đã hủy đơn hàng thành công. Vé và ghế đã được nhả lại cho hệ thống.",
       })
-      refreshOrders()
     } catch {
       setFeedbackMessage({
         type: "error",
@@ -61,7 +79,9 @@ export function useCustomerOrders() {
           ordersApi.getMyOrders({ params: { query: { page: 0, size: 20 } } }),
         ])
         if (!mounted) return
-        setOrders(results[0].data?.data?.content ?? [])
+        const page = results[0].data?.data
+        setOrders(page?.content ?? [])
+        setNextPage((page?.totalPages ?? 0) > 1 ? 1 : null)
       } catch (error) {
         if (mounted)
           setFeedbackMessage({
@@ -86,6 +106,9 @@ export function useCustomerOrders() {
     feedbackMessage,
     setFeedbackMessage,
     cancellingOrderId,
+    nextPage,
+    isLoadingMore,
+    loadMoreOrders,
     handleCancelOrder,
   }
 }

@@ -6,6 +6,9 @@ import { ActionFeedback } from "@/components/shared/action-feedback"
 import { useCustomerInvoices } from "@/features/account/hooks/use-invoices"
 import { InvoiceDetailDialog } from "@/features/account/components/invoice-detail-dialog"
 import { InvoiceEmailDialog } from "@/features/account/components/invoice-email-dialog"
+import type { components } from "@/lib/api/schema"
+
+type Invoice = components["schemas"]["InvoiceResponse"]
 
 export function CustomerInvoicesPanel() {
   const {
@@ -19,8 +22,8 @@ export function CustomerInvoicesPanel() {
     handleSendInvoiceEmail,
   } = useCustomerInvoices()
 
-  const [selectedInvoiceForDetail, setSelectedInvoiceForDetail] = useState<any | null>(null)
-  const [selectedInvoiceForEmail, setSelectedInvoiceForEmail] = useState<any | null>(null)
+  const [selectedInvoiceForDetail, setSelectedInvoiceForDetail] = useState<Invoice | null>(null)
+  const [selectedInvoiceForEmail, setSelectedInvoiceForEmail] = useState<Invoice | null>(null)
 
   return (
     <div className="space-y-6">
@@ -29,7 +32,7 @@ export function CustomerInvoicesPanel() {
         <div>
           <h2 className="text-lg font-bold text-on-surface">Hóa đơn giao dịch điện tử</h2>
           <p className="text-xs text-on-surface-variant">
-            Hệ thống tự động phát hành hóa đơn điện tử cho mọi giao dịch thanh toán thành công.
+            Chứng từ giao dịch được tạo sau khi thanh toán thành công.
           </p>
         </div>
 
@@ -45,7 +48,7 @@ export function CustomerInvoicesPanel() {
               Chưa có hóa đơn nào được phát hành
             </h4>
             <p className="text-xs text-on-surface-variant max-w-sm mx-auto">
-              Hóa đơn sẽ xuất hiện tại đây ngay khi đơn hàng thanh toán thành công.
+              Chứng từ sẽ xuất hiện tại đây sau khi đơn hàng thanh toán thành công.
             </p>
           </div>
         ) : (
@@ -61,15 +64,19 @@ export function CustomerInvoicesPanel() {
                       HÓA ĐƠN #{inv.invoiceCode || inv.id}
                     </span>
                     <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-green-50 text-green-700 border border-green-200">
-                      {inv.status || "ISSUED"}
+                      {inv.status ?? "Chưa rõ"}
                     </span>
                   </div>
                   <p className="text-xs text-on-surface-variant">
                     Ngày lập:{" "}
-                    {inv.issuedAt ? new Date(inv.issuedAt).toLocaleString("vi-VN") : "Gần đây"} •
-                    Tổng tiền:{" "}
+                    {inv.issuedAt
+                      ? new Date(inv.issuedAt).toLocaleString("vi-VN")
+                      : "Chưa có thông tin"}{" "}
+                    • Tổng tiền:{" "}
                     <strong className="text-primary">
-                      {(inv.totalAmount || 0).toLocaleString("vi-VN")} ₫
+                      {typeof inv.totalAmount === "number"
+                        ? `${inv.totalAmount.toLocaleString("vi-VN")} ₫`
+                        : "Chưa có thông tin"}
                     </strong>
                   </p>
                 </div>
@@ -133,9 +140,7 @@ export function CustomerInvoicesPanel() {
           invoice={selectedInvoiceForEmail}
           isOpen={Boolean(selectedInvoiceForEmail)}
           onClose={() => setSelectedInvoiceForEmail(null)}
-          onSendEmail={async (inv, customEmail) => {
-            await handleSendInvoiceEmail({ ...inv, recipientEmail: customEmail })
-          }}
+          onSendEmail={handleSendInvoiceEmail}
         />
       )}
     </div>

@@ -2,12 +2,15 @@
 
 import { useState } from "react"
 import { Mail, CheckCircle2, Clock, Loader2, Info } from "lucide-react"
+import type { components } from "@/lib/api/schema"
+
+type Invoice = components["schemas"]["InvoiceResponse"]
 
 interface InvoiceEmailDialogProps {
-  invoice: any | null
+  invoice: Invoice | null
   isOpen: boolean
   onClose: () => void
-  onSendEmail: (invoice: any, email?: string) => Promise<void>
+  onSendEmail: (invoice: Invoice, email?: string) => Promise<boolean>
 }
 
 export function InvoiceEmailDialog({
@@ -19,15 +22,20 @@ export function InvoiceEmailDialog({
   const [recipientEmail, setRecipientEmail] = useState("")
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isQueued, setIsQueued] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   if (!isOpen || !invoice) return null
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    setError(null)
     setIsSubmitting(true)
     try {
-      await onSendEmail(invoice, recipientEmail.trim() || undefined)
-      setIsQueued(true)
+      const accepted = await onSendEmail(invoice, recipientEmail.trim() || undefined)
+      if (accepted) setIsQueued(true)
+      else setError("Không thể tiếp nhận yêu cầu gửi email. Vui lòng thử lại.")
+    } catch {
+      setError("Không thể tiếp nhận yêu cầu gửi email. Vui lòng thử lại.")
     } finally {
       setIsSubmitting(false)
     }
@@ -35,6 +43,7 @@ export function InvoiceEmailDialog({
 
   const handleClose = () => {
     setIsQueued(false)
+    setError(null)
     setRecipientEmail("")
     onClose()
   }
@@ -51,19 +60,23 @@ export function InvoiceEmailDialog({
             <div className="space-y-1.5">
               <h3 className="text-lg font-bold text-on-surface">Gửi hóa đơn qua email</h3>
               <p className="text-xs text-on-surface-variant leading-relaxed">
-                Hóa đơn VAT điện tử của đơn hàng #{invoice.invoiceCode || invoice.id?.slice(0, 8)}{" "}
-                sẽ được gửi đến địa chỉ email bạn chỉ định.
+                Chứng từ giao dịch #{invoice.invoiceCode ?? invoice.id?.slice(0, 8)} sẽ được gửi đến
+                địa chỉ email bạn chỉ định.
               </p>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-1.5">
-                <label className="text-xs font-semibold text-on-surface-variant">
+                <label
+                  htmlFor="invoice-recipient-email"
+                  className="text-xs font-semibold text-on-surface-variant"
+                >
                   Email người nhận (Tùy chọn)
                 </label>
                 <input
+                  id="invoice-recipient-email"
                   type="email"
-                  placeholder="Ví dụ: ketoan@congty.com (để trống nếu gửi về email tài khoản)"
+                  placeholder="Ví dụ: ketoan@congty.com (để trống để dùng email trên chứng từ)"
                   value={recipientEmail}
                   onChange={(e) => setRecipientEmail(e.target.value)}
                   className="w-full px-4 py-2.5 rounded-xl border border-outline-variant text-xs"
@@ -73,10 +86,15 @@ export function InvoiceEmailDialog({
               <div className="p-3 bg-blue-50/70 rounded-xl border border-blue-200/60 flex items-start gap-2 text-[11px] text-blue-900 leading-relaxed">
                 <Info className="size-4 text-blue-600 shrink-0 mt-0.5" />
                 <span>
-                  Nếu để trống, hệ thống sẽ sử dụng email thanh toán mặc định đã đăng ký trên tài
-                  khoản của bạn.
+                  Nếu để trống, hệ thống sẽ gửi đến email thanh toán đã ghi trên chứng từ.
                 </span>
               </div>
+
+              {error && (
+                <p role="alert" className="text-xs text-red-600">
+                  {error}
+                </p>
+              )}
 
               <div className="flex items-center justify-end gap-2 pt-2">
                 <button
@@ -110,8 +128,7 @@ export function InvoiceEmailDialog({
                 Yêu cầu đã được tiếp nhận vào hàng đợi
               </h3>
               <p className="text-xs text-on-surface-variant max-w-sm mx-auto leading-relaxed">
-                Hệ thống thư điện tử Outbox đã tạo tác vụ gửi hóa đơn (Trạng thái: PENDING). Hóa đơn
-                điện tử sẽ được chuyển đến hộp thư của bạn sau ít phút.
+                Hệ thống đã tiếp nhận yêu cầu gửi chứng từ. Bạn có thể kiểm tra hộp thư sau ít phút.
               </p>
             </div>
 

@@ -5,14 +5,12 @@ import { accountApi } from "@/features/account/api/account-api"
 import { useEffect, useState } from "react"
 
 import type { components } from "@/lib/api/schema"
-import { useAuth } from "@/features/auth/auth-provider"
 import { getApiErrorMessage } from "@/lib/api/result"
+import { invoiceEmailBody } from "../model/invoice-email"
 
 type InvoiceResponse = components["schemas"]["InvoiceResponse"]
 
 export function useCustomerInvoices() {
-  const { user } = useAuth()
-
   const [invoices, setInvoices] = useState<InvoiceResponse[]>([])
 
   const [isLoadingInvoices, setIsLoadingInvoices] = useState(true)
@@ -57,27 +55,30 @@ export function useCustomerInvoices() {
     }
   }
 
-  async function handleSendInvoiceEmail(invoice: InvoiceResponse) {
-    if (!invoice.id) return
+  async function handleSendInvoiceEmail(
+    invoice: InvoiceResponse,
+    customEmail?: string,
+  ): Promise<boolean> {
+    if (!invoice.id) return false
 
     setSendingInvoiceId(invoice.id)
     try {
       await accountApi.sendInvoice({
         params: { path: { id: invoice.id } },
-        body: {
-          recipientEmail: invoice.billingEmail || user?.email || "customer@example.com",
-        },
+        body: invoiceEmailBody(customEmail),
       })
       // Thông báo đúng như cam kết trong Phase 1 design
       setFeedbackMessage({
         type: "info",
         text: "Đã tiếp nhận yêu cầu gửi email hóa đơn. Hệ thống đang tiến hành chuyển phát.",
       })
+      return true
     } catch {
       setFeedbackMessage({
         type: "error",
         text: "Gửi email hóa đơn thất bại. Vui lòng thử lại sau.",
       })
+      return false
     } finally {
       setSendingInvoiceId(null)
     }

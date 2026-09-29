@@ -1,12 +1,22 @@
 import type { FetchOptions } from "openapi-fetch"
-import { apiClient } from "@/lib/api/client"
+import { apiClient, type ApiPaths } from "@/lib/api/client"
 import { requireApiSuccess } from "@/lib/api/result"
-import type { paths } from "@/lib/api/schema"
-import type { EventSetupPaths } from "@/lib/api/event-setup-contract"
-
-type ApiPaths = paths & EventSetupPaths
 
 export const ordersApi = {
+  getRefundReview: (orderId: string) =>
+    requireApiSuccess(
+      apiClient.GET("/api/v1/orders/{orderId}/refund-review", {
+        params: { path: { orderId } },
+      }),
+    ),
+
+  requestRefundReview: (orderId: string, reason: string) =>
+    requireApiSuccess(
+      apiClient.POST("/api/v1/orders/{orderId}/refund-review", {
+        params: { path: { orderId } },
+        body: { reason },
+      }),
+    ),
   getOrder: (
     options: Omit<FetchOptions<ApiPaths["/api/v1/orders/{id}"]["get"]>, "parseAs"> & {
       parseAs?: "json"

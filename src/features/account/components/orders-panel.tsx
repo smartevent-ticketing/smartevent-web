@@ -7,7 +7,11 @@ import { ActionFeedback } from "@/components/shared/action-feedback"
 import { useCustomerOrders } from "@/features/account/hooks/use-orders"
 import { OrderDetailDialog } from "@/features/account/components/order-detail-dialog"
 import { CancelOrderDialog } from "@/features/account/components/cancel-order-dialog"
+import { RefundSupportDialog } from "@/features/account/components/refund-support-dialog"
 import { useClock } from "@/hooks/use-clock"
+import type { components } from "@/lib/api/schema"
+
+type Order = components["schemas"]["OrderResponse"]
 
 export function CustomerOrdersPanel() {
   const now = useClock()
@@ -17,11 +21,15 @@ export function CustomerOrdersPanel() {
     feedbackMessage,
     setFeedbackMessage,
     cancellingOrderId,
+    nextPage,
+    isLoadingMore,
+    loadMoreOrders,
     handleCancelOrder,
   } = useCustomerOrders()
 
-  const [selectedOrderForDetail, setSelectedOrderForDetail] = useState<any | null>(null)
-  const [orderToCancel, setOrderToCancel] = useState<any | null>(null)
+  const [selectedOrderForDetail, setSelectedOrderForDetail] = useState<Order | null>(null)
+  const [orderToCancel, setOrderToCancel] = useState<Order | null>(null)
+  const [orderForSupport, setOrderForSupport] = useState<Order | null>(null)
 
   const handleConfirmCancel = async () => {
     if (!orderToCancel?.id) return
@@ -131,7 +139,7 @@ export function CustomerOrdersPanel() {
                         {isPending && ord.id && (
                           <>
                             <Link
-                              href={`/payment?orderId=${ord.id}&orderCode=${ord.orderCode}&amount=${ord.totalAmount}`}
+                              href={`/payment?orderId=${encodeURIComponent(ord.id)}`}
                               className="inline-block px-3 py-1.5 bg-primary text-white text-xs font-bold rounded-lg hover:bg-primary-hover transition shadow-xs"
                             >
                               Thanh toán
@@ -146,12 +154,33 @@ export function CustomerOrdersPanel() {
                             </button>
                           </>
                         )}
+                        {(isPaid || isPartiallyRefunded || isRefunded) && ord.id && (
+                          <button
+                            type="button"
+                            onClick={() => setOrderForSupport(ord)}
+                            className="px-3 py-1.5 border border-primary/30 text-primary text-xs font-semibold rounded-lg hover:bg-primary/5"
+                          >
+                            Hỗ trợ hoàn tiền
+                          </button>
+                        )}
                       </td>
                     </tr>
                   )
                 })}
               </tbody>
             </table>
+            {nextPage !== null && (
+              <div className="border-t border-outline-variant/60 p-4 text-center">
+                <button
+                  type="button"
+                  onClick={() => void loadMoreOrders()}
+                  disabled={isLoadingMore}
+                  className="rounded-xl border border-outline-variant/60 px-5 py-2 text-xs font-semibold text-primary hover:bg-surface-container-low disabled:opacity-50"
+                >
+                  {isLoadingMore ? "Đang tải..." : "Tải thêm đơn hàng"}
+                </button>
+              </div>
+            )}
           </div>
         )}
       </div>
@@ -171,11 +200,18 @@ export function CustomerOrdersPanel() {
 
       {orderToCancel && (
         <CancelOrderDialog
-          orderCode={orderToCancel.orderCode || orderToCancel.id}
+          orderCode={orderToCancel.orderCode || orderToCancel.id || "Chưa có mã"}
           isOpen={Boolean(orderToCancel)}
           isCancelling={cancellingOrderId === orderToCancel.id}
           onConfirm={handleConfirmCancel}
           onClose={() => setOrderToCancel(null)}
+        />
+      )}
+      {orderForSupport?.id && (
+        <RefundSupportDialog
+          orderId={orderForSupport.id}
+          orderCode={orderForSupport.orderCode || orderForSupport.id}
+          onClose={() => setOrderForSupport(null)}
         />
       )}
     </div>
