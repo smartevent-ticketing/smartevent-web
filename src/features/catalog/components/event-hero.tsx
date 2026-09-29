@@ -34,13 +34,11 @@ export function EventHero({
   return (
     <section className="overflow-hidden rounded-[28px] border border-white/15 bg-[#242331]">
       <div className="grid lg:grid-cols-[minmax(0,0.88fr)_minmax(0,1.12fr)]">
-        <div className="flex flex-col justify-between gap-10 p-7 sm:p-9 lg:p-11">
+        <div className="flex flex-col justify-between gap-8 p-7 sm:p-8 lg:p-9">
           <div>
             <span className="nightline-kicker">SmartEvent / Trải nghiệm sắp tới</span>
-            <h1 className="nightline-heading mt-5 text-4xl text-white sm:text-5xl lg:text-6xl">
-              {title}
-            </h1>
-            <div className="mt-7 space-y-3 text-sm text-[#d1cbd3]">
+            <h1 className="nightline-heading mt-4 text-4xl text-white sm:text-5xl">{title}</h1>
+            <div className="mt-6 space-y-3 text-sm text-[#d1cbd3]">
               <p className="flex items-center gap-3">
                 <CalendarDays className="size-5 shrink-0 text-[#ff9479]" />
                 {date}
@@ -53,7 +51,7 @@ export function EventHero({
               </p>
             </div>
           </div>
-          <div className="border-t border-white/15 pt-6">
+          <div className="border-t border-white/15 pt-5">
             <p className="text-xs font-bold uppercase tracking-widest text-[#aaa6b7]">Giá vé từ</p>
             <p className="mt-1 text-3xl font-extrabold text-[#ffad95]">
               {minPrice > 0 ? minPrice.toLocaleString("vi-VN") + " ₫" : "Miễn phí"}
@@ -62,7 +60,7 @@ export function EventHero({
               type="button"
               onClick={scrollToTickets}
               disabled={!isSaleActive}
-              className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#ff8063] px-5 py-3.5 text-sm font-bold text-[#261621] transition hover:bg-[#ff9b83] disabled:cursor-not-allowed disabled:bg-white/10 disabled:text-[#aaa6b7]"
+              className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#ff8063] px-5 py-3.5 text-sm font-bold text-[#261621] transition hover:bg-[#ff9b83] disabled:cursor-not-allowed disabled:bg-white/10 disabled:text-[#aaa6b7]"
             >
               <Ticket className="size-4" />
               {isSaleActive ? "Chọn vé ngay" : isEnded ? "Sự kiện đã kết thúc" : "Chưa mở bán"}
@@ -70,7 +68,7 @@ export function EventHero({
             </button>
           </div>
         </div>
-        <div className="nightline-art relative flex min-h-[320px] items-center justify-center p-4 sm:p-7 lg:min-h-[490px]">
+        <div className="nightline-art relative flex min-h-[280px] items-center justify-center p-4 sm:p-6 lg:min-h-[410px]">
           {bannerUrl ? (
             <>
               {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -85,7 +83,7 @@ export function EventHero({
               <img
                 src={bannerUrl}
                 alt={"Ảnh bìa " + title}
-                className="relative z-20 block h-auto max-h-[440px] w-auto max-w-full rounded-xl object-contain shadow-2xl shadow-black/40"
+                className="relative z-20 block h-auto max-h-[360px] w-auto max-w-full rounded-xl object-contain shadow-2xl shadow-black/40"
               />
             </>
           ) : (

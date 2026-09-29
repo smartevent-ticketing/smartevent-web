@@ -40,7 +40,7 @@ export function EventDetailView({ eventId }: { eventId: string }) {
   if (isLoading) {
     return (
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12 space-y-8 animate-pulse">
-        <div className="h-[320px] w-full rounded-3xl bg-[#242331] sm:h-[420px]" />
+        <div className="h-[280px] w-full rounded-3xl bg-[#242331] sm:h-[380px]" />
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           <div className="lg:col-span-8 space-y-6">
             <div className="h-20 rounded-2xl bg-[#242331]" />
