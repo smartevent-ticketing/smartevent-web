@@ -6,13 +6,14 @@ import { useEventDetail } from "@/features/catalog/hooks/use-event-detail"
 
 type Props = Pick<
   ReturnType<typeof useEventDetail>,
-  "isSaleActive" | "categoryName" | "locationName" | "descriptionText" | "galleryUrls"
+  "isSaleActive" | "isEnded" | "categoryName" | "locationName" | "descriptionText" | "galleryUrls"
 > & {
   seatMapUrl?: string | null
 }
 
 export function EventInformation({
   isSaleActive,
+  isEnded,
   categoryName,
   locationName,
   descriptionText,
@@ -25,63 +26,61 @@ export function EventInformation({
     <>
       <div className="lg:col-span-8 space-y-8">
         {/* Quick Info Bar */}
-        <div className="bg-white rounded-2xl p-5 border border-outline-variant/60 shadow-xs grid grid-cols-2 sm:grid-cols-3 gap-4">
+        <div className="grid grid-cols-2 gap-4 rounded-2xl border border-white/15 bg-[#242331] p-5 sm:grid-cols-3">
           <div className="flex items-center gap-3">
-            <div className="size-10 rounded-xl bg-surface-container flex items-center justify-center text-primary">
+            <div className="flex size-10 items-center justify-center rounded-xl bg-[#ff9479]/10 text-[#ff9479]">
               <Music className="size-5" />
             </div>
             <div>
-              <span className="text-xs text-on-surface-variant block">Thể loại</span>
-              <span className="text-sm font-bold text-on-surface">{categoryName}</span>
+              <span className="block text-xs text-[#aaa6b7]">Thể loại</span>
+              <span className="text-sm font-bold text-white">{categoryName}</span>
             </div>
           </div>
 
           <div className="flex items-center gap-3">
-            <div className="size-10 rounded-xl bg-surface-container flex items-center justify-center text-primary">
+            <div className="flex size-10 items-center justify-center rounded-xl bg-[#ff9479]/10 text-[#ff9479]">
               <Building className="size-5" />
             </div>
             <div>
-              <span className="text-xs text-on-surface-variant block">Địa điểm</span>
-              <span className="text-sm font-bold text-on-surface truncate block max-w-[160px]">
+              <span className="block text-xs text-[#aaa6b7]">Địa điểm</span>
+              <span className="block max-w-[160px] truncate text-sm font-bold text-white">
                 {locationName}
               </span>
             </div>
           </div>
 
           <div className="flex items-center gap-3 col-span-2 sm:col-span-1">
-            <div className="size-10 rounded-xl bg-surface-container flex items-center justify-center text-primary">
+            <div className="flex size-10 items-center justify-center rounded-xl bg-[#ff9479]/10 text-[#ff9479]">
               <Tag className="size-5" />
             </div>
             <div>
-              <span className="text-xs text-on-surface-variant block">Trạng thái bán</span>
+              <span className="block text-xs text-[#aaa6b7]">Trạng thái bán</span>
               <span
-                className={`text-sm font-bold ${isSaleActive ? "text-primary" : "text-gray-500"}`}
+                className={`text-sm font-bold ${isSaleActive ? "text-[#ffad95]" : "text-[#aaa6b7]"}`}
               >
-                {isSaleActive ? "Đang mở bán" : "Tạm khóa đặt"}
+                {isEnded ? "Đã kết thúc" : isSaleActive ? "Đang mở bán" : "Tạm khóa đặt"}
               </span>
             </div>
           </div>
         </div>
 
         {/* Description Section */}
-        <section className="bg-white rounded-2xl p-6 sm:p-8 border border-outline-variant/60 shadow-xs space-y-4">
-          <h2 className="text-xl font-bold text-on-surface">Giới thiệu sự kiện</h2>
-          <div className="text-sm sm:text-base text-on-surface-variant leading-relaxed whitespace-pre-line">
+        <section className="space-y-4 rounded-2xl border border-white/15 bg-[#242331] p-6 sm:p-8">
+          <h2 className="text-xl font-bold text-white">Giới thiệu sự kiện</h2>
+          <div className="whitespace-pre-line text-sm leading-relaxed text-[#c9c4cf] sm:text-base">
             {descriptionText}
           </div>
         </section>
 
         {/* Gallery / Hình ảnh sự kiện & Poster: Xếp hàng dọc 1 ảnh 1 dòng */}
         {galleryUrls && galleryUrls.length > 0 && (
-          <section className="bg-white rounded-2xl p-6 sm:p-8 border border-outline-variant/60 shadow-xs space-y-4">
-            <div className="flex items-center justify-between border-b border-outline-variant/40 pb-3">
-              <h2 className="text-xl font-bold text-on-surface flex items-center gap-2">
-                <ImageIcon className="size-5 text-primary" />
+          <section className="space-y-4 rounded-2xl border border-white/15 bg-[#242331] p-6 sm:p-8">
+            <div className="flex items-center justify-between border-b border-white/15 pb-3">
+              <h2 className="flex items-center gap-2 text-xl font-bold text-white">
+                <ImageIcon className="size-5 text-[#ff9479]" />
                 <span>Hình ảnh sự kiện & Poster thông tin</span>
               </h2>
-              <span className="text-xs font-semibold text-on-surface-variant">
-                {galleryUrls.length} ảnh
-              </span>
+              <span className="text-xs font-semibold text-[#bcb7c4]">{galleryUrls.length} ảnh</span>
             </div>
             <div className="flex flex-col gap-6 pt-2">
               {galleryUrls.map((url, idx) => (
@@ -110,16 +109,16 @@ export function EventInformation({
         )}
 
         {/* Sơ đồ phân khu & khán đài */}
-        <section className="bg-white rounded-2xl p-6 sm:p-8 border border-outline-variant/60 shadow-xs space-y-4">
-          <h2 className="text-xl font-bold text-on-surface">Sơ đồ phân khu & khán đài</h2>
-          <p className="text-xs sm:text-sm text-on-surface-variant">
+        <section className="space-y-4 rounded-2xl border border-white/15 bg-[#242331] p-6 sm:p-8">
+          <h2 className="text-xl font-bold text-white">Sơ đồ phân khu & khán đài</h2>
+          <p className="text-xs text-[#bcb7c4] sm:text-sm">
             Khán giả vui lòng kiểm tra kỹ vị trí cổng vào và phân khu tương ứng khi mua vé.
           </p>
 
           {seatMapUrl ? (
             <div
               onClick={() => setPreviewImage(seatMapUrl)}
-              className="rounded-2xl overflow-hidden border border-outline-variant/60 bg-slate-900/5 p-3 text-center cursor-pointer group relative max-w-3xl mx-auto"
+              className="group relative mx-auto max-w-3xl cursor-pointer overflow-hidden rounded-2xl border border-white/15 bg-[#161621] p-3 text-center"
               title="Nhấn để xem sơ đồ phóng to"
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -128,18 +127,18 @@ export function EventInformation({
                 alt="Sơ đồ phân khu & khán đài"
                 className="w-full max-h-[540px] object-contain rounded-xl mx-auto group-hover:scale-[1.01] transition"
               />
-              <div className="mt-2.5 flex items-center justify-center gap-1.5 text-xs text-primary font-semibold">
+              <div className="mt-2.5 flex items-center justify-center gap-1.5 text-xs font-semibold text-[#ffad95]">
                 <Maximize2 className="size-3.5" />
                 <span>Nhấn vào ảnh để xem sơ đồ phóng to chi tiết</span>
               </div>
             </div>
           ) : (
-            <div className="p-8 rounded-2xl bg-surface-container-low/60 border border-dashed border-outline-variant text-center space-y-2">
-              <Armchair className="size-8 text-on-surface-variant/40 mx-auto" />
-              <h4 className="text-sm font-bold text-on-surface">
+            <div className="space-y-2 rounded-2xl border border-dashed border-white/20 bg-white/5 p-8 text-center">
+              <Armchair className="mx-auto size-8 text-[#aaa6b7]" />
+              <h4 className="text-sm font-bold text-white">
                 Ban tổ chức đang cập nhật sơ đồ khán đài
               </h4>
-              <p className="text-xs text-on-surface-variant max-w-md mx-auto">
+              <p className="mx-auto max-w-md text-xs text-[#bcb7c4]">
                 Sơ đồ vị trí phân khu và chỗ ngồi chính thức sẽ được công bố sớm nhất trước khi mở
                 bán.
               </p>
@@ -147,16 +146,16 @@ export function EventInformation({
           )}
         </section>
 
-        {/* Important Rules */}
-        <section className="bg-amber-50 rounded-2xl p-6 border border-amber-200 text-amber-900 flex items-start gap-3">
-          <AlertCircle className="size-5 shrink-0 text-amber-600 mt-0.5" />
+        {/* Important booking notes */}
+        <section className="flex items-start gap-3 rounded-2xl border border-[#ff9479]/25 bg-[#ff9479]/10 p-6 text-[#f7d6cb]">
+          <AlertCircle className="mt-0.5 size-5 shrink-0 text-[#ffad95]" />
           <div className="text-xs sm:text-sm space-y-1">
-            <h4 className="font-bold">Quy định tham gia sự kiện:</h4>
-            <ul className="list-disc list-inside space-y-0.5 text-amber-800">
-              <li>Khán giả từ 12 tuổi trở lên mới được tham dự.</li>
-              <li>Không mang đồ ăn, thức uống, vật sắc nhọn hoặc chất cấm vào sự kiện.</li>
+            <h4 className="font-bold text-white">Lưu ý khi đặt vé</h4>
+            <ul className="list-inside list-disc space-y-0.5">
+              <li>Kiểm tra thông tin sự kiện và hạng vé trước khi thanh toán.</li>
+              <li>Xem hướng dẫn tham gia do ban tổ chức cung cấp trước ngày diễn ra.</li>
               <li>Mỗi mã vé QR chỉ có giá trị check-in một lần duy nhất tại cổng soát vé.</li>
-              <li>Phiên giữ chỗ đặt vé sẽ tự động hết hạn sau 10 phút.</li>
+              <li>Thời hạn giữ chỗ hiển thị trong bước đặt vé.</li>
             </ul>
           </div>
         </section>

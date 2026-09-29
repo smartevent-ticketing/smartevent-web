@@ -1,71 +1,120 @@
 "use client"
+
+import { useState, type FormEvent } from "react"
+import { useRouter, useSearchParams } from "next/navigation"
+import { Search } from "lucide-react"
 import { CatalogResults } from "./components/catalog-results"
-
-import { Info } from "lucide-react"
-
 import { useEventsCatalog } from "./hooks/use-events-catalog"
+import { catalogUrl, type CatalogFilters } from "./model/catalog-url"
 
-export function EventsCatalogView() {
-  const { events, currentPage, setCurrentPage, totalPages, totalElements, isLoading, loadError } =
-    useEventsCatalog()
+function EventsCatalogContent({ filters }: { filters: CatalogFilters }) {
+  const router = useRouter()
+  const [query, setQuery] = useState(filters.q)
+  const [city, setCity] = useState(filters.city)
+  const [categoryId, setCategoryId] = useState(filters.categoryId)
+  const {
+    events,
+    categories,
+    currentPage,
+    setCurrentPage,
+    totalPages,
+    totalElements,
+    isLoading,
+    loadError,
+  } = useEventsCatalog(filters)
+
+  const submitSearch = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    setCurrentPage(0)
+    router.push(catalogUrl({ q: query, city, categoryId }))
+  }
+
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12 space-y-8">
-      {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-extrabold text-on-surface tracking-tight">Tất cả sự kiện</h1>
-          <p className="text-sm text-on-surface-variant mt-1.5">
-            Khám phá danh sách các sự kiện văn hóa, thể thao và nghệ thuật hot nhất.
-          </p>
-        </div>
+    <div className="mx-auto max-w-7xl space-y-8 px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
+      <div className="max-w-2xl">
+        <span className="nightline-kicker">Khám phá / SmartEvent</span>
+        <h1 className="nightline-heading mt-3 text-4xl text-[#f8f2ed] sm:text-6xl">
+          Tìm sự kiện cho bạn.
+        </h1>
+        <p className="mt-4 text-base text-[#bcb7c4]">
+          Chọn một sự kiện đáng mong đợi, rồi để những khoảnh khắc đẹp bắt đầu.
+        </p>
       </div>
 
+      <form
+        onSubmit={submitSearch}
+        className="grid grid-cols-1 gap-3 rounded-2xl border border-white/15 bg-[#242331] p-4 md:grid-cols-[minmax(0,1fr)_12rem_12rem_auto]"
+      >
+        <input
+          type="search"
+          aria-label="Từ khóa sự kiện"
+          value={query}
+          onChange={(event) => setQuery(event.target.value)}
+          placeholder="Tên sự kiện hoặc địa điểm"
+          className="rounded-xl border border-white/15 bg-[#1a1a26] px-4 py-3 text-sm text-white outline-none placeholder:text-[#aaa6b7] focus:border-[#ff9479]"
+        />
+        <select
+          aria-label="Thành phố"
+          value={city}
+          onChange={(event) => setCity(event.target.value)}
+          className="rounded-xl border border-white/15 bg-[#1a1a26] px-3 py-3 text-sm text-white outline-none focus:border-[#ff9479]"
+        >
+          <option value="">Tất cả thành phố</option>
+          <option value="Hồ Chí Minh">TP. Hồ Chí Minh</option>
+          <option value="Hà Nội">Hà Nội</option>
+        </select>
+        <select
+          aria-label="Danh mục"
+          value={categoryId}
+          onChange={(event) => setCategoryId(event.target.value)}
+          className="rounded-xl border border-white/15 bg-[#1a1a26] px-3 py-3 text-sm text-white outline-none focus:border-[#ff9479]"
+        >
+          <option value="">Tất cả danh mục</option>
+          {categories
+            .filter((category) => category.id)
+            .map((category) => (
+              <option key={category.id} value={category.id}>
+                {category.name}
+              </option>
+            ))}
+        </select>
+        <button
+          type="submit"
+          className="inline-flex cursor-pointer items-center justify-center gap-2 rounded-xl bg-[#ff8063] px-5 py-3 text-sm font-bold text-[#261621] hover:bg-[#ff9b83]"
+        >
+          <Search className="size-4" /> Tìm kiếm
+        </button>
+      </form>
+
       {loadError && (
-        <div className="p-4 bg-red-50 border border-red-200 text-red-700 rounded-xl text-sm">
+        <div
+          role="alert"
+          className="rounded-xl border border-red-400/30 bg-red-400/10 p-4 text-sm text-red-200"
+        >
           {loadError}
         </div>
       )}
-
-      {/* Info notice for server pagination */}
-      <div className="bg-surface-container-low p-3.5 rounded-xl border border-outline-variant/60 flex items-center justify-between text-xs text-on-surface-variant">
-        <div className="flex items-center gap-2">
-          <Info className="size-4 text-primary shrink-0" />
-          <span>
-            Danh sách hiển thị theo phân trang máy chủ thực tế. Bộ lọc đa tiêu chí đang chờ đồng bộ
-            API tìm kiếm phía máy chủ.
-          </span>
-        </div>
-        <span className="font-semibold text-on-surface hidden sm:inline">
-          Tổng cộng: {totalElements} sự kiện
-        </span>
-      </div>
-
-      {/* Loading state */}
+      <p className="text-sm text-[#aaa6b7]">
+        Tìm thấy {totalElements.toLocaleString("vi-VN")} sự kiện
+      </p>
       {isLoading && (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {[1, 2, 3, 4, 5, 6].map((i) => (
-            <div
-              key={i}
-              className="bg-white rounded-2xl border border-outline-variant/60 overflow-hidden animate-pulse"
-            >
-              <div className="h-52 bg-gray-200" />
-              <div className="p-5 space-y-3">
-                <div className="h-5 bg-gray-200 rounded w-3/4" />
-                <div className="h-4 bg-gray-100 rounded w-1/2" />
-                <div className="h-4 bg-gray-100 rounded w-2/3" />
-                <div className="pt-4 border-t border-gray-100 flex justify-between">
-                  <div className="h-4 bg-gray-200 rounded w-20" />
-                  <div className="h-6 bg-gray-200 rounded w-16" />
-                </div>
-              </div>
-            </div>
+          {[1, 2, 3, 4, 5, 6].map((item) => (
+            <div key={item} className="h-[370px] animate-pulse rounded-2xl bg-[#242331]" />
           ))}
         </div>
       )}
-
-      {/* Real backend events view */}
-      {/* Real backend events view */}
       <CatalogResults {...{ events, currentPage, setCurrentPage, totalPages, isLoading }} />
     </div>
   )
+}
+
+export function EventsCatalogView() {
+  const searchParams = useSearchParams()
+  const filters: CatalogFilters = {
+    q: searchParams.get("q") ?? "",
+    city: searchParams.get("city") ?? "",
+    categoryId: searchParams.get("categoryId") ?? "",
+  }
+  return <EventsCatalogContent key={catalogUrl(filters)} filters={filters} />
 }

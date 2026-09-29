@@ -4,54 +4,52 @@ import { ShieldCheck, Users, Zap } from "lucide-react"
 
 export function ServiceBenefits() {
   return (
-    <>
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-        <div className="bg-surface-container-high rounded-3xl p-8 lg:p-12 border border-outline-variant/60">
-          <div className="text-center max-w-2xl mx-auto mb-10">
-            <h2 className="text-2xl sm:text-3xl font-bold text-on-surface">
-              Vì sao chọn SMART EVENT?
-            </h2>
-            <p className="text-sm text-on-surface-variant mt-2">
-              Trải nghiệm mua vé sự kiện hiện đại, nhanh chóng và an tâm tuyệt đối
+    <section className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="rounded-3xl border border-white/10 bg-[#1d1d2a] p-7 sm:p-9 lg:p-12">
+        <div className="mb-10 max-w-2xl">
+          <span className="nightline-kicker">Trải nghiệm liền mạch</span>
+          <h2 className="nightline-heading mt-2 text-3xl text-[#f8f2ed] sm:text-4xl">
+            Cứ tận hưởng. Để vé cho chúng tôi.
+          </h2>
+          <p className="mt-3 text-sm text-[#aaa6b7]">
+            Từ lúc chọn sự kiện đến lúc vào cửa, mọi thứ đều nằm trong tầm tay.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+          <div className="space-y-3 rounded-2xl border border-white/10 bg-[#272633] p-6">
+            <div className="flex size-12 items-center justify-center rounded-xl bg-[#ff9479]/10 text-[#ff9479]">
+              <ShieldCheck className="size-6" />
+            </div>
+            <h3 className="text-lg font-bold text-white">Vé điện tử riêng cho bạn</h3>
+            <p className="text-sm leading-relaxed text-[#bcb7c4]">
+              Mỗi vé có mã QR riêng và được lưu trong tài khoản để bạn dễ dàng sử dụng khi đến sự
+              kiện.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
-            <div className="bg-white p-6 rounded-2xl border border-outline-variant/60 space-y-3">
-              <div className="size-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
-                <ShieldCheck className="size-6" />
-              </div>
-              <h3 className="text-lg font-bold text-on-surface">100% Vé chính hãng</h3>
-              <p className="text-sm text-on-surface-variant leading-relaxed">
-                Mỗi tấm vé được gắn mã QR duy nhất chống làm giả, liên kết trực tiếp với hệ thống
-                Ban tổ chức.
-              </p>
+          <div className="space-y-3 rounded-2xl border border-white/10 bg-[#272633] p-6">
+            <div className="flex size-12 items-center justify-center rounded-xl bg-[#ff9479]/10 text-[#ff9479]">
+              <Zap className="size-6" />
             </div>
+            <h3 className="text-lg font-bold text-white">Đặt vé thuận tiện</h3>
+            <p className="text-sm leading-relaxed text-[#bcb7c4]">
+              Xem hạng vé, chọn số lượng và hoàn tất thanh toán qua VNPay trên một hành trình rõ
+              ràng.
+            </p>
+          </div>
 
-            <div className="bg-white p-6 rounded-2xl border border-outline-variant/60 space-y-3">
-              <div className="size-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
-                <Zap className="size-6" />
-              </div>
-              <h3 className="text-lg font-bold text-on-surface">Giữ chỗ & Mua vé tức thì</h3>
-              <p className="text-sm text-on-surface-variant leading-relaxed">
-                Cơ chế đặt chỗ thời gian thực bảo lưu vé trong 10 phút, thanh toán tiện lợi qua cổng
-                VNPay.
-              </p>
+          <div className="space-y-3 rounded-2xl border border-white/10 bg-[#272633] p-6">
+            <div className="flex size-12 items-center justify-center rounded-xl bg-[#ff9479]/10 text-[#ff9479]">
+              <Users className="size-6" />
             </div>
-
-            <div className="bg-white p-6 rounded-2xl border border-outline-variant/60 space-y-3">
-              <div className="size-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
-                <Users className="size-6" />
-              </div>
-              <h3 className="text-lg font-bold text-on-surface">Check-in thông minh</h3>
-              <p className="text-sm text-on-surface-variant leading-relaxed">
-                Vào cửa chỉ với 1 giây quét mã QR trên điện thoại, không cần in vé giấy, không lo
-                thất lạc.
-              </p>
-            </div>
+            <h3 className="text-lg font-bold text-white">Check-in với mã QR</h3>
+            <p className="text-sm leading-relaxed text-[#bcb7c4]">
+              Mở mã QR của vé trên điện thoại để ban tổ chức kiểm tra khi bạn đến nơi.
+            </p>
           </div>
         </div>
-      </section>
-    </>
+      </div>
+    </section>
   )
 }

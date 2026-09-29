@@ -1,12 +1,13 @@
 "use client"
 
-import { Calendar, Clock, MapPin, Ticket, ArrowDown } from "lucide-react"
-import { useEventDetail } from "@/features/catalog/hooks/use-event-detail"
+import { ArrowDown, CalendarDays, MapPin, Ticket } from "lucide-react"
+import type { useEventDetail } from "@/features/catalog/hooks/use-event-detail"
 
 type Props = Pick<
   ReturnType<typeof useEventDetail>,
   | "bannerUrl"
   | "isSaleActive"
+  | "isEnded"
   | "title"
   | "date"
   | "time"
@@ -18,6 +19,7 @@ type Props = Pick<
 export function EventHero({
   bannerUrl,
   isSaleActive,
+  isEnded,
   title,
   date,
   time,
@@ -25,108 +27,77 @@ export function EventHero({
   cityName,
   minPrice = 0,
 }: Props) {
-  const handleScrollToTickets = () => {
-    const section = document.getElementById("ticket-picker-section")
-    if (section) {
-      section.scrollIntoView({ behavior: "smooth" })
-    }
+  const scrollToTickets = () => {
+    document.getElementById("ticket-picker-section")?.scrollIntoView({ behavior: "smooth" })
   }
 
   return (
-    <div className="relative w-full rounded-3xl overflow-hidden shadow-2xl bg-[#0f172a] border border-slate-800 text-white">
-      {/* Background glow effects */}
-      <div className="absolute top-0 right-1/4 w-96 h-96 bg-primary/20 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-0 left-10 w-80 h-80 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
-
-      {/* Main Ticket-Card Split Container (Ticketbox Format) */}
-      <div className="relative grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 p-6 sm:p-8 lg:p-10 items-center">
-        {/* Left Column: Event Information & Ticket Details (5 cols) */}
-        <div className="lg:col-span-5 flex flex-col justify-between h-full space-y-6">
-          <div className="space-y-4">
-            {/* Status & Category Badge */}
-            <div className="flex flex-wrap items-center gap-2">
-              <span
-                className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-extrabold uppercase tracking-wider ${
-                  isSaleActive
-                    ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"
-                    : "bg-slate-800 text-slate-400 border border-slate-700"
-                }`}
-              >
-                <span
-                  className={`size-2 rounded-full ${isSaleActive ? "bg-emerald-400 animate-pulse" : "bg-slate-400"}`}
-                />
-                {isSaleActive ? "Đang mở bán vé" : "Chưa mở bán"}
-              </span>
-            </div>
-
-            {/* Event Title */}
-            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black leading-tight tracking-tight text-white">
+    <section className="overflow-hidden rounded-[28px] border border-white/15 bg-[#242331]">
+      <div className="grid lg:grid-cols-[minmax(0,0.88fr)_minmax(0,1.12fr)]">
+        <div className="flex flex-col justify-between gap-10 p-7 sm:p-9 lg:p-11">
+          <div>
+            <span className="nightline-kicker">SmartEvent / Trải nghiệm sắp tới</span>
+            <h1 className="nightline-heading mt-5 text-4xl text-white sm:text-5xl lg:text-6xl">
               {title}
             </h1>
-
-            {/* Schedule & Venue Meta */}
-            <div className="space-y-2.5 pt-2 text-xs sm:text-sm text-slate-300">
-              <div className="flex items-start gap-2.5">
-                <Calendar className="size-4 text-emerald-400 shrink-0 mt-0.5" />
-                <span className="font-semibold">{date}</span>
-                {time && (
-                  <span className="flex items-center gap-1 text-slate-400">
-                    • <Clock className="size-3.5" /> {time}
-                  </span>
-                )}
-              </div>
-
-              <div className="flex items-start gap-2.5">
-                <MapPin className="size-4 text-emerald-400 shrink-0 mt-0.5" />
-                <span>
-                  {locationName}
-                  {cityName ? `, ${cityName}` : ""}
-                </span>
-              </div>
+            <div className="mt-7 space-y-3 text-sm text-[#d1cbd3]">
+              <p className="flex items-center gap-3">
+                <CalendarDays className="size-5 shrink-0 text-[#ff9479]" />
+                {date}
+                {time ? " · " + time : ""}
+              </p>
+              <p className="flex items-center gap-3">
+                <MapPin className="size-5 shrink-0 text-[#ff9479]" />
+                {locationName}
+                {cityName ? ", " + cityName : ""}
+              </p>
             </div>
           </div>
-
-          {/* Pricing & CTA Section */}
-          <div className="pt-4 border-t border-slate-800/80 space-y-4">
-            <div>
-              <span className="text-[11px] font-bold text-slate-400 uppercase tracking-widest block">
-                Giá vé từ
-              </span>
-              <span className="text-2xl sm:text-3xl font-black text-emerald-400 font-mono tracking-tight">
-                {minPrice > 0 ? `${minPrice.toLocaleString("vi-VN")} đ` : "Miễn phí"}
-              </span>
-            </div>
-
+          <div className="border-t border-white/15 pt-6">
+            <p className="text-xs font-bold uppercase tracking-widest text-[#aaa6b7]">Giá vé từ</p>
+            <p className="mt-1 text-3xl font-extrabold text-[#ffad95]">
+              {minPrice > 0 ? minPrice.toLocaleString("vi-VN") + " ₫" : "Miễn phí"}
+            </p>
             <button
               type="button"
-              onClick={handleScrollToTickets}
+              onClick={scrollToTickets}
               disabled={!isSaleActive}
-              className={`w-full py-3.5 px-6 rounded-2xl font-bold text-sm transition-all duration-200 flex items-center justify-center gap-2 shadow-lg cursor-pointer ${
-                isSaleActive
-                  ? "bg-emerald-500 hover:bg-emerald-400 text-slate-950 shadow-emerald-500/25 hover:shadow-emerald-500/40 active:scale-[0.99]"
-                  : "bg-slate-800 text-slate-500 cursor-not-allowed"
-              }`}
+              className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#ff8063] px-5 py-3.5 text-sm font-bold text-[#261621] transition hover:bg-[#ff9b83] disabled:cursor-not-allowed disabled:bg-white/10 disabled:text-[#aaa6b7]"
             >
               <Ticket className="size-4" />
-              <span>{isSaleActive ? "Mua vé ngay" : "Tạm ngưng mở bán"}</span>
-              {isSaleActive && <ArrowDown className="size-3.5 animate-bounce ml-1" />}
+              {isSaleActive ? "Chọn vé ngay" : isEnded ? "Sự kiện đã kết thúc" : "Chưa mở bán"}
+              {isSaleActive && <ArrowDown className="size-4" />}
             </button>
           </div>
         </div>
-
-        {/* Right Column: Hero High-Res Banner Display (7 cols) */}
-        <div className="lg:col-span-7">
-          <div className="relative aspect-video w-full rounded-2xl overflow-hidden shadow-2xl border border-slate-700/60 bg-slate-950 group">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={bannerUrl}
-              alt={title}
-              className="w-full h-full object-cover group-hover:scale-[1.02] transition duration-500 ease-out"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/40 via-transparent to-transparent pointer-events-none" />
-          </div>
+        <div className="nightline-art relative flex min-h-[320px] items-center justify-center p-4 sm:p-7 lg:min-h-[490px]">
+          {bannerUrl ? (
+            <>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={bannerUrl}
+                alt=""
+                aria-hidden="true"
+                className="absolute inset-0 z-10 size-full scale-110 object-cover opacity-30 blur-2xl"
+              />
+              {/* Presigned media URLs have dynamic hosts, so this cannot use a fixed Next image host. */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={bannerUrl}
+                alt={"Ảnh bìa " + title}
+                className="relative z-20 block h-auto max-h-[440px] w-auto max-w-full rounded-xl object-contain shadow-2xl shadow-black/40"
+              />
+            </>
+          ) : (
+            <span className="absolute bottom-9 left-8 right-8 z-10 text-5xl font-black uppercase leading-[0.9] tracking-[-0.08em] text-white drop-shadow-xl sm:text-7xl">
+              {title}
+            </span>
+          )}
+          <span className="absolute right-5 top-5 z-30 rounded-full border border-white/25 bg-[#151521]/75 px-3 py-1.5 text-xs font-bold text-white backdrop-blur">
+            {isEnded ? "Đã kết thúc" : isSaleActive ? "Đang mở bán" : "Chưa mở bán"}
+          </span>
         </div>
       </div>
-    </div>
+    </section>
   )
 }

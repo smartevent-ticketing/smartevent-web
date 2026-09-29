@@ -1,10 +1,6 @@
 import type { FetchOptions } from "openapi-fetch"
-import { apiClient } from "@/lib/api/client"
+import { apiClient, type ApiPaths } from "@/lib/api/client"
 import { requireApiSuccess } from "@/lib/api/result"
-import type { paths } from "@/lib/api/schema"
-import type { EventSetupPaths } from "@/lib/api/event-setup-contract"
-
-type ApiPaths = paths & EventSetupPaths
 
 export const catalogApi = {
   getCategories: (

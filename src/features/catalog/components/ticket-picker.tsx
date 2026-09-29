@@ -12,6 +12,7 @@ type Props = Pick<
   | "shared"
   | "availableTiers"
   | "isSaleActive"
+  | "isEnded"
   | "effectiveTierId"
   | "currentTier"
   | "totalPrice"
@@ -27,6 +28,7 @@ export function TicketPicker({
   shared,
   availableTiers,
   isSaleActive,
+  isEnded,
   effectiveTierId,
   currentTier,
   totalPrice,
@@ -37,22 +39,22 @@ export function TicketPicker({
   return (
     <>
       <div className="lg:col-span-4 sticky top-24 space-y-4">
-        <div className="bg-white rounded-3xl p-6 border border-outline-variant/70 shadow-lg space-y-6">
-          <div className="flex items-center justify-between border-b border-outline-variant/60 pb-4">
+        <div className="space-y-6 rounded-3xl border border-white/15 bg-[#242331] p-6 shadow-xl shadow-black/20">
+          <div className="flex items-center justify-between border-b border-white/15 pb-4">
             <div>
-              <span className="text-xs text-on-surface-variant">
+              <span className="text-xs text-[#aaa6b7]">
                 {isSaleActive ? "Chọn hạng vé" : "Tình trạng"}
               </span>
-              <h3 className="text-lg font-bold text-on-surface">
-                {isSaleActive ? "Đặt vé ngay" : "Chưa mở bán"}
+              <h3 className="text-lg font-bold text-white">
+                {isSaleActive ? "Đặt vé ngay" : isEnded ? "Đã kết thúc" : "Chưa mở bán"}
               </h3>
             </div>
             <div className="flex items-center gap-2">
-              {shared && <span className="text-xs text-green-600 font-medium">Đã sao chép!</span>}
+              {shared && <span className="text-xs font-medium text-[#aee8c3]">Đã sao chép!</span>}
               <button
                 type="button"
                 onClick={handleShare}
-                className="p-2 rounded-full hover:bg-surface-container text-on-surface-variant transition cursor-pointer"
+                className="cursor-pointer rounded-full p-2 text-[#bcb7c4] transition hover:bg-white/10 hover:text-white"
                 aria-label="Chia sẻ sự kiện"
               >
                 <Share2 className="size-5" />
@@ -62,18 +64,19 @@ export function TicketPicker({
 
           {/* Condition: Not Active */}
           {!isSaleActive ? (
-            <div className="p-6 bg-surface-container-low rounded-2xl border border-outline-variant text-center space-y-3">
-              <AlertCircle className="size-8 text-on-surface-variant mx-auto" />
-              <h4 className="text-sm font-bold text-on-surface">
-                Chưa mở bán hoặc đợt bán đã kết thúc
+            <div className="space-y-3 rounded-2xl border border-white/15 bg-white/5 p-6 text-center">
+              <AlertCircle className="mx-auto size-8 text-[#bcb7c4]" />
+              <h4 className="text-sm font-bold text-white">
+                {isEnded ? "Sự kiện đã kết thúc" : "Chưa mở bán hoặc đợt bán đã kết thúc"}
               </h4>
-              <p className="text-xs text-on-surface-variant leading-relaxed">
-                Sự kiện hiện chưa có đợt bán vé nào ở trạng thái hoạt động (ACTIVE). Vui lòng quay
-                lại sau khi Ban tổ chức mở đợt bán tiếp theo.
+              <p className="text-xs leading-relaxed text-[#bcb7c4]">
+                {isEnded
+                  ? "Sự kiện này đã diễn ra. Vé mới không còn được phát hành."
+                  : "Sự kiện hiện chưa có đợt bán vé nào đang hoạt động. Vui lòng quay lại sau khi ban tổ chức mở bán."}
               </p>
               <Link
                 href="/events"
-                className="inline-block mt-2 text-xs font-semibold text-primary hover:underline"
+                className="mt-2 inline-block text-xs font-semibold text-[#ffad95] hover:underline"
               >
                 Xem các sự kiện khác
               </Link>
@@ -90,25 +93,23 @@ export function TicketPicker({
                       onClick={() => setSelectedTierId(tier.id)}
                       className={`p-4 rounded-2xl border transition cursor-pointer ${
                         isSelected
-                          ? "border-primary bg-primary/5 shadow-xs"
-                          : "border-outline-variant/60 hover:border-primary/40 bg-white"
+                          ? "border-[#ff9479] bg-[#ff9479]/10 shadow-xs"
+                          : "border-white/15 bg-white/5 hover:border-[#ff9479]/50"
                       }`}
                     >
                       <div className="flex items-center justify-between mb-1">
-                        <h4 className="text-sm font-bold text-on-surface">{tier.name}</h4>
-                        <span className="text-sm font-bold text-primary">
+                        <h4 className="text-sm font-bold text-white">{tier.name}</h4>
+                        <span className="text-sm font-bold text-[#ffad95]">
                           {tier.price.toLocaleString("vi-VN")} ₫
                         </span>
                       </div>
-                      <p className="text-xs text-on-surface-variant">{tier.description}</p>
+                      <p className="text-xs text-[#bcb7c4]">{tier.description}</p>
                       <div className="mt-2 flex items-center justify-between text-[11px]">
-                        <span className="text-green-600 font-medium">
+                        <span className="font-medium text-[#aee8c3]">
                           {tier.available > 0 ? `Còn ${tier.available} vé` : "Hết vé"}
                         </span>
                         {tier.areaName && (
-                          <span className="text-on-surface-variant font-medium">
-                            {tier.areaName}
-                          </span>
+                          <span className="font-medium text-[#bcb7c4]">{tier.areaName}</span>
                         )}
                       </div>
                     </div>
@@ -118,22 +119,22 @@ export function TicketPicker({
 
               {/* Quantity Counter */}
               <div className="flex items-center justify-between pt-2">
-                <span className="text-sm font-medium text-on-surface">Số lượng</span>
-                <div className="flex items-center border border-outline-variant rounded-xl overflow-hidden">
+                <span className="text-sm font-medium text-white">Số lượng</span>
+                <div className="flex items-center overflow-hidden rounded-xl border border-white/15">
                   <button
                     type="button"
                     onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                    className="px-3.5 py-1.5 text-base font-bold text-on-surface hover:bg-surface-container transition cursor-pointer"
+                    className="cursor-pointer px-3.5 py-1.5 text-base font-bold text-white transition hover:bg-white/10"
                   >
                     -
                   </button>
-                  <span className="px-3 py-1.5 text-sm font-bold text-on-surface min-w-8 text-center">
+                  <span className="min-w-8 px-3 py-1.5 text-center text-sm font-bold text-white">
                     {quantity}
                   </span>
                   <button
                     type="button"
                     onClick={() => setQuantity(Math.min(maxAllowedQty, quantity + 1))}
-                    className="px-3.5 py-1.5 text-base font-bold text-on-surface hover:bg-surface-container transition cursor-pointer"
+                    className="cursor-pointer px-3.5 py-1.5 text-base font-bold text-white transition hover:bg-white/10"
                   >
                     +
                   </button>
@@ -141,24 +142,24 @@ export function TicketPicker({
               </div>
 
               {/* Price Summary & Checkout Button */}
-              <div className="pt-4 border-t border-outline-variant/60 space-y-3">
+              <div className="space-y-3 border-t border-white/15 pt-4">
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-on-surface-variant">Tổng tiền</span>
-                  <span className="text-2xl font-extrabold text-primary">
+                  <span className="text-sm text-[#bcb7c4]">Tổng tiền</span>
+                  <span className="text-2xl font-extrabold text-[#ffad95]">
                     {totalPrice.toLocaleString("vi-VN")} ₫
                   </span>
                 </div>
 
                 <Link
                   href={`/reservations/${targetEventId}?tier=${currentTier?.ticketTypeId || currentTier?.id}&phase=${currentTier?.salePhaseId}&qty=${quantity}`}
-                  className="w-full h-12 bg-primary hover:bg-primary-hover text-white font-bold text-sm rounded-xl shadow-md transition flex items-center justify-center gap-2 cursor-pointer"
+                  className="flex h-12 w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-[#ff8063] text-sm font-bold text-[#261621] transition hover:bg-[#ff9b83]"
                 >
                   <Ticket className="size-4" />
                   <span>Tiến hành giữ chỗ</span>
                 </Link>
 
-                <div className="flex items-center justify-center gap-1.5 text-xs text-on-surface-variant text-center">
-                  <ShieldCheck className="size-4 text-green-600" />
+                <div className="flex items-center justify-center gap-1.5 text-center text-xs text-[#bcb7c4]">
+                  <ShieldCheck className="size-4 text-[#aee8c3]" />
                   <span>Vé được giữ chỗ trong 10 phút sau khi nhấn</span>
                 </div>
               </div>

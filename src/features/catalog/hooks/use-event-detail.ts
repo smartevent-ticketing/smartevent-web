@@ -12,6 +12,8 @@ export function useEventDetail({ eventId }: { eventId: string }) {
   const now = useClock()
   const data = catalog.data
   const event = data?.event
+  const endTime = Date.parse(event?.endTime ?? "")
+  const isEnded = Number.isFinite(endTime) && endTime <= now
   const availableTiers = data
     ? buildTicketTiers(data.types, data.areas, data.phases, data.inventory, now)
     : []
@@ -32,19 +34,20 @@ export function useEventDetail({ eventId }: { eventId: string }) {
     }
   }
   return {
-    bannerUrl: data?.bannerUrl ?? "/images/concert-banner.jpg",
-    seatMapUrl: ((data as any)?.seatMapUrl as string | null) ?? null,
-    galleryUrls: ((data as any)?.galleryUrls as string[]) ?? [],
+    bannerUrl: data?.bannerUrl ?? null,
+    seatMapUrl: data?.seatMapUrl ?? null,
+    galleryUrls: data?.galleryUrls ?? [],
     minPrice: availableTiers.length > 0 ? Math.min(...availableTiers.map((t) => t.price)) : 0,
     isLoading: catalog.isLoading,
     isNotFound: catalog.isNotFound,
+    isEnded,
     loadError: catalog.error,
     setSelectedTierId,
     quantity,
     setQuantity,
     shared,
     availableTiers,
-    isSaleActive: availableTiers.length > 0,
+    isSaleActive: !isEnded && availableTiers.length > 0,
     effectiveTierId: currentTier?.id ?? "",
     currentTier,
     totalPrice: (currentTier?.price ?? 0) * quantity,

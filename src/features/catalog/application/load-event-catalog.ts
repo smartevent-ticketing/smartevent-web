@@ -16,7 +16,7 @@ export async function loadEventCatalog(identifier: string, signal: AbortSignal) 
     catalogApi.getSalePhases(options),
     catalogApi.getInventory(options),
   ])
-  let bannerUrl = "/images/concert-banner.jpg"
+  let bannerUrl: string | null = null
   const banner = event.files?.find((file) => file.fileType === "BANNER")
   if (banner?.fileId) {
     try {

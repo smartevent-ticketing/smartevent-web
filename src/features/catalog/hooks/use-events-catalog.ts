@@ -4,10 +4,13 @@ import { catalogApi } from "@/features/catalog/api/catalog-api"
 import { useEffect, useState } from "react"
 
 import type { components } from "@/lib/api/schema"
+import type { CatalogFilters } from "../model/catalog-url"
 type EventResponse = components["schemas"]["EventResponse"]
+type CategoryResponse = components["schemas"]["CategoryResponse"]
 
-export function useEventsCatalog() {
+export function useEventsCatalog({ q, city, categoryId }: CatalogFilters) {
   const [events, setEvents] = useState<EventResponse[]>([])
+  const [categories, setCategories] = useState<CategoryResponse[]>([])
 
   const [currentPage, setCurrentPage] = useState(0)
 
@@ -20,6 +23,21 @@ export function useEventsCatalog() {
   const [loadError, setLoadError] = useState<string | null>(null)
 
   const pageSize = 9
+
+  useEffect(() => {
+    let active = true
+    catalogApi
+      .getCategories()
+      .then((response) => {
+        if (active) setCategories(response.data?.data ?? [])
+      })
+      .catch(() => {
+        if (active) setCategories([])
+      })
+    return () => {
+      active = false
+    }
+  }, [])
 
   useEffect(() => {
     let isMounted = true
@@ -35,6 +53,9 @@ export function useEventsCatalog() {
                 page: currentPage,
                 size: pageSize,
               },
+              q: q || undefined,
+              city: city || undefined,
+              categoryId: categoryId || undefined,
             },
           },
         })
@@ -61,10 +82,11 @@ export function useEventsCatalog() {
     return () => {
       isMounted = false
     }
-  }, [currentPage])
+  }, [currentPage, q, city, categoryId])
 
   return {
     events,
+    categories,
     currentPage,
     setCurrentPage,
     totalPages,

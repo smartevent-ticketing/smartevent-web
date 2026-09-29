@@ -5,14 +5,13 @@ import { CategoryPicker } from "./components/category-picker"
 import { HomeHero } from "./components/home-hero"
 
 import { useHome } from "./hooks/use-home"
+import { useEventBannerUrls } from "./hooks/use-event-banner-urls"
 
 export function HomeView() {
   const {
     events,
     isLoading,
     loadError,
-    selectedCategory,
-    setSelectedCategory,
     searchQuery,
     setSearchQuery,
     selectedCity,
@@ -20,18 +19,19 @@ export function HomeView() {
     displayCategories,
     filteredRealEvents,
   } = useHome()
+  const bannerUrls = useEventBannerUrls(events)
   return (
-    <div className="flex flex-col gap-12 lg:gap-16 pb-20">
+    <div className="flex flex-col gap-14 lg:gap-20 pb-20">
       {/* 1. Hero Section */}
-      <HomeHero {...{ searchQuery, setSearchQuery, selectedCity, setSelectedCity }} />
-
-      {/* 2. Categories Section */}
-      <CategoryPicker
-        {...{ isLoading, loadError, selectedCategory, setSelectedCategory, displayCategories }}
+      <HomeHero
+        {...{ searchQuery, setSearchQuery, selectedCity, setSelectedCity, events, bannerUrls }}
       />
 
+      {/* 2. Categories Section */}
+      <CategoryPicker {...{ isLoading, loadError, displayCategories }} />
+
       {/* 3. Events Grid */}
-      <HomeEvents {...{ events, isLoading, filteredRealEvents }} />
+      <HomeEvents {...{ events, isLoading, filteredRealEvents, bannerUrls }} />
 
       {/* 4. Why Choose SMART EVENT */}
       <ServiceBenefits />

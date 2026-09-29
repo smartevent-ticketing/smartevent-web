@@ -27,8 +27,6 @@ export function useHome() {
 
   const [loadError, setLoadError] = useState<string | null>(null)
 
-  const [selectedCategory, setSelectedCategory] = useState("Tất cả")
-
   const [searchQuery, setSearchQuery] = useState("")
 
   const [selectedCity, setSelectedCity] = useState("all")
@@ -85,33 +83,16 @@ export function useHome() {
     })),
   ]
 
-  const filteredRealEvents = events.filter((e) => {
-    const matchCat =
-      selectedCategory === "Tất cả" || e.categories?.some((c) => c.name === selectedCategory)
-    const matchSearch =
-      !searchQuery ||
-      e.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      e.venue?.name?.toLowerCase().includes(searchQuery.toLowerCase())
-    const matchCity =
-      selectedCity === "all" ||
-      (selectedCity === "hcm" &&
-        (e.city?.includes("Hồ Chí Minh") || e.venue?.city?.includes("Hồ Chí Minh"))) ||
-      (selectedCity === "hn" && (e.city?.includes("Hà Nội") || e.venue?.city?.includes("Hà Nội")))
-    return matchCat && matchSearch && matchCity
-  })
-
   return {
     categories,
     events,
     isLoading,
     loadError,
-    selectedCategory,
-    setSelectedCategory,
     searchQuery,
     setSearchQuery,
     selectedCity,
     setSelectedCity,
     displayCategories,
-    filteredRealEvents,
+    filteredRealEvents: events,
   }
 }

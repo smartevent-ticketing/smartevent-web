@@ -16,6 +16,7 @@ export function EventDetailView({ eventId }: { eventId: string }) {
     minPrice,
     isLoading,
     isNotFound,
+    isEnded,
     setSelectedTierId,
     quantity,
     setQuantity,
@@ -39,14 +40,14 @@ export function EventDetailView({ eventId }: { eventId: string }) {
   if (isLoading) {
     return (
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12 space-y-8 animate-pulse">
-        <div className="w-full h-[320px] sm:h-[420px] rounded-3xl bg-gray-200" />
+        <div className="h-[320px] w-full rounded-3xl bg-[#242331] sm:h-[420px]" />
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           <div className="lg:col-span-8 space-y-6">
-            <div className="h-20 bg-gray-100 rounded-2xl" />
-            <div className="h-40 bg-gray-100 rounded-2xl" />
-            <div className="h-40 bg-gray-100 rounded-2xl" />
+            <div className="h-20 rounded-2xl bg-[#242331]" />
+            <div className="h-40 rounded-2xl bg-[#242331]" />
+            <div className="h-40 rounded-2xl bg-[#242331]" />
           </div>
-          <div className="lg:col-span-4 h-96 bg-gray-100 rounded-3xl" />
+          <div className="h-96 rounded-3xl bg-[#242331] lg:col-span-4" />
         </div>
       </div>
     )
@@ -58,8 +59,8 @@ export function EventDetailView({ eventId }: { eventId: string }) {
         <div className="size-20 rounded-full bg-amber-50 text-amber-600 flex items-center justify-center mx-auto border border-amber-200">
           <AlertCircle className="size-10" />
         </div>
-        <h1 className="text-2xl font-bold text-on-surface">Không tìm thấy sự kiện</h1>
-        <p className="text-sm text-on-surface-variant">
+        <h1 className="text-2xl font-bold text-white">Không tìm thấy sự kiện</h1>
+        <p className="text-sm text-[#bcb7c4]">
           Sự kiện bạn đang tìm kiếm không tồn tại hoặc chưa được công bố chính thức trên hệ thống.
         </p>
         <Link
@@ -76,7 +77,17 @@ export function EventDetailView({ eventId }: { eventId: string }) {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12 flex flex-col gap-8">
       {/* 1. Hero Event Banner */}
       <EventHero
-        {...{ bannerUrl, isSaleActive, title, date, time, locationName, cityName, minPrice }}
+        {...{
+          bannerUrl,
+          isSaleActive,
+          isEnded,
+          title,
+          date,
+          time,
+          locationName,
+          cityName,
+          minPrice,
+        }}
       />
 
       {/* 2. Grid Layout: Left Content & Right Sticky Booking Card */}
@@ -85,6 +96,7 @@ export function EventDetailView({ eventId }: { eventId: string }) {
         <EventInformation
           {...{
             isSaleActive,
+            isEnded,
             categoryName,
             locationName,
             descriptionText,
@@ -103,6 +115,7 @@ export function EventDetailView({ eventId }: { eventId: string }) {
               shared,
               availableTiers,
               isSaleActive,
+              isEnded,
               effectiveTierId,
               currentTier,
               totalPrice,

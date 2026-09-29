@@ -1,52 +1,47 @@
 import Link from "next/link"
-import { Globe, MessageSquare, Share2, Ticket } from "lucide-react"
+import { Asterisk, ArrowUpRight } from "lucide-react"
 
 export function SiteFooter() {
   return (
-    <footer className="bg-surface-container-highest border-t border-outline-variant mt-auto">
+    <footer className="bg-[#10101a] border-t border-white/10 text-[#f8f2ed] mt-auto">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 lg:gap-12">
           {/* Cột 1: Thương hiệu */}
           <div className="space-y-4">
-            <Link href="/" className="flex items-center gap-2 text-xl font-bold text-primary">
-              <span className="bg-primary text-white p-1.5 rounded-lg">
-                <Ticket className="size-4" />
+            <Link
+              href="/"
+              className="flex items-center gap-2 text-xl font-extrabold tracking-[-0.06em] text-white"
+            >
+              <span className="bg-[#ff8063] text-[#261621] p-1.5 rounded-[9px_14px_9px_14px]">
+                <Asterisk className="size-4" strokeWidth={3} />
               </span>
-              <span>SMART EVENT</span>
+              <span>SmartEvent</span>
             </Link>
-            <p className="text-sm text-on-surface-variant leading-relaxed">
-              Nền tảng đặt vé và quản lý sự kiện thông minh, hiện đại và an toàn hàng đầu tại Việt
-              Nam.
+            <p className="text-sm text-[#bcb7c4] leading-relaxed">
+              Mỗi tấm vé là điểm bắt đầu của một câu chuyện đáng nhớ.
             </p>
-            <p className="text-xs text-on-surface-variant pt-2">
+            <p className="text-xs text-[#928d9e] pt-2">
               © {new Date().getFullYear()} SMART EVENT. All rights reserved.
             </p>
           </div>
 
-          {/* Cột 2: Về chúng tôi */}
+          {/* Cột 2: Điều hướng */}
           <div className="space-y-3">
-            <h4 className="text-sm font-bold text-on-surface uppercase tracking-wider">
-              Về chúng tôi
-            </h4>
-            <ul className="space-y-2 text-sm text-on-surface-variant">
+            <h4 className="text-sm font-bold text-white uppercase tracking-wider">Khám phá</h4>
+            <ul className="space-y-2 text-sm text-[#bcb7c4]">
               <li>
-                <Link href="#" className="hover:text-primary transition">
-                  Giới thiệu
+                <Link href="/" className="hover:text-[#ff9479] transition">
+                  Trang chủ
                 </Link>
               </li>
               <li>
-                <Link href="#" className="hover:text-primary transition">
-                  Điều khoản dịch vụ
+                <Link href="/events" className="hover:text-[#ff9479] transition">
+                  Tìm sự kiện
                 </Link>
               </li>
               <li>
-                <Link href="#" className="hover:text-primary transition">
-                  Chính sách bảo mật
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className="hover:text-primary transition">
-                  Trung tâm hỗ trợ
+                <Link href="/account" className="hover:text-[#ff9479] transition">
+                  Tài khoản của tôi
                 </Link>
               </li>
             </ul>
@@ -54,58 +49,41 @@ export function SiteFooter() {
 
           {/* Cột 3: Dành cho Ban tổ chức */}
           <div className="space-y-3">
-            <h4 className="text-sm font-bold text-on-surface uppercase tracking-wider">
+            <h4 className="text-sm font-bold text-white uppercase tracking-wider">
               Dành cho Ban tổ chức
             </h4>
-            <ul className="space-y-2 text-sm text-on-surface-variant">
+            <ul className="space-y-2 text-sm text-[#bcb7c4]">
               <li>
-                <Link href="/organizer" className="hover:text-primary transition">
+                <Link href="/organizer" className="hover:text-[#ff9479] transition">
                   Tạo sự kiện mới
                 </Link>
               </li>
               <li>
-                <Link href="/organizer" className="hover:text-primary transition">
+                <Link href="/organizer" className="hover:text-[#ff9479] transition">
                   Giải pháp bán vé thông minh
                 </Link>
               </li>
               <li>
-                <Link href="/checkin" className="hover:text-primary transition">
+                <Link href="/checkin" className="hover:text-[#ff9479] transition">
                   Ứng dụng quét vé Check-in
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Cột 4: Kết nối */}
+          {/* Cột 4: Tài khoản */}
           <div className="space-y-3">
-            <h4 className="text-sm font-bold text-on-surface uppercase tracking-wider">
-              Kết nối với chúng tôi
-            </h4>
-            <p className="text-sm text-on-surface-variant">
-              Theo dõi SmartEvent để cập nhật các concert và lễ hội hot nhất.
+            <h4 className="text-sm font-bold text-white uppercase tracking-wider">Bắt đầu</h4>
+            <p className="text-sm text-[#bcb7c4]">
+              Tạo tài khoản để đặt vé và theo dõi đơn hàng của bạn.
             </p>
-            <div className="flex items-center gap-3 pt-2">
-              <a
-                href="#"
-                className="size-9 rounded-full bg-white border border-outline-variant flex items-center justify-center text-on-surface-variant hover:text-primary hover:border-primary transition"
-                aria-label="Website"
-              >
-                <Globe className="size-4" />
-              </a>
-              <a
-                href="#"
-                className="size-9 rounded-full bg-white border border-outline-variant flex items-center justify-center text-on-surface-variant hover:text-primary hover:border-primary transition"
-                aria-label="Share"
-              >
-                <Share2 className="size-4" />
-              </a>
-              <a
-                href="#"
-                className="size-9 rounded-full bg-white border border-outline-variant flex items-center justify-center text-on-surface-variant hover:text-primary hover:border-primary transition"
-                aria-label="Message"
-              >
-                <MessageSquare className="size-4" />
-              </a>
+            <div className="flex flex-wrap gap-3 pt-2 text-sm font-semibold text-[#ff9479]">
+              <Link href="/register" className="inline-flex items-center gap-1 hover:underline">
+                Đăng ký <ArrowUpRight className="size-3.5" />
+              </Link>
+              <Link href="/login" className="hover:underline">
+                Đăng nhập
+              </Link>
             </div>
           </div>
         </div>
