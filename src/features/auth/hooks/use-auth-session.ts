@@ -23,11 +23,13 @@ export function useAuthSession() {
   const router = useRouter()
   const [user, setUser] = useState<AuthUser | null>(null)
   const [status, setStatus] = useState<AuthStatus>("checking")
+  const [avatarImage, setAvatarImage] = useState<{ fileId: string; url: string } | null>(null)
   const operationVersion = useRef(0)
 
   const resetLocalSession = useCallback(() => {
     accessTokenStore.clear()
     setUser(null)
+    setAvatarImage(null)
     setStatus("unauthenticated")
   }, [])
 
@@ -61,6 +63,30 @@ export function useAuthSession() {
       operationVersion.current += 1
     }
   }, [resetLocalSession])
+
+  useEffect(() => {
+    const fileId = user?.avatarFileId
+    if (!fileId || status !== "authenticated") return
+    const currentFileId = fileId
+    let active = true
+
+    async function refreshAvatarUrl() {
+      try {
+        const result = await authApi.getAvatarUrl(currentFileId)
+        const url = result.data?.data?.url
+        if (active && url) setAvatarImage({ fileId: currentFileId, url })
+      } catch {
+        if (active) setAvatarImage(null)
+      }
+    }
+
+    void refreshAvatarUrl()
+    const interval = window.setInterval(() => void refreshAvatarUrl(), 12 * 60 * 1000)
+    return () => {
+      active = false
+      window.clearInterval(interval)
+    }
+  }, [user?.avatarFileId, status])
 
   const login = useCallback(
     async (credentials: LoginCredentials): Promise<LoginResult> => {
@@ -100,6 +126,16 @@ export function useAuthSession() {
     if (operationVersion.current === operation) router.push("/login")
   }, [resetLocalSession, router])
 
+  const updateAvatar = useCallback(async (file: File) => {
+    const operation = operationVersion.current
+    const result = await authApi.updateAvatar(file)
+    const profile = requireAuthUser(result.data?.data)
+    if (operation !== operationVersion.current) {
+      throw new Error("Phiên đăng nhập đã thay đổi. Vui lòng thử lại.")
+    }
+    setUser(profile)
+  }, [])
+
   const hasRole = useCallback(
     (role: string) => {
       if (!user?.roles || user.roles.length === 0) return false
@@ -111,11 +147,14 @@ export function useAuthSession() {
 
   return {
     user,
+    avatarUrl:
+      user?.avatarFileId && avatarImage?.fileId === user.avatarFileId ? avatarImage.url : undefined,
     status,
     isAuthenticated: status === "authenticated",
     isLoading: status === "checking",
     hasRole,
     login,
     logout,
+    updateAvatar,
   }
 }

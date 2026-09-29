@@ -125,3 +125,23 @@ test("optional profile fields do not break a valid session when absent or malfor
   assert.equal(user.phone, undefined)
   assert.equal(user.avatarFileId, undefined)
 })
+
+test("profile metadata is retained without trusting malformed organizer fields", () => {
+  const user = requireAuthUser({
+    id: "user",
+    email: "u@example.com",
+    roles: ["ORGANIZER"],
+    status: "ACTIVE",
+    createdAt: "2026-01-01T00:00:00Z",
+    organizerProfile: {
+      companyName: "Smart Events",
+      taxCode: 123,
+      bankAccountStatus: "PENDING",
+    },
+  })
+  assert.equal(user.status, "ACTIVE")
+  assert.equal(user.createdAt, "2026-01-01T00:00:00Z")
+  assert.equal(user.organizerProfile?.companyName, "Smart Events")
+  assert.equal(user.organizerProfile?.taxCode, undefined)
+  assert.equal(user.organizerProfile?.bankAccountStatus, "PENDING")
+})

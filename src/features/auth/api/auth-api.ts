@@ -12,4 +12,17 @@ export const authApi = {
       parseAs?: "json"
     } = {},
   ) => requireApiSuccess(apiClient.GET("/api/v1/auth/me", options)),
+
+  updateAvatar: (file: File) => {
+    const body = new FormData()
+    body.append("file", file)
+    return requireApiSuccess(apiClient.PUT("/api/v1/auth/me/avatar", { body }))
+  },
+
+  getAvatarUrl: (fileId: string) =>
+    requireApiSuccess(
+      apiClient.GET("/api/v1/storage/{fileId}/presigned-url", {
+        params: { path: { fileId } },
+      }),
+    ),
 }
