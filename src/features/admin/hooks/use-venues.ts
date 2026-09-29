@@ -1,7 +1,7 @@
 "use client"
 
 import { adminApi } from "@/features/admin/api/admin-api"
-import { catalogApi } from "@/features/catalog/api/catalog-api"
+import { catalogApi } from "@/features/catalog"
 
 import { useEffect, useState } from "react"
 
@@ -24,19 +24,93 @@ export function useAdminVenues() {
   const [newVenueCapacity, setNewVenueCapacity] = useState("10000")
 
   const [isAddingVenue, setIsAddingVenue] = useState(false)
+  const [editingVenue, setEditingVenue] = useState<VenueResponse | null>(null)
+  const [editVenueName, setEditVenueName] = useState("")
+  const [editVenueCity, setEditVenueCity] = useState("")
+  const [editVenueAddress, setEditVenueAddress] = useState("")
+  const [editVenueCapacity, setEditVenueCapacity] = useState("")
+  const [isSavingVenue, setIsSavingVenue] = useState(false)
+
+  function startEditingVenue(venue: VenueResponse) {
+    if (!venue.id) return
+    setEditingVenue(venue)
+    setEditVenueName(venue.name ?? "")
+    setEditVenueCity(venue.city ?? "")
+    setEditVenueAddress(venue.address ?? "")
+    setEditVenueCapacity(venue.capacity?.toString() ?? "")
+    setNotification(null)
+  }
+
+  function cancelEditingVenue() {
+    setEditingVenue(null)
+  }
+
+  async function saveVenue() {
+    if (!editingVenue?.id || isSavingVenue) return
+    const capacity = Number(editVenueCapacity)
+    if (
+      !editVenueName.trim() ||
+      !editVenueCity.trim() ||
+      !editVenueAddress.trim() ||
+      !Number.isSafeInteger(capacity) ||
+      capacity <= 0
+    ) {
+      setNotification({
+        type: "error",
+        text: "Vui lòng nhập tên, thành phố, địa chỉ và sức chứa nguyên dương.",
+      })
+      return
+    }
+    setIsSavingVenue(true)
+    try {
+      const result = await adminApi.updateVenue(editingVenue.id, {
+        name: editVenueName.trim(),
+        city: editVenueCity.trim(),
+        address: editVenueAddress.trim(),
+        capacity,
+        latitude: editingVenue.latitude,
+        longitude: editingVenue.longitude,
+      })
+      const updated = result.data?.data
+      if (!updated) throw new Error("Máy chủ chưa xác nhận địa điểm đã cập nhật.")
+      setVenues((current) => current.map((item) => (item.id === editingVenue.id ? updated : item)))
+      cancelEditingVenue()
+      setNotification({ type: "success", text: "Đã cập nhật địa điểm." })
+    } catch (error) {
+      setNotification({
+        type: "error",
+        text: getApiErrorMessage(error, "Không thể cập nhật địa điểm."),
+      })
+    } finally {
+      setIsSavingVenue(false)
+    }
+  }
 
   async function handleAddVenue(e: React.FormEvent) {
     e.preventDefault()
-    if (!newVenueName.trim()) return
+    const capacity = Number(newVenueCapacity)
+    if (
+      !newVenueName.trim() ||
+      !newVenueCity.trim() ||
+      !newVenueAddress.trim() ||
+      !Number.isSafeInteger(capacity) ||
+      capacity <= 0
+    ) {
+      setNotification({
+        type: "error",
+        text: "Vui lòng nhập tên, thành phố, địa chỉ và sức chứa nguyên dương.",
+      })
+      return
+    }
 
     setIsAddingVenue(true)
     try {
       const res = await adminApi.createVenue({
         body: {
           name: newVenueName.trim(),
-          city: newVenueCity.trim() || "Việt Nam",
-          address: newVenueAddress.trim() || "Chưa cập nhật địa chỉ chi tiết",
-          capacity: parseInt(newVenueCapacity || "10000", 10),
+          city: newVenueCity.trim(),
+          address: newVenueAddress.trim(),
+          capacity,
         },
       })
 
@@ -116,6 +190,19 @@ export function useAdminVenues() {
     newVenueCapacity,
     setNewVenueCapacity,
     isAddingVenue,
+    editingVenue,
+    editVenueName,
+    setEditVenueName,
+    editVenueCity,
+    setEditVenueCity,
+    editVenueAddress,
+    setEditVenueAddress,
+    editVenueCapacity,
+    setEditVenueCapacity,
+    isSavingVenue,
+    startEditingVenue,
+    cancelEditingVenue,
+    saveVenue,
     handleAddVenue,
     handleDeleteVenue,
   }
