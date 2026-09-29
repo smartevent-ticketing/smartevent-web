@@ -7,6 +7,8 @@ import { refreshAccessToken } from "@/lib/auth/token-refresher"
 
 import type { paths } from "./schema"
 import type { RefundReviewPaths } from "./refund-review-contract"
+import type { AvatarPaths } from "./avatar-contract"
+import type { AdminUsersPaths } from "./admin-users-contract"
 import type {
   EventSetupPaths,
   AdminEventPaths,
@@ -134,9 +136,25 @@ const serializeQueryParams = (queryParams: Record<string, unknown>) => {
 
 // ─── Client instance ──────────────────────────────────────
 
-export const apiClient = createClient<
-  paths & EventSetupPaths & AdminEventPaths & SalePhasePaths & EventMediaPaths & RefundReviewPaths
->({
+export type ApiPaths = Omit<
+  paths,
+  | keyof EventSetupPaths
+  | keyof AdminEventPaths
+  | keyof SalePhasePaths
+  | keyof EventMediaPaths
+  | keyof RefundReviewPaths
+  | keyof AvatarPaths
+  | keyof AdminUsersPaths
+> &
+  EventSetupPaths &
+  AdminEventPaths &
+  SalePhasePaths &
+  EventMediaPaths &
+  RefundReviewPaths &
+  AvatarPaths &
+  AdminUsersPaths
+
+export const apiClient = createClient<ApiPaths>({
   baseUrl: apiBaseUrl,
   querySerializer: serializeQueryParams,
 })

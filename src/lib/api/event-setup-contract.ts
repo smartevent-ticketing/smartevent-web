@@ -1,8 +1,21 @@
 import type { components } from "./schema"
 
+export type CreateEventPayload = components["schemas"]["CreateEventRequest"] & {
+  maxTicketsPerUser?: number
+}
+
+export type UpdateEventPayload = components["schemas"]["UpdateEventRequest"] & {
+  maxTicketsPerUser?: number
+  clearMaxTicketsPerUser?: boolean
+}
+
+export type EventDetails = components["schemas"]["EventResponse"] & {
+  maxTicketsPerUser?: number | null
+}
+
 /** Additive contract for the event setup endpoint; existing generated endpoints remain unchanged. */
 export type EventSetupRequest = {
-  event: components["schemas"]["CreateEventRequest"]
+  event: CreateEventPayload
   tiers: { name: string; areaType: "STANDING" | "SEATED"; price: number; capacity: number }[]
 }
 
@@ -110,7 +123,9 @@ export type SalePhasePaths = {
       }
       responses: {
         200: {
-          content: { "application/json": { success?: boolean; data?: unknown; message?: string } }
+          content: {
+            "application/json": components["schemas"]["ApiResponseTicketSalePhaseResponse"]
+          }
         }
         default: { content: { "application/json": { message?: string } } }
       }

@@ -13,7 +13,7 @@ export interface paths {
         };
         /** Lấy thông tin chi tiết địa điểm theo ID */
         get: operations["getVenueById"];
-        /** Cập nhật thông tin địa điểm theo ID (Yêu cầu ADMIN hoặc ORGANIZER) */
+        /** Cập nhật thông tin địa điểm theo ID (Yêu cầu ADMIN) */
         put: operations["updateVenue"];
         post?: never;
         /** Xóa mềm địa điểm theo ID (Yêu cầu ADMIN) */
@@ -72,6 +72,23 @@ export interface paths {
         get: operations["getEventById"];
         /** Cập nhật thông tin sự kiện theo ID (Yêu cầu ADMIN hoặc Ban tổ chức chính chủ) */
         put: operations["updateEvent"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/events/{eventId}/media/order": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** Cập nhật thứ tự hiển thị của các ảnh trong bộ sưu tập (Yêu cầu ORGANIZER hoặc ADMIN) */
+        put: operations["updateMediaOrder"];
         post?: never;
         delete?: never;
         options?: never;
@@ -288,6 +305,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/orders/{orderId}/refund-review": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["get"];
+        put?: never;
+        post: operations["create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/orders/{id}/cancel": {
         parameters: {
             query?: never;
@@ -329,7 +362,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Lấy danh sách các sự kiện đã được duyệt và đang mở bán (PUBLISHED) */
+        /** Lấy danh sách sự kiện đã công bố và chưa kết thúc */
         get: operations["getPublishedEvents"];
         put?: never;
         /** Tạo sự kiện mới ở trạng thái DRAFT (Yêu cầu ADMIN hoặc ORGANIZER) */
@@ -426,6 +459,41 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/events/{eventId}/media": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Lấy danh sách media của sự kiện (Công khai nếu sự kiện PUBLISHED, yêu cầu quyền nếu DRAFT) */
+        get: operations["getEventMedia"];
+        put?: never;
+        /** Tải lên ảnh Banner hoặc Gallery cho sự kiện (Yêu cầu ORGANIZER hoặc ADMIN) */
+        post: operations["uploadMedia"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/events/{eventId}/complete-setup": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Hoàn tất cấu hình vé của bản nháp và gửi duyệt trong một giao dịch */
+        post: operations["completeDraftSetup"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/events/{eventId}/areas": {
         parameters: {
             query?: never;
@@ -438,6 +506,23 @@ export interface paths {
         put?: never;
         /** Tạo phân khu mới cho sự kiện (Yêu cầu ADMIN hoặc Ban tổ chức chính chủ) */
         post: operations["createArea"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/events/setup": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Tạo cấu hình sự kiện và gửi duyệt trong một giao dịch */
+        post: operations["createEventSetup"];
         delete?: never;
         options?: never;
         head?: never;
@@ -615,6 +700,22 @@ export interface paths {
         head?: never;
         /** Chuyển trạng thái đợt mở bán (ACTIVE, PAUSED, CLOSED) */
         patch: operations["updateStatus"];
+        trace?: never;
+    };
+    "/api/v1/admin/payment-refund-reviews/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["update"];
         trace?: never;
     };
     "/api/v1/venues/city/{city}": {
@@ -811,7 +912,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Return URL tiếp nhận khách hàng quay lại sau khi thanh toán trên VNPay (Hiển thị UI) */
+        /** Return URL tiếp nhận khách hàng quay lại sau khi thanh toán trên VNPay (Chuyển hướng về Frontend UI) */
         get: operations["vnpayReturn"];
         put?: never;
         post?: never;
@@ -974,6 +1075,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/events/{id}/submission-readiness": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Kiểm tra điều kiện để nộp duyệt sự kiện (Submission Readiness Preflight) */
+        get: operations["checkSubmissionReadiness"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/events/{eventId}/sale-phases": {
         parameters: {
             query?: never;
@@ -983,6 +1101,23 @@ export interface paths {
         };
         /** Lấy danh sách tất cả các đợt mở bán của một sự kiện */
         get: operations["getSalePhasesByEventId"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/events/{eventId}/my-counter": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Tổng số vé người dùng hiện tại đã mua hoặc đang giữ trong sự kiện */
+        get: operations["getMyEventCounter"];
         put?: never;
         post?: never;
         delete?: never;
@@ -1127,6 +1262,38 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/admin/payment-refund-reviews": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["list"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/payment-refund-reviews/{id}/history": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["history"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/admin/outbox/stats": {
         parameters: {
             query?: never;
@@ -1170,6 +1337,54 @@ export interface paths {
         };
         /** Lấy danh sách các sự kiện Outbox bị lỗi gửi (FAILED) */
         get: operations["getFailedEvents"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/events": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["list_1"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/events/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["detail"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/events/pending": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["getPendingEvents_1"];
         put?: never;
         post?: never;
         delete?: never;
@@ -1229,6 +1444,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/events/{eventId}/media/{eventFileId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Gỡ bỏ ảnh khỏi sự kiện và xóa tệp tin trên MinIO (Yêu cầu ORGANIZER hoặc ADMIN) */
+        delete: operations["deleteMedia"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -1268,7 +1500,8 @@ export interface components {
             eventAreaId: string;
             name: string;
             description?: string;
-            status?: string;
+            /** @enum {string} */
+            status?: "ACTIVE" | "INACTIVE";
         };
         ApiResponseTicketTypeResponse: {
             success?: boolean;
@@ -1289,7 +1522,8 @@ export interface components {
             areaType?: "STANDING" | "SEATED";
             name?: string;
             description?: string;
-            status?: string;
+            /** @enum {string} */
+            status?: "ACTIVE" | "INACTIVE";
             /** Format: date-time */
             createdAt?: string;
         };
@@ -1373,6 +1607,13 @@ export interface components {
             virtualQueueEnabled?: boolean;
             /** Format: int32 */
             queueBatchSize?: number;
+            /**
+             * Format: int32
+             * @description Bỏ qua hoặc gửi null để giữ giới hạn hiện tại; gửi số dương để thay đổi
+             */
+            maxTicketsPerUser?: number;
+            /** @description Gửi true để bỏ giới hạn hiện tại; không gửi cùng maxTicketsPerUser */
+            clearMaxTicketsPerUser?: boolean;
         };
         ApiResponseEventResponse: {
             success?: boolean;
@@ -1426,12 +1667,30 @@ export interface components {
             virtualQueueEnabled?: boolean;
             /** Format: int32 */
             queueBatchSize?: number;
+            /** Format: int32 */
+            maxTicketsPerUser?: number;
             /** Format: date-time */
             publishedAt?: string;
             /** Format: date-time */
             createdAt?: string;
             /** Format: date-time */
             updatedAt?: string;
+        };
+        MediaOrderItem: {
+            /** Format: uuid */
+            eventFileId: string;
+            /** Format: int32 */
+            sortOrder: number;
+        };
+        UpdateMediaOrderRequest: {
+            items: components["schemas"]["MediaOrderItem"][];
+        };
+        ApiResponseVoid: {
+            success?: boolean;
+            message?: string;
+            data?: unknown;
+            /** Format: date-time */
+            timestamp?: string;
         };
         CategoryRequest: {
             name: string;
@@ -1636,18 +1895,14 @@ export interface components {
             /** Format: date-time */
             createdAt?: string;
         };
-        ApiResponseVoid: {
-            success?: boolean;
-            message?: string;
-            data?: unknown;
-            /** Format: date-time */
-            timestamp?: string;
-        };
         CreatePaymentRequest: {
             /** Format: uuid */
             orderId: string;
-            /** @enum {string} */
-            paymentMethod: "VNPAY" | "MOMO" | "ZALOPAY" | "PAYPAL" | "BANK_TRANSFER";
+            /**
+             * @description Hiện chỉ hỗ trợ VNPay
+             * @enum {string}
+             */
+            paymentMethod: "VNPAY";
             bankCode?: string;
         };
         ApiResponsePaymentResponse: {
@@ -1676,8 +1931,11 @@ export interface components {
             /** Format: uuid */
             reservationId: string;
             customerNote?: string;
-            /** @enum {string} */
-            paymentMethod?: "VNPAY" | "MOMO" | "ZALOPAY" | "PAYPAL" | "BANK_TRANSFER";
+            /**
+             * @description Hiện chỉ hỗ trợ VNPay
+             * @enum {string}
+             */
+            paymentMethod?: "VNPAY";
         };
         ApiResponseOrderResponse: {
             success?: boolean;
@@ -1727,6 +1985,32 @@ export interface components {
             /** Format: date-time */
             createdAt?: string;
         };
+        BuyerRefundReviewRequest: {
+            reason: string;
+        };
+        ApiResponseBuyerRefundReviewResponse: {
+            success?: boolean;
+            message?: string;
+            data?: components["schemas"]["BuyerRefundReviewResponse"];
+            /** Format: date-time */
+            timestamp?: string;
+        };
+        BuyerRefundReviewResponse: {
+            /** Format: uuid */
+            id?: string;
+            /** Format: uuid */
+            orderId?: string;
+            amount?: number;
+            reason?: string;
+            /** @enum {string} */
+            status?: "REQUIRED" | "IN_REVIEW" | "REFUNDED_CONFIRMED" | "CLOSED_NO_REFUND";
+            resolutionNote?: string;
+            evidenceReference?: string;
+            /** Format: date-time */
+            createdAt?: string;
+            /** Format: date-time */
+            resolvedAt?: string;
+        };
         SendInvoiceEmailRequest: {
             /** Format: email */
             recipientEmail?: string;
@@ -1775,6 +2059,43 @@ export interface components {
             virtualQueueEnabled?: boolean;
             /** Format: int32 */
             queueBatchSize?: number;
+            /** Format: int32 */
+            maxTicketsPerUser?: number;
+        };
+        ApiResponseEventMediaResponse: {
+            success?: boolean;
+            message?: string;
+            data?: components["schemas"]["EventMediaResponse"];
+            /** Format: date-time */
+            timestamp?: string;
+        };
+        EventMediaResponse: {
+            /** Format: uuid */
+            eventFileId?: string;
+            /** Format: uuid */
+            fileID?: string;
+            /** @enum {string} */
+            fileType?: "BANNER" | "GALLERY" | "SEAT_MAP" | "DOCUMENT";
+            fileUrl?: string;
+            /** Format: int32 */
+            sortOrder?: number;
+            /** Format: date-time */
+            createdAt?: string;
+        };
+        CompleteDraftSetupRequest: {
+            tiers: components["schemas"]["Tier"][];
+        };
+        Tier: {
+            name: string;
+            /** @enum {string} */
+            areaType: "STANDING" | "SEATED";
+            price: number;
+            /** Format: int32 */
+            capacity?: number;
+        };
+        CreateEventSetupRequest: {
+            event: components["schemas"]["CreateEventRequest"];
+            tiers: components["schemas"]["Tier"][];
         };
         CheckinRequest: {
             ticketCodeOrToken: string;
@@ -1913,6 +2234,45 @@ export interface components {
             /** Format: date-time */
             timestamp?: string;
         };
+        UpdateSalePhaseStatusRequest: {
+            /** @enum {string} */
+            status: "DRAFT" | "SCHEDULED" | "ACTIVE" | "PAUSED" | "CLOSED" | "SOLD_OUT";
+        };
+        UpdateRefundReviewRequest: {
+            /** @enum {string} */
+            status: "REQUIRED" | "IN_REVIEW" | "REFUNDED_CONFIRMED" | "CLOSED_NO_REFUND";
+            note: string;
+            evidenceReference?: string;
+        };
+        ApiResponsePaymentRefundReview: {
+            success?: boolean;
+            message?: string;
+            data?: components["schemas"]["PaymentRefundReview"];
+            /** Format: date-time */
+            timestamp?: string;
+        };
+        PaymentRefundReview: {
+            /** Format: uuid */
+            id?: string;
+            /** Format: date-time */
+            createdAt?: string;
+            /** Format: date-time */
+            updatedAt?: string;
+            /** Format: uuid */
+            paymentId?: string;
+            /** Format: uuid */
+            orderId?: string;
+            amount?: number;
+            reason?: string;
+            /** @enum {string} */
+            status?: "REQUIRED" | "IN_REVIEW" | "REFUNDED_CONFIRMED" | "CLOSED_NO_REFUND";
+            resolutionNote?: string;
+            evidenceReference?: string;
+            /** Format: uuid */
+            updatedByUserId?: string;
+            /** Format: date-time */
+            resolvedAt?: string;
+        };
         ApiResponseListVenueResponse: {
             success?: boolean;
             message?: string;
@@ -2014,22 +2374,6 @@ export interface components {
             id?: string;
             name?: string;
         };
-        ApiResponseVNPayReturnResponse: {
-            success?: boolean;
-            message?: string;
-            data?: components["schemas"]["VNPayReturnResponse"];
-            /** Format: date-time */
-            timestamp?: string;
-        };
-        VNPayReturnResponse: {
-            orderCode?: string;
-            transactionNo?: string;
-            bankCode?: string;
-            amount?: number;
-            payDate?: string;
-            status?: string;
-            message?: string;
-        };
         VNPayIpnResponse: {
             RspCode?: string;
             Message?: string;
@@ -2129,10 +2473,39 @@ export interface components {
             totalPages?: number;
             last?: boolean;
         };
+        ApiResponseEventSubmissionReadinessResponse: {
+            success?: boolean;
+            message?: string;
+            data?: components["schemas"]["EventSubmissionReadinessResponse"];
+            /** Format: date-time */
+            timestamp?: string;
+        };
+        EventSubmissionReadinessResponse: {
+            ready?: boolean;
+            checklist?: {
+                [key: string]: boolean;
+            };
+            blockers?: string[];
+        };
         ApiResponseListTicketTypeResponse: {
             success?: boolean;
             message?: string;
             data?: components["schemas"]["TicketTypeResponse"][];
+            /** Format: date-time */
+            timestamp?: string;
+        };
+        ApiResponseInteger: {
+            success?: boolean;
+            message?: string;
+            /** Format: int32 */
+            data?: number;
+            /** Format: date-time */
+            timestamp?: string;
+        };
+        ApiResponseListEventMediaResponse: {
+            success?: boolean;
+            message?: string;
+            data?: components["schemas"]["EventMediaResponse"][];
             /** Format: date-time */
             timestamp?: string;
         };
@@ -2226,6 +2599,48 @@ export interface components {
             /** Format: int32 */
             totalPages?: number;
             last?: boolean;
+        };
+        ApiResponsePageResponsePaymentRefundReview: {
+            success?: boolean;
+            message?: string;
+            data?: components["schemas"]["PageResponsePaymentRefundReview"];
+            /** Format: date-time */
+            timestamp?: string;
+        };
+        PageResponsePaymentRefundReview: {
+            content?: components["schemas"]["PaymentRefundReview"][];
+            /** Format: int32 */
+            page?: number;
+            /** Format: int32 */
+            size?: number;
+            /** Format: int64 */
+            totalElements?: number;
+            /** Format: int32 */
+            totalPages?: number;
+            last?: boolean;
+        };
+        ApiResponseListPaymentRefundReviewAction: {
+            success?: boolean;
+            message?: string;
+            data?: components["schemas"]["PaymentRefundReviewAction"][];
+            /** Format: date-time */
+            timestamp?: string;
+        };
+        PaymentRefundReviewAction: {
+            /** Format: uuid */
+            id?: string;
+            /** Format: uuid */
+            reviewId?: string;
+            /** @enum {string} */
+            previousStatus?: "REQUIRED" | "IN_REVIEW" | "REFUNDED_CONFIRMED" | "CLOSED_NO_REFUND";
+            /** @enum {string} */
+            newStatus?: "REQUIRED" | "IN_REVIEW" | "REFUNDED_CONFIRMED" | "CLOSED_NO_REFUND";
+            note?: string;
+            evidenceReference?: string;
+            /** Format: uuid */
+            adminUserId?: string;
+            /** Format: date-time */
+            createdAt?: string;
         };
         ApiResponseMapStringLong: {
             success?: boolean;
@@ -2524,6 +2939,32 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["ApiResponseEventResponse"];
+                };
+            };
+        };
+    };
+    updateMediaOrder: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                eventId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateMediaOrderRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ApiResponseVoid"];
                 };
             };
         };
@@ -2936,6 +3377,54 @@ export interface operations {
             };
         };
     };
+    get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                orderId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ApiResponseBuyerRefundReviewResponse"];
+                };
+            };
+        };
+    };
+    create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                orderId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["BuyerRefundReviewRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ApiResponseBuyerRefundReviewResponse"];
+                };
+            };
+        };
+    };
     cancelOrder: {
         parameters: {
             query?: never;
@@ -2987,6 +3476,9 @@ export interface operations {
     getPublishedEvents: {
         parameters: {
             query: {
+                q?: string;
+                city?: string;
+                categoryId?: string;
                 pageable: components["schemas"]["Pageable"];
             };
             header?: never;
@@ -3170,6 +3662,85 @@ export interface operations {
             };
         };
     };
+    getEventMedia: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                eventId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ApiResponseListEventMediaResponse"];
+                };
+            };
+        };
+    };
+    uploadMedia: {
+        parameters: {
+            query: {
+                type: "BANNER" | "GALLERY" | "SEAT_MAP" | "DOCUMENT";
+            };
+            header?: never;
+            path: {
+                eventId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "multipart/form-data": {
+                    /** Format: binary */
+                    file: string;
+                };
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ApiResponseEventMediaResponse"];
+                };
+            };
+        };
+    };
+    completeDraftSetup: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                eventId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CompleteDraftSetupRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ApiResponseEventResponse"];
+                };
+            };
+        };
+    };
     getAreasByEventId: {
         parameters: {
             query?: never;
@@ -3214,6 +3785,30 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["ApiResponseEventAreaResponse"];
+                };
+            };
+        };
+    };
+    createEventSetup: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateEventSetupRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ApiResponseEventResponse"];
                 };
             };
         };
@@ -3513,22 +4108,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json":
-                    | {
-                          status:
-                              | "DRAFT"
-                              | "SCHEDULED"
-                              | "ACTIVE"
-                              | "PAUSED"
-                              | "CLOSED"
-                              | "SOLD_OUT";
-                      }
-                    | "DRAFT"
-                    | "SCHEDULED"
-                    | "ACTIVE"
-                    | "PAUSED"
-                    | "CLOSED"
-                    | "SOLD_OUT";
+                "application/json": components["schemas"]["UpdateSalePhaseStatusRequest"];
             };
         };
         responses: {
@@ -3539,6 +4119,32 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["ApiResponseTicketSalePhaseResponse"];
+                };
+            };
+        };
+    };
+    update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateRefundReviewRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ApiResponsePaymentRefundReview"];
                 };
             };
         };
@@ -3799,9 +4405,7 @@ export interface operations {
                 headers: {
                     [name: string]: unknown;
                 };
-                content: {
-                    "*/*": components["schemas"]["ApiResponseVNPayReturnResponse"];
-                };
+                content?: never;
             };
         };
     };
@@ -4006,6 +4610,28 @@ export interface operations {
             };
         };
     };
+    checkSubmissionReadiness: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ApiResponseEventSubmissionReadinessResponse"];
+                };
+            };
+        };
+    };
     getSalePhasesByEventId: {
         parameters: {
             query?: never;
@@ -4024,6 +4650,28 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["ApiResponseListTicketSalePhaseResponse"];
+                };
+            };
+        };
+    };
+    getMyEventCounter: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                eventId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ApiResponseInteger"];
                 };
             };
         };
@@ -4202,6 +4850,51 @@ export interface operations {
             };
         };
     };
+    list: {
+        parameters: {
+            query: {
+                status?: "REQUIRED" | "IN_REVIEW" | "REFUNDED_CONFIRMED" | "CLOSED_NO_REFUND";
+                pageable: components["schemas"]["Pageable"];
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ApiResponsePageResponsePaymentRefundReview"];
+                };
+            };
+        };
+    };
+    history: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ApiResponseListPaymentRefundReviewAction"];
+                };
+            };
+        };
+    };
     getOutboxStats: {
         parameters: {
             query?: never;
@@ -4262,6 +4955,73 @@ export interface operations {
             };
         };
     };
+    list_1: {
+        parameters: {
+            query: {
+                status?: "DRAFT" | "PENDING_APPROVAL" | "PUBLISHED" | "CANCELLED" | "COMPLETED";
+                pageable: components["schemas"]["Pageable"];
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ApiResponsePageResponseEventResponse"];
+                };
+            };
+        };
+    };
+    detail: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ApiResponseEventResponse"];
+                };
+            };
+        };
+    };
+    getPendingEvents_1: {
+        parameters: {
+            query: {
+                pageable: components["schemas"]["Pageable"];
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ApiResponsePageResponseEventResponse"];
+                };
+            };
+        };
+    };
     deleteFile: {
         parameters: {
             query?: never;
@@ -4312,6 +5072,29 @@ export interface operations {
             header?: never;
             path: {
                 ruleId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ApiResponseVoid"];
+                };
+            };
+        };
+    };
+    deleteMedia: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                eventId: string;
+                eventFileId: string;
             };
             cookie?: never;
         };
