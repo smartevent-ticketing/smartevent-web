@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useMemo } from "react"
+import { useState } from "react"
 import {
   Calendar,
   Clock,
@@ -9,67 +9,18 @@ import {
   AlertTriangle,
   Tag,
   Loader2,
-  X,
   Play,
   Pause,
   RotateCcw,
   Trash2,
+  Pencil,
 } from "lucide-react"
+import { SalePhaseEditDialog } from "./sale-phase-edit-dialog"
+import { CreateSalePhaseDialog } from "./sale-phase-create-dialog"
+import { hasSalePhaseOverlap } from "../../model/sale-phase-availability"
+import type { SalePhaseItem } from "../../model/event-management.types"
 import type { SalePhaseStatus } from "@/lib/api/event-setup-contract"
-import type { SalePhaseItem } from "@/features/organizer/model/event-management.types"
-export type { SalePhaseItem }
-
-export interface SalePhasesTabProps {
-  eventId: string
-  eventStartTime?: string
-  eventEndTime?: string
-  salePhases: SalePhaseItem[]
-  ticketTypes: Array<{
-    id: string
-    name: string
-    areaId?: string
-    areaName?: string
-    totalQuota?: number
-    price?: number
-    basePrice?: number
-  }>
-  areas?: Array<{ id: string; name: string; capacity?: number; type?: string }>
-  onAddSalePhase: (
-    phase:
-      | {
-          ticketTypeId: string
-          name: string
-          price: number
-          basePrice?: number
-          quantity: number
-          saleStartAt: string
-          saleEndAt: string
-          maxPerOrder?: number
-          maxPerUser?: number
-        }
-      | Array<{
-          ticketTypeId: string
-          name: string
-          price: number
-          basePrice?: number
-          quantity: number
-          saleStartAt: string
-          saleEndAt: string
-          maxPerOrder?: number
-          maxPerUser?: number
-        }>,
-  ) => Promise<void>
-  onUpdatePhaseStatus: (phaseId: string, newStatus: SalePhaseStatus) => Promise<void>
-  onDeleteSalePhase?: (phaseId: string) => Promise<void>
-}
-
-interface TierPhaseConfig {
-  selected: boolean
-  basePrice: number | ""
-  discountPercent: number
-  price: number | ""
-  quantity: number | ""
-}
+import type { SalePhasesTabProps } from "./sale-phase-types"
 
 const STATUS_CONFIG: Record<SalePhaseStatus, { label: string; badgeClass: string; desc: string }> =
   {
@@ -113,257 +64,13 @@ export function SalePhasesTab({
   onAddSalePhase,
   onUpdatePhaseStatus,
   onDeleteSalePhase,
+  onUpdateSalePhase,
+  canEditConfig,
 }: SalePhasesTabProps) {
   const [showAddModal, setShowAddModal] = useState(false)
-  const [isSubmitting, setIsSubmitting] = useState(false)
   const [updatingPhaseId, setUpdatingPhaseId] = useState<string | null>(null)
   const [deletingPhaseId, setDeletingPhaseId] = useState<string | null>(null)
-
-  // Form State
-  const [name, setName] = useState("")
-  const [saleStartAt, setSaleStartAt] = useState("")
-  const [saleEndAt, setSaleEndAt] = useState("")
-  const [maxTicketsPerCustomer, setMaxTicketsPerCustomer] = useState<number | "">(4)
-  const [formError, setFormError] = useState<string | null>(null)
-
-  // Multi-tier configuration state
-  const [tierConfigs, setTierConfigs] = useState<Record<string, TierPhaseConfig>>({})
-
-  // Helper check overlap locally
-  const checkOverlap = (
-    ticketTypeId: string,
-    startIso: string,
-    endIso: string,
-    excludePhaseId?: string,
-  ) => {
-    const s = new Date(startIso).getTime()
-    const e = new Date(endIso).getTime()
-    return salePhases.some((p) => {
-      if (p.id === excludePhaseId) return false
-      if (p.ticketTypeId !== ticketTypeId) return false
-      const ps = new Date(p.saleStartAt).getTime()
-      const pe = new Date(p.saleEndAt).getTime()
-      return s < pe && e > ps
-    })
-  }
-
-  // Helper to compute remaining available capacity for a ticket type
-  const getRemainingCapacity = (ticketTypeId: string) => {
-    const t = ticketTypes.find((item) => item.id === ticketTypeId)
-    if (!t) return 0
-    const matchedArea = areas.find((a) => a.id === t.areaId)
-    const totalAreaCapacity = matchedArea?.capacity ?? t.totalQuota ?? 0
-    const configuredQty = salePhases
-      .filter((p) => {
-        if (p.status === "CLOSED") return false
-        if (p.ticketTypeId === t.id) return true
-        const otherType = ticketTypes.find((ot) => ot.id === p.ticketTypeId)
-        return Boolean(otherType?.areaId && t.areaId && otherType.areaId === t.areaId)
-      })
-      .reduce((sum, p) => sum + p.quantity, 0)
-    return Math.max(0, totalAreaCapacity - configuredQty)
-  }
-
-  // Open modal and pre-initialize tier configs
-  const handleOpenAddModal = () => {
-    // Group ticket types by area to distribute initial quantities fairly
-    const areaGroups = new Map<string, typeof ticketTypes>()
-    ticketTypes.forEach((t) => {
-      const areaKey = t.areaId || `tier-${t.id}`
-      const list = areaGroups.get(areaKey) || []
-      list.push(t)
-      areaGroups.set(areaKey, list)
-    })
-
-    const initial: Record<string, TierPhaseConfig> = {}
-    areaGroups.forEach((group) => {
-      const firstTier = group[0]
-      const areaAvailable = getRemainingCapacity(firstTier.id)
-      const perTierQuota = Math.floor(areaAvailable / group.length)
-      let remainder = areaAvailable % group.length
-
-      group.forEach((t) => {
-        const initialBase =
-          (t.basePrice && t.basePrice > 0 ? t.basePrice : undefined) ??
-          (t.price && t.price > 0 ? t.price : 500000)
-
-        const maxAllowed = perTierQuota + (remainder > 0 ? 1 : 0)
-        if (remainder > 0) remainder--
-        const initialQty = maxAllowed > 0 ? Math.min(50, maxAllowed) : ""
-
-        initial[t.id] = {
-          selected: true, // Default selected for speed
-          basePrice: initialBase,
-          discountPercent: 0,
-          price: initialBase,
-          quantity: initialQty,
-        }
-      })
-    })
-
-    setTierConfigs(initial)
-    setName("")
-    setSaleStartAt("")
-    setSaleEndAt("")
-    setMaxTicketsPerCustomer(4)
-    setFormError(null)
-    setShowAddModal(true)
-  }
-
-  // Handle Form Submit (Multi-tier batch creation)
-  const handleCreateSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setFormError(null)
-
-    if (!name.trim()) {
-      setFormError("Vui lòng nhập tên đợt mở bán.")
-      return
-    }
-
-    if (!saleStartAt || !saleEndAt) {
-      setFormError("Vui lòng chọn đầy đủ thời gian bắt đầu và kết thúc.")
-      return
-    }
-
-    const startDate = new Date(saleStartAt)
-    const endDate = new Date(saleEndAt)
-
-    if (startDate.getTime() >= endDate.getTime()) {
-      setFormError("Thời gian kết thúc phải sau thời gian bắt đầu mở bán.")
-      return
-    }
-
-    if (eventEndTime) {
-      const eventEnd = new Date(eventEndTime)
-      if (endDate.getTime() > eventEnd.getTime()) {
-        setFormError(
-          `Thời gian kết thúc mở bán (${endDate.toLocaleString("vi-VN")}) không được vượt quá thời gian kết thúc sự kiện (${eventEnd.toLocaleString("vi-VN")}).`,
-        )
-        return
-      }
-    }
-
-    // Filter selected ticket types
-    const selectedTiers = ticketTypes.filter((t) => tierConfigs[t.id]?.selected)
-    if (selectedTiers.length === 0) {
-      setFormError("Vui lòng chọn ít nhất một hạng vé để mở bán trong đợt này.")
-      return
-    }
-
-    // Validate each selected ticket type
-    for (const t of selectedTiers) {
-      const cfg = tierConfigs[t.id]
-      const numPrice = Number(cfg?.price)
-      if (isNaN(numPrice) || numPrice < 0) {
-        setFormError(`Giá vé của hạng vé "${t.name}" không hợp lệ.`)
-        return
-      }
-      const numQty = Number(cfg?.quantity)
-      if (isNaN(numQty) || numQty <= 0) {
-        setFormError(`Số lượng vé của hạng vé "${t.name}" phải lớn hơn 0.`)
-        return
-      }
-
-      // Capacity verification
-      const matchedArea = areas.find((a) => a.id === t.areaId)
-      const totalAreaCapacity = matchedArea?.capacity ?? t.totalQuota ?? 0
-      const remainingCapacity = getRemainingCapacity(t.id)
-
-      if (totalAreaCapacity > 0 && numQty > remainingCapacity) {
-        setFormError(
-          `Số lượng vé mở bán của hạng vé "${t.name}" (${numQty.toLocaleString("vi-VN")}) vượt quá số lượng vé còn khả dụng (${remainingCapacity.toLocaleString("vi-VN")} vé). Vui lòng điều chỉnh lại.`,
-        )
-        return
-      }
-
-      if (checkOverlap(t.id, startDate.toISOString(), endDate.toISOString())) {
-        setFormError(
-          `Khoảng thời gian mở bán của hạng vé "${t.name}" bị trùng lặp với một đợt mở bán khác của cùng hạng vé.`,
-        )
-        return
-      }
-    }
-
-    // Area-level capacity verification across all selected tiers in the batch
-    const areaGroups: Record<
-      string,
-      { areaName: string; totalAreaCapacity: number; tiers: typeof selectedTiers }
-    > = {}
-    for (const t of selectedTiers) {
-      const areaKey = t.areaId || `tier-${t.id}`
-      const matchedArea = areas.find((a) => a.id === t.areaId)
-      const areaName = matchedArea?.name || t.name
-      const totalAreaCapacity = matchedArea?.capacity ?? t.totalQuota ?? 0
-      if (!areaGroups[areaKey]) {
-        areaGroups[areaKey] = { areaName, totalAreaCapacity, tiers: [] }
-      }
-      areaGroups[areaKey].tiers.push(t)
-    }
-
-    for (const [areaKey, group] of Object.entries(areaGroups)) {
-      if (group.tiers.length > 1) {
-        const batchTotalForArea = group.tiers.reduce((sum, t) => {
-          return sum + Number(tierConfigs[t.id]?.quantity || 0)
-        }, 0)
-
-        // Calculate remaining capacity for this area (considering already saved phases in DB)
-        const existingAreaQty = salePhases
-          .filter((p) => {
-            if (p.status === "CLOSED") return false
-            const tier = ticketTypes.find((ot) => ot.id === p.ticketTypeId)
-            return (tier?.areaId && tier.areaId === areaKey) || p.ticketTypeId === areaKey
-          })
-          .reduce((sum, p) => sum + p.quantity, 0)
-
-        const remainingForArea = Math.max(0, group.totalAreaCapacity - existingAreaQty)
-
-        if (group.totalAreaCapacity > 0 && batchTotalForArea > remainingForArea) {
-          const tierDetails = group.tiers
-            .map(
-              (t) =>
-                `"${t.name}" (${Number(tierConfigs[t.id]?.quantity || 0).toLocaleString("vi-VN")} vé)`,
-            )
-            .join(" + ")
-          setFormError(
-            `Khu vực / Khán đài "${group.areaName}" chỉ còn lại ${remainingForArea.toLocaleString(
-              "vi-VN",
-            )} vé khả dụng, nhưng tổng số lượng vé bạn đang phân bổ cho các hạng vé thuộc khu vực này là ${batchTotalForArea.toLocaleString(
-              "vi-VN",
-            )} vé [${tierDetails}]. Vui lòng điều chỉnh lại để tổng số không vượt quá ${remainingForArea.toLocaleString(
-              "vi-VN",
-            )} vé.`,
-          )
-          return
-        }
-      }
-    }
-
-    const customerLimit = Number(maxTicketsPerCustomer) || 4
-
-    const phasesToCreate = selectedTiers.map((t) => ({
-      ticketTypeId: t.id,
-      name: name.trim(),
-      price: Number(tierConfigs[t.id]?.price || 0),
-      basePrice: Number(tierConfigs[t.id]?.basePrice) || undefined,
-      quantity: Number(tierConfigs[t.id]?.quantity || 0),
-      saleStartAt: startDate.toISOString(),
-      saleEndAt: endDate.toISOString(),
-      maxPerOrder: customerLimit,
-      maxPerUser: customerLimit,
-    }))
-
-    setIsSubmitting(true)
-    try {
-      await onAddSalePhase(phasesToCreate)
-      setShowAddModal(false)
-    } catch (err: unknown) {
-      setFormError(
-        err instanceof Error ? err.message : "Không thể tạo đợt mở bán. Vui lòng kiểm tra lại.",
-      )
-    } finally {
-      setIsSubmitting(false)
-    }
-  }
+  const [editingPhase, setEditingPhase] = useState<SalePhaseItem | null>(null)
 
   // Handle status transition
   const handleTransition = async (phaseId: string, targetStatus: SalePhaseStatus) => {
@@ -397,133 +104,6 @@ export function SalePhasesTab({
     }
   }
 
-  // Multi-tier Batch Actions & Status Helpers
-  const selectedTiers = ticketTypes.filter((t) => tierConfigs[t.id]?.selected)
-  const allTiersSelected =
-    ticketTypes.length > 0 && ticketTypes.every((t) => tierConfigs[t.id]?.selected)
-
-  // Map each area (or standalone tier) to its available capacity in DB
-  const areaRemainingMap = useMemo(() => {
-    const map = new Map<string, number>()
-    ticketTypes.forEach((t) => {
-      const areaKey = t.areaId || `tier-${t.id}`
-      if (!map.has(areaKey)) {
-        map.set(areaKey, getRemainingCapacity(t.id))
-      }
-    })
-    return map
-  }, [ticketTypes, areas, salePhases])
-
-  // Deduplicated remaining capacity calculation for selected tiers
-  // (tiers sharing the same area do not double count the area's remaining capacity)
-  const totalRemainingSelected = useMemo(() => {
-    const seenAreaKeys = new Set<string>()
-    let total = 0
-    selectedTiers.forEach((t) => {
-      const areaKey = t.areaId || `tier-${t.id}`
-      if (!seenAreaKeys.has(areaKey)) {
-        seenAreaKeys.add(areaKey)
-        total += areaRemainingMap.get(areaKey) ?? 0
-      }
-    })
-    return total
-  }, [selectedTiers, areaRemainingMap])
-
-  // Check if all selected tiers are currently configured to sell ALL their available tickets
-  const isAllRemainingSelected = useMemo(() => {
-    if (selectedTiers.length === 0) return false
-    const groups = new Map<string, typeof selectedTiers>()
-    selectedTiers.forEach((t) => {
-      const areaKey = t.areaId || `tier-${t.id}`
-      const list = groups.get(areaKey) || []
-      list.push(t)
-      groups.set(areaKey, list)
-    })
-
-    for (const [areaKey, group] of groups.entries()) {
-      const available = areaRemainingMap.get(areaKey) ?? 0
-      const currentSum = group.reduce((sum, t) => sum + Number(tierConfigs[t.id]?.quantity || 0), 0)
-      if (available > 0 && currentSum !== available) {
-        return false
-      }
-    }
-    return true
-  }, [selectedTiers, tierConfigs, areaRemainingMap])
-
-  const handleToggleAllRemaining = (checked: boolean) => {
-    setTierConfigs((prev) => {
-      const updated = { ...prev }
-      // Group selected tiers by area to distribute available capacity fairly
-      const groups = new Map<string, typeof selectedTiers>()
-      selectedTiers.forEach((t) => {
-        const areaKey = t.areaId || `tier-${t.id}`
-        const list = groups.get(areaKey) || []
-        list.push(t)
-        groups.set(areaKey, list)
-      })
-
-      groups.forEach((group, areaKey) => {
-        const available = areaRemainingMap.get(areaKey) ?? 0
-        if (checked) {
-          const share = Math.floor(available / group.length)
-          let remainder = available % group.length
-          group.forEach((t) => {
-            const qty = share + (remainder > 0 ? 1 : 0)
-            if (remainder > 0) remainder--
-            if (updated[t.id]) {
-              updated[t.id] = {
-                ...updated[t.id],
-                quantity: qty > 0 ? qty : "",
-              }
-            }
-          })
-        } else {
-          const share = Math.floor(available / group.length)
-          group.forEach((t) => {
-            if (updated[t.id]) {
-              updated[t.id] = {
-                ...updated[t.id],
-                quantity: share >= 50 ? 50 : share > 0 ? share : "",
-              }
-            }
-          })
-        }
-      })
-      return updated
-    })
-  }
-
-  const handleToggleSelectAllTiers = () => {
-    const updated: Record<string, TierPhaseConfig> = {}
-    ticketTypes.forEach((t) => {
-      if (tierConfigs[t.id]) {
-        updated[t.id] = { ...tierConfigs[t.id], selected: !allTiersSelected }
-      }
-    })
-    setTierConfigs(updated)
-  }
-
-  const handleBatchDiscount = (discountPercent: number) => {
-    setTierConfigs((prev) => {
-      const updated = { ...prev }
-      selectedTiers.forEach((t) => {
-        if (updated[t.id]) {
-          const base = Number(updated[t.id].basePrice) || 0
-          const calculatedPrice =
-            discountPercent === 0
-              ? base
-              : Math.round((base * (1 - discountPercent / 100)) / 1000) * 1000
-          updated[t.id] = {
-            ...updated[t.id],
-            discountPercent,
-            price: calculatedPrice,
-          }
-        }
-      })
-      return updated
-    })
-  }
-
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -536,24 +116,26 @@ export function SalePhasesTab({
           </p>
         </div>
 
-        <button
-          type="button"
-          disabled={ticketTypes.length === 0}
-          onClick={handleOpenAddModal}
-          className={`inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold rounded-xl transition cursor-pointer shadow-xs ${
-            ticketTypes.length === 0
-              ? "bg-slate-200 text-slate-400 cursor-not-allowed"
-              : "bg-primary hover:bg-primary-hover text-white"
-          }`}
-          title={
-            ticketTypes.length === 0
-              ? "Vui lòng tạo ít nhất một hạng vé trước khi thêm đợt bán"
-              : "Thêm đợt mở bán mới cho một hoặc nhiều hạng vé"
-          }
-        >
-          <Plus className="size-4" />
-          <span>Thêm đợt mở bán</span>
-        </button>
+        {canEditConfig && (
+          <button
+            type="button"
+            disabled={ticketTypes.length === 0}
+            onClick={() => setShowAddModal(true)}
+            className={`inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold rounded-xl transition cursor-pointer shadow-xs ${
+              ticketTypes.length === 0
+                ? "bg-slate-200 text-slate-400 cursor-not-allowed"
+                : "bg-primary hover:bg-primary-hover text-white"
+            }`}
+            title={
+              ticketTypes.length === 0
+                ? "Vui lòng tạo ít nhất một hạng vé trước khi thêm đợt bán"
+                : "Thêm đợt mở bán mới cho một hoặc nhiều hạng vé"
+            }
+          >
+            <Plus className="size-4" />
+            <span>Thêm đợt mở bán</span>
+          </button>
+        )}
       </div>
 
       {ticketTypes.length === 0 && (
@@ -569,7 +151,7 @@ export function SalePhasesTab({
       {/* Sale Phases List */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {salePhases.length === 0 ? (
-          <div className="col-span-2 bg-white border border-outline-variant/60 rounded-3xl p-12 text-center space-y-3">
+          <div className="workspace-card col-span-2 space-y-3 p-12 text-center">
             <Calendar className="size-10 text-primary/40 mx-auto" />
             <h4 className="text-sm font-bold text-on-surface">Chưa có đợt mở bán nào</h4>
             <p className="text-xs text-on-surface-variant max-w-sm mx-auto">
@@ -584,7 +166,8 @@ export function SalePhasesTab({
             const isEndAfterEvent =
               eventEndTime && new Date(phase.saleEndAt).getTime() > new Date(eventEndTime).getTime()
 
-            const hasOverlapConflict = checkOverlap(
+            const hasOverlapConflict = hasSalePhaseOverlap(
+              salePhases,
               phase.ticketTypeId,
               phase.saleStartAt,
               phase.saleEndAt,
@@ -594,12 +177,15 @@ export function SalePhasesTab({
             const isUpdating = updatingPhaseId === phase.id
             const isDeleting = deletingPhaseId === phase.id
             const canDelete =
-              Boolean(onDeleteSalePhase) && status !== "ACTIVE" && status !== "SOLD_OUT"
+              canEditConfig &&
+              Boolean(onDeleteSalePhase) &&
+              status !== "ACTIVE" &&
+              status !== "SOLD_OUT"
 
             return (
               <div
                 key={phase.id}
-                className="bg-white border border-outline-variant/60 rounded-3xl p-6 shadow-xs flex flex-col justify-between gap-4 transition hover:border-outline-variant"
+                className="workspace-card flex flex-col justify-between gap-4 p-6 transition hover:border-[#d6aaa0]"
               >
                 {/* Header Phase */}
                 <div className="flex items-start justify-between gap-3">
@@ -717,6 +303,15 @@ export function SalePhasesTab({
                 <div className="pt-2 border-t border-outline-variant/40 flex items-center justify-between gap-2 flex-wrap">
                   <div className="flex items-center gap-2">
                     <span className="text-[11px] text-on-surface-variant">Thao tác:</span>
+                    {canEditConfig && (
+                      <button
+                        type="button"
+                        onClick={() => setEditingPhase(phase)}
+                        className="px-2 py-1 text-[11px] font-semibold text-primary bg-primary/10 rounded-lg inline-flex items-center gap-1 cursor-pointer"
+                      >
+                        <Pencil className="size-3" /> Sửa đợt
+                      </button>
+                    )}
                     {canDelete && (
                       <button
                         type="button"
@@ -883,664 +478,23 @@ export function SalePhasesTab({
       </div>
 
       {/* Modal: Thêm đợt mở bán mới (Hỗ trợ cấu hình nhiều hạng vé cùng lúc) */}
+      {editingPhase && (
+        <SalePhaseEditDialog
+          key={editingPhase.id}
+          phase={editingPhase}
+          onSave={onUpdateSalePhase}
+          onClose={() => setEditingPhase(null)}
+        />
+      )}
       {showAddModal && (
-        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl border border-outline-variant/60 shadow-xl max-w-2xl w-full p-6 space-y-4 max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between border-b border-outline-variant/40 pb-3">
-              <div className="flex items-center gap-2">
-                <div className="p-2 rounded-xl bg-primary/10 text-primary">
-                  <Plus className="size-4" />
-                </div>
-                <div>
-                  <h4 className="text-sm font-bold text-on-surface">Thêm đợt mở bán mới</h4>
-                  <p className="text-[11px] text-on-surface-variant">
-                    Thiết lập chiến dịch bán vé và áp dụng cho một hoặc nhiều hạng vé cùng lúc
-                  </p>
-                </div>
-              </div>
-              <button
-                type="button"
-                onClick={() => setShowAddModal(false)}
-                className="p-1 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition cursor-pointer"
-              >
-                <X className="size-4" />
-              </button>
-            </div>
-
-            {formError && (
-              <div className="bg-red-50 border border-red-200 rounded-xl p-3 text-xs text-red-700 flex items-start gap-2">
-                <AlertCircle className="size-4 shrink-0 text-red-500 mt-0.5" />
-                <span>{formError}</span>
-              </div>
-            )}
-
-            <form onSubmit={handleCreateSubmit} className="space-y-4 text-xs">
-              {/* 1. Tên đợt mở bán */}
-              <div className="space-y-1">
-                <label className="font-bold text-on-surface">Tên đợt mở bán *</label>
-                <input
-                  type="text"
-                  placeholder="Ví dụ: Early Bird, Đợt 1, Mở bán chính thức..."
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  className="w-full px-3 py-2 rounded-xl border border-outline-variant text-on-surface focus:outline-primary"
-                  required
-                />
-                <div className="flex items-center gap-1.5 pt-1 flex-wrap">
-                  <span className="text-[10px] text-on-surface-variant">Gợi ý:</span>
-                  {[
-                    "Early Bird",
-                    "Mở bán đợt 1",
-                    "Mở bán chính thức",
-                    "Chót giờ (Last Minute)",
-                  ].map((preset) => (
-                    <button
-                      key={preset}
-                      type="button"
-                      onClick={() => setName(preset)}
-                      className="px-2 py-0.5 rounded-lg bg-surface-container hover:bg-surface-container-high text-[10px] font-medium transition cursor-pointer"
-                    >
-                      {preset}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* 2. Thời gian bắt đầu & kết thúc */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div className="space-y-1">
-                  <label className="font-bold text-on-surface">Thời gian bắt đầu *</label>
-                  <input
-                    type="datetime-local"
-                    value={saleStartAt}
-                    onChange={(e) => setSaleStartAt(e.target.value)}
-                    className="w-full px-3 py-2 rounded-xl border border-outline-variant font-mono text-on-surface focus:outline-primary"
-                    required
-                  />
-                </div>
-
-                <div className="space-y-1">
-                  <label className="font-bold text-on-surface">Thời gian kết thúc *</label>
-                  <input
-                    type="datetime-local"
-                    value={saleEndAt}
-                    onChange={(e) => setSaleEndAt(e.target.value)}
-                    className="w-full px-3 py-2 rounded-xl border border-outline-variant font-mono text-on-surface focus:outline-primary"
-                    required
-                  />
-                </div>
-              </div>
-
-              {/* 3. Hạn mức mua tối đa mỗi khách */}
-              <div className="space-y-1">
-                <div className="flex items-center justify-between">
-                  <label className="font-bold text-on-surface">
-                    Số vé tối đa mỗi khách được mua *
-                  </label>
-                  <span className="text-[10px] text-on-surface-variant font-normal">
-                    (Giới hạn trên 1 tài khoản)
-                  </span>
-                </div>
-                <input
-                  type="number"
-                  min="1"
-                  max="20"
-                  value={maxTicketsPerCustomer}
-                  onChange={(e) =>
-                    setMaxTicketsPerCustomer(
-                      e.target.value === "" ? "" : Math.max(1, Number(e.target.value)),
-                    )
-                  }
-                  className="w-full px-3 py-2 rounded-xl border border-outline-variant font-mono text-on-surface focus:outline-primary"
-                  placeholder="4"
-                  required
-                />
-                <div className="flex items-center gap-1.5 pt-1">
-                  <span className="text-[10px] text-on-surface-variant">Chọn nhanh:</span>
-                  {[2, 4, 6, 10].map((num) => (
-                    <button
-                      key={num}
-                      type="button"
-                      onClick={() => setMaxTicketsPerCustomer(num)}
-                      className={`px-2 py-0.5 rounded-lg text-[10px] font-mono font-medium transition cursor-pointer ${
-                        maxTicketsPerCustomer === num
-                          ? "bg-primary text-white"
-                          : "bg-surface-container hover:bg-surface-container-high text-on-surface"
-                      }`}
-                    >
-                      {num} vé
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* 4. Danh sách chọn các hạng vé mở bán trong đợt này */}
-              <div className="space-y-2.5 pt-2 border-t border-outline-variant/40">
-                <div className="flex items-center justify-between">
-                  <label className="font-bold text-on-surface">
-                    Các hạng vé mở bán trong đợt này *
-                  </label>
-                  <span className="text-[11px] text-on-surface-variant font-medium">
-                    Đã chọn:{" "}
-                    <strong className="text-primary font-bold">
-                      {selectedTiers.length}/{ticketTypes.length}
-                    </strong>{" "}
-                    hạng vé
-                  </span>
-                </div>
-
-                {/* Thanh điều khiển hàng loạt & Ô lọc chọn bán toàn bộ vé cho đợt */}
-                <div className="bg-surface-container-low/90 border border-outline-variant/70 rounded-2xl p-3 space-y-2.5 shadow-2xs">
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
-                    {/* Ô tích lọc chọn bán toàn bộ vé cho đợt đấy */}
-                    <label className="flex items-center gap-2.5 cursor-pointer select-none">
-                      <input
-                        type="checkbox"
-                        checked={isAllRemainingSelected}
-                        onChange={(e) => handleToggleAllRemaining(e.target.checked)}
-                        className="size-4.5 rounded text-primary focus:ring-primary accent-primary cursor-pointer"
-                      />
-                      <div>
-                        <span className="text-xs font-bold text-on-surface flex items-center gap-1.5">
-                          <span>Bán toàn bộ vé khả dụng cho đợt này</span>
-                          <span className="px-1.5 py-0.5 rounded-full bg-primary/10 text-primary text-[10px] font-mono font-bold">
-                            {totalRemainingSelected.toLocaleString("vi-VN")} vé
-                          </span>
-                        </span>
-                        <span className="text-[10px] text-on-surface-variant block">
-                          Tự động phân bổ tối đa 100% hạn ngạch vé cho tất cả các hạng vé được chọn
-                        </span>
-                      </div>
-                    </label>
-
-                    {/* Nút chọn / bỏ chọn tất cả hạng vé */}
-                    <div className="flex items-center gap-2 self-end sm:self-auto shrink-0">
-                      <button
-                        type="button"
-                        onClick={handleToggleSelectAllTiers}
-                        className="px-2.5 py-1 rounded-lg bg-surface-container hover:bg-surface-container-high text-[11px] font-semibold text-primary transition cursor-pointer"
-                      >
-                        {allTiersSelected ? "Bỏ chọn tất cả" : "Chọn tất cả hạng vé"}
-                      </button>
-                    </div>
-                  </div>
-
-                  {/* Thanh áp dụng chiết khấu hàng loạt cho các hạng vé được chọn */}
-                  {selectedTiers.length > 0 && (
-                    <div className="pt-2 border-t border-outline-variant/40 flex items-center justify-between gap-2 flex-wrap text-[10px]">
-                      <span className="text-on-surface-variant font-medium">
-                        Áp dụng mức giá / chiết khấu hàng loạt:
-                      </span>
-                      <div className="flex items-center gap-1 flex-wrap">
-                        {[
-                          { label: "Giá gốc", percent: 0 },
-                          { label: "Giảm 5%", percent: 5 },
-                          { label: "Giảm 10%", percent: 10 },
-                          { label: "Giảm 15%", percent: 15 },
-                          { label: "Giảm 20%", percent: 20 },
-                        ].map((btn) => (
-                          <button
-                            key={btn.percent}
-                            type="button"
-                            onClick={() => handleBatchDiscount(btn.percent)}
-                            className="px-2 py-0.5 rounded-md bg-white hover:bg-surface-container border border-outline-variant/60 font-mono font-bold text-on-surface transition cursor-pointer"
-                            title={`Áp dụng ${btn.label} cho ${selectedTiers.length} hạng vé đã chọn`}
-                          >
-                            {btn.label}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </div>
-
-                <div className="space-y-2.5 max-h-[300px] overflow-y-auto pr-1">
-                  {ticketTypes.map((t) => {
-                    const cfg = tierConfigs[t.id] || {
-                      selected: false,
-                      basePrice: "",
-                      discountPercent: 0,
-                      price: "",
-                      quantity: "",
-                    }
-                    const matchedArea = areas.find((a) => a.id === t.areaId)
-                    const totalAreaCapacity = matchedArea?.capacity ?? t.totalQuota ?? 0
-                    const remainingCapacity = getRemainingCapacity(t.id)
-                    const tiersInSameArea = t.areaId
-                      ? ticketTypes.filter((ot) => ot.areaId === t.areaId)
-                      : []
-
-                    return (
-                      <div
-                        key={t.id}
-                        className={`border rounded-2xl p-3 transition ${
-                          cfg.selected
-                            ? "border-primary/50 bg-white shadow-2xs"
-                            : "border-outline-variant/60 bg-surface-container-low/40 opacity-70"
-                        }`}
-                      >
-                        {/* Checkbox & Tiêu đề Hạng vé */}
-                        <div className="flex items-start justify-between gap-3">
-                          <label className="flex items-center gap-2.5 cursor-pointer select-none">
-                            <input
-                              type="checkbox"
-                              checked={cfg.selected}
-                              onChange={(e) => {
-                                setTierConfigs((prev) => ({
-                                  ...prev,
-                                  [t.id]: { ...cfg, selected: e.target.checked },
-                                }))
-                              }}
-                              className="size-4 rounded text-primary focus:ring-primary accent-primary cursor-pointer"
-                            />
-                            <div>
-                              <div className="flex items-center gap-1.5 flex-wrap">
-                                <span className="font-bold text-on-surface text-xs block">
-                                  {t.name}
-                                </span>
-                                {tiersInSameArea.length > 1 && (
-                                  <span className="px-1.5 py-0.2 rounded text-[9px] font-semibold bg-amber-50 text-amber-800 border border-amber-200">
-                                    Chung khán đài ({tiersInSameArea.length} hạng vé)
-                                  </span>
-                                )}
-                              </div>
-                              <span className="text-[11px] text-on-surface-variant font-medium">
-                                {matchedArea?.name || t.areaName || "Khán đài"} (
-                                {totalAreaCapacity.toLocaleString("vi-VN")} chỗ)
-                              </span>
-                            </div>
-                          </label>
-
-                          <span className="text-[11px] font-mono text-primary font-bold">
-                            {tiersInSameArea.length > 1 ? "Khả dụng khán đài: " : "Khả dụng: "}
-                            {remainingCapacity.toLocaleString("vi-VN")} vé
-                          </span>
-                        </div>
-
-                        {/* Chi tiết Giá vé & Số lượng khi được chọn */}
-                        {cfg.selected && (
-                          <div className="mt-3 pt-3 border-t border-outline-variant/40 space-y-3">
-                            {/* Hàng cấu hình Giá: Giá gốc & Giá mở bán */}
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                              {/* Cột 1: Giá vé gốc / niêm yết */}
-                              <div className="space-y-1">
-                                <div className="flex items-center justify-between">
-                                  <label className="text-[11px] font-bold text-on-surface flex items-center gap-1">
-                                    <span>Giá vé gốc (niêm yết)</span>
-                                    <span className="text-red-500">*</span>
-                                  </label>
-                                  <span className="text-[10px] text-on-surface-variant font-medium">
-                                    (Tham chiếu)
-                                  </span>
-                                </div>
-                                <div className="relative">
-                                  <input
-                                    type="number"
-                                    min="0"
-                                    step="10000"
-                                    placeholder="500000"
-                                    value={cfg.basePrice}
-                                    onChange={(e) => {
-                                      const newBase =
-                                        e.target.value === ""
-                                          ? ""
-                                          : Math.max(0, Number(e.target.value))
-                                      const discount = cfg.discountPercent || 0
-                                      const newPrice =
-                                        newBase === ""
-                                          ? ""
-                                          : discount > 0
-                                            ? Math.round(
-                                                (Number(newBase) * (1 - discount / 100)) / 1000,
-                                              ) * 1000
-                                            : newBase
-                                      setTierConfigs((prev) => ({
-                                        ...prev,
-                                        [t.id]: {
-                                          ...cfg,
-                                          basePrice: newBase,
-                                          price: newPrice,
-                                        },
-                                      }))
-                                    }}
-                                    className="w-full px-3 py-1.5 rounded-xl border border-outline-variant font-mono text-xs font-bold text-on-surface focus:outline-primary bg-surface-container-low/40"
-                                    required
-                                  />
-                                  <span className="absolute right-3 top-1.5 text-xs text-on-surface-variant font-mono pointer-events-none">
-                                    ₫
-                                  </span>
-                                </div>
-                              </div>
-
-                              {/* Cột 2: Giá mở bán thực tế của đợt này */}
-                              <div className="space-y-1">
-                                <div className="flex items-center justify-between">
-                                  <label className="text-[11px] font-bold text-primary flex items-center gap-1">
-                                    <span>Giá mở bán đợt này</span>
-                                    <span className="text-red-500">*</span>
-                                  </label>
-                                  {typeof cfg.basePrice === "number" &&
-                                    typeof cfg.price === "number" &&
-                                    cfg.basePrice > 0 && (
-                                      <span className="text-[10px] font-semibold">
-                                        {cfg.price < cfg.basePrice ? (
-                                          <span className="text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">
-                                            Giảm{" "}
-                                            {Math.round(
-                                              (1 - Number(cfg.price) / Number(cfg.basePrice)) * 100,
-                                            )}
-                                            %
-                                          </span>
-                                        ) : cfg.price === cfg.basePrice ? (
-                                          <span className="text-slate-600 bg-slate-100 px-1.5 py-0.5 rounded">
-                                            Giá gốc
-                                          </span>
-                                        ) : (
-                                          <span className="text-amber-700 bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200">
-                                            Tăng{" "}
-                                            {Math.round(
-                                              (Number(cfg.price) / Number(cfg.basePrice) - 1) * 100,
-                                            )}
-                                            %
-                                          </span>
-                                        )}
-                                      </span>
-                                    )}
-                                </div>
-                                <div className="relative">
-                                  <input
-                                    type="number"
-                                    min="0"
-                                    step="1000"
-                                    placeholder="0"
-                                    value={cfg.price}
-                                    onChange={(e) => {
-                                      const val =
-                                        e.target.value === ""
-                                          ? ""
-                                          : Math.max(0, Number(e.target.value))
-                                      const base = Number(cfg.basePrice) || 0
-                                      let discountPct = 0
-                                      if (base > 0 && typeof val === "number") {
-                                        discountPct = Math.round((1 - val / base) * 100)
-                                      }
-                                      setTierConfigs((prev) => ({
-                                        ...prev,
-                                        [t.id]: {
-                                          ...cfg,
-                                          price: val,
-                                          discountPercent: discountPct,
-                                        },
-                                      }))
-                                    }}
-                                    className="w-full px-3 py-1.5 rounded-xl border-2 border-primary/40 focus:border-primary font-mono text-xs font-bold text-primary bg-primary/5 focus:outline-hidden"
-                                    required
-                                  />
-                                  <span className="absolute right-3 top-1.5 text-xs text-primary font-mono font-bold pointer-events-none">
-                                    ₫
-                                  </span>
-                                </div>
-                              </div>
-                            </div>
-
-                            {/* Nút chọn mức giảm giá nhanh */}
-                            <div className="bg-surface-container-low/70 rounded-xl p-2.5 space-y-1.5 border border-outline-variant/40">
-                              <div className="flex items-center justify-between">
-                                <span className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">
-                                  Mức ưu đãi / Chiết khấu:
-                                </span>
-                                {typeof cfg.basePrice === "number" &&
-                                  typeof cfg.price === "number" &&
-                                  cfg.basePrice > 0 &&
-                                  cfg.price < cfg.basePrice && (
-                                    <span className="text-[10px] font-mono text-emerald-700 font-bold">
-                                      Tiết kiệm:{" "}
-                                      {(Number(cfg.basePrice) - Number(cfg.price)).toLocaleString(
-                                        "vi-VN",
-                                      )}{" "}
-                                      ₫ / vé
-                                    </span>
-                                  )}
-                              </div>
-
-                              <div className="flex items-center gap-1.5 flex-wrap">
-                                {[
-                                  { label: "Giá gốc (0%)", percent: 0 },
-                                  { label: "Giảm 5%", percent: 5 },
-                                  { label: "Giảm 10%", percent: 10 },
-                                  { label: "Giảm 15%", percent: 15 },
-                                  { label: "Giảm 20%", percent: 20 },
-                                ].map((item) => {
-                                  const base = Number(cfg.basePrice) || 0
-                                  const targetPrice =
-                                    item.percent === 0
-                                      ? base
-                                      : Math.round((base * (1 - item.percent / 100)) / 1000) * 1000
-                                  const isSelected =
-                                    base > 0 &&
-                                    (cfg.discountPercent === item.percent ||
-                                      cfg.price === targetPrice)
-
-                                  return (
-                                    <button
-                                      key={item.percent}
-                                      type="button"
-                                      onClick={() => {
-                                        setTierConfigs((prev) => ({
-                                          ...prev,
-                                          [t.id]: {
-                                            ...cfg,
-                                            discountPercent: item.percent,
-                                            price: targetPrice,
-                                          },
-                                        }))
-                                      }}
-                                      className={`px-2.5 py-1 rounded-lg text-[10px] font-mono font-bold transition cursor-pointer ${
-                                        isSelected
-                                          ? item.percent === 0
-                                            ? "bg-slate-800 text-white shadow-xs"
-                                            : "bg-emerald-600 text-white shadow-xs"
-                                          : "bg-white hover:bg-surface-container text-on-surface border border-outline-variant/60"
-                                      }`}
-                                    >
-                                      {item.label}
-                                    </button>
-                                  )
-                                })}
-                              </div>
-
-                              {/* Hiển thị chi tiết công thức tính */}
-                              {typeof cfg.basePrice === "number" && cfg.basePrice > 0 && (
-                                <div className="text-[10px] text-on-surface-variant font-mono pt-0.5">
-                                  {typeof cfg.price === "number" && cfg.price < cfg.basePrice ? (
-                                    <span>
-                                      🏷️ Đã giảm: {cfg.basePrice.toLocaleString("vi-VN")} ₫ -{" "}
-                                      {Math.round((1 - cfg.price / cfg.basePrice) * 100)}% (-
-                                      {(cfg.basePrice - cfg.price).toLocaleString("vi-VN")} ₫) ={" "}
-                                      <strong className="text-emerald-700 font-bold">
-                                        {cfg.price.toLocaleString("vi-VN")} ₫
-                                      </strong>
-                                    </span>
-                                  ) : (
-                                    <span>
-                                      Bán theo giá gốc:{" "}
-                                      <strong className="text-on-surface">
-                                        {cfg.basePrice.toLocaleString("vi-VN")} ₫
-                                      </strong>
-                                    </span>
-                                  )}
-                                </div>
-                              )}
-                            </div>
-
-                            {/* Số lượng vé */}
-                            <div className="space-y-1">
-                              <div className="flex items-center justify-between">
-                                <label className="text-[11px] font-bold text-on-surface">
-                                  Số lượng vé mở bán đợt này *
-                                </label>
-                                {remainingCapacity > 0 && (
-                                  <label className="flex items-center gap-1.5 cursor-pointer select-none">
-                                    <input
-                                      type="checkbox"
-                                      checked={
-                                        remainingCapacity > 0 &&
-                                        Number(cfg.quantity) === remainingCapacity
-                                      }
-                                      onChange={(e) => {
-                                        setTierConfigs((prev) => {
-                                          const updated = { ...prev }
-                                          if (e.target.checked) {
-                                            // If this tier claims the entire available capacity of its shared area,
-                                            // reset other tiers in the same area to avoid batch capacity overflow
-                                            if (t.areaId) {
-                                              selectedTiers.forEach((ot) => {
-                                                if (
-                                                  ot.id !== t.id &&
-                                                  ot.areaId === t.areaId &&
-                                                  updated[ot.id]
-                                                ) {
-                                                  updated[ot.id] = {
-                                                    ...updated[ot.id],
-                                                    quantity: "",
-                                                  }
-                                                }
-                                              })
-                                            }
-                                            updated[t.id] = {
-                                              ...cfg,
-                                              quantity: remainingCapacity,
-                                            }
-                                          } else {
-                                            updated[t.id] = {
-                                              ...cfg,
-                                              quantity:
-                                                remainingCapacity >= 50
-                                                  ? 50
-                                                  : remainingCapacity || "",
-                                            }
-                                          }
-                                          return updated
-                                        })
-                                      }}
-                                      className="size-3.5 rounded text-primary focus:ring-primary accent-primary cursor-pointer"
-                                    />
-                                    <span className="text-[10px] font-bold text-primary">
-                                      Bán toàn bộ ({remainingCapacity.toLocaleString("vi-VN")} vé)
-                                    </span>
-                                  </label>
-                                )}
-                              </div>
-                              <input
-                                type="number"
-                                min="1"
-                                max={remainingCapacity > 0 ? remainingCapacity : undefined}
-                                placeholder={
-                                  remainingCapacity > 0 ? `Tối đa ${remainingCapacity}` : "100"
-                                }
-                                value={cfg.quantity}
-                                onChange={(e) => {
-                                  const val =
-                                    e.target.value === "" ? "" : Math.max(1, Number(e.target.value))
-                                  setTierConfigs((prev) => ({
-                                    ...prev,
-                                    [t.id]: { ...cfg, quantity: val },
-                                  }))
-                                }}
-                                className="w-full px-3 py-1.5 rounded-xl border border-outline-variant font-mono text-xs text-on-surface focus:outline-primary"
-                                required
-                              />
-
-                              {/* Chọn nhanh số lượng */}
-                              {remainingCapacity > 0 && (
-                                <div className="flex items-center gap-1 pt-0.5 flex-wrap">
-                                  <span className="text-[10px] text-on-surface-variant mr-1">
-                                    Nhanh:
-                                  </span>
-                                  {remainingCapacity >= 50 && (
-                                    <button
-                                      type="button"
-                                      onClick={() =>
-                                        setTierConfigs((prev) => ({
-                                          ...prev,
-                                          [t.id]: { ...cfg, quantity: 50 },
-                                        }))
-                                      }
-                                      className={`px-1.5 py-0.5 rounded text-[10px] font-mono font-medium transition cursor-pointer ${
-                                        cfg.quantity === 50
-                                          ? "bg-primary text-white"
-                                          : "bg-surface-container hover:bg-surface-container-high text-on-surface"
-                                      }`}
-                                    >
-                                      50 vé
-                                    </button>
-                                  )}
-                                  {remainingCapacity >= 100 && (
-                                    <button
-                                      type="button"
-                                      onClick={() =>
-                                        setTierConfigs((prev) => ({
-                                          ...prev,
-                                          [t.id]: { ...cfg, quantity: 100 },
-                                        }))
-                                      }
-                                      className={`px-1.5 py-0.5 rounded text-[10px] font-mono font-medium transition cursor-pointer ${
-                                        cfg.quantity === 100
-                                          ? "bg-primary text-white"
-                                          : "bg-surface-container hover:bg-surface-container-high text-on-surface"
-                                      }`}
-                                    >
-                                      100 vé
-                                    </button>
-                                  )}
-                                  <button
-                                    type="button"
-                                    onClick={() =>
-                                      setTierConfigs((prev) => ({
-                                        ...prev,
-                                        [t.id]: { ...cfg, quantity: remainingCapacity },
-                                      }))
-                                    }
-                                    className={`px-1.5 py-0.5 rounded text-[10px] font-mono font-bold transition cursor-pointer ${
-                                      cfg.quantity === remainingCapacity
-                                        ? "bg-primary text-white"
-                                        : "bg-primary/10 hover:bg-primary/20 text-primary"
-                                    }`}
-                                  >
-                                    Toàn bộ ({remainingCapacity} vé)
-                                  </button>
-                                </div>
-                              )}
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    )
-                  })}
-                </div>
-              </div>
-
-              {/* Nút hành động */}
-              <div className="flex items-center justify-end gap-2 pt-3 border-t border-outline-variant/40">
-                <button
-                  type="button"
-                  onClick={() => setShowAddModal(false)}
-                  className="px-4 py-2 border border-outline-variant text-on-surface hover:bg-surface-container font-semibold rounded-xl transition cursor-pointer"
-                >
-                  Hủy
-                </button>
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="px-5 py-2 bg-primary hover:bg-primary-hover text-white font-bold rounded-xl transition cursor-pointer inline-flex items-center gap-1.5 shadow-xs disabled:opacity-50"
-                >
-                  {isSubmitting && <Loader2 className="size-3.5 animate-spin" />}
-                  <span>{isSubmitting ? "Đang tạo..." : "Lưu đợt mở bán"}</span>
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
+        <CreateSalePhaseDialog
+          eventEndTime={eventEndTime}
+          salePhases={salePhases}
+          ticketTypes={ticketTypes}
+          areas={areas}
+          onAddSalePhase={onAddSalePhase}
+          onClose={() => setShowAddModal(false)}
+        />
       )}
     </div>
   )
