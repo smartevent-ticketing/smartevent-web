@@ -1,16 +1,13 @@
 import type { FetchOptions } from "openapi-fetch"
-import { apiClient } from "@/lib/api/client"
+import { apiClient, type ApiPaths } from "@/lib/api/client"
 import { requireApiSuccess } from "@/lib/api/result"
-import type { paths, components } from "@/lib/api/schema"
+import type { components } from "@/lib/api/schema"
 import type {
-  EventSetupPaths,
-  EventMediaPaths,
   EventFileType,
   SalePhaseStatus,
-  SalePhasePaths,
+  CreateEventPayload,
+  UpdateEventPayload,
 } from "@/lib/api/event-setup-contract"
-
-type ApiPaths = paths & EventSetupPaths & EventMediaPaths & SalePhasePaths
 
 export const organizerApi = {
   createEventSetup: (
@@ -19,10 +16,29 @@ export const organizerApi = {
     },
   ) => requireApiSuccess(apiClient.POST("/api/v1/events/setup", options)),
 
+  completeDraftSetup: (
+    eventId: string,
+    tiers: components["schemas"]["CompleteDraftSetupRequest"]["tiers"],
+  ) =>
+    requireApiSuccess(
+      apiClient.POST("/api/v1/events/{eventId}/complete-setup", {
+        params: { path: { eventId } },
+        body: { tiers },
+      }),
+    ),
+
   getEvent: (id: string) =>
     requireApiSuccess(
       apiClient.GET("/api/v1/events/{id}", {
         params: { path: { id } },
+      }),
+    ),
+
+  updateEvent: (id: string, body: UpdateEventPayload) =>
+    requireApiSuccess(
+      apiClient.PUT("/api/v1/events/{id}", {
+        params: { path: { id } },
+        body: body as components["schemas"]["UpdateEventRequest"],
       }),
     ),
 
@@ -101,13 +117,28 @@ export const organizerApi = {
       eventAreaId: string
       name: string
       description?: string
-      status?: string
+      status?: "ACTIVE" | "INACTIVE"
     },
   ) =>
     requireApiSuccess(
       apiClient.POST("/api/v1/events/{eventId}/ticket-types", {
         params: { path: { eventId } },
         body,
+      }),
+    ),
+
+  updateTicketType: (id: string, body: components["schemas"]["TicketTypeRequest"]) =>
+    requireApiSuccess(
+      apiClient.PUT("/api/v1/ticket-types/{id}", {
+        params: { path: { id } },
+        body,
+      }),
+    ),
+
+  deleteTicketType: (id: string) =>
+    requireApiSuccess(
+      apiClient.DELETE("/api/v1/ticket-types/{id}", {
+        params: { path: { id } },
       }),
     ),
 
@@ -137,6 +168,14 @@ export const organizerApi = {
       }),
     ),
 
+  updateSalePhase: (id: string, body: components["schemas"]["TicketSalePhaseRequest"]) =>
+    requireApiSuccess(
+      apiClient.PUT("/api/v1/sale-phases/{id}", {
+        params: { path: { id } },
+        body,
+      }),
+    ),
+
   getInventory: (eventId: string) =>
     requireApiSuccess(
       apiClient.GET("/api/v1/events/{eventId}/inventory", {
@@ -151,14 +190,25 @@ export const organizerApi = {
       }),
     ),
 
-  getSeatsByArea: (
-    areaId: string,
-    options?: Omit<FetchOptions<ApiPaths["/api/v1/areas/{areaId}/seats"]["get"]>, "parseAs">,
-  ) =>
+  getSeatsByArea: (areaId: string, page = 0) =>
     requireApiSuccess(
       apiClient.GET("/api/v1/areas/{areaId}/seats", {
-        params: { path: { areaId }, query: { pageable: { size: 1000 } } },
-        ...options,
+        params: { path: { areaId }, query: { pageable: { page, size: 1000 } } },
+      }),
+    ),
+
+  createSingleSeat: (areaId: string, body: components["schemas"]["EventSeatRequest"]) =>
+    requireApiSuccess(
+      apiClient.POST("/api/v1/areas/{areaId}/seats", {
+        params: { path: { areaId } },
+        body,
+      }),
+    ),
+
+  deleteSeat: (id: string) =>
+    requireApiSuccess(
+      apiClient.DELETE("/api/v1/seats/{id}", {
+        params: { path: { id } },
       }),
     ),
 
@@ -184,10 +234,10 @@ export const organizerApi = {
       }),
     ),
 
-  createDraftEvent: (body: components["schemas"]["CreateEventRequest"]) =>
+  createDraftEvent: (body: CreateEventPayload) =>
     requireApiSuccess(
       apiClient.POST("/api/v1/events", {
-        body,
+        body: body as components["schemas"]["CreateEventRequest"],
       }),
     ),
 
@@ -208,6 +258,14 @@ export const organizerApi = {
     requireApiSuccess(
       apiClient.GET("/api/v1/events/{eventId}/media", {
         params: { path: { eventId } },
+      }),
+    ),
+
+  updateMediaOrder: (eventId: string, body: components["schemas"]["UpdateMediaOrderRequest"]) =>
+    requireApiSuccess(
+      apiClient.PUT("/api/v1/events/{eventId}/media/order", {
+        params: { path: { eventId } },
+        body,
       }),
     ),
 
