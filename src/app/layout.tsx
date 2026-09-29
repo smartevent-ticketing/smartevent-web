@@ -1,19 +1,23 @@
 import type { Metadata } from "next"
 import type { ReactNode } from "react"
-import { Geist, Geist_Mono } from "next/font/google"
+import localFont from "next/font/local"
 
 import { AuthProvider } from "@/features/auth"
 
 import "./globals.css"
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin", "vietnamese"],
+const beVietnamPro = localFont({
+  src: "../assets/fonts/BeVietnamPro-variable.ttf",
+  variable: "--font-be-vietnam",
+  display: "swap",
+  weight: "100 900",
 })
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin", "vietnamese"],
+const plusJakartaSans = localFont({
+  src: "../assets/fonts/PlusJakartaSans-variable.ttf",
+  variable: "--font-plus-jakarta",
+  display: "swap",
+  weight: "200 800",
 })
 
 export const metadata: Metadata = {
@@ -30,7 +34,10 @@ interface RootLayoutProps {
 
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
-    <html lang="vi" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
+    <html
+      lang="vi"
+      className={beVietnamPro.variable + " " + plusJakartaSans.variable + " h-full antialiased"}
+    >
       <body className="flex min-h-full flex-col">
         <AuthProvider>{children}</AuthProvider>
       </body>

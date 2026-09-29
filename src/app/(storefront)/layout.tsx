@@ -7,7 +7,7 @@ interface StorefrontLayoutProps {
 
 export default function StorefrontLayout({ children }: StorefrontLayoutProps) {
   return (
-    <div className="min-h-screen flex flex-col bg-surface text-on-surface">
+    <div className="nightline-storefront flex min-h-screen flex-col">
       <SiteHeader />
       <div className="flex-1">{children}</div>
       <SiteFooter />

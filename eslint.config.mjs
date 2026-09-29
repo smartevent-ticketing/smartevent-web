@@ -77,6 +77,27 @@ const eslintConfig = defineConfig([
       ],
     },
   },
+  {
+    files: ["src/app/**/*.{ts,tsx}", "src/components/**/*.{ts,tsx}"],
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          patterns: [
+            {
+              group: [
+                "@/features/*/api/**",
+                "@/features/*/hooks/**",
+                "@/features/*/components/**",
+                "@/features/*/model/**",
+              ],
+              message: "Use a feature's public index.ts or model/index.ts from app and shared UI.",
+            },
+          ],
+        },
+      ],
+    },
+  },
   // Override default ignores of eslint-config-next.
   globalIgnores([
     // Default ignores of eslint-config-next:
