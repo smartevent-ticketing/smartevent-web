@@ -1,6 +1,6 @@
 "use client"
 
-import { AlertTriangle, Loader2 } from "lucide-react"
+import { AlertTriangle, CheckCheck, Clock3, Inbox, Loader2, RotateCcw } from "lucide-react"
 import { ActionFeedback } from "@/components/shared/action-feedback"
 import { useAdminOutbox } from "@/features/admin/hooks/use-outbox"
 
@@ -15,108 +15,138 @@ export function AdminOutboxPanel() {
     retryingId,
     handleRetryOutbox,
   } = useAdminOutbox()
+  const stats = [
+    {
+      label: "Đang chờ",
+      value: outboxStats?.pendingCount ?? pendingOutbox.length,
+      icon: Clock3,
+      color: "text-[#b87a38]",
+      background: "bg-[#fff4e6]",
+    },
+    {
+      label: "Đã gửi",
+      value: outboxStats?.publishedCount ?? 0,
+      icon: CheckCheck,
+      color: "text-[#257555]",
+      background: "bg-[#eaf7ee]",
+    },
+    {
+      label: "Gặp lỗi",
+      value: outboxStats?.failedCount ?? failedOutbox.length,
+      icon: AlertTriangle,
+      color: "text-[#b7474f]",
+      background: "bg-[#fff0f1]",
+    },
+  ]
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-7">
       <ActionFeedback message={notification} onDismiss={() => setNotification(null)} />
-      <div className="space-y-6">
-        {isLoadingOutbox ? (
-          <div className="flex items-center justify-center py-12 text-on-surface-variant gap-2 text-sm">
-            <Loader2 className="size-4 animate-spin text-primary" />
-            <span>Đang tải thông tin Outbox...</span>
+      {isLoadingOutbox ? (
+        <div
+          role="status"
+          className="admin-card flex items-center justify-center gap-2 py-16 text-sm text-[#756d77]"
+        >
+          <Loader2 className="size-4 animate-spin text-[#bd443a]" /> Đang tải thông báo...
+        </div>
+      ) : (
+        <>
+          <div className="grid gap-4 sm:grid-cols-3">
+            {stats.map(({ label, value, icon: Icon, color, background }) => (
+              <div key={label} className="admin-card flex items-center gap-4 p-5">
+                <span
+                  className={
+                    "flex size-12 items-center justify-center rounded-2xl " +
+                    color +
+                    " " +
+                    background
+                  }
+                >
+                  <Icon className="size-5" />
+                </span>
+                <div>
+                  <p className="text-2xl font-extrabold tabular-nums">
+                    {value.toLocaleString("vi-VN")}
+                  </p>
+                  <p className="text-xs font-semibold text-[#756d77]">{label}</p>
+                </div>
+              </div>
+            ))}
           </div>
-        ) : (
-          <>
-            {/* Outbox Stats Summary */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <div className="bg-white p-5 rounded-3xl border border-outline-variant/60 shadow-xs space-y-1">
-                <span className="text-xs text-on-surface-variant font-semibold">
-                  Tin nhắn đang chờ (Pending)
-                </span>
-                <div className="text-2xl font-black text-amber-600">
-                  {outboxStats?.pendingCount ?? pendingOutbox.length}
-                </div>
+          <section className="admin-card overflow-hidden">
+            <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#eee6e1] px-5 py-5 sm:px-7">
+              <div>
+                <p className="admin-kicker">Cần can thiệp</p>
+                <h2 className="mt-1 text-lg font-extrabold">
+                  Thông điệp gửi lỗi ({failedOutbox.length})
+                </h2>
+                <p className="mt-1 text-xs text-[#756d77]">
+                  Kiểm tra trước khi gửi lại để tránh lặp thông báo.
+                </p>
               </div>
-              <div className="bg-white p-5 rounded-3xl border border-outline-variant/60 shadow-xs space-y-1">
-                <span className="text-xs text-on-surface-variant font-semibold">
-                  Đã phát thành công (Published)
-                </span>
-                <div className="text-2xl font-black text-green-600">
-                  {outboxStats?.publishedCount ?? 0}
-                </div>
-              </div>
-              <div className="bg-white p-5 rounded-3xl border border-outline-variant/60 shadow-xs space-y-1">
-                <span className="text-xs text-on-surface-variant font-semibold">
-                  Tin nhắn lỗi (Failed)
-                </span>
-                <div className="text-2xl font-black text-red-600">
-                  {outboxStats?.failedCount ?? failedOutbox.length}
-                </div>
-              </div>
+              <Inbox className="size-5 text-[#bd443a]" />
             </div>
-
-            {/* Danh sách lỗi cần retry */}
-            <div className="bg-white rounded-3xl border border-outline-variant/60 shadow-xs p-6 space-y-4">
-              <h3 className="text-base font-bold text-on-surface flex items-center gap-2">
-                <AlertTriangle className="size-4 text-red-600" />
-                <span>Các sự kiện Outbox lỗi cần can thiệp ({failedOutbox.length})</span>
-              </h3>
-
-              {failedOutbox.length === 0 ? (
-                <div className="py-8 text-center text-xs text-on-surface-variant">
-                  Hiện không có tin nhắn Outbox nào bị lỗi. Toàn bộ thông điệp RabbitMQ hoạt động
-                  thông suốt.
-                </div>
-              ) : (
-                <div className="overflow-x-auto">
-                  <table className="w-full text-left text-xs">
-                    <thead className="bg-surface-container-low uppercase font-bold text-on-surface-variant border-b border-outline-variant/60">
-                      <tr>
-                        <th className="px-4 py-3">Outbox ID</th>
-                        <th className="px-4 py-3">Loại sự kiện</th>
-                        <th className="px-4 py-3">Trạng thái</th>
-                        <th className="px-4 py-3">Thời gian</th>
-                        <th className="px-4 py-3 text-right">Thao tác</th>
+            {failedOutbox.length === 0 ? (
+              <div className="px-6 py-14 text-center">
+                <span className="mx-auto flex size-12 items-center justify-center rounded-2xl bg-[#eaf7ee] text-[#257555]">
+                  <CheckCheck className="size-6" />
+                </span>
+                <p className="mt-4 text-sm font-bold">Chưa có thông điệp gửi lỗi</p>
+                <p className="mt-1 text-xs text-[#756d77]">
+                  Các thông điệp trong hộp thư đi đang được xử lý bình thường.
+                </p>
+              </div>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="admin-table min-w-[700px]">
+                  <thead>
+                    <tr>
+                      <th>Outbox ID</th>
+                      <th>Loại sự kiện</th>
+                      <th>Trạng thái</th>
+                      <th>Thời gian</th>
+                      <th className="text-right">Thao tác</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {failedOutbox.map((task) => (
+                      <tr key={task.id}>
+                        <td className="max-w-64 break-all font-mono text-[11px] text-[#756d77]">
+                          {task.id}
+                        </td>
+                        <td className="font-semibold">{task.aggregateType || "OUTBOX_EVENT"}</td>
+                        <td>
+                          <span className="rounded-full bg-[#fff0f1] px-2.5 py-1 text-[10px] font-extrabold uppercase text-[#b7474f]">
+                            Gửi lỗi
+                          </span>
+                        </td>
+                        <td className="whitespace-nowrap text-[#756d77]">
+                          {task.createdAt
+                            ? new Date(task.createdAt).toLocaleString("vi-VN")
+                            : "Gần đây"}
+                        </td>
+                        <td className="text-right">
+                          {task.id && (
+                            <button
+                              type="button"
+                              onClick={() => handleRetryOutbox(task.id!)}
+                              disabled={retryingId === task.id}
+                              className="admin-secondary-button !min-h-0 !py-2"
+                            >
+                              <RotateCcw className="size-3.5" />
+                              {retryingId === task.id ? "Đang gửi..." : "Gửi lại"}
+                            </button>
+                          )}
+                        </td>
                       </tr>
-                    </thead>
-                    <tbody className="divide-y divide-outline-variant/40">
-                      {failedOutbox.map((task) => (
-                        <tr key={task.id} className="hover:bg-surface-container-low/50">
-                          <td className="px-4 py-3 font-mono font-bold text-primary">{task.id}</td>
-                          <td className="px-4 py-3 font-semibold text-on-surface">
-                            {task.aggregateType || "OUTBOX_EVENT"}
-                          </td>
-                          <td className="px-4 py-3">
-                            <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-red-100 text-red-700">
-                              FAILED
-                            </span>
-                          </td>
-                          <td className="px-4 py-3 text-on-surface-variant">
-                            {task.createdAt
-                              ? new Date(task.createdAt).toLocaleString("vi-VN")
-                              : "Gần đây"}
-                          </td>
-                          <td className="px-4 py-3 text-right">
-                            {task.id && (
-                              <button
-                                type="button"
-                                onClick={() => handleRetryOutbox(task.id!)}
-                                disabled={retryingId === task.id}
-                                className="px-3 py-1.5 bg-primary text-white font-bold rounded-lg hover:bg-primary-hover transition cursor-pointer shadow-xs disabled:opacity-50"
-                              >
-                                {retryingId === task.id ? "Đang gửi..." : "Thử lại (Retry)"}
-                              </button>
-                            )}
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              )}
-            </div>
-          </>
-        )}
-      </div>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </section>
+        </>
+      )}
     </div>
   )
 }
