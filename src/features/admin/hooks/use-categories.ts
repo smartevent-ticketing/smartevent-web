@@ -1,7 +1,7 @@
 "use client"
 
 import { adminApi } from "@/features/admin/api/admin-api"
-import { catalogApi } from "@/features/catalog/api/catalog-api"
+import { catalogApi } from "@/features/catalog"
 
 import { useEffect, useState } from "react"
 
@@ -20,6 +20,49 @@ export function useAdminCategories() {
   const [newCatDesc, setNewCatDesc] = useState("")
 
   const [isAddingCat, setIsAddingCat] = useState(false)
+  const [editingCategoryId, setEditingCategoryId] = useState<string | null>(null)
+  const [editCatName, setEditCatName] = useState("")
+  const [editCatDesc, setEditCatDesc] = useState("")
+  const [isSavingCategory, setIsSavingCategory] = useState(false)
+
+  function startEditingCategory(category: CategoryResponse) {
+    if (!category.id) return
+    setEditingCategoryId(category.id)
+    setEditCatName(category.name ?? "")
+    setEditCatDesc(category.description ?? "")
+    setNotification(null)
+  }
+
+  function cancelEditingCategory() {
+    setEditingCategoryId(null)
+    setEditCatName("")
+    setEditCatDesc("")
+  }
+
+  async function saveCategory() {
+    if (!editingCategoryId || !editCatName.trim() || isSavingCategory) return
+    setIsSavingCategory(true)
+    try {
+      const result = await adminApi.updateCategory(editingCategoryId, {
+        name: editCatName.trim(),
+        description: editCatDesc.trim() || undefined,
+      })
+      const updated = result.data?.data
+      if (!updated) throw new Error("Máy chủ chưa xác nhận danh mục đã cập nhật.")
+      setCategories((current) =>
+        current.map((item) => (item.id === editingCategoryId ? updated : item)),
+      )
+      cancelEditingCategory()
+      setNotification({ type: "success", text: "Đã cập nhật danh mục." })
+    } catch (error) {
+      setNotification({
+        type: "error",
+        text: getApiErrorMessage(error, "Không thể cập nhật danh mục."),
+      })
+    } finally {
+      setIsSavingCategory(false)
+    }
+  }
 
   async function handleAddCategory(e: React.FormEvent) {
     e.preventDefault()
@@ -106,6 +149,15 @@ export function useAdminCategories() {
     newCatDesc,
     setNewCatDesc,
     isAddingCat,
+    editingCategoryId,
+    editCatName,
+    setEditCatName,
+    editCatDesc,
+    setEditCatDesc,
+    isSavingCategory,
+    startEditingCategory,
+    cancelEditingCategory,
+    saveCategory,
     handleAddCategory,
     handleDeleteCategory,
   }
