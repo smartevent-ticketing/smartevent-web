@@ -17,11 +17,11 @@ export function AuthSubmitButton({
     <button
       type="submit"
       disabled={isSubmitting}
-      className={`w-full ${compact ? "h-11" : "h-12"} bg-primary hover:bg-primary-hover text-white text-sm font-semibold rounded-xl transition flex items-center justify-center gap-2 shadow-md hover:shadow-lg disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer`}
+      className={`se-button group flex w-full ${compact ? "h-12" : "h-14"} items-center justify-center gap-3 rounded-xl bg-primary text-sm font-semibold text-white shadow-[0_6px_16px_-6px_rgba(199,75,49,0.45)] transition hover:bg-primary-hover focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-60`}
     >
-      {isSubmitting && <Loader2 className="size-4 animate-spin" />}
+      {isSubmitting && <Loader2 className="size-4 animate-spin" aria-hidden="true" />}
       <span>{isSubmitting ? pendingLabel : label}</span>
-      {!isSubmitting && <ArrowRight className="size-4" />}
+      {!isSubmitting && <ArrowRight className="size-4" aria-hidden="true" />}
     </button>
   )
 }

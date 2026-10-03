@@ -4,6 +4,8 @@ import fs from "node:fs"
 import path from "node:path"
 import { fileURLToPath } from "node:url"
 
+import { renderCart, reservationButton } from "./helpers/booking-markup.mjs"
+
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 const srcDir = path.resolve(__dirname, "../src")
@@ -65,48 +67,17 @@ test("CHALLENGE 1: Empirical codebase scan for zero alert() / window.alert() / g
   )
 })
 
-test("CHALLENGE 2: Multi-tier cart layout structure & viewport geometry verification in booking-cart-panel.tsx", () => {
-  const filePath = path.join(srcDir, "features/booking/components/booking-cart-panel.tsx")
-  assert.ok(fs.existsSync(filePath), "booking-cart-panel.tsx must exist")
-  const content = fs.readFileSync(filePath, "utf-8")
-
-  // 1. Verify card container classes: flex flex-col and max-h-[calc(100vh-6rem)]
-  const cardContainerRegex =
-    /<div[^>]*className="[^"]*flex flex-col[^"]*max-h-\[calc\(100vh-6rem\)\][^"]*"/
-  assert.match(
-    content,
-    cardContainerRegex,
-    "Cart card container must enforce flex flex-col and max-h-[calc(100vh-6rem)]",
-  )
-
-  // 2. Verify outer container sticky positioning
-  const stickyContainerRegex = /<div[^>]*className="[^"]*sticky top-20[^"]*"/
-  assert.match(content, stickyContainerRegex, "Cart sidebar outer column must be sticky top-20")
-
-  // 3. Verify cart items list has flex-1, min-h-0, overflow-y-auto
-  const scrollableListRegex = /<div[^>]*className="[^"]*flex-1 min-h-0 overflow-y-auto[^"]*"/
-  assert.match(
-    content,
-    scrollableListRegex,
-    "Cart items container must enforce flex-1 min-h-0 overflow-y-auto",
-  )
-
-  // 4. Verify footer has shrink-0 and holds the CTA button
-  const footerRegex = /<div[^>]*className="[^"]*shrink-0[^"]*pt-1 space-y-4[^"]*"/
-  assert.match(content, footerRegex, "Cart footer must enforce shrink-0 to prevent collapsing")
-
-  // 5. Verify CTA button text and disabled condition
-  assert.match(
-    content,
-    /Xác nhận & Giữ chỗ 10 phút/,
-    "CTA button must include text 'Xác nhận & Giữ chỗ 10 phút'",
-  )
-
-  assert.match(
-    content,
-    /disabled=\{isSubmitting \|\| cart\.length === 0\}/,
-    "CTA button disabled state must only activate when submitting or empty",
-  )
+test("Multiple ticket tiers retain the total and an enabled reservation action", () => {
+  for (const count of [2, 3, 5, 10]) {
+    const markup = renderCart(count)
+    for (let tier = 1; tier <= count; tier++) assert.ok(markup.includes("Hạng vé " + tier))
+    assert.ok(markup.includes(count * 2 + " vé đã chọn"))
+    assert.ok(markup.includes((count * 200000).toLocaleString("vi-VN")))
+    const action = reservationButton(markup)
+    assert.ok(action)
+    assert.doesNotMatch(action, /disabled=/)
+    assert.ok(markup.indexOf(action) > markup.lastIndexOf("Hạng vé " + count))
+  }
 })
 
 test("CHALLENGE 3: Multi-tier cart simulation (2, 3, 5, 10 tiers) guarantees CTA permanence & clickability", () => {

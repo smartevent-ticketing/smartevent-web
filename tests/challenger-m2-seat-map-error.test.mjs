@@ -5,6 +5,11 @@ import path from "node:path"
 import { fileURLToPath } from "node:url"
 import { getApiErrorMessage, ApiRequestError } from "../src/lib/api/result.ts"
 
+import { createElement } from "react"
+import { renderToStaticMarkup } from "react-dom/server"
+import { SeatMap } from "../src/features/booking/components/seat-map.tsx"
+import { renderSeatMap, seatButtons } from "./helpers/booking-markup.mjs"
+
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 const srcDir = path.resolve(__dirname, "../src")
@@ -12,66 +17,27 @@ const srcDir = path.resolve(__dirname, "../src")
 // -------------------------------------------------------------
 // CHALLENGE 1: Seat Map UX (R2)
 // -------------------------------------------------------------
-test("CHALLENGE R2.1: SeatMap verifies 4 statuses styling and disabled state", () => {
-  const seatMapPath = path.join(srcDir, "features/booking/components/seat-map.tsx")
-  const content = fs.readFileSync(seatMapPath, "utf-8")
-
-  // 1. AVAILABLE: white / blue border, selectable
-  assert.match(
-    content,
-    /bg-white border-2 border-primary\/50 text-primary hover:bg-primary\/10 hover:border-primary cursor-pointer/,
-    "AVAILABLE seat must have white background with blue border and cursor-pointer",
+test("A selected available seat exposes its pressed state", () => {
+  const seat = { id: "a1", label: "A1", status: "AVAILABLE" }
+  const markup = renderToStaticMarkup(
+    createElement(SeatMap, {
+      availableSeats: [seat],
+      selectedSeats: [seat],
+      isSeated: true,
+      maxAllowed: 1,
+      handleToggleSeat() {},
+    }),
   )
-
-  // 2. SELECTED: Primary fill, selectable
-  assert.match(
-    content,
-    /bg-primary text-white border-2 border-primary shadow-sm cursor-pointer/,
-    "SELECTED seat must have primary background, white text and cursor-pointer",
-  )
-
-  // 3. HELD: Orange / Amber, disabled
-  assert.match(
-    content,
-    /bg-amber-500 text-white border-2 border-amber-600 cursor-not-allowed opacity-90/,
-    "HELD seat must have amber-500 background, white text, amber-600 border and cursor-not-allowed",
-  )
-
-  // 4. SOLD: Yellow, disabled
-  assert.match(
-    content,
-    /bg-yellow-400 text-yellow-950 border-2 border-yellow-500 cursor-not-allowed font-extrabold/,
-    "SOLD seat must have yellow-400 background, yellow-950 text, yellow-500 border and font-extrabold",
-  )
-
-  // 5. Disabled logic for HELD, SOLD, and BLOCKED
-  assert.match(content, /const isHeld = !isSelected && seat\.status === "HELD"/)
-  assert.match(content, /const isSold = !isSelected && seat\.status === "SOLD"/)
-  assert.match(content, /const isBlocked = !isSelected && seat\.status === "BLOCKED"/)
-  assert.match(content, /const isDisabled\s*=\s*isHeld \|\| isSold \|\| isBlocked/)
-  assert.match(content, /disabled=\{isDisabled\}/)
-  assert.match(content, /onClick=\{.*!isDisabled && handleToggleSeat\(seat\)\}/)
+  const [button] = seatButtons(markup)
+  assert.match(button, /aria-pressed="true"/)
+  assert.match(button, /Đang chọn - Bấm để hủy chọn/)
+  assert.doesNotMatch(button, /disabled=/)
 })
 
-test("CHALLENGE R2.2: SeatMap legend displays all 4 statuses with matching colors", () => {
-  const seatMapPath = path.join(srcDir, "features/booking/components/seat-map.tsx")
-  const content = fs.readFileSync(seatMapPath, "utf-8")
-
-  // Available chip & label
-  assert.match(content, /border-primary\/50 bg-white/)
-  assert.match(content, /<span>Còn trống<\/span>/)
-
-  // Selected chip & label
-  assert.match(content, /bg-primary border-2 border-primary/)
-  assert.match(content, /<span>Đang chọn<\/span>/)
-
-  // Held chip & label
-  assert.match(content, /bg-amber-500 border-2 border-amber-600/)
-  assert.match(content, /<span>Đang giữ chỗ \(10p\)<\/span>/)
-
-  // Sold chip & label
-  assert.match(content, /bg-yellow-400 border-2 border-yellow-500/)
-  assert.match(content, /<span>Đã bán<\/span>/)
+test("Seat map legend explains available, selected, held and sold states", () => {
+  const markup = renderSeatMap()
+  for (const label of ["Còn trống", "Đang chọn", "Đang giữ chỗ", "Đã bán"])
+    assert.ok(markup.includes("<span>" + label + "</span>"))
 })
 
 test("CHALLENGE R2.3: SeatMap logic emulation on synthetic seats", () => {
@@ -204,8 +170,8 @@ test("CHALLENGE R3.3: UI Error Banners rendered in booking view and seat dialog 
 
   // Page level error banner with AlertCircle and dismiss
   assert.match(content, /\{errorMessage && \(/)
-  assert.match(content, /bg-red-50 border border-red-200 text-red-700/)
-  assert.match(content, /<AlertCircle className="size-4 shrink-0" \/>/)
+  assert.match(content, /role="alert"/)
+  assert.match(content, /aria-label="Đóng thông báo lỗi"/)
   assert.match(content, /onClick=\{.*setErrorMessage\(null\)\}/)
 
   // Modal error banner with AlertCircle and dismiss

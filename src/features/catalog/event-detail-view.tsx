@@ -1,11 +1,11 @@
 "use client"
+
+import Link from "next/link"
+import { AlertCircle, ArrowLeft, ChevronRight, Home } from "lucide-react"
+
 import { TicketPicker } from "./components/ticket-picker"
 import { EventInformation } from "./components/event-information"
 import { EventHero } from "./components/event-hero"
-
-import Link from "next/link"
-import { AlertCircle } from "lucide-react"
-
 import { useEventDetail } from "./hooks/use-event-detail"
 
 export function EventDetailView({ eventId }: { eventId: string }) {
@@ -17,6 +17,7 @@ export function EventDetailView({ eventId }: { eventId: string }) {
     isLoading,
     isNotFound,
     isEnded,
+    loadError,
     setSelectedTierId,
     quantity,
     setQuantity,
@@ -37,17 +38,33 @@ export function EventDetailView({ eventId }: { eventId: string }) {
     descriptionText,
     targetEventId,
   } = useEventDetail({ eventId })
+
   if (isLoading) {
     return (
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12 space-y-8 animate-pulse">
-        <div className="h-[280px] w-full rounded-3xl bg-[#242331] sm:h-[380px]" />
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          <div className="lg:col-span-8 space-y-6">
-            <div className="h-20 rounded-2xl bg-[#242331]" />
-            <div className="h-40 rounded-2xl bg-[#242331]" />
-            <div className="h-40 rounded-2xl bg-[#242331]" />
+      <div
+        role="status"
+        aria-label="Đang tải thông tin sự kiện"
+        className="mx-auto w-full max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8 lg:py-10"
+      >
+        <span className="sr-only">Đang tải thông tin sự kiện...</span>
+        <div aria-hidden="true" className="space-y-8 animate-pulse">
+          <div className="h-4 w-56 rounded bg-surface-container" />
+          <div className="grid overflow-hidden rounded-3xl border border-border bg-white lg:grid-cols-2">
+            <div className="h-72 bg-surface-container sm:h-96" />
+            <div className="space-y-5 p-8">
+              <div className="h-6 w-28 rounded-full bg-surface-container" />
+              <div className="h-16 rounded-xl bg-surface-container" />
+              <div className="h-12 rounded-xl bg-surface-container" />
+              <div className="h-12 rounded-xl bg-surface-container" />
+            </div>
           </div>
-          <div className="h-96 rounded-3xl bg-[#242331] lg:col-span-4" />
+          <div className="grid items-start gap-8 lg:grid-cols-12">
+            <div className="space-y-6 lg:col-span-8">
+              <div className="h-28 rounded-2xl bg-white" />
+              <div className="h-64 rounded-2xl bg-white" />
+            </div>
+            <div className="h-96 rounded-3xl bg-white lg:col-span-4" />
+          </div>
         </div>
       </div>
     )
@@ -55,27 +72,56 @@ export function EventDetailView({ eventId }: { eventId: string }) {
 
   if (isNotFound) {
     return (
-      <div className="max-w-xl mx-auto px-4 py-20 text-center space-y-6">
-        <div className="size-20 rounded-full bg-amber-50 text-amber-600 flex items-center justify-center mx-auto border border-amber-200">
-          <AlertCircle className="size-10" />
-        </div>
-        <h1 className="text-2xl font-bold text-white">Không tìm thấy sự kiện</h1>
-        <p className="text-sm text-[#bcb7c4]">
+      <div className="mx-auto max-w-xl px-4 py-20 text-center">
+        <span className="mx-auto flex size-16 items-center justify-center rounded-2xl border border-amber-200 bg-amber-50 text-amber-600">
+          <AlertCircle className="size-8" aria-hidden="true" />
+        </span>
+        <h1 className="mt-6 text-2xl font-bold tracking-tight text-foreground">
+          Không tìm thấy sự kiện
+        </h1>
+        <p className="mt-3 text-sm leading-7 text-muted">
           Sự kiện bạn đang tìm kiếm không tồn tại hoặc chưa được công bố chính thức trên hệ thống.
         </p>
         <Link
           href="/events"
-          className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-white text-sm font-semibold rounded-xl hover:bg-primary-hover transition shadow-md"
+          className="se-button mt-7 inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-primary px-5 py-3 text-sm font-semibold text-on-primary hover:bg-primary-hover"
         >
-          <span>Khám phá các sự kiện khác</span>
+          <ArrowLeft className="size-4" aria-hidden="true" />
+          Khám phá các sự kiện khác
         </Link>
       </div>
     )
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12 flex flex-col gap-8">
-      {/* 1. Hero Event Banner */}
+    <div className="mx-auto flex w-full max-w-7xl flex-col gap-7 px-4 py-6 sm:px-6 lg:gap-9 lg:px-8 lg:py-9">
+      <nav
+        aria-label="Đường dẫn trang"
+        className="flex min-w-0 items-center gap-2 text-xs text-muted sm:gap-3 sm:text-sm"
+      >
+        <Link href="/" aria-label="Trang chủ" className="shrink-0 rounded p-1 hover:text-primary">
+          <Home className="size-4" aria-hidden="true" />
+        </Link>
+        <ChevronRight className="size-3.5 shrink-0 text-slate-400" aria-hidden="true" />
+        <Link href="/events" className="shrink-0 hover:text-primary">
+          Sự kiện
+        </Link>
+        <ChevronRight className="size-3.5 shrink-0 text-slate-400" aria-hidden="true" />
+        <span aria-current="page" className="truncate font-medium text-foreground">
+          {title}
+        </span>
+      </nav>
+
+      {loadError && (
+        <div
+          role="alert"
+          className="flex items-start gap-3 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800"
+        >
+          <AlertCircle className="mt-0.5 size-4 shrink-0" aria-hidden="true" />
+          <span>{loadError}</span>
+        </div>
+      )}
+
       <EventHero
         {...{
           bannerUrl,
@@ -90,9 +136,7 @@ export function EventDetailView({ eventId }: { eventId: string }) {
         }}
       />
 
-      {/* 2. Grid Layout: Left Content & Right Sticky Booking Card */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-        {/* Main Content (Left - 8 cols) */}
+      <div className="grid grid-cols-1 items-start gap-7 lg:grid-cols-12 lg:gap-8">
         <EventInformation
           {...{
             isSaleActive,
@@ -104,9 +148,11 @@ export function EventDetailView({ eventId }: { eventId: string }) {
             galleryUrls,
           }}
         />
-
-        {/* Sticky Sidebar Booking (Right - 4 cols) */}
-        <div id="ticket-picker-section" className="lg:col-span-4 w-full">
+        <aside
+          id="ticket-picker-section"
+          aria-label="Chọn vé sự kiện"
+          className="order-first w-full scroll-mt-28 lg:order-none lg:sticky lg:top-28 lg:col-span-4"
+        >
           <TicketPicker
             {...{
               setSelectedTierId,
@@ -124,7 +170,7 @@ export function EventDetailView({ eventId }: { eventId: string }) {
               targetEventId,
             }}
           />
-        </div>
+        </aside>
       </div>
     </div>
   )

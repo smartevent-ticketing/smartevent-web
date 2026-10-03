@@ -1,12 +1,13 @@
 "use client"
 
 import Link from "next/link"
-import { AlertCircle, ArrowLeft, Loader2, Timer, X } from "lucide-react"
+import { AlertCircle, ArrowLeft, Loader2, Ticket, X } from "lucide-react"
 import { useBookingCart } from "./hooks/use-booking-cart"
 import { ActiveReservationNotice } from "./components/active-reservation-notice"
 import { BookingTierList } from "./components/booking-tier-list"
 import { BookingCartPanel } from "./components/booking-cart-panel"
 import { BookingSeatDialog } from "./components/booking-seat-dialog"
+import { BookingProgress } from "./components/booking-progress"
 
 export function SeatSelectionView({ eventId }: { eventId: string }) {
   const booking = useBookingCart({ eventId })
@@ -24,10 +25,10 @@ export function SeatSelectionView({ eventId }: { eventId: string }) {
 
   if (isLoading || isAuthLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-surface">
-        <div className="flex flex-col items-center gap-3 text-on-surface-variant">
-          <Loader2 className="size-8 animate-spin text-primary" />
-          <p className="text-sm font-medium">Đang tải thông tin đặt vé và giỏ hàng...</p>
+      <div className="flex min-h-screen items-center justify-center bg-surface px-6">
+        <div role="status" className="flex flex-col items-center gap-4 text-on-surface-variant">
+          <Loader2 className="size-7 animate-spin text-primary" />
+          <p className="text-sm">Đang chuẩn bị các hạng vé cho bạn...</p>
         </div>
       </div>
     )
@@ -35,21 +36,20 @@ export function SeatSelectionView({ eventId }: { eventId: string }) {
 
   if (!event) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-surface p-4">
-        <div className="max-w-md w-full bg-white rounded-3xl p-8 border border-outline-variant/60 shadow-lg text-center space-y-4">
-          <div className="size-16 rounded-full bg-red-50 text-red-600 flex items-center justify-center mx-auto">
-            <AlertCircle className="size-8" />
+      <div className="flex min-h-screen items-center justify-center bg-surface p-4">
+        <div className="w-full max-w-md space-y-5 rounded-2xl border border-outline-variant bg-white p-8 text-center shadow-sm">
+          <div className="mx-auto flex size-14 items-center justify-center rounded-2xl bg-red-50 text-red-600">
+            <AlertCircle className="size-6" />
           </div>
-          <h2 className="text-xl font-bold text-on-surface">Không tìm thấy sự kiện</h2>
-          <p className="text-sm text-on-surface-variant">
+          <h1 className="text-xl font-bold text-on-surface">Không tìm thấy sự kiện</h1>
+          <p className="text-sm leading-6 text-on-surface-variant">
             {errorMessage || "Sự kiện không tồn tại hoặc đã ngừng mở bán vé."}
           </p>
           <Link
             href="/events"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-white text-sm font-bold rounded-xl hover:bg-primary-hover transition"
+            className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-primary px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-primary-hover"
           >
-            <ArrowLeft className="size-4" />
-            <span>Khám phá các sự kiện khác</span>
+            <ArrowLeft className="size-4" /> Khám phá sự kiện
           </Link>
         </div>
       </div>
@@ -57,47 +57,53 @@ export function SeatSelectionView({ eventId }: { eventId: string }) {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-surface text-on-surface">
-      {/* Top Reservation Bar */}
-      <div className="bg-white border-b border-outline-variant/60 sticky top-0 z-40 px-4 sm:px-8 py-3 flex items-center justify-between shadow-xs">
-        <div className="flex items-center gap-3 min-w-0">
+    <div className="min-h-screen bg-surface text-on-surface">
+      <header className="border-b border-outline-variant bg-white">
+        <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
           <Link
-            href={`/events/${eventId}`}
-            className="text-xs sm:text-sm font-semibold text-primary hover:underline shrink-0"
+            href={"/events/" + eventId}
+            className="inline-flex min-h-11 items-center gap-2 text-sm font-medium text-on-surface-variant transition-colors hover:text-primary"
           >
-            ← Quay lại sự kiện
+            <ArrowLeft className="size-4" /> Quay lại sự kiện
           </Link>
-          <span className="text-gray-300">|</span>
-          <span className="text-xs sm:text-sm font-bold text-on-surface truncate">
-            {eventTitle} — Đặt vé & Giữ chỗ
-          </span>
+          <div className="mt-4 flex flex-col justify-between gap-7 lg:flex-row lg:items-center">
+            <div className="min-w-0 max-w-2xl">
+              <p className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-primary">
+                <Ticket className="size-4" /> Đặt vé sự kiện
+              </p>
+              <h1 className="text-2xl font-bold leading-tight tracking-tight sm:text-3xl">
+                {eventTitle}
+              </h1>
+              <p className="mt-3 text-sm leading-6 text-on-surface-variant">
+                Chọn hạng vé, số lượng hoặc vị trí ghế để tiếp tục thanh toán.
+              </p>
+            </div>
+            <div className="w-full lg:max-w-md">
+              <BookingProgress currentStep={1} />
+            </div>
+          </div>
         </div>
+      </header>
 
-        {/* 10-Minute Timer Badge */}
-        <div className="flex items-center gap-2 bg-amber-50 border border-amber-200 text-amber-800 px-3.5 py-1.5 rounded-full text-xs sm:text-sm font-bold shadow-xs shrink-0">
-          <Timer className="size-4 animate-pulse text-amber-600" />
-          <span className="hidden sm:inline">Thời gian giữ chỗ:</span>
-          <span className="font-mono text-sm sm:text-base">10 phút</span>
-        </div>
-      </div>
-
-      {/* Cảnh báo nếu đang có phiên giữ chỗ cũ */}
       <ActiveReservationNotice
         {...{ activeReservation, isSubmitting, handleCancelActiveReservation }}
       />
 
-      {/* Thông báo lỗi nếu có */}
       {errorMessage && (
-        <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 pt-4">
-          <div className="bg-red-50 border border-red-200 text-red-700 p-4 rounded-2xl text-xs sm:text-sm flex items-center justify-between shadow-xs">
-            <div className="flex items-center gap-2">
-              <AlertCircle className="size-4 shrink-0" />
+        <div className="mx-auto w-full max-w-7xl px-4 pt-6 sm:px-6 lg:px-8">
+          <div
+            role="alert"
+            className="flex items-center justify-between gap-3 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-800"
+          >
+            <div className="flex items-start gap-3">
+              <AlertCircle className="mt-0.5 size-4 shrink-0" />
               <span>{errorMessage}</span>
             </div>
             <button
               type="button"
+              aria-label="Đóng thông báo lỗi"
               onClick={() => setErrorMessage(null)}
-              className="text-red-500 hover:text-red-700 p-1 cursor-pointer"
+              className="flex size-11 shrink-0 items-center justify-center rounded-lg hover:bg-red-100"
             >
               <X className="size-4" />
             </button>
@@ -105,12 +111,10 @@ export function SeatSelectionView({ eventId }: { eventId: string }) {
         </div>
       )}
 
-      {/* Main Container: Ticket List (Left) + Cart & Checkout (Right) */}
-      <div className="flex-1 flex flex-col lg:flex-row max-w-7xl mx-auto w-full p-4 sm:p-6 lg:p-8 gap-8 items-start">
+      <main className="mx-auto flex w-full max-w-7xl flex-col items-start gap-6 px-4 py-8 sm:px-6 lg:flex-row lg:px-8 lg:py-10">
         <BookingTierList booking={booking} />
         <BookingCartPanel booking={booking} />
-      </div>
-
+      </main>
       <BookingSeatDialog booking={booking} />
     </div>
   )

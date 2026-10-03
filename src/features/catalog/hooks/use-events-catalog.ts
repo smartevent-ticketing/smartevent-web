@@ -21,6 +21,7 @@ export function useEventsCatalog({ q, city, categoryId }: CatalogFilters) {
   const [isLoading, setIsLoading] = useState(true)
 
   const [loadError, setLoadError] = useState<string | null>(null)
+  const [retryCount, setRetryCount] = useState(0)
 
   const pageSize = 9
 
@@ -82,7 +83,7 @@ export function useEventsCatalog({ q, city, categoryId }: CatalogFilters) {
     return () => {
       isMounted = false
     }
-  }, [currentPage, q, city, categoryId])
+  }, [currentPage, q, city, categoryId, retryCount])
 
   return {
     events,
@@ -93,5 +94,6 @@ export function useEventsCatalog({ q, city, categoryId }: CatalogFilters) {
     totalElements,
     isLoading,
     loadError,
+    retry: () => setRetryCount((count) => count + 1),
   }
 }

@@ -6,6 +6,13 @@ import { fileURLToPath } from "node:url"
 import { getApiErrorMessage, ApiRequestError } from "../src/lib/api/result.ts"
 import { buildEventSetupRequest } from "../src/features/organizer/model/event-setup-input.ts"
 
+import {
+  renderSeatMap,
+  seatButtons,
+  renderCart,
+  reservationButton,
+} from "./helpers/booking-markup.mjs"
+
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 const srcDir = path.resolve(__dirname, "../src")
@@ -42,50 +49,21 @@ test("R1/Event Setup: buildEventSetupRequest supports maxTicketsPerUser", () => 
   assert.equal(result.event.name, "Gala Concert")
 })
 
-test("R2: SeatMap source code contains 4 distinct statuses and updated legend", () => {
-  const seatMapPath = path.join(srcDir, "features/booking/components/seat-map.tsx")
-  const content = fs.readFileSync(seatMapPath, "utf-8")
-
-  // Check 4 status styles
-  assert.match(
-    content,
-    /bg-amber-500 text-white border-2 border-amber-600 cursor-not-allowed opacity-90/,
-  )
-  assert.match(
-    content,
-    /bg-yellow-400 text-yellow-950 border-2 border-yellow-500 cursor-not-allowed font-extrabold/,
-  )
-  assert.match(
-    content,
-    /bg-white border-2 border-primary\/50 text-primary hover:bg-primary\/10 hover:border-primary cursor-pointer/,
-  )
-  assert.match(content, /bg-primary text-white border-2 border-primary shadow-sm cursor-pointer/)
-
-  // Check disabled attributes for HELD and SOLD
-  assert.match(content, /const isHeld = !isSelected && seat\.status === "HELD"/)
-  assert.match(content, /const isSold = !isSelected && seat\.status === "SOLD"/)
-  assert.match(content, /disabled=\{isDisabled\}/)
-
-  // Check 4-status Legend chips
-  assert.match(content, /Còn trống/)
-  assert.match(content, /Đang chọn/)
-  assert.match(content, /Đang giữ chỗ \(10p\)/)
-  assert.match(content, /Đã bán/)
+test("Seat map labels unavailable seats and disables them", () => {
+  const buttons = seatButtons(renderSeatMap())
+  assert.equal(buttons.length, 4)
+  assert.match(buttons[0], /Ghế A1: Còn trống/)
+  assert.doesNotMatch(buttons[0], /disabled=/)
+  for (const button of buttons.slice(1)) assert.match(button, /disabled=""/)
+  assert.match(buttons[1], /Ghế A2: Đang được giữ chỗ/)
+  assert.match(buttons[2], /Ghế A3: Đã bán/)
+  assert.match(buttons[3], /Ghế A4: Tạm khóa/)
 })
 
-test("R4: booking cart sidebar layout enforces vertical scrolling and sticky CTA", () => {
-  const viewPath = path.join(srcDir, "features/booking/components/booking-cart-panel.tsx")
-  const content = fs.readFileSync(viewPath, "utf-8")
-
-  // Check flex and max-h container
-  assert.match(content, /flex flex-col max-h-\[calc\(100vh-6rem\)\]/)
-
-  // Check internal scrolling cart list
-  assert.match(content, /flex-1 min-h-0 overflow-y-auto/)
-
-  // Check shrink-0 footer with persistent CTA button
-  assert.match(content, /shrink-0 pt-1 space-y-4/)
-  assert.match(content, /Xác nhận & Giữ chỗ 10 phút/)
+test("Reservation action is disabled for an empty cart and while submitting", () => {
+  assert.match(reservationButton(renderCart(0)), /disabled=""/)
+  assert.match(reservationButton(renderCart(2, true)), /disabled=""/)
+  assert.doesNotMatch(reservationButton(renderCart(2)), /disabled=/)
 })
 
 test("R3: Absolute zero alert() or window.alert() in entire smartevent-web/src directory", () => {

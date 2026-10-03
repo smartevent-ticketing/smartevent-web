@@ -87,40 +87,41 @@ export function CustomerPortalView() {
   }
 
   return (
-    <div className="min-h-screen bg-[#f7f3ef] pb-20">
-      <div className="relative overflow-hidden bg-[#1b1a27] text-white">
-        <div className="pointer-events-none absolute -right-20 -top-52 size-[520px] rounded-full bg-[#a94467]/30 blur-[100px]" />
-        <div className="relative mx-auto flex max-w-7xl flex-col gap-8 px-4 pb-24 pt-12 sm:px-6 md:flex-row md:items-center md:justify-between lg:px-8 lg:pb-28 lg:pt-16">
+    <div className="min-h-screen bg-surface pb-20">
+      <header className="border-b border-outline-variant bg-white text-on-surface">
+        <div className="mx-auto flex max-w-7xl flex-col gap-6 px-4 py-10 sm:px-6 md:flex-row md:items-center md:justify-between lg:px-8 lg:py-12">
           <div>
-            <span className="nightline-kicker">Không gian của bạn / SmartEvent</span>
-            <h1 className="mt-3 text-3xl font-extrabold tracking-tight sm:text-5xl">
+            <span className="text-xs font-semibold uppercase tracking-[0.16em] text-primary">
+              Tài khoản / SmartEvent
+            </span>
+            <h1 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">
               Xin chào, {greetingName}
             </h1>
-            <p className="mt-3 max-w-xl text-sm leading-6 text-[#c9c4cf] sm:text-base">
+            <p className="mt-3 max-w-xl text-sm leading-6 text-on-surface-variant">
               Mọi tấm vé, đơn hàng và thông tin tài khoản ở cùng một nơi.
             </p>
           </div>
-          <div className="flex items-center gap-4 rounded-2xl border border-white/15 bg-white/5 p-4 backdrop-blur">
+          <div className="flex min-w-0 items-center gap-4 rounded-xl border border-outline-variant bg-surface/60 p-4 md:max-w-sm">
             <UserAvatar
               src={avatarUrl}
               name={user?.fullName}
               initials={initials}
-              className="flex size-14 items-center justify-center rounded-2xl bg-[#ff8063] text-xl font-extrabold text-[#261621]"
+              className="flex size-14 items-center justify-center rounded-2xl bg-primary-container text-xl font-bold text-primary"
             />
             <div className="min-w-0">
               <p className="truncate font-bold">{user?.fullName || "Tài khoản SmartEvent"}</p>
-              <p className="mt-0.5 truncate text-xs text-[#c9c4cf]">{user?.email}</p>
-              <span className="mt-2 inline-flex items-center gap-1 rounded-full bg-white/10 px-2.5 py-1 text-[11px] font-semibold text-[#ffb19e]">
+              <p className="mt-0.5 truncate text-xs text-on-surface-variant">{user?.email}</p>
+              <span className="mt-2 inline-flex items-center gap-1 text-[11px] font-medium text-on-surface-variant">
                 <ShieldCheck className="size-3" /> {role}
               </span>
             </div>
           </div>
         </div>
-      </div>
+      </header>
 
-      <div className="relative mx-auto -mt-12 grid max-w-7xl gap-6 px-4 sm:px-6 lg:grid-cols-[252px_minmax(0,1fr)] lg:items-start lg:px-8">
-        <aside className="rounded-3xl border border-[#e7ddd7] bg-white p-3 shadow-xl shadow-[#291d2610] lg:sticky lg:top-24">
-          <p className="px-4 pb-2 pt-3 text-[11px] font-extrabold uppercase tracking-[0.18em] text-[#92848a]">
+      <div className="mx-auto grid max-w-7xl gap-6 px-4 py-8 sm:px-6 lg:grid-cols-[240px_minmax(0,1fr)] lg:items-start lg:px-8 lg:py-10">
+        <aside className="rounded-2xl border border-outline-variant bg-white p-3 shadow-sm lg:sticky lg:top-24">
+          <p className="px-4 pb-2 pt-3 text-[11px] font-bold uppercase tracking-[0.18em] text-on-surface-variant">
             Tài khoản của tôi
           </p>
           <nav aria-label="Quản lý tài khoản" className="flex gap-1 overflow-x-auto lg:flex-col">
@@ -135,8 +136,8 @@ export function CustomerPortalView() {
                   className={
                     "inline-flex shrink-0 items-center gap-3 rounded-xl px-4 py-3 text-left text-sm font-semibold transition lg:w-full " +
                     (activeTab === section.id
-                      ? "bg-[#bd443a]/10 text-[#a73530]"
-                      : "text-[#655c63] hover:bg-[#f7f3ef] hover:text-[#231b23]")
+                      ? "bg-primary-container text-primary"
+                      : "text-on-surface-variant hover:bg-surface hover:text-on-surface")
                   }
                 >
                   <Icon className="size-4 shrink-0" />
@@ -145,17 +146,17 @@ export function CustomerPortalView() {
               )
             })}
           </nav>
-          <div className="mt-3 hidden border-t border-[#e7ddd7] px-2 pt-3 lg:block">
+          <div className="mt-3 hidden border-t border-outline-variant px-2 pt-3 lg:block">
             <Link
               href="/events"
-              className="flex items-center justify-between rounded-xl bg-[#231f2d] px-4 py-3 text-sm font-semibold text-white transition hover:bg-[#3a2c3d]"
+              className="flex items-center justify-between rounded-xl bg-on-surface px-4 py-3 text-sm font-semibold text-white transition hover:bg-on-surface/90"
             >
-              Khám phá sự kiện <ArrowUpRight className="size-4 text-[#ffad95]" />
+              Khám phá sự kiện <ArrowUpRight className="size-4 text-white/80" />
             </Link>
             <button
               type="button"
               onClick={logout}
-              className="mt-2 flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left text-sm font-semibold text-[#9a4b4b] transition hover:bg-[#fff1ef]"
+              className="mt-2 flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left text-sm font-semibold text-red-700 transition hover:bg-red-50"
             >
               <LogOut className="size-4" /> Đăng xuất
             </button>
@@ -163,15 +164,10 @@ export function CustomerPortalView() {
         </aside>
 
         <main className="min-w-0">
-          <div className="mb-6 flex flex-wrap items-end justify-between gap-3 rounded-3xl border border-[#e7ddd7] bg-white px-6 py-5 shadow-sm sm:px-7">
+          <div className="mb-6 flex flex-wrap items-end justify-between gap-3 px-1">
             <div>
-              <span className="text-[11px] font-extrabold uppercase tracking-[0.16em] text-[#bd443a]">
-                Quản lý tài khoản
-              </span>
-              <h2 className="mt-1 text-2xl font-extrabold tracking-tight text-[#231b23]">
-                {current.title}
-              </h2>
-              <p className="mt-1 text-sm text-[#74696e]">{current.description}</p>
+              <h2 className="text-2xl font-bold tracking-tight text-on-surface">{current.title}</h2>
+              <p className="mt-1 text-sm text-on-surface-variant">{current.description}</p>
             </div>
           </div>
           {activeTab === "tickets" && <CustomerTicketsPanel />}
@@ -179,10 +175,10 @@ export function CustomerPortalView() {
           {activeTab === "invoices" && <CustomerInvoicesPanel />}
           {activeTab === "profile" && <CustomerProfilePanel />}
           <div className="mt-6 flex justify-center gap-4 text-xs lg:hidden">
-            <Link href="/events" className="font-semibold text-[#a73530]">
+            <Link href="/events" className="font-semibold text-primary">
               Khám phá sự kiện
             </Link>
-            <button type="button" onClick={logout} className="font-semibold text-[#9a4b4b]">
+            <button type="button" onClick={logout} className="font-semibold text-red-700">
               Đăng xuất
             </button>
           </div>

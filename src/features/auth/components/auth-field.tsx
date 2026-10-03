@@ -13,6 +13,7 @@ interface AuthFieldProps {
   required?: boolean
   disabled?: boolean
   compact?: boolean
+  hint?: string
   onToggleVisibility?: () => void
 }
 
@@ -28,21 +29,24 @@ export function AuthField({
   required,
   disabled,
   compact,
+  hint,
   onToggleVisibility,
 }: AuthFieldProps) {
   const visible = type === "text"
   return (
     <div>
-      <label
-        className={`block text-sm font-medium text-gray-700 ${compact ? "mb-1" : "mb-1.5"}`}
-        htmlFor={id}
-      >
+      <label className="mb-2 block text-sm font-medium text-foreground" htmlFor={id}>
         {label}
-        {compact && required && <span className="text-red-500"> *</span>}
+        {required && (
+          <span className="ml-1 text-primary" aria-hidden="true">
+            *
+          </span>
+        )}
       </label>
-      <div className="relative">
+      <div className="group relative">
         <Icon
-          className={`absolute left-3.5 top-1/2 -translate-y-1/2 ${compact ? "size-4" : "size-5"} text-gray-400 pointer-events-none`}
+          aria-hidden="true"
+          className="pointer-events-none absolute top-1/2 left-4 size-[18px] -translate-y-1/2 text-muted transition-colors group-focus-within:text-primary"
         />
         <input
           id={id}
@@ -53,27 +57,33 @@ export function AuthField({
           required={required}
           disabled={disabled}
           value={value}
+          aria-describedby={hint ? `${id}-hint` : undefined}
           onChange={(event) => onChange(event.target.value)}
-          className={`w-full ${compact ? "pl-10 py-2.5" : "pl-11 py-3"} ${onToggleVisibility ? "pr-11" : "pr-4"} bg-[#f9f9ff] border border-gray-200 rounded-xl text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition disabled:opacity-60`}
+          className={`w-full ${compact ? "h-12" : "h-14"} rounded-xl border border-border bg-[#fcfcfd] pl-11 ${onToggleVisibility ? "pr-14" : "pr-4"} text-base text-foreground outline-none transition placeholder:text-sm placeholder:text-muted hover:border-slate-300 focus:border-primary focus:bg-white focus:ring-4 focus:ring-primary/10 disabled:cursor-not-allowed disabled:bg-surface disabled:opacity-60 sm:text-sm`}
         />
         {onToggleVisibility && (
           <button
             type="button"
             disabled={disabled}
             onClick={onToggleVisibility}
-            className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-gray-400 hover:text-gray-600 transition cursor-pointer"
+            className="absolute inset-y-0 right-0 flex w-12 items-center justify-center rounded-r-xl text-muted transition hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed"
             aria-label={visible ? "Ẩn mật khẩu" : "Hiện mật khẩu"}
             aria-controls={id}
             aria-pressed={visible}
           >
             {visible ? (
-              <Eye className={compact ? "size-4" : "size-5"} />
+              <Eye className="size-4" aria-hidden="true" />
             ) : (
-              <EyeOff className={compact ? "size-4" : "size-5"} />
+              <EyeOff className="size-4" aria-hidden="true" />
             )}
           </button>
         )}
       </div>
+      {hint && (
+        <p id={`${id}-hint`} className="mt-2 text-xs leading-5 text-muted">
+          {hint}
+        </p>
+      )}
     </div>
   )
 }

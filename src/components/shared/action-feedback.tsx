@@ -23,7 +23,7 @@ export function ActionFeedback({
   return (
     <div
       role={message.type === "error" ? "alert" : "status"}
-      className={`p-4 rounded-2xl text-sm flex items-center justify-between border ${color}`}
+      className={`se-feedback-enter p-4 rounded-2xl text-sm flex items-center justify-between border ${color}`}
     >
       <div className="flex items-center gap-2">
         <Icon className="size-4 shrink-0" />

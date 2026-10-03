@@ -1,6 +1,6 @@
 "use client"
 
-import { Calendar, Loader2, MapPin, ShieldCheck, Ticket } from "lucide-react"
+import { ArrowUpRight, Loader2, Ticket } from "lucide-react"
 import { useCheckout } from "@/features/booking/hooks/use-checkout"
 
 type Props = Pick<
@@ -16,105 +16,85 @@ export function CheckoutSummary({
   totalAmount,
   items,
 }: Props) {
+  const ticketCount = items.reduce((total, item) => total + (item.quantity || 0), 0)
   return (
-    <>
-      <div className="lg:col-span-5">
-        <div className="bg-white rounded-3xl p-6 border border-outline-variant/60 shadow-md space-y-6 sticky top-6">
-          <h3 className="text-base font-bold text-on-surface border-b border-outline-variant/60 pb-4">
-            Tóm tắt đơn hàng
-          </h3>
-
-          {/* Event mini card */}
-          <div className="flex items-center gap-3">
-            <div className="size-20 rounded-xl bg-primary/10 text-primary flex items-center justify-center shrink-0">
-              <Ticket className="size-8" aria-hidden="true" />
-            </div>
-            <div className="space-y-1 min-w-0">
-              <h4 className="text-sm font-bold text-on-surface line-clamp-2">{eventName}</h4>
-              <p className="text-xs text-on-surface-variant flex items-center gap-1">
-                <Calendar className="size-3.5 text-primary shrink-0" />
-                <span>Sự kiện trực tiếp</span>
-              </p>
-              <p className="text-xs text-on-surface-variant flex items-center gap-1 truncate">
-                <MapPin className="size-3.5 text-primary shrink-0" />
-                <span>Địa điểm theo thông tin sự kiện</span>
-              </p>
-            </div>
+    <aside aria-label="Tóm tắt đơn hàng" className="lg:col-span-5 lg:sticky lg:top-24">
+      <div className="overflow-hidden rounded-2xl border border-outline-variant bg-white shadow-sm">
+        <div className="flex items-center gap-3 border-b border-outline-variant px-5 py-5 sm:px-6">
+          <div className="flex size-10 items-center justify-center rounded-xl bg-primary-container text-primary">
+            <Ticket className="size-5" />
           </div>
-
-          {/* Ticket Breakdown */}
-          <div className="p-4 rounded-2xl bg-surface-container-low space-y-2.5 border border-outline-variant/60 text-xs">
+          <div>
+            <h2 className="text-base font-bold">Đơn hàng của bạn</h2>
+            <p className="mt-0.5 text-xs text-on-surface-variant">
+              {ticketCount} vé trong phiên giữ chỗ
+            </p>
+          </div>
+        </div>
+        <div className="space-y-5 px-5 py-5 sm:px-6">
+          <h3 className="text-base font-semibold leading-6">{eventName}</h3>
+          <div className="space-y-4">
             {items.length > 0 ? (
               items.map((item, idx) => (
                 <div
                   key={item.id || idx}
-                  className="space-y-1 pb-2 border-b border-outline-variant/40 last:border-b-0 last:pb-0"
+                  className="space-y-2 border-b border-outline-variant pb-4 last:border-0 last:pb-0"
                 >
-                  <div className="flex justify-between font-bold text-on-surface">
-                    <span>{item.ticketTypeName || "Hạng vé"}</span>
-                    <span>x {item.quantity}</span>
+                  <div className="flex items-start justify-between gap-4">
+                    <p className="text-sm font-semibold">{item.ticketTypeName || "Hạng vé"}</p>
+                    <span className="shrink-0 rounded-md bg-surface px-2 py-1 text-xs font-medium">
+                      {item.quantity} vé
+                    </span>
                   </div>
-                  {item.seatCode && (
-                    <div className="text-primary font-semibold">Số ghế: {item.seatCode}</div>
-                  )}
-                  <div className="flex justify-between text-on-surface-variant">
-                    <span>Đơn giá</span>
-                    <span>{(item.unitPrice || 0).toLocaleString("vi-VN")} ₫</span>
-                  </div>
+                  {item.seatCode && <p className="text-xs text-primary">Ghế {item.seatCode}</p>}
+                  <p className="text-sm tabular-nums text-on-surface-variant">
+                    {(item.unitPrice || 0).toLocaleString("vi-VN")} ₫{" "}
+                    <span className="text-xs">/ vé</span>
+                  </p>
                 </div>
               ))
             ) : (
-              <div className="text-on-surface-variant py-2 text-center">
+              <p className="rounded-xl bg-surface p-4 text-center text-sm text-on-surface-variant">
                 Chưa có vé trong phiên giữ chỗ.
-              </div>
+              </p>
             )}
           </div>
-
-          {/* Financial Calculation */}
-          <div className="space-y-2 text-xs text-on-surface-variant border-t border-outline-variant/60 pt-4">
-            <div className="flex justify-between">
-              <span>Tạm tính</span>
-              <span>{totalAmount.toLocaleString("vi-VN")} ₫</span>
+        </div>
+        <div className="space-y-5 border-t border-outline-variant bg-surface/40 px-5 py-5 sm:px-6">
+          <div className="flex flex-wrap items-end justify-between gap-3">
+            <div>
+              <p className="text-xs text-on-surface-variant">Tổng thanh toán</p>
+              <p className="mt-1 text-sm font-medium">{ticketCount} vé</p>
             </div>
-            <div className="flex justify-between">
-              <span>Phí cổng thanh toán VNPay</span>
-              <span className="text-green-600 font-semibold">0 ₫ (Miễn phí)</span>
-            </div>
-            <div className="flex justify-between text-base font-extrabold text-on-surface pt-3 border-t border-outline-variant/60">
-              <span>Tổng thanh toán</span>
-              <span className="text-2xl font-black text-primary">
-                {totalAmount.toLocaleString("vi-VN")} ₫
-              </span>
-            </div>
+            <p className="text-2xl font-bold tabular-nums tracking-tight">
+              {totalAmount.toLocaleString("vi-VN")} <span className="text-base">₫</span>
+            </p>
           </div>
-
-          {/* Pay Button */}
           <button
             type="button"
             onClick={handlePayment}
             disabled={isProcessing || isExpired}
-            className="w-full h-12 bg-primary hover:bg-primary-hover text-white text-sm font-bold rounded-xl shadow-md transition flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-primary px-4 py-3 text-sm font-semibold text-white transition-colors hover:bg-primary-hover disabled:cursor-not-allowed disabled:bg-primary/40"
           >
             {isProcessing ? (
               <>
                 <Loader2 className="size-4 animate-spin" />
-                <span>Đang tạo đơn & kết nối VNPay...</span>
+                <span>Đang kết nối VNPAY...</span>
               </>
             ) : (
-              <span>
-                {isExpired
-                  ? "Phiên giữ chỗ không còn thanh toán được"
-                  : "Thanh toán ngay qua VNPay"}
-              </span>
+              <>
+                <span>
+                  {isExpired ? "Phiên giữ chỗ không còn thanh toán được" : "Tiếp tục đến VNPAY"}
+                </span>
+                {!isExpired && <ArrowUpRight className="size-4 shrink-0" />}
+              </>
             )}
           </button>
-
-          <div className="flex items-center justify-center gap-1.5 text-xs text-on-surface-variant text-center">
-            <ShieldCheck className="size-4 text-green-600" />
-            <span>Bảo mật cổng thanh toán chuẩn quốc tế SSL / TLS</span>
-          </div>
+          <p className="text-center text-xs leading-5 text-on-surface-variant">
+            Kiểm tra tổng tiền trước khi chuyển đến cổng thanh toán.
+          </p>
         </div>
       </div>
-    </>
+    </aside>
   )
 }

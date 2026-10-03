@@ -18,6 +18,7 @@ export function AreaSelector({ areas, selectedAreaId, setSelectedAreaId }: Props
             <button
               key={area.id}
               type="button"
+              aria-pressed={isSelected}
               onClick={() => setSelectedAreaId(area.id || "")}
               className={`p-3.5 rounded-2xl border text-left transition cursor-pointer ${
                 isSelected

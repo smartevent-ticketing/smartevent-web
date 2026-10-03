@@ -10,71 +10,60 @@ type Props = Pick<
 
 export function CheckoutContact({ customerNote, setCustomerNote, fullName, email, phone }: Props) {
   return (
-    <>
-      <div className="bg-white rounded-3xl p-6 border border-outline-variant/60 shadow-sm space-y-6">
-        <div className="flex items-center justify-between border-b border-outline-variant/60 pb-4">
-          <h3 className="text-base font-bold text-on-surface">Thông tin tài khoản nhận vé</h3>
-          <span className="text-xs text-primary font-semibold">
-            Vé điện tử và hóa đơn được gửi qua email tài khoản
-          </span>
+    <section
+      aria-labelledby="checkout-contact-heading"
+      className="space-y-5 rounded-2xl border border-outline-variant bg-white p-5 shadow-sm sm:p-6"
+    >
+      <div className="flex items-center gap-3">
+        <div className="flex size-10 items-center justify-center rounded-xl bg-surface text-on-surface">
+          <User className="size-5" />
         </div>
-
-        <div className="space-y-4">
-          <div>
-            <label className="text-xs font-bold text-on-surface block mb-1.5">
-              Họ và tên tài khoản
-            </label>
-            <div className="relative">
-              <User className="absolute left-3.5 top-1/2 -translate-y-1/2 size-4 text-on-surface-variant" />
-              <div className="h-11 pl-10 pr-4 rounded-xl border border-outline-variant/80 bg-surface-container-low text-sm flex items-center">
-                {fullName || "Chưa cập nhật"}
-              </div>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label className="text-xs font-bold text-on-surface block mb-1.5">
-                Email tài khoản nhận vé
-              </label>
-              <div className="relative">
-                <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 size-4 text-on-surface-variant" />
-                <div className="h-11 pl-10 pr-4 rounded-xl border border-outline-variant/80 bg-surface-container-low text-sm flex items-center break-all">
-                  {email || "Chưa cập nhật"}
-                </div>
-              </div>
-            </div>
-
-            <div>
-              <label className="text-xs font-bold text-on-surface block mb-1.5">
-                Số điện thoại tài khoản
-              </label>
-              <div className="relative">
-                <Phone className="absolute left-3.5 top-1/2 -translate-y-1/2 size-4 text-on-surface-variant" />
-                <div className="h-11 pl-10 pr-4 rounded-xl border border-outline-variant/80 bg-surface-container-low text-sm flex items-center">
-                  {phone || "Chưa cập nhật"}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div>
-            <label className="text-xs font-bold text-on-surface block mb-1.5">
-              Ghi chú đơn hàng / Yêu cầu đặc biệt (tùy chọn)
-            </label>
-            <div className="relative">
-              <FileText className="absolute left-3.5 top-3 size-4 text-on-surface-variant" />
-              <textarea
-                rows={2}
-                value={customerNote}
-                onChange={(e) => setCustomerNote(e.target.value)}
-                placeholder="Nhập ghi chú cho ban tổ chức nếu có..."
-                className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-outline-variant/80 bg-white text-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none transition"
-              />
-            </div>
-          </div>
+        <div>
+          <h2 id="checkout-contact-heading" className="text-base font-bold">
+            Thông tin nhận vé
+          </h2>
+          <p className="mt-0.5 text-xs leading-5 text-on-surface-variant">
+            Thông tin từ tài khoản đang đăng nhập.
+          </p>
         </div>
       </div>
-    </>
+
+      <dl className="grid gap-4 sm:grid-cols-2">
+        <div className="rounded-xl border border-outline-variant bg-surface/50 p-4 sm:col-span-2">
+          <dt className="mb-2 text-xs text-on-surface-variant">Họ và tên</dt>
+          <dd className="text-sm font-semibold">{fullName || "Chưa cập nhật"}</dd>
+        </div>
+        <div className="min-w-0 rounded-xl border border-outline-variant bg-surface/50 p-4">
+          <dt className="mb-2 flex items-center gap-2 text-xs text-on-surface-variant">
+            <Mail className="size-3.5" /> Email tài khoản
+          </dt>
+          <dd className="break-all text-sm font-medium leading-6">{email || "Chưa cập nhật"}</dd>
+        </div>
+        <div className="rounded-xl border border-outline-variant bg-surface/50 p-4">
+          <dt className="mb-2 flex items-center gap-2 text-xs text-on-surface-variant">
+            <Phone className="size-3.5" /> Số điện thoại
+          </dt>
+          <dd className="text-sm font-medium leading-6">{phone || "Chưa cập nhật"}</dd>
+        </div>
+      </dl>
+
+      <div className="border-t border-outline-variant pt-5">
+        <label
+          htmlFor="checkout-note"
+          className="mb-2 flex items-center gap-2 text-sm font-semibold"
+        >
+          <FileText className="size-4 text-on-surface-variant" /> Ghi chú cho ban tổ chức{" "}
+          <span className="text-xs font-normal text-on-surface-variant">(tùy chọn)</span>
+        </label>
+        <textarea
+          id="checkout-note"
+          rows={3}
+          value={customerNote}
+          onChange={(e) => setCustomerNote(e.target.value)}
+          placeholder="Thông tin bổ sung cho đơn hàng của bạn..."
+          className="w-full resize-y rounded-xl border border-outline-variant bg-white px-4 py-3 text-sm leading-6 outline-none transition-colors placeholder:text-on-surface-variant/70 focus:border-primary focus:ring-2 focus:ring-primary/10"
+        />
+      </div>
+    </section>
   )
 }

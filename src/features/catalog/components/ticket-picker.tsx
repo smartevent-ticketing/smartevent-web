@@ -1,8 +1,8 @@
 "use client"
 
 import Link from "next/link"
-import { AlertCircle, Share2, ShieldCheck, Ticket } from "lucide-react"
-import { useEventDetail } from "@/features/catalog/hooks/use-event-detail"
+import { AlertCircle, ArrowRight, Check, Clock3, Minus, Plus, Share2, Ticket } from "lucide-react"
+import type { useEventDetail } from "@/features/catalog/hooks/use-event-detail"
 
 type Props = Pick<
   ReturnType<typeof useEventDetail>,
@@ -37,136 +37,205 @@ export function TicketPicker({
   targetEventId,
 }: Props) {
   return (
-    <>
-      <div className="lg:col-span-4 sticky top-24 space-y-4">
-        <div className="space-y-6 rounded-3xl border border-white/15 bg-[#242331] p-6 shadow-xl shadow-black/20">
-          <div className="flex items-center justify-between border-b border-white/15 pb-4">
-            <div>
-              <span className="text-xs text-[#aaa6b7]">
-                {isSaleActive ? "Chọn hạng vé" : "Tình trạng"}
-              </span>
-              <h3 className="text-lg font-bold text-white">
-                {isSaleActive ? "Đặt vé ngay" : isEnded ? "Đã kết thúc" : "Chưa mở bán"}
-              </h3>
-            </div>
-            <div className="flex items-center gap-2">
-              {shared && <span className="text-xs font-medium text-[#aee8c3]">Đã sao chép!</span>}
-              <button
-                type="button"
-                onClick={handleShare}
-                className="cursor-pointer rounded-full p-2 text-[#bcb7c4] transition hover:bg-white/10 hover:text-white"
-                aria-label="Chia sẻ sự kiện"
-              >
-                <Share2 className="size-5" />
-              </button>
-            </div>
+    <div className="overflow-hidden rounded-2xl border border-border bg-white shadow-[0_12px_40px_-20px_rgba(24,34,48,0.18)]">
+      <div className="flex items-center justify-between gap-4 border-b border-border px-5 py-5 sm:px-6">
+        <div className="flex items-center gap-3">
+          <span className="flex size-10 items-center justify-center rounded-xl bg-primary-container text-primary">
+            <Ticket className="size-5" aria-hidden="true" />
+          </span>
+          <div>
+            <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-muted">
+              {isSaleActive ? "Vé tham gia" : "Tình trạng sự kiện"}
+            </p>
+            <h2 className="mt-1 text-lg font-bold tracking-tight text-foreground">
+              {isSaleActive ? "Chọn vé của bạn" : isEnded ? "Đã kết thúc" : "Chưa mở bán"}
+            </h2>
           </div>
+        </div>
+        <button
+          type="button"
+          onClick={handleShare}
+          aria-label="Chia sẻ sự kiện"
+          className="flex size-10 shrink-0 items-center justify-center rounded-full border border-border text-muted transition-colors hover:border-primary/30 hover:bg-primary-container hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+        >
+          <Share2 className="size-4" aria-hidden="true" />
+        </button>
+      </div>
 
-          {/* Condition: Not Active */}
-          {!isSaleActive ? (
-            <div className="space-y-3 rounded-2xl border border-white/15 bg-white/5 p-6 text-center">
-              <AlertCircle className="mx-auto size-8 text-[#bcb7c4]" />
-              <h4 className="text-sm font-bold text-white">
-                {isEnded ? "Sự kiện đã kết thúc" : "Chưa mở bán hoặc đợt bán đã kết thúc"}
-              </h4>
-              <p className="text-xs leading-relaxed text-[#bcb7c4]">
-                {isEnded
-                  ? "Sự kiện này đã diễn ra. Vé mới không còn được phát hành."
-                  : "Sự kiện hiện chưa có đợt bán vé nào đang hoạt động. Vui lòng quay lại sau khi ban tổ chức mở bán."}
-              </p>
-              <Link
-                href="/events"
-                className="mt-2 inline-block text-xs font-semibold text-[#ffad95] hover:underline"
-              >
-                Xem các sự kiện khác
-              </Link>
-            </div>
-          ) : (
-            <>
-              {/* Ticket Tiers Selection */}
-              <div className="space-y-3">
+      <div className="space-y-6 p-5 sm:p-6">
+        {shared && (
+          <p
+            role="status"
+            className="rounded-lg bg-emerald-50 px-3 py-2 text-xs font-medium text-emerald-700"
+          >
+            Đã sao chép liên kết sự kiện.
+          </p>
+        )}
+
+        {!isSaleActive ? (
+          <div className="rounded-xl border border-border bg-surface px-4 py-7 text-center">
+            <AlertCircle className="mx-auto size-7 text-slate-400" aria-hidden="true" />
+            <h3 className="mt-4 text-sm font-semibold text-foreground">
+              {isEnded ? "Sự kiện đã kết thúc" : "Hiện chưa có vé đang mở bán"}
+            </h3>
+            <p className="mt-2 text-xs leading-6 text-muted">
+              {isEnded
+                ? "Sự kiện này đã diễn ra. Vé mới không còn được phát hành."
+                : "Sự kiện hiện chưa có đợt bán vé nào đang hoạt động. Vui lòng quay lại sau khi ban tổ chức mở bán."}
+            </p>
+            <Link
+              href="/events"
+              className="se-text-link mt-5 inline-flex items-center gap-2 text-xs font-semibold text-primary hover:underline"
+            >
+              Khám phá sự kiện khác
+              <ArrowRight className="size-3.5" aria-hidden="true" />
+            </Link>
+          </div>
+        ) : (
+          <>
+            <fieldset>
+              <legend className="mb-3 text-sm font-semibold text-foreground">Hạng vé</legend>
+              <div className="max-h-[360px] space-y-3 overflow-y-auto pr-1">
                 {availableTiers.map((tier) => {
                   const isSelected = effectiveTierId === tier.id
                   return (
-                    <div
+                    <label
                       key={tier.id}
-                      onClick={() => setSelectedTierId(tier.id)}
-                      className={`p-4 rounded-2xl border transition cursor-pointer ${
-                        isSelected
-                          ? "border-[#ff9479] bg-[#ff9479]/10 shadow-xs"
-                          : "border-white/15 bg-white/5 hover:border-[#ff9479]/50"
-                      }`}
+                      className={
+                        "relative block cursor-pointer rounded-xl border p-4 transition-colors focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-primary " +
+                        (isSelected
+                          ? "border-primary bg-primary-container"
+                          : "border-border bg-white hover:border-primary/40 hover:bg-surface")
+                      }
                     >
-                      <div className="flex items-center justify-between mb-1">
-                        <h4 className="text-sm font-bold text-white">{tier.name}</h4>
-                        <span className="text-sm font-bold text-[#ffad95]">
-                          {tier.price.toLocaleString("vi-VN")} ₫
+                      <input
+                        type="radio"
+                        name="event-ticket-tier"
+                        value={tier.id}
+                        checked={isSelected}
+                        onChange={() => setSelectedTierId(tier.id)}
+                        className="sr-only"
+                      />
+                      <span className="flex items-start justify-between gap-3">
+                        <span className="flex min-w-0 items-start gap-2.5">
+                          <span
+                            className={
+                              "mt-0.5 flex size-4 shrink-0 items-center justify-center rounded-full border " +
+                              (isSelected
+                                ? "border-primary bg-primary text-on-primary"
+                                : "border-slate-300 bg-white")
+                            }
+                            aria-hidden="true"
+                          >
+                            {isSelected && <Check className="size-2.5" strokeWidth={3} />}
+                          </span>
+                          <span className="break-words text-sm font-semibold leading-6 text-foreground">
+                            {tier.name}
+                          </span>
                         </span>
-                      </div>
-                      <p className="text-xs text-[#bcb7c4]">{tier.description}</p>
-                      <div className="mt-2 flex items-center justify-between text-[11px]">
-                        <span className="font-medium text-[#aee8c3]">
-                          {tier.available > 0 ? `Còn ${tier.available} vé` : "Hết vé"}
+                        <span className="shrink-0 pt-0.5 text-sm font-bold text-primary">
+                          {tier.price > 0 ? tier.price.toLocaleString("vi-VN") + " ₫" : "Miễn phí"}
                         </span>
+                      </span>
+                      {tier.description && (
+                        <span className="mt-2 block break-words text-xs leading-6 text-muted">
+                          {tier.description}
+                        </span>
+                      )}
+                      <span className="mt-3 flex flex-wrap items-center justify-between gap-2 text-[11px]">
                         {tier.areaName && (
-                          <span className="font-medium text-[#bcb7c4]">{tier.areaName}</span>
+                          <span className="rounded-md border border-border bg-white/70 px-2 py-1 text-muted">
+                            {tier.areaName}
+                          </span>
                         )}
-                      </div>
-                    </div>
+                        <span
+                          className={
+                            "ml-auto font-medium " +
+                            (tier.available > 0 ? "text-emerald-700" : "text-muted")
+                          }
+                        >
+                          {tier.available > 0 ? "Còn " + tier.available + " vé" : "Hết vé"}
+                        </span>
+                      </span>
+                    </label>
                   )
                 })}
               </div>
+            </fieldset>
 
-              {/* Quantity Counter */}
-              <div className="flex items-center justify-between pt-2">
-                <span className="text-sm font-medium text-white">Số lượng</span>
-                <div className="flex items-center overflow-hidden rounded-xl border border-white/15">
-                  <button
-                    type="button"
-                    onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                    className="cursor-pointer px-3.5 py-1.5 text-base font-bold text-white transition hover:bg-white/10"
-                  >
-                    -
-                  </button>
-                  <span className="min-w-8 px-3 py-1.5 text-center text-sm font-bold text-white">
-                    {quantity}
-                  </span>
-                  <button
-                    type="button"
-                    onClick={() => setQuantity(Math.min(maxAllowedQty, quantity + 1))}
-                    className="cursor-pointer px-3.5 py-1.5 text-base font-bold text-white transition hover:bg-white/10"
-                  >
-                    +
-                  </button>
-                </div>
+            <div className="flex items-center justify-between gap-4">
+              <div>
+                <p className="text-sm font-semibold text-foreground">Số lượng</p>
+                <p className="mt-1 text-[11px] text-muted">Tối đa {maxAllowedQty} vé / lần đặt</p>
               </div>
-
-              {/* Price Summary & Checkout Button */}
-              <div className="space-y-3 border-t border-white/15 pt-4">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-[#bcb7c4]">Tổng tiền</span>
-                  <span className="text-2xl font-extrabold text-[#ffad95]">
-                    {totalPrice.toLocaleString("vi-VN")} ₫
-                  </span>
-                </div>
-
-                <Link
-                  href={`/reservations/${targetEventId}?tier=${currentTier?.ticketTypeId || currentTier?.id}&phase=${currentTier?.salePhaseId}&qty=${quantity}`}
-                  className="flex h-12 w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-[#ff8063] text-sm font-bold text-[#261621] transition hover:bg-[#ff9b83]"
+              <div className="flex items-center rounded-xl border border-border bg-white p-1">
+                <button
+                  type="button"
+                  aria-label="Giảm số lượng vé"
+                  onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                  disabled={quantity <= 1}
+                  className="flex size-9 items-center justify-center rounded-lg text-foreground transition-colors hover:bg-surface focus-visible:outline-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:text-slate-300"
                 >
-                  <Ticket className="size-4" />
-                  <span>Tiến hành giữ chỗ</span>
-                </Link>
-
-                <div className="flex items-center justify-center gap-1.5 text-center text-xs text-[#bcb7c4]">
-                  <ShieldCheck className="size-4 text-[#aee8c3]" />
-                  <span>Vé được giữ chỗ trong 10 phút sau khi nhấn</span>
-                </div>
+                  <Minus className="size-4" aria-hidden="true" />
+                </button>
+                <span
+                  aria-live="polite"
+                  aria-atomic="true"
+                  className="min-w-10 text-center text-sm font-semibold tabular-nums text-foreground"
+                >
+                  {quantity}
+                </span>
+                <button
+                  type="button"
+                  aria-label="Tăng số lượng vé"
+                  onClick={() => setQuantity(Math.min(maxAllowedQty, quantity + 1))}
+                  disabled={quantity >= maxAllowedQty}
+                  className="flex size-9 items-center justify-center rounded-lg text-foreground transition-colors hover:bg-surface focus-visible:outline-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:text-slate-300"
+                >
+                  <Plus className="size-4" aria-hidden="true" />
+                </button>
               </div>
-            </>
-          )}
-        </div>
+            </div>
+
+            <div className="space-y-4 border-t border-border pt-5">
+              <div className="flex items-center justify-between gap-3 text-xs text-muted">
+                <span>
+                  {currentTier?.name} × {quantity}
+                </span>
+                <span className="shrink-0 tabular-nums">
+                  {totalPrice.toLocaleString("vi-VN")} ₫
+                </span>
+              </div>
+              <div className="flex items-end justify-between gap-3">
+                <span className="text-sm font-semibold text-foreground">Tổng tiền</span>
+                <span className="text-2xl font-bold tracking-tight tabular-nums text-primary">
+                  {totalPrice.toLocaleString("vi-VN")} <span className="text-base">₫</span>
+                </span>
+              </div>
+              <Link
+                href={
+                  "/reservations/" +
+                  targetEventId +
+                  "?tier=" +
+                  (currentTier?.ticketTypeId || currentTier?.id) +
+                  "&phase=" +
+                  currentTier?.salePhaseId +
+                  "&qty=" +
+                  quantity
+                }
+                className="se-button flex min-h-12 w-full items-center justify-center gap-3 rounded-xl bg-primary px-4 py-3 text-sm font-semibold text-on-primary hover:bg-primary-hover"
+              >
+                <span>Tiến hành giữ chỗ</span>
+                <ArrowRight className="size-4" aria-hidden="true" />
+              </Link>
+              <p className="flex items-start justify-center gap-2 text-[11px] leading-5 text-muted">
+                <Clock3 className="mt-0.5 size-3.5 shrink-0 text-primary" aria-hidden="true" />
+                <span>Chỗ được giữ trong 10 phút sau khi xác nhận ở bước tiếp theo.</span>
+              </p>
+            </div>
+          </>
+        )}
       </div>
-    </>
+    </div>
   )
 }

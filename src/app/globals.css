@@ -2,29 +2,33 @@
 
 @theme {
   --font-sans: var(--font-be-vietnam), Arial, sans-serif;
-  --color-primary: #bd443a;
-  --color-primary-hover: #a73530;
-  --color-primary-container: #ff8368;
+  --color-primary: #c74b31;
+  --color-primary-hover: #a93c26;
+  --color-primary-container: #fff0ea;
   --color-on-primary: #ffffff;
-  --color-on-primary-container: #24141c;
+  --color-on-primary-container: #963923;
 
-  --color-surface: #f8f5f1;
-  --color-surface-dim: #ddd6d1;
-  --color-surface-bright: #fffaf6;
+  --color-background: #f7f8fa;
+  --color-foreground: #182230;
+  --color-muted: #667085;
+  --color-border: #e4e7ec;
+  --color-surface: #f7f8fa;
+  --color-surface-dim: #eaecf0;
+  --color-surface-bright: #ffffff;
   --color-surface-container-lowest: #ffffff;
-  --color-surface-container-low: #f4eee9;
-  --color-surface-container: #ede4de;
-  --color-surface-container-high: #e8ddd6;
-  --color-surface-container-highest: #e1d4cc;
+  --color-surface-container-low: #f2f4f7;
+  --color-surface-container: #eaecf0;
+  --color-surface-container-high: #e4e7ec;
+  --color-surface-container-highest: #d0d5dd;
 
-  --color-on-surface: #231b23;
-  --color-on-surface-variant: #625960;
-  --color-outline: #80747b;
-  --color-outline-variant: #d6c9c5;
+  --color-on-surface: #182230;
+  --color-on-surface-variant: #667085;
+  --color-outline: #98a2b3;
+  --color-outline-variant: #e4e7ec;
 
-  --color-secondary: #695b63;
-  --color-secondary-container: #f4dfd4;
-  --color-on-secondary-container: #5d3541;
+  --color-secondary: #475467;
+  --color-secondary-container: #f2f4f7;
+  --color-on-secondary-container: #344054;
 
   --color-error: #ba1a1a;
   --color-error-container: #ffdad6;
@@ -35,14 +39,15 @@
 }
 
 html {
-  background: #f8f5f1;
-  color: #231b23;
+  background: var(--color-background);
+  color: var(--color-foreground);
+  scroll-padding-top: 6rem;
 }
 
 body {
   margin: 0;
-  background: #f8f5f1;
-  color: #231b23;
+  background: var(--color-background);
+  color: var(--color-foreground);
   font-family: var(--font-be-vietnam), Arial, sans-serif;
 }
 
@@ -53,22 +58,22 @@ h3 {
 }
 
 .nightline-storefront {
-  background: #151521;
-  color: #f8f2ed;
+  background: var(--color-background);
+  color: var(--color-foreground);
 }
 
 .nightline-heading {
   font-family: var(--font-plus-jakarta), var(--font-be-vietnam), Arial, sans-serif;
-  font-weight: 800;
-  letter-spacing: -0.045em;
-  line-height: 1.12;
+  font-weight: 750;
+  letter-spacing: -0.04em;
+  line-height: 1.18;
 }
 
 .nightline-kicker {
-  color: #ff9479;
+  color: var(--color-primary);
   font-size: 0.7rem;
   font-weight: 800;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
 }
 
@@ -168,21 +173,20 @@ h3 {
 .nightline-event-card {
   min-width: 0;
   overflow: hidden;
-  border: 1px solid #3d384a;
-  border-radius: 18px;
-  background: #232330;
+  border: 1px solid var(--color-border);
+  border-radius: 20px;
+  background: #fff;
   transition:
     border-color 180ms ease,
     transform 180ms ease;
 }
 
 .nightline-event-card:hover {
-  border-color: #ff9479;
-  transform: translateY(-3px);
+  border-color: #d7a89b;
 }
 
 .nightline-event-card:focus-visible {
-  outline: 2px solid #ff9479;
+  outline: 2px solid var(--color-primary);
   outline-offset: 3px;
 }
 
@@ -306,4 +310,362 @@ h3 {
 .admin-table tbody tr:hover,
 .workspace-table tbody tr:hover {
   background: #fcf9f7;
+}
+
+/* Shared motion rhythm: quick feedback, softer entrances, no layout animation. */
+:root {
+  --se-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --se-feedback: 220ms;
+  --se-entrance: 680ms;
+}
+
+.se-reveal {
+  transition:
+    opacity var(--se-entrance) var(--se-ease),
+    transform var(--se-entrance) var(--se-ease);
+  transition-delay: var(--se-delay, 0ms);
+}
+
+.se-reveal[data-motion-state="pending"] {
+  opacity: 0;
+  transform: translateY(24px);
+}
+
+.se-reveal[data-motion-state="visible"] {
+  opacity: 1;
+  transform: none;
+}
+
+.se-hero-enter,
+.se-auth-enter {
+  animation: se-enter var(--se-entrance) var(--se-ease) both;
+}
+
+.se-hero-enter:focus-within,
+.se-auth-enter:focus-within {
+  animation: none;
+}
+
+.se-hero-glow {
+  animation: se-glow-arrive 2400ms var(--se-ease) both;
+}
+
+.se-home-hero::after {
+  position: absolute;
+  content: "";
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent, #c74b311a, transparent);
+}
+
+.se-gradient-text {
+  color: var(--color-primary);
+  background: linear-gradient(105deg, #a93c26 0%, #df6a4b 58%, #c74b31 100%);
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.se-spark {
+  animation: se-spark-arrive 1100ms var(--se-ease) both;
+}
+
+.se-search-shell {
+  transition:
+    border-color 280ms ease,
+    box-shadow 280ms ease,
+    background-color 280ms ease;
+}
+
+.se-search-shell:focus-within {
+  border-color: #d99480;
+  background: #fff;
+  box-shadow:
+    0 0 0 4px #c74b3108,
+    0 16px 40px #18223008;
+}
+
+.se-button,
+.se-chip,
+.nightline-control,
+.admin-primary-button,
+.admin-secondary-button,
+.workspace-primary-button,
+.workspace-secondary-button {
+  transition:
+    background-color var(--se-feedback) ease,
+    color var(--se-feedback) ease,
+    border-color var(--se-feedback) ease,
+    box-shadow 320ms var(--se-ease),
+    transform 320ms var(--se-ease);
+}
+
+.se-button > svg,
+.se-text-link > svg,
+.se-card-arrow {
+  transition: transform 320ms var(--se-ease);
+}
+
+.se-chip:focus-visible,
+.se-button:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 4px;
+}
+
+.se-category-card,
+.se-benefit-card {
+  transition:
+    opacity var(--se-entrance) var(--se-ease),
+    transform 450ms var(--se-ease),
+    border-color 300ms ease,
+    background-color 300ms ease,
+    box-shadow 450ms var(--se-ease);
+  transition-delay: 0ms;
+}
+
+.se-benefit-card[data-motion-state="visible"] {
+  transition-delay: var(--se-delay, 0ms), var(--se-delay, 0ms), 0ms, 0ms, 0ms;
+}
+
+.nightline-event-card {
+  transition:
+    border-color 300ms ease,
+    box-shadow 450ms var(--se-ease),
+    transform 450ms var(--se-ease);
+}
+
+.nightline-event-card h3 {
+  transition: color 220ms ease;
+}
+
+.se-card-art {
+  transition: transform 750ms var(--se-ease);
+}
+
+.se-category-card > div {
+  transition:
+    background-color 300ms ease,
+    color 300ms ease,
+    transform 450ms var(--se-ease);
+}
+
+.se-nav-link {
+  position: relative;
+  border-bottom-color: transparent !important;
+}
+
+.se-nav-link::after {
+  position: absolute;
+  content: "";
+  height: 2px;
+  left: 0;
+  right: 0;
+  bottom: -5px;
+  background: var(--color-primary);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 350ms var(--se-ease);
+}
+
+.se-nav-link[aria-current="page"]::after,
+.se-nav-link:hover::after,
+.se-nav-link:focus-visible::after {
+  transform: scaleX(1);
+}
+
+.se-menu-enter {
+  animation: se-menu-in 230ms var(--se-ease);
+}
+
+.se-feedback-enter {
+  animation: se-feedback-in 200ms ease-out;
+}
+
+.se-auth-art {
+  animation: se-art-arrive 1600ms var(--se-ease);
+}
+
+.nightline-carousel-slide {
+  z-index: 1;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 800ms var(--se-ease);
+}
+
+.nightline-carousel-slide[data-active="true"] {
+  z-index: 2;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.nightline-carousel-art {
+  transform: scale(1.045);
+  transition: transform 1400ms var(--se-ease);
+}
+
+.nightline-carousel-slide[data-active="true"] .nightline-carousel-art {
+  transform: none;
+}
+
+.nightline-carousel-copy {
+  opacity: 0;
+  transform: translateY(16px);
+  transition:
+    opacity 650ms var(--se-ease),
+    transform 650ms var(--se-ease),
+    background-color 220ms ease;
+}
+
+.nightline-carousel-slide[data-active="true"] .nightline-carousel-copy {
+  opacity: 1;
+  transform: none;
+  transition-delay: var(--slide-delay, 0ms), var(--slide-delay, 0ms), 0ms;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .se-button:not(:disabled):hover,
+  .se-chip:hover {
+    transform: translateY(-2px);
+  }
+
+  .se-button:hover > svg,
+  .se-text-link:hover > svg {
+    transform: translateX(3px);
+  }
+
+  .nightline-event-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 32px #1822300c;
+  }
+
+  .nightline-event-card:hover .se-card-art {
+    transform: scale(1.045);
+  }
+
+  .nightline-event-card:hover .se-card-arrow {
+    transform: translate(2px, -2px);
+  }
+
+  .se-category-card:hover,
+  .se-benefit-card[data-motion-state="visible"]:hover {
+    transform: translateY(-3px);
+    border-color: #d7a89b;
+    box-shadow: 0 10px 24px #18223008;
+  }
+
+  .se-category-card:hover > div {
+    transform: rotate(-5deg) scale(1.04);
+  }
+
+  .nightline-control:not(:disabled):hover {
+    transform: translateY(-2px);
+  }
+}
+
+.nightline-event-card:focus-visible {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 4px #c74b3112;
+}
+
+.se-button:not(:disabled):active,
+.nightline-control:not(:disabled):active {
+  transform: translateY(1px);
+}
+
+@keyframes se-enter {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes se-menu-in {
+  from {
+    opacity: 0;
+    transform: translateY(-7px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes se-feedback-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes se-glow-arrive {
+  from {
+    opacity: 0;
+    transform: translate(45px, -25px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes se-spark-arrive {
+  from {
+    opacity: 0;
+    transform: rotate(-50deg) scale(0.65);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes se-art-arrive {
+  from {
+    transform: scale(1.055);
+  }
+  to {
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0ms !important;
+  }
+
+  .se-reveal[data-motion-state],
+  .se-hero-enter,
+  .se-auth-enter,
+  .se-category-card,
+  .se-benefit-card,
+  .se-card-art,
+  .nightline-carousel-art,
+  .nightline-carousel-copy,
+  .se-button,
+  .se-chip,
+  .nightline-control,
+  .nightline-event-card,
+  .se-card-arrow,
+  .se-category-card > div {
+    transform: none !important;
+  }
+
+  .se-reveal[data-motion-state] {
+    opacity: 1;
+  }
 }

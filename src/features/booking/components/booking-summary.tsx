@@ -1,6 +1,6 @@
 "use client"
 
-import { ArrowRight, Calendar, Loader2, MapPin, ShieldCheck } from "lucide-react"
+import { ArrowRight, Calendar, Loader2, MapPin, Timer } from "lucide-react"
 import { useSeatSelection } from "@/features/booking/hooks/use-seat-selection"
 
 type Props = Pick<
@@ -47,7 +47,7 @@ export function BookingSummary({
   return (
     <>
       <div className="w-full lg:w-[420px] flex flex-col gap-6">
-        <div className="bg-white rounded-3xl p-6 border border-outline-variant/60 shadow-lg space-y-6">
+        <div className="bg-white rounded-2xl p-5 sm:p-6 border border-outline-variant shadow-sm space-y-6">
           {/* Event Header Summary */}
           <div className="space-y-2 border-b border-outline-variant/60 pb-5">
             <h2 className="text-lg font-bold text-on-surface">Thông tin sự kiện</h2>
@@ -164,10 +164,6 @@ export function BookingSummary({
               <span>Đơn giá ({effectiveQty} vé)</span>
               <span>{totalPrice.toLocaleString("vi-VN")} ₫</span>
             </div>
-            <div className="flex items-center justify-between">
-              <span>Phí dịch vụ tiện ích</span>
-              <span className="text-green-600 font-semibold">Miễn phí</span>
-            </div>
             <div className="flex items-center justify-between text-base font-extrabold text-on-surface pt-2 border-t border-outline-variant/40">
               <span>Tổng thanh toán</span>
               <span className="text-primary text-xl font-extrabold">
@@ -192,15 +188,15 @@ export function BookingSummary({
               </>
             ) : (
               <>
-                <span>Xác nhận & Giữ chỗ 10 phút</span>
+                <span>Giữ vé & tiếp tục</span>
                 <ArrowRight className="size-4" />
               </>
             )}
           </button>
 
           <div className="flex items-center justify-center gap-1.5 text-xs text-on-surface-variant text-center">
-            <ShieldCheck className="size-4 text-green-600" />
-            <span>Ghế và vé được giữ an toàn trong 10 phút sau khi xác nhận</span>
+            <Timer className="size-4 shrink-0" />
+            <span>Thời hạn thanh toán hiển thị sau khi xác nhận giữ chỗ.</span>
           </div>
         </div>
       </div>

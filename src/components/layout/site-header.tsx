@@ -1,22 +1,13 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useRef, useState, type FormEvent } from "react"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
-import {
-  Asterisk,
-  ChevronDown,
-  LayoutDashboard,
-  LogOut,
-  Menu,
-  Search,
-  Shield,
-  User,
-  X,
-} from "lucide-react"
+import { ChevronDown, LayoutDashboard, LogOut, Menu, Search, Shield, User, X } from "lucide-react"
 
 import { useAuth } from "@/features/auth"
 import { UserAvatar } from "@/components/ui/user-avatar"
+import { SmartEventMark } from "@/components/brand/smartevent-mark"
 import { catalogUrl } from "@/features/catalog/model"
 
 export function SiteHeader() {
@@ -26,178 +17,206 @@ export function SiteHeader() {
   const [headerQuery, setHeaderQuery] = useState("")
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [userMenuOpen, setUserMenuOpen] = useState(false)
+  const mobileMenuButtonRef = useRef<HTMLButtonElement>(null)
+  const userMenuButtonRef = useRef<HTMLButtonElement>(null)
+  const userMenuRef = useRef<HTMLDivElement>(null)
 
-  // Chữ cái đầu tiên cho avatar placeholder
+  useEffect(() => {
+    if (!mobileMenuOpen && !userMenuOpen) return
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key !== "Escape") return
+      event.preventDefault()
+      if (mobileMenuOpen) {
+        setMobileMenuOpen(false)
+        mobileMenuButtonRef.current?.focus()
+      } else {
+        setUserMenuOpen(false)
+        userMenuButtonRef.current?.focus()
+      }
+    }
+    const closeOutsideAccount = (event: PointerEvent) => {
+      if (
+        userMenuOpen &&
+        event.target instanceof Node &&
+        !userMenuRef.current?.contains(event.target)
+      ) {
+        setUserMenuOpen(false)
+      }
+    }
+    document.addEventListener("keydown", closeOnEscape)
+    document.addEventListener("pointerdown", closeOutsideAccount)
+    return () => {
+      document.removeEventListener("keydown", closeOnEscape)
+      document.removeEventListener("pointerdown", closeOutsideAccount)
+    }
+  }, [mobileMenuOpen, userMenuOpen])
+
   const avatarInitial = user?.fullName?.charAt(0)?.toUpperCase() ?? "U"
+  const navigation = [
+    { href: "/", label: "Khám phá", active: pathname === "/" },
+    { href: "/events", label: "Sự kiện", active: pathname.startsWith("/events") },
+    ...(isAuthenticated
+      ? [{ href: "/account", label: "Vé của tôi", active: pathname.startsWith("/account") }]
+      : []),
+    ...(hasRole("ORGANIZER")
+      ? [{ href: "/organizer", label: "Ban tổ chức", active: pathname.startsWith("/organizer") }]
+      : []),
+  ]
+  const focusStyle =
+    "focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
+
+  function submitSearch(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+    setMobileMenuOpen(false)
+    router.push(catalogUrl({ q: headerQuery }))
+  }
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-[#151521]/95 text-[#f8f2ed] backdrop-blur-xl border-b border-white/10">
-      <div className="max-w-7xl mx-auto flex items-center justify-between h-[72px] px-4 sm:px-6 lg:px-8">
-        {/* Logo */}
-        <div className="flex items-center gap-3">
-          <Link
-            href="/"
-            className="flex items-center gap-2.5 text-xl sm:text-2xl font-extrabold tracking-[-0.06em] text-[#f8f2ed] hover:text-[#ff9479] transition"
-          >
-            <span className="bg-[#ff8063] text-[#261621] p-1.5 rounded-[10px_16px_10px_16px]">
-              <Asterisk className="size-5" strokeWidth={3} />
-            </span>
-            <span>SmartEvent</span>
-          </Link>
-        </div>
+    <header className="sticky top-0 z-50 w-full border-b border-border bg-white/95 text-foreground backdrop-blur-xl">
+      <div className="mx-auto flex h-[76px] max-w-7xl items-center justify-between gap-6 px-4 sm:px-6 lg:px-8">
+        <Link
+          href="/"
+          className={`flex shrink-0 items-center gap-2.5 rounded-sm text-xl font-extrabold tracking-[-0.05em] ${focusStyle}`}
+          aria-label="SmartEvent — Trang chủ"
+        >
+          <SmartEventMark className="size-9 shrink-0 rounded-xl shadow-sm shadow-primary/15" />
+          SmartEvent
+        </Link>
 
-        {/* Navigation Links (Desktop) */}
-        <nav className="hidden md:flex items-center gap-8 text-sm font-medium">
-          <Link
-            href="/"
-            aria-current={pathname === "/" ? "page" : undefined}
-            className={
-              pathname === "/"
-                ? "border-b-2 border-[#ff9479] pb-1 font-semibold text-[#ff9479]"
-                : "text-[#c1bdc9] transition hover:text-white"
-            }
-          >
-            Khám phá
-          </Link>
-          <Link
-            href="/events"
-            aria-current={pathname.startsWith("/events") ? "page" : undefined}
-            className={
-              pathname.startsWith("/events")
-                ? "border-b-2 border-[#ff9479] pb-1 font-semibold text-[#ff9479]"
-                : "text-[#c1bdc9] transition hover:text-white"
-            }
-          >
-            Sự kiện
-          </Link>
-          {isAuthenticated && (
-            <Link href="/account" className="text-[#c1bdc9] hover:text-white transition">
-              Vé của tôi
+        <nav
+          aria-label="Điều hướng chính"
+          className="hidden items-center gap-6 self-stretch text-sm lg:flex"
+        >
+          {navigation.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              aria-current={item.active ? "page" : undefined}
+              className={`se-nav-link flex items-center border-b-2 px-0.5 font-medium transition-colors ${focusStyle} ${item.active ? "border-primary text-primary" : "border-transparent text-muted hover:text-foreground"}`}
+            >
+              {item.label}
             </Link>
-          )}
-          {hasRole("ORGANIZER") && (
-            <Link href="/organizer" className="text-[#c1bdc9] hover:text-white transition">
-              Dành cho BTC
-            </Link>
-          )}
+          ))}
         </nav>
 
-        {/* Actions (Desktop) */}
-        <div className="hidden md:flex items-center gap-3">
-          {/* Search bar */}
+        <div className="hidden items-center gap-2 lg:flex">
           <form
-            className="relative"
-            onSubmit={(event) => {
-              event.preventDefault()
-              router.push(catalogUrl({ q: headerQuery }))
-            }}
+            role="search"
+            aria-label="Tìm sự kiện"
+            onSubmit={submitSearch}
+            className="relative mr-1"
           >
             <button
               type="submit"
               aria-label="Tìm sự kiện"
-              className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#aaa6b7] cursor-pointer"
+              className={`absolute left-3 top-1/2 -translate-y-1/2 rounded-sm text-muted hover:text-primary ${focusStyle}`}
             >
-              <Search className="size-4" />
+              <Search className="size-4" aria-hidden="true" />
             </button>
             <input
-              type="text"
-              placeholder="Tìm kiếm sự kiện, nghệ sĩ..."
+              type="search"
+              aria-label="Tìm sự kiện hoặc nghệ sĩ"
+              placeholder="Tìm sự kiện..."
               value={headerQuery}
               onChange={(event) => setHeaderQuery(event.target.value)}
-              className="w-56 pl-10 pr-4 py-2 text-sm bg-white/5 border border-white/20 rounded-full text-white placeholder:text-[#aaa6b7] focus:outline-none focus:ring-2 focus:ring-[#ff9479] focus:border-transparent transition"
+              className="h-10 w-44 rounded-xl border border-border bg-surface pl-9 pr-3 text-sm text-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/15 xl:w-52"
             />
           </form>
-
-          {/* Auth buttons / User menu */}
           {isLoading ? (
-            <div className="w-20 h-9 bg-white/10 rounded-xl animate-pulse" />
+            <div
+              className="h-10 w-24 animate-pulse rounded-xl bg-surface"
+              aria-label="Đang tải tài khoản"
+            />
           ) : isAuthenticated && user ? (
-            <div className="relative">
+            <div className="relative" ref={userMenuRef}>
               <button
+                ref={userMenuButtonRef}
                 type="button"
-                onClick={() => setUserMenuOpen(!userMenuOpen)}
-                className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-white hover:bg-white/10 rounded-xl transition cursor-pointer"
+                onClick={() => {
+                  setMobileMenuOpen(false)
+                  setUserMenuOpen(!userMenuOpen)
+                }}
+                aria-label={`Tài khoản ${user.fullName || "của bạn"}`}
+                aria-expanded={userMenuOpen}
+                aria-controls="site-user-menu"
+                className={`flex h-10 items-center gap-2 rounded-xl border border-border bg-white px-2.5 text-sm font-medium transition hover:bg-surface ${focusStyle}`}
               >
                 <UserAvatar
                   src={avatarUrl}
                   name={user.fullName}
                   initials={avatarInitial}
-                  className="flex size-8 items-center justify-center rounded-full bg-[#ff8063] text-xs font-bold text-[#261621]"
+                  className="flex size-7 items-center justify-center rounded-full bg-primary-container text-xs font-bold text-on-primary-container"
                 />
-                <span className="max-w-[120px] truncate hidden lg:inline">{user.fullName}</span>
-                <ChevronDown className="size-3.5 text-[#aaa6b7]" />
+                <span className="hidden max-w-[100px] truncate xl:inline">{user.fullName}</span>
+                <ChevronDown
+                  aria-hidden="true"
+                  className={`size-3.5 text-muted transition-transform ${userMenuOpen ? "rotate-180" : ""}`}
+                />
               </button>
-
-              {/* Dropdown menu */}
               {userMenuOpen && (
-                <>
-                  {/* Overlay để đóng menu khi click ra ngoài */}
-                  <div className="fixed inset-0 z-40" onClick={() => setUserMenuOpen(false)} />
-                  <div className="absolute right-0 top-full mt-2 w-56 bg-[#242331] border border-white/15 rounded-xl shadow-2xl z-50 py-2">
-                    <div className="px-4 py-2 border-b border-white/10">
-                      <p className="text-sm font-semibold text-white truncate">{user.fullName}</p>
-                      <p className="text-xs text-[#aaa6b7] truncate">{user.email}</p>
-                    </div>
-
-                    <Link
-                      href="/account"
-                      onClick={() => setUserMenuOpen(false)}
-                      className="flex items-center gap-2.5 px-4 py-2 text-sm text-[#e7e2ea] hover:bg-white/10 transition"
-                    >
-                      <User className="size-4" />
-                      Tài khoản
-                    </Link>
-
-                    {hasRole("ORGANIZER") && (
-                      <Link
-                        href="/organizer"
-                        onClick={() => setUserMenuOpen(false)}
-                        className="flex items-center gap-2.5 px-4 py-2 text-sm text-[#e7e2ea] hover:bg-white/10 transition"
-                      >
-                        <LayoutDashboard className="size-4" />
-                        Quản lý sự kiện
-                      </Link>
-                    )}
-
-                    {hasRole("ADMIN") && (
-                      <Link
-                        href="/admin"
-                        onClick={() => setUserMenuOpen(false)}
-                        className="flex items-center gap-2.5 px-4 py-2 text-sm text-[#e7e2ea] hover:bg-white/10 transition"
-                      >
-                        <Shield className="size-4" />
-                        Quản trị hệ thống
-                      </Link>
-                    )}
-
-                    <div className="border-t border-white/10 mt-1 pt-1">
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setUserMenuOpen(false)
-                          logout()
-                        }}
-                        className="flex items-center gap-2.5 w-full px-4 py-2 text-sm text-[#ff9b91] hover:bg-white/10 transition cursor-pointer"
-                      >
-                        <LogOut className="size-4" />
-                        Đăng xuất
-                      </button>
-                    </div>
+                <div
+                  id="site-user-menu"
+                  className="se-menu-enter absolute right-0 top-full z-50 mt-3 w-64 overflow-hidden rounded-2xl border border-border bg-white py-2 shadow-xl shadow-slate-900/10"
+                >
+                  <div className="mb-1 border-b border-border px-4 py-3">
+                    <p className="truncate text-sm font-semibold">{user.fullName}</p>
+                    <p className="mt-0.5 truncate text-xs text-muted">{user.email}</p>
                   </div>
-                </>
+                  <Link
+                    href="/account"
+                    onClick={() => setUserMenuOpen(false)}
+                    className={`flex items-center gap-2.5 px-4 py-2.5 text-sm transition hover:bg-surface ${focusStyle}`}
+                  >
+                    <User className="size-4 text-muted" aria-hidden="true" />
+                    Tài khoản & vé
+                  </Link>
+                  {hasRole("ORGANIZER") && (
+                    <Link
+                      href="/organizer"
+                      onClick={() => setUserMenuOpen(false)}
+                      className={`flex items-center gap-2.5 px-4 py-2.5 text-sm transition hover:bg-surface ${focusStyle}`}
+                    >
+                      <LayoutDashboard className="size-4 text-muted" aria-hidden="true" />
+                      Quản lý sự kiện
+                    </Link>
+                  )}
+                  {hasRole("ADMIN") && (
+                    <Link
+                      href="/admin"
+                      onClick={() => setUserMenuOpen(false)}
+                      className={`flex items-center gap-2.5 px-4 py-2.5 text-sm transition hover:bg-surface ${focusStyle}`}
+                    >
+                      <Shield className="size-4 text-muted" aria-hidden="true" />
+                      Quản trị hệ thống
+                    </Link>
+                  )}
+                  <div className="mt-1 border-t border-border pt-1">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setUserMenuOpen(false)
+                        logout()
+                      }}
+                      className={`flex w-full items-center gap-2.5 px-4 py-2.5 text-sm text-red-700 transition hover:bg-red-50 ${focusStyle}`}
+                    >
+                      <LogOut className="size-4" aria-hidden="true" />
+                      Đăng xuất
+                    </button>
+                  </div>
+                </div>
               )}
             </div>
           ) : (
             <>
               <Link
                 href="/login"
-                className="inline-flex items-center justify-center px-4 py-2 text-sm font-semibold text-[#f8f2ed] hover:bg-white/10 rounded-xl transition"
+                className={`se-button rounded-xl px-3 py-2.5 text-sm font-semibold transition hover:bg-surface ${focusStyle}`}
               >
                 Đăng nhập
               </Link>
               <Link
                 href="/register"
-                className="inline-flex items-center justify-center px-4 py-2 text-sm font-semibold text-[#261621] bg-[#ff8063] hover:bg-[#ff9b83] rounded-xl shadow-xs transition"
+                className={`se-button rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-primary-hover ${focusStyle}`}
               >
                 Đăng ký
               </Link>
@@ -205,103 +224,95 @@ export function SiteHeader() {
           )}
         </div>
 
-        {/* Mobile menu button */}
-        <div className="flex md:hidden items-center gap-2">
-          <button
-            type="button"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="p-2 text-white hover:text-[#ff9479] focus:outline-none cursor-pointer"
-            aria-label={mobileMenuOpen ? "Đóng menu" : "Mở menu"}
+        <button
+          ref={mobileMenuButtonRef}
+          type="button"
+          onClick={() => {
+            setUserMenuOpen(false)
+            setMobileMenuOpen(!mobileMenuOpen)
+          }}
+          className={`flex size-10 items-center justify-center rounded-xl border border-border bg-white text-foreground lg:hidden ${focusStyle}`}
+          aria-label={mobileMenuOpen ? "Đóng menu" : "Mở menu"}
+          aria-expanded={mobileMenuOpen}
+          aria-controls="site-mobile-menu"
+        >
+          <span
+            aria-hidden="true"
+            className={`inline-flex transition-transform duration-200 ${mobileMenuOpen ? "rotate-90" : ""}`}
           >
-            {mobileMenuOpen ? <X className="size-6" /> : <Menu className="size-6" />}
-          </button>
-        </div>
+            {mobileMenuOpen ? <X className="size-5" /> : <Menu className="size-5" />}
+          </span>
+        </button>
       </div>
 
-      {/* Mobile dropdown menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden border-b border-white/10 bg-[#1e1d2a] px-4 pt-2 pb-6 space-y-3">
+        <div
+          id="site-mobile-menu"
+          className="se-menu-enter max-h-[calc(100dvh-76px)] overflow-y-auto border-t border-border bg-white px-4 py-5 shadow-lg shadow-slate-900/5 sm:px-6 lg:hidden"
+        >
           <form
+            role="search"
+            aria-label="Tìm sự kiện"
+            onSubmit={submitSearch}
             className="relative mb-4"
-            onSubmit={(event) => {
-              event.preventDefault()
-              setMobileMenuOpen(false)
-              router.push(catalogUrl({ q: headerQuery }))
-            }}
           >
             <button
               type="submit"
               aria-label="Tìm sự kiện"
-              className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#aaa6b7] cursor-pointer"
+              className={`absolute left-3.5 top-1/2 -translate-y-1/2 rounded-sm text-muted ${focusStyle}`}
             >
-              <Search className="size-4" />
+              <Search className="size-4" aria-hidden="true" />
             </button>
             <input
-              type="text"
-              placeholder="Tìm kiếm sự kiện..."
+              type="search"
+              aria-label="Tìm sự kiện hoặc nghệ sĩ"
+              placeholder="Tìm sự kiện, nghệ sĩ..."
               value={headerQuery}
               onChange={(event) => setHeaderQuery(event.target.value)}
-              className="w-full pl-10 pr-4 py-2 text-sm bg-white/5 border border-white/20 rounded-full text-white placeholder:text-[#aaa6b7] focus:outline-none focus:ring-2 focus:ring-[#ff9479]"
+              className="h-11 w-full rounded-xl border border-border bg-surface pl-10 pr-4 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/15"
             />
           </form>
-          <nav className="flex flex-col space-y-3 text-sm font-medium">
-            <Link
-              href="/"
-              onClick={() => setMobileMenuOpen(false)}
-              className="px-2 py-1.5 text-[#ff9479] font-semibold rounded-lg hover:bg-white/10"
-            >
-              Khám phá
-            </Link>
-            <Link
-              href="/events"
-              onClick={() => setMobileMenuOpen(false)}
-              className="px-2 py-1.5 text-white hover:bg-white/10 rounded-lg"
-            >
-              Tất cả sự kiện
-            </Link>
-            {isAuthenticated && (
+          <nav aria-label="Điều hướng trên điện thoại" className="flex flex-col gap-1 text-sm">
+            {navigation.map((item) => (
               <Link
-                href="/account"
+                key={item.href}
+                href={item.href}
                 onClick={() => setMobileMenuOpen(false)}
-                className="px-2 py-1.5 text-white hover:bg-white/10 rounded-lg"
+                aria-current={item.active ? "page" : undefined}
+                className={`rounded-xl px-3 py-3 font-medium ${focusStyle} ${item.active ? "bg-primary-container text-on-primary-container" : "text-foreground hover:bg-surface"}`}
               >
-                Vé của tôi
+                {item.label}
               </Link>
-            )}
-            {hasRole("ORGANIZER") && (
-              <Link
-                href="/organizer"
-                onClick={() => setMobileMenuOpen(false)}
-                className="px-2 py-1.5 text-white hover:bg-white/10 rounded-lg"
-              >
-                Dành cho Ban tổ chức
-              </Link>
-            )}
+            ))}
             {hasRole("ADMIN") && (
               <Link
                 href="/admin"
                 onClick={() => setMobileMenuOpen(false)}
-                className="px-2 py-1.5 text-white hover:bg-white/10 rounded-lg"
+                aria-current={pathname.startsWith("/admin") ? "page" : undefined}
+                className={`rounded-xl px-3 py-3 font-medium text-foreground hover:bg-surface ${focusStyle}`}
               >
                 Quản trị hệ thống
               </Link>
             )}
           </nav>
-
-          {/* Auth section */}
-          <div className="pt-2 border-t border-white/10 flex flex-col gap-2">
-            {isAuthenticated && user ? (
+          <div className="mt-4 flex flex-col gap-2 border-t border-border pt-4">
+            {isLoading ? (
+              <div
+                className="h-11 animate-pulse rounded-xl bg-surface"
+                aria-label="Đang tải tài khoản"
+              />
+            ) : isAuthenticated && user ? (
               <>
-                <div className="flex items-center gap-3 px-2 py-2">
+                <div className="mb-1 flex items-center gap-3 px-3 py-2">
                   <UserAvatar
                     src={avatarUrl}
                     name={user.fullName}
                     initials={avatarInitial}
-                    className="flex size-9 items-center justify-center rounded-full bg-[#ff8063] text-sm font-bold text-[#261621]"
+                    className="flex size-9 items-center justify-center rounded-full bg-primary-container text-sm font-bold text-on-primary-container"
                   />
                   <div className="min-w-0">
-                    <p className="text-sm font-semibold text-white truncate">{user.fullName}</p>
-                    <p className="text-xs text-[#aaa6b7] truncate">{user.email}</p>
+                    <p className="truncate text-sm font-semibold">{user.fullName}</p>
+                    <p className="truncate text-xs text-muted">{user.email}</p>
                   </div>
                 </div>
                 <button
@@ -310,8 +321,9 @@ export function SiteHeader() {
                     setMobileMenuOpen(false)
                     logout()
                   }}
-                  className="w-full py-2.5 text-center text-sm font-semibold text-[#ff9b91] border border-white/20 rounded-xl hover:bg-white/10 transition cursor-pointer"
+                  className={`se-button flex w-full items-center justify-center gap-2 rounded-xl border border-border py-3 text-sm font-semibold text-red-700 transition hover:bg-red-50 ${focusStyle}`}
                 >
+                  <LogOut className="size-4" aria-hidden="true" />
                   Đăng xuất
                 </button>
               </>
@@ -320,14 +332,14 @@ export function SiteHeader() {
                 <Link
                   href="/login"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="w-full py-2.5 text-center text-sm font-semibold text-[#ff9479] border border-[#ff9479]/40 rounded-xl"
+                  className={`se-button rounded-xl border border-border py-3 text-center text-sm font-semibold ${focusStyle}`}
                 >
                   Đăng nhập
                 </Link>
                 <Link
                   href="/register"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="w-full py-2.5 text-center text-sm font-semibold text-[#261621] bg-[#ff8063] rounded-xl"
+                  className={`se-button rounded-xl bg-primary py-3 text-center text-sm font-semibold text-white ${focusStyle}`}
                 >
                   Đăng ký tài khoản
                 </Link>

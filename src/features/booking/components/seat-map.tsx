@@ -51,11 +51,11 @@ export function SeatMap({
                 <span>Đang chọn</span>
               </div>
               <div className="flex items-center gap-1.5">
-                <span className="size-3.5 rounded bg-amber-500 border-2 border-amber-600" />
-                <span>Đang giữ chỗ (10p)</span>
+                <span className="size-3.5 rounded bg-amber-100 border-2 border-amber-300" />
+                <span>Đang giữ chỗ</span>
               </div>
               <div className="flex items-center gap-1.5">
-                <span className="size-3.5 rounded bg-yellow-400 border-2 border-yellow-500" />
+                <span className="size-3.5 rounded bg-slate-200 border-2 border-slate-300" />
                 <span>Đã bán</span>
               </div>
             </div>
@@ -73,8 +73,8 @@ export function SeatMap({
           ) : (
             <div className="max-h-[380px] overflow-y-auto p-4 bg-surface-container-low rounded-2xl border border-outline-variant/60">
               {/* Sân khấu chính */}
-              <div className="w-full bg-[#273143] text-white text-xs font-bold text-center py-2 rounded-xl mb-6 shadow-xs">
-                ★ HƯỚNG SÂN KHẤU CHÍNH ★
+              <div className="w-full bg-on-surface text-white text-[10px] uppercase tracking-[0.2em] font-semibold text-center py-3 rounded-lg mb-6">
+                Hướng sân khấu
               </div>
 
               {/* Lưới ghế thật */}
@@ -100,11 +100,11 @@ export function SeatMap({
                     tooltip = `Ghế ${seatText}: Đang chọn - Bấm để hủy chọn`
                   } else if (isHeld) {
                     statusClasses =
-                      "bg-amber-500 text-white border-2 border-amber-600 cursor-not-allowed opacity-90"
-                    tooltip = `Ghế ${seatText}: Đang được giữ chỗ (10 phút)`
+                      "bg-amber-50 text-amber-700 border-2 border-amber-200 cursor-not-allowed"
+                    tooltip = `Ghế ${seatText}: Đang được giữ chỗ`
                   } else if (isSold) {
                     statusClasses =
-                      "bg-yellow-400 text-yellow-950 border-2 border-yellow-500 cursor-not-allowed font-extrabold"
+                      "bg-slate-200 text-slate-500 border-2 border-slate-300 cursor-not-allowed"
                     tooltip = `Ghế ${seatText}: Đã bán`
                   } else if (isBlocked) {
                     statusClasses =
@@ -123,8 +123,9 @@ export function SeatMap({
                       disabled={isDisabled}
                       title={tooltip}
                       aria-label={tooltip}
+                      aria-pressed={isSelected}
                       onClick={() => !isDisabled && handleToggleSeat(seat)}
-                      className={`p-2.5 rounded-xl border text-xs font-bold transition flex flex-col items-center justify-center ${statusClasses}`}
+                      className={`min-h-11 p-2.5 rounded-lg text-xs font-semibold transition-colors flex flex-col items-center justify-center focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary ${statusClasses}`}
                     >
                       <span>{seatText}</span>
                     </button>
@@ -138,8 +139,8 @@ export function SeatMap({
         /* Khu đứng (STANDING) */
         <div className="pt-4 border-t border-outline-variant/60 space-y-3">
           <div className="p-6 bg-surface-container-low rounded-2xl border border-outline-variant text-center space-y-2">
-            <div className="w-full bg-[#273143] text-white text-xs font-bold text-center py-2 rounded-xl mb-4 shadow-xs">
-              ★ HƯỚNG SÂN KHẤU CHÍNH ★
+            <div className="w-full bg-on-surface text-white text-[10px] uppercase tracking-[0.2em] font-semibold text-center py-3 rounded-lg mb-4">
+              Hướng sân khấu
             </div>
             <h4 className="text-sm font-bold text-on-surface">
               Khu vực đứng tự do (Standing Zone)

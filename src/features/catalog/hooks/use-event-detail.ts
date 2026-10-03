@@ -72,7 +72,9 @@ export function useEventDetail({ eventId }: { eventId: string }) {
       : "",
     locationName: event?.venue?.name ?? "Địa điểm thông báo sau",
     cityName: event?.city ?? event?.venue?.city ?? "",
-    descriptionText: event?.description ?? "Thông tin chi tiết sẽ được cập nhật.",
+    descriptionText:
+      event?.description?.trim() ||
+      "Ban tổ chức chưa cung cấp nội dung giới thiệu cho sự kiện này.",
     targetEventId: event?.id ?? eventId,
   }
 }

@@ -48,11 +48,11 @@ export function TicketCard({ ticket: t, onShowQr, onTransfer }: Props) {
   return (
     <div
       key={t.id}
-      className="bg-white rounded-3xl p-6 border border-outline-variant/60 shadow-xs hover:shadow-md transition flex flex-col justify-between space-y-4"
+      className="overflow-hidden bg-white rounded-2xl p-5 sm:p-6 border border-outline-variant shadow-sm transition-colors hover:border-primary/30 flex flex-col justify-between space-y-5"
     >
       <div className="space-y-2">
-        <div className="flex items-center justify-between">
-          <span className="text-xs font-mono font-bold text-primary bg-primary/10 px-2.5 py-1 rounded-lg">
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <span className="text-xs font-mono font-semibold tracking-wide text-on-surface-variant">
             {t.ticketCode}
           </span>
           <span
@@ -63,38 +63,38 @@ export function TicketCard({ ticket: t, onShowQr, onTransfer }: Props) {
           </span>
         </div>
 
-        <h3 className="text-base sm:text-lg font-bold text-on-surface line-clamp-1">
+        <h3 className="pt-2 text-lg font-bold leading-7 text-on-surface line-clamp-2">
           {t.eventName || "Sự kiện SmartEvent"}
         </h3>
 
         <div className="space-y-1.5 text-xs text-on-surface-variant pt-1">
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <Ticket className="size-3.5 text-primary shrink-0" />
             <span className="font-semibold text-on-surface">
               {t.ticketTypeName || "Hạng vé chính"}
             </span>
-            {t.areaName && <span className="text-primary font-medium">• {t.areaName}</span>}
+            {t.areaName && <span className="text-on-surface-variant">· {t.areaName}</span>}
             {t.seatCode && <span className="font-bold text-primary">• Ghế: {t.seatCode}</span>}
           </div>
         </div>
       </div>
 
-      <div className="pt-4 border-t border-outline-variant/60 flex items-center justify-between gap-3 flex-wrap">
+      <div className="pt-5 border-t border-dashed border-outline-variant flex items-center justify-between gap-3 flex-wrap">
         {isValid ? (
           <>
             <button
               type="button"
               onClick={() => onShowQr(t)}
-              className="px-4 py-2 bg-primary hover:bg-primary-hover text-white text-xs font-bold rounded-xl shadow-xs transition flex items-center gap-1.5 cursor-pointer"
+              className="min-h-11 px-4 py-2 bg-primary hover:bg-primary-hover text-white text-xs font-semibold rounded-lg transition-colors flex items-center gap-2 cursor-pointer"
             >
               <QrCode className="size-4" />
-              <span>Xem mã QR Check-in</span>
+              <span>Xem mã QR</span>
             </button>
 
             <button
               type="button"
               onClick={() => onTransfer(t)}
-              className="px-3.5 py-2 bg-white border border-outline-variant/60 hover:bg-surface-container text-on-surface text-xs font-semibold rounded-xl transition flex items-center gap-1.5 cursor-pointer"
+              className="min-h-11 px-3.5 py-2 bg-white border border-outline-variant hover:bg-surface text-on-surface text-xs font-semibold rounded-lg transition-colors flex items-center gap-2 cursor-pointer"
             >
               <Send className="size-3.5 text-primary" />
               <span>Chuyển nhượng</span>

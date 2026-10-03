@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { Lock, Mail, Phone, Ticket, User } from "lucide-react"
+import { Lock, Mail, Phone, User } from "lucide-react"
 import { useRegisterForm } from "./hooks/use-register-form"
 import { AuthField } from "./components/auth-field"
 import { AuthFormShell } from "./components/auth-form-shell"
@@ -13,23 +13,24 @@ export function RegisterForm() {
   return (
     <AuthFormShell
       variant="register"
-      bannerTitle="Cảm nhận nhịp đập của đêm hội"
-      bannerDescription="Khám phá hàng ngàn sự kiện, đặt vé an toàn và tận hưởng những khoảnh khắc đáng nhớ nhất cùng SMART EVENT."
+      bannerTitle="Khoảnh khắc đáng nhớ bắt đầu từ đây."
+      bannerDescription="Âm nhạc, thể thao hay một trải nghiệm mới — tìm sự kiện dành cho bạn và lưu giữ mọi tấm vé trong tài khoản SmartEvent."
     >
-      <div className="mb-6 text-center md:text-left">
-        <div className="flex items-center justify-center md:justify-start gap-2 text-primary font-bold text-lg mb-1">
-          <Ticket className="size-5" />
-          <span>SMART EVENT</span>
-        </div>
-        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Tạo tài khoản mới</h1>
-        <p className="text-sm text-gray-500 mt-1">
-          Điền thông tin bên dưới để bắt đầu hành trình của bạn.
+      <div className="mb-7">
+        <p className="mb-3 text-xs font-semibold uppercase tracking-[0.16em] text-primary">
+          Tài khoản SmartEvent
+        </p>
+        <h1 className="text-3xl font-semibold tracking-[-0.04em] text-foreground sm:text-4xl">
+          Tạo tài khoản
+        </h1>
+        <p className="mt-3 text-sm leading-6 text-muted">
+          Một nơi để đặt vé, theo dõi đơn hàng và quản lý trải nghiệm của bạn.
         </p>
       </div>
       {form.errorMessage && (
         <div
           role="alert"
-          className="mb-4 p-3 rounded-xl bg-red-50 border border-red-200 text-sm text-red-600"
+          className="mb-5 rounded-xl border border-red-200 bg-red-50 p-3.5 text-sm leading-6 text-red-700"
         >
           {form.errorMessage}
         </div>
@@ -81,7 +82,8 @@ export function RegisterForm() {
               autoComplete="new-password"
               compact
               required
-              placeholder="Tối thiểu 8 ký tự"
+              placeholder="Tạo mật khẩu"
+              hint="Sử dụng ít nhất 8 ký tự."
               value={form.password}
               onChange={form.setPassword}
               onToggleVisibility={() => form.setShowPassword(!form.showPassword)}
@@ -98,27 +100,16 @@ export function RegisterForm() {
               value={form.confirmPassword}
               onChange={form.setConfirmPassword}
             />
-            <div className="flex items-start gap-2 pt-1">
+            <div className="flex items-start gap-3 py-1">
               <input
                 id="terms"
                 type="checkbox"
                 checked={form.termsAgreed}
                 onChange={(event) => form.setTermsAgreed(event.target.checked)}
-                className="mt-1 size-4 rounded border-gray-300 text-primary focus:ring-primary cursor-pointer"
+                className="mt-0.5 size-4 shrink-0 cursor-pointer rounded border-border accent-primary focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-primary"
               />
-              <label
-                htmlFor="terms"
-                className="text-xs text-gray-600 leading-relaxed cursor-pointer"
-              >
-                Tôi đồng ý với{" "}
-                <Link href="#" className="text-primary hover:underline">
-                  Điều khoản dịch vụ
-                </Link>{" "}
-                và{" "}
-                <Link href="#" className="text-primary hover:underline">
-                  Chính sách bảo mật
-                </Link>{" "}
-                của SMART EVENT.
+              <label htmlFor="terms" className="cursor-pointer text-xs leading-5 text-muted">
+                Tôi đồng ý với Điều khoản dịch vụ và Chính sách bảo mật của SmartEvent.
               </label>
             </div>
             <AuthSubmitButton
@@ -130,9 +121,12 @@ export function RegisterForm() {
           </fieldset>
         </form>
       )}
-      <div className="mt-6 text-center text-sm text-gray-600">
+      <div className="mt-6 border-t border-border pt-6 text-center text-sm text-muted">
         Đã có tài khoản?{" "}
-        <Link href="/login" className="text-primary font-medium hover:underline">
+        <Link
+          href="/login"
+          className="rounded-sm font-semibold text-primary hover:underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
+        >
           Đăng nhập ngay
         </Link>
       </div>

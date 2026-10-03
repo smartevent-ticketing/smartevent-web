@@ -1,8 +1,11 @@
 "use client"
 
-import { useState } from "react"
-import { AlertCircle, Building, Music, Tag, ImageIcon, Maximize2, X, Armchair } from "lucide-react"
-import { useEventDetail } from "@/features/catalog/hooks/use-event-detail"
+import { useEffect, useRef, useState } from "react"
+import { AlertCircle, Armchair, Building2, ImageIcon, Maximize2, Tag, X } from "lucide-react"
+
+import { MotionReveal } from "@/components/shared/motion-reveal"
+import { EventMediaImage } from "./event-media-image"
+import type { useEventDetail } from "@/features/catalog/hooks/use-event-detail"
 
 type Props = Pick<
   ReturnType<typeof useEventDetail>,
@@ -20,173 +23,249 @@ export function EventInformation({
   seatMapUrl,
   galleryUrls = [],
 }: Props) {
-  const [previewImage, setPreviewImage] = useState<string | null>(null)
+  const [previewImage, setPreviewImage] = useState<{ url: string; alt: string } | null>(null)
+  const previewDialogRef = useRef<HTMLDialogElement>(null)
+  const previewTriggerRef = useRef<HTMLButtonElement>(null)
+
+  function closePreview() {
+    previewDialogRef.current?.close()
+    setPreviewImage(null)
+    previewTriggerRef.current?.focus()
+  }
+
+  useEffect(() => {
+    const dialog = previewDialogRef.current
+    if (!previewImage || !dialog) return
+    dialog.showModal()
+    return () => dialog.close()
+  }, [previewImage])
 
   return (
     <>
-      <div className="lg:col-span-8 space-y-8">
-        {/* Quick Info Bar */}
-        <div className="grid grid-cols-2 gap-4 rounded-2xl border border-white/15 bg-[#242331] p-5 sm:grid-cols-3">
-          <div className="flex items-center gap-3">
-            <div className="flex size-10 items-center justify-center rounded-xl bg-[#ff9479]/10 text-[#ff9479]">
-              <Music className="size-5" />
-            </div>
-            <div>
-              <span className="block text-xs text-[#aaa6b7]">Thể loại</span>
-              <span className="text-sm font-bold text-white">{categoryName}</span>
+      <div className="min-w-0 space-y-6 lg:col-span-8">
+        <div className="grid gap-5 rounded-2xl border border-border bg-white p-5 sm:grid-cols-3 sm:gap-4 sm:p-6">
+          <div className="flex min-w-0 items-start gap-3">
+            <span className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-primary-container text-primary">
+              <Tag className="size-4" aria-hidden="true" />
+            </span>
+            <div className="min-w-0">
+              <span className="block text-xs text-muted">Danh mục</span>
+              <span className="mt-1 block break-words text-sm font-semibold text-foreground">
+                {categoryName}
+              </span>
             </div>
           </div>
-
-          <div className="flex items-center gap-3">
-            <div className="flex size-10 items-center justify-center rounded-xl bg-[#ff9479]/10 text-[#ff9479]">
-              <Building className="size-5" />
-            </div>
-            <div>
-              <span className="block text-xs text-[#aaa6b7]">Địa điểm</span>
-              <span className="block max-w-[160px] truncate text-sm font-bold text-white">
+          <div className="flex min-w-0 items-start gap-3">
+            <span className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-primary-container text-primary">
+              <Building2 className="size-4" aria-hidden="true" />
+            </span>
+            <div className="min-w-0">
+              <span className="block text-xs text-muted">Địa điểm</span>
+              <span className="mt-1 block break-words text-sm font-semibold text-foreground">
                 {locationName}
               </span>
             </div>
           </div>
-
-          <div className="flex items-center gap-3 col-span-2 sm:col-span-1">
-            <div className="flex size-10 items-center justify-center rounded-xl bg-[#ff9479]/10 text-[#ff9479]">
-              <Tag className="size-5" />
-            </div>
+          <div className="flex items-start gap-3">
+            <span className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-primary-container text-primary">
+              <Armchair className="size-4" aria-hidden="true" />
+            </span>
             <div>
-              <span className="block text-xs text-[#aaa6b7]">Trạng thái bán</span>
+              <span className="block text-xs text-muted">Tình trạng</span>
               <span
-                className={`text-sm font-bold ${isSaleActive ? "text-[#ffad95]" : "text-[#aaa6b7]"}`}
+                className={
+                  "mt-1 block text-sm font-semibold " +
+                  (isSaleActive ? "text-emerald-700" : "text-muted")
+                }
               >
-                {isEnded ? "Đã kết thúc" : isSaleActive ? "Đang mở bán" : "Tạm khóa đặt"}
+                {isEnded ? "Đã kết thúc" : isSaleActive ? "Đang mở bán" : "Chưa mở bán"}
               </span>
             </div>
           </div>
         </div>
 
-        {/* Description Section */}
-        <section className="space-y-4 rounded-2xl border border-white/15 bg-[#242331] p-6 sm:p-8">
-          <h2 className="text-xl font-bold text-white">Giới thiệu sự kiện</h2>
-          <div className="whitespace-pre-line text-sm leading-relaxed text-[#c9c4cf] sm:text-base">
-            {descriptionText}
-          </div>
-        </section>
-
-        {/* Gallery / Hình ảnh sự kiện & Poster: Xếp hàng dọc 1 ảnh 1 dòng */}
-        {galleryUrls && galleryUrls.length > 0 && (
-          <section className="space-y-4 rounded-2xl border border-white/15 bg-[#242331] p-6 sm:p-8">
-            <div className="flex items-center justify-between border-b border-white/15 pb-3">
-              <h2 className="flex items-center gap-2 text-xl font-bold text-white">
-                <ImageIcon className="size-5 text-[#ff9479]" />
-                <span>Hình ảnh sự kiện & Poster thông tin</span>
-              </h2>
-              <span className="text-xs font-semibold text-[#bcb7c4]">{galleryUrls.length} ảnh</span>
-            </div>
-            <div className="flex flex-col gap-6 pt-2">
-              {galleryUrls.map((url, idx) => (
-                <div
-                  key={idx}
-                  onClick={() => setPreviewImage(url)}
-                  className="w-full max-w-2xl mx-auto rounded-2xl overflow-hidden border border-outline-variant/60 shadow-xs bg-slate-950 cursor-pointer group relative"
-                  title="Nhấn để xem ảnh phóng to"
-                >
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={url}
-                    alt={`Event poster ${idx + 1}`}
-                    className="w-full h-auto object-contain group-hover:scale-[1.01] transition duration-300 mx-auto"
-                  />
-                  <div className="absolute inset-0 bg-black/25 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
-                    <span className="px-3.5 py-1.5 bg-black/70 text-white rounded-xl text-xs font-semibold backdrop-blur-xs flex items-center gap-1.5 shadow-md">
-                      <Maximize2 className="size-3.5" />
-                      <span>Xem phóng to</span>
-                    </span>
-                  </div>
-                </div>
-              ))}
+        <MotionReveal>
+          <section
+            aria-labelledby="event-description-title"
+            className="rounded-2xl border border-border bg-white p-6 sm:p-8"
+          >
+            <span className="text-[11px] font-semibold uppercase tracking-[0.16em] text-primary">
+              Về trải nghiệm này
+            </span>
+            <h2
+              id="event-description-title"
+              className="mt-2 text-xl font-bold tracking-tight text-foreground sm:text-2xl"
+            >
+              Giới thiệu sự kiện
+            </h2>
+            <div className="mt-5 whitespace-pre-line break-words text-sm leading-8 text-muted sm:text-base">
+              {descriptionText}
             </div>
           </section>
+        </MotionReveal>
+
+        {galleryUrls.length > 0 && (
+          <MotionReveal>
+            <section
+              aria-labelledby="event-gallery-title"
+              className="rounded-2xl border border-border bg-white p-6 sm:p-8"
+            >
+              <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
+                <div>
+                  <span className="text-[11px] font-semibold uppercase tracking-[0.16em] text-primary">
+                    Từ ban tổ chức
+                  </span>
+                  <h2
+                    id="event-gallery-title"
+                    className="mt-2 text-xl font-bold tracking-tight text-foreground"
+                  >
+                    Hình ảnh &amp; thông tin
+                  </h2>
+                </div>
+                <span className="flex items-center gap-1.5 rounded-full border border-border bg-surface px-3 py-1.5 text-xs text-muted">
+                  <ImageIcon className="size-3.5" aria-hidden="true" />
+                  {galleryUrls.length} ảnh
+                </span>
+              </div>
+              <div className="flex flex-col gap-5">
+                {galleryUrls.map((url, idx) => (
+                  <button
+                    key={url + idx}
+                    type="button"
+                    onClick={(event) => {
+                      previewTriggerRef.current = event.currentTarget
+                      setPreviewImage({ url, alt: "Hình ảnh sự kiện " + (idx + 1) })
+                    }}
+                    aria-label={"Phóng to hình ảnh sự kiện " + (idx + 1)}
+                    className="group relative mx-auto w-full max-w-2xl cursor-zoom-in overflow-hidden rounded-xl border border-border bg-surface text-left focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
+                  >
+                    <EventMediaImage
+                      src={url}
+                      alt={"Hình ảnh sự kiện " + (idx + 1)}
+                      className="mx-auto h-auto w-full object-contain"
+                    />
+                    <span className="absolute bottom-3 right-3 inline-flex items-center gap-2 rounded-lg border border-white/60 bg-white/95 px-3 py-2 text-xs font-semibold text-foreground shadow-sm transition-colors group-hover:bg-primary group-hover:text-on-primary group-focus-visible:bg-primary group-focus-visible:text-on-primary">
+                      <Maximize2 className="size-3.5" aria-hidden="true" />
+                      Xem phóng to
+                    </span>
+                  </button>
+                ))}
+              </div>
+            </section>
+          </MotionReveal>
         )}
 
-        {/* Sơ đồ phân khu & khán đài */}
-        <section className="space-y-4 rounded-2xl border border-white/15 bg-[#242331] p-6 sm:p-8">
-          <h2 className="text-xl font-bold text-white">Sơ đồ phân khu & khán đài</h2>
-          <p className="text-xs text-[#bcb7c4] sm:text-sm">
-            Khán giả vui lòng kiểm tra kỹ vị trí cổng vào và phân khu tương ứng khi mua vé.
-          </p>
-
-          {seatMapUrl ? (
-            <div
-              onClick={() => setPreviewImage(seatMapUrl)}
-              className="group relative mx-auto max-w-3xl cursor-pointer overflow-hidden rounded-2xl border border-white/15 bg-[#161621] p-3 text-center"
-              title="Nhấn để xem sơ đồ phóng to"
+        <MotionReveal>
+          <section
+            aria-labelledby="event-seatmap-title"
+            className="rounded-2xl border border-border bg-white p-6 sm:p-8"
+          >
+            <span className="text-[11px] font-semibold uppercase tracking-[0.16em] text-primary">
+              Chuẩn bị trước khi tham gia
+            </span>
+            <h2
+              id="event-seatmap-title"
+              className="mt-2 text-xl font-bold tracking-tight text-foreground"
             >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={seatMapUrl}
-                alt="Sơ đồ phân khu & khán đài"
-                className="w-full max-h-[540px] object-contain rounded-xl mx-auto group-hover:scale-[1.01] transition"
-              />
-              <div className="mt-2.5 flex items-center justify-center gap-1.5 text-xs font-semibold text-[#ffad95]">
-                <Maximize2 className="size-3.5" />
-                <span>Nhấn vào ảnh để xem sơ đồ phóng to chi tiết</span>
+              Sơ đồ phân khu &amp; khán đài
+            </h2>
+            <p className="mt-3 text-sm leading-7 text-muted">
+              Xem vị trí phân khu và cổng vào do ban tổ chức cung cấp để chọn hạng vé phù hợp.
+            </p>
+            {seatMapUrl ? (
+              <button
+                type="button"
+                onClick={(event) => {
+                  previewTriggerRef.current = event.currentTarget
+                  setPreviewImage({ url: seatMapUrl, alt: "Sơ đồ phân khu và khán đài" })
+                }}
+                aria-label="Phóng to sơ đồ phân khu và khán đài"
+                className="group mt-5 w-full cursor-zoom-in overflow-hidden rounded-xl border border-border bg-surface p-3 text-center focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
+              >
+                <EventMediaImage
+                  src={seatMapUrl}
+                  alt="Sơ đồ phân khu và khán đài"
+                  className="mx-auto max-h-[540px] w-full rounded-lg object-contain"
+                />
+                <span className="mt-3 flex items-center justify-center gap-2 pb-1 text-xs font-semibold text-primary">
+                  <Maximize2 className="size-3.5" aria-hidden="true" />
+                  Xem sơ đồ chi tiết
+                </span>
+              </button>
+            ) : (
+              <div className="mt-5 rounded-xl border border-dashed border-border bg-surface px-5 py-9 text-center">
+                <span className="mx-auto flex size-12 items-center justify-center rounded-xl border border-border bg-white text-slate-400">
+                  <Armchair className="size-6" aria-hidden="true" />
+                </span>
+                <h3 className="mt-4 text-sm font-semibold text-foreground">
+                  Chưa có sơ đồ phân khu
+                </h3>
+                <p className="mx-auto mt-2 max-w-md text-xs leading-6 text-muted">
+                  Ban tổ chức chưa cung cấp hình ảnh sơ đồ cho sự kiện này. Kiểm tra thông tin phân
+                  khu tại bước chọn vé.
+                </p>
               </div>
-            </div>
-          ) : (
-            <div className="space-y-2 rounded-2xl border border-dashed border-white/20 bg-white/5 p-8 text-center">
-              <Armchair className="mx-auto size-8 text-[#aaa6b7]" />
-              <h4 className="text-sm font-bold text-white">
-                Ban tổ chức đang cập nhật sơ đồ khán đài
-              </h4>
-              <p className="mx-auto max-w-md text-xs text-[#bcb7c4]">
-                Sơ đồ vị trí phân khu và chỗ ngồi chính thức sẽ được công bố sớm nhất trước khi mở
-                bán.
-              </p>
-            </div>
-          )}
-        </section>
+            )}
+          </section>
+        </MotionReveal>
 
-        {/* Important booking notes */}
-        <section className="flex items-start gap-3 rounded-2xl border border-[#ff9479]/25 bg-[#ff9479]/10 p-6 text-[#f7d6cb]">
-          <AlertCircle className="mt-0.5 size-5 shrink-0 text-[#ffad95]" />
-          <div className="text-xs sm:text-sm space-y-1">
-            <h4 className="font-bold text-white">Lưu ý khi đặt vé</h4>
-            <ul className="list-inside list-disc space-y-0.5">
-              <li>Kiểm tra thông tin sự kiện và hạng vé trước khi thanh toán.</li>
+        <section
+          aria-labelledby="event-notes-title"
+          className="flex items-start gap-3.5 rounded-2xl border border-primary/15 bg-primary-container p-5 sm:p-6"
+        >
+          <AlertCircle className="mt-0.5 size-5 shrink-0 text-primary" aria-hidden="true" />
+          <div>
+            <h2 id="event-notes-title" className="text-sm font-semibold text-foreground">
+              Trước khi đặt vé
+            </h2>
+            <ul className="mt-3 list-outside list-disc space-y-2 pl-4 text-xs leading-6 text-muted sm:text-sm">
+              <li>Kiểm tra thời gian, địa điểm và hạng vé trước khi thanh toán.</li>
+              <li>Thời hạn giữ chỗ được hiển thị trong bước đặt vé.</li>
+              <li>Mỗi vé QR được check-in một lần tại cổng soát vé.</li>
               <li>Xem hướng dẫn tham gia do ban tổ chức cung cấp trước ngày diễn ra.</li>
-              <li>Mỗi mã vé QR chỉ có giá trị check-in một lần duy nhất tại cổng soát vé.</li>
-              <li>Thời hạn giữ chỗ hiển thị trong bước đặt vé.</li>
             </ul>
           </div>
         </section>
       </div>
 
-      {/* Lightbox Modal phóng to ảnh */}
       {previewImage && (
-        <div
-          onClick={() => setPreviewImage(null)}
-          className="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm flex items-center justify-center p-4 cursor-zoom-out animate-in fade-in duration-200"
+        <dialog
+          ref={previewDialogRef}
+          aria-label={previewImage.alt}
+          onCancel={(event) => {
+            event.preventDefault()
+            closePreview()
+          }}
+          onClick={(event) => {
+            if (event.target !== event.currentTarget) return
+            const bounds = event.currentTarget.getBoundingClientRect()
+            if (
+              event.clientX < bounds.left ||
+              event.clientX > bounds.right ||
+              event.clientY < bounds.top ||
+              event.clientY > bounds.bottom
+            )
+              closePreview()
+          }}
+          className="fixed inset-0 m-auto max-h-[92dvh] w-[calc(100%_-_2rem)] max-w-6xl overflow-auto rounded-2xl border border-white/15 bg-slate-950 p-3 text-white shadow-2xl backdrop:bg-slate-950/85 backdrop:backdrop-blur-sm sm:p-5"
         >
-          <div
-            onClick={(e) => e.stopPropagation()}
-            className="relative max-w-5xl max-h-[92vh] w-full flex items-center justify-center"
-          >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={previewImage}
-              alt="Phóng to ảnh"
-              className="max-w-full max-h-[88vh] object-contain rounded-2xl shadow-2xl"
-            />
+          <div className="mb-3 flex items-center justify-between gap-4">
+            <p className="text-xs font-medium text-slate-300">{previewImage.alt}</p>
             <button
               type="button"
-              onClick={() => setPreviewImage(null)}
-              className="absolute -top-3 -right-3 p-2 bg-slate-800 hover:bg-slate-700 text-white rounded-full shadow-lg transition cursor-pointer border border-white/20"
-              title="Đóng ảnh"
+              onClick={closePreview}
+              aria-label="Đóng ảnh phóng to"
+              className="inline-flex size-10 shrink-0 items-center justify-center rounded-full border border-white/20 bg-white/5 text-white transition hover:bg-white/15 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
             >
-              <X className="size-5" />
+              <X className="size-5" aria-hidden="true" />
             </button>
           </div>
-        </div>
+          <EventMediaImage
+            src={previewImage.url}
+            alt={previewImage.alt}
+            className="mx-auto max-h-[78dvh] max-w-full rounded-lg object-contain"
+          />
+        </dialog>
       )}
     </>
   )

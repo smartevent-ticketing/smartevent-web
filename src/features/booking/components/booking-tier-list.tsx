@@ -18,26 +18,27 @@ export function BookingTierList({ booking }: Props) {
   return (
     <>
       {/* Left Column: Danh sách các hạng vé đang mở bán */}
-      <div className="flex-1 bg-white rounded-3xl border border-outline-variant/60 p-6 space-y-6 shadow-sm w-full">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-outline-variant/60 pb-4">
+      <div className="min-w-0 flex-1 bg-white rounded-2xl border border-outline-variant p-5 sm:p-6 space-y-6 shadow-sm w-full">
+        <div className="flex flex-col gap-5 border-b border-outline-variant pb-5">
           <div>
             <h2 className="text-xl font-bold text-on-surface flex items-center gap-2">
               <Ticket className="size-5 text-primary" />
-              <span>Danh sách vé đang mở bán</span>
+              <span>Chọn hạng vé</span>
             </h2>
-            <p className="text-xs text-on-surface-variant mt-0.5">
-              Chọn hạng vé và số lượng để thêm vào giỏ hàng bên phải
+            <p className="text-sm text-on-surface-variant mt-2 leading-6">
+              Các hạng vé và đợt mở bán hiện có của sự kiện.
             </p>
           </div>
 
           {/* Filter buttons */}
-          <div className="flex items-center gap-1.5 text-xs font-semibold self-start sm:self-auto">
+          <div className="flex flex-wrap items-center gap-1.5 text-xs font-semibold">
             <button
               type="button"
+              aria-pressed={activeFilter === "ALL"}
               onClick={() => setActiveFilter("ALL")}
-              className={`px-3 py-1.5 rounded-xl transition cursor-pointer ${
+              className={`min-h-10 px-4 py-2 rounded-lg transition-colors cursor-pointer ${
                 activeFilter === "ALL"
-                  ? "bg-on-surface text-surface"
+                  ? "bg-on-surface text-white"
                   : "bg-surface-container-low text-on-surface-variant hover:bg-surface-container"
               }`}
             >
@@ -45,10 +46,11 @@ export function BookingTierList({ booking }: Props) {
             </button>
             <button
               type="button"
+              aria-pressed={activeFilter === "STANDING"}
               onClick={() => setActiveFilter("STANDING")}
-              className={`px-3 py-1.5 rounded-xl transition cursor-pointer ${
+              className={`min-h-10 px-4 py-2 rounded-lg transition-colors cursor-pointer ${
                 activeFilter === "STANDING"
-                  ? "bg-primary text-white"
+                  ? "bg-on-surface text-white"
                   : "bg-surface-container-low text-on-surface-variant hover:bg-surface-container"
               }`}
             >
@@ -56,10 +58,11 @@ export function BookingTierList({ booking }: Props) {
             </button>
             <button
               type="button"
+              aria-pressed={activeFilter === "SEATED"}
               onClick={() => setActiveFilter("SEATED")}
-              className={`px-3 py-1.5 rounded-xl transition cursor-pointer ${
+              className={`min-h-10 px-4 py-2 rounded-lg transition-colors cursor-pointer ${
                 activeFilter === "SEATED"
-                  ? "bg-purple-700 text-white"
+                  ? "bg-on-surface text-white"
                   : "bg-surface-container-low text-on-surface-variant hover:bg-surface-container"
               }`}
             >
@@ -76,7 +79,7 @@ export function BookingTierList({ booking }: Props) {
             <p className="text-xs">Hiện không có hạng vé nào thuộc danh mục này đang mở bán.</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
             {filteredTiers.map((tier) => {
               const cartItemId = `${tier.id}-${tier.phaseId}`
               const cartItem = cart.find((item) => item.id === cartItemId)
@@ -85,10 +88,10 @@ export function BookingTierList({ booking }: Props) {
               return (
                 <div
                   key={cartItemId}
-                  className={`rounded-2xl border p-5 transition flex flex-col justify-between space-y-4 ${
+                  className={`rounded-xl border p-5 transition-colors duration-200 flex flex-col justify-between space-y-5 ${
                     inCartQty > 0
-                      ? "border-primary bg-primary/3 shadow-xs"
-                      : "border-outline-variant/60 bg-white hover:border-primary/40 hover:shadow-2xs"
+                      ? "border-primary/45 bg-primary-container/50"
+                      : "border-outline-variant bg-white hover:border-primary/35"
                   }`}
                 >
                   {/* Header */}
@@ -96,14 +99,14 @@ export function BookingTierList({ booking }: Props) {
                     <div className="flex items-start justify-between gap-2">
                       <div>
                         <h3 className="text-base font-bold text-on-surface">{tier.name}</h3>
-                        <div className="flex items-center gap-2 mt-1">
+                        <div className="flex flex-wrap items-center gap-2 mt-2">
                           {tier.areaType === "STANDING" ? (
-                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-semibold bg-blue-50 text-blue-700 border border-blue-200">
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-semibold bg-surface text-on-surface-variant border border-outline-variant">
                               <User className="size-3" />
                               <span>Khu đứng</span>
                             </span>
                           ) : (
-                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-semibold bg-purple-50 text-purple-700 border border-purple-200">
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-semibold bg-surface text-on-surface-variant border border-outline-variant">
                               <Armchair className="size-3" />
                               <span>Khu có ghế</span>
                             </span>
@@ -123,19 +126,24 @@ export function BookingTierList({ booking }: Props) {
                     </div>
 
                     {tier.description && (
-                      <p className="text-xs text-on-surface-variant line-clamp-2">
+                      <p className="text-sm leading-6 text-on-surface-variant line-clamp-2">
                         {tier.description}
                       </p>
                     )}
                   </div>
 
                   {/* Pricing & Stock */}
-                  <div className="pt-2 border-t border-outline-variant/40 flex items-baseline justify-between">
+                  <div className="pt-4 border-t border-outline-variant flex flex-wrap gap-2 items-baseline justify-between">
                     <div>
-                      <div className="text-lg font-black text-primary">
+                      <div className="text-2xl font-bold tracking-tight text-on-surface">
                         {tier.price.toLocaleString("vi-VN")} ₫
                       </div>
-                      <span className="text-[11px] text-green-700 font-semibold block">
+                      <span
+                        className={
+                          "text-xs font-medium block mt-1 " +
+                          (tier.available > 0 ? "text-on-surface-variant" : "text-red-700")
+                        }
+                      >
                         {tier.available > 0 ? `Còn ${tier.available} vé` : "Hết vé"}
                       </span>
                     </div>
@@ -148,7 +156,7 @@ export function BookingTierList({ booking }: Props) {
                   <div className="pt-1">
                     {tier.areaType === "STANDING" ? (
                       inCartQty > 0 ? (
-                        <div className="flex items-center justify-between bg-surface-container-low p-2 rounded-xl border border-primary/30">
+                        <div className="flex flex-wrap gap-3 items-center justify-between bg-white p-2 rounded-lg border border-outline-variant">
                           <span className="text-xs font-bold text-on-surface pl-2">
                             Số lượng trong giỏ:
                           </span>
@@ -157,18 +165,18 @@ export function BookingTierList({ booking }: Props) {
                               <button
                                 type="button"
                                 onClick={() => updateQuantity(cartItemId, inCartQty - 1)}
-                                className="px-2.5 py-1 text-xs font-bold text-on-surface hover:bg-surface-container transition cursor-pointer"
+                                className="size-10 text-sm font-semibold text-on-surface hover:bg-surface transition-colors cursor-pointer"
                                 title="Giảm số lượng"
                               >
                                 -
                               </button>
-                              <span className="px-3 py-1 text-xs font-bold text-primary min-w-7 text-center">
+                              <span className="px-2 py-1 text-sm font-semibold text-on-surface min-w-7 text-center">
                                 {inCartQty}
                               </span>
                               <button
                                 type="button"
                                 onClick={() => updateQuantity(cartItemId, inCartQty + 1)}
-                                className="px-2.5 py-1 text-xs font-bold text-on-surface hover:bg-surface-container transition cursor-pointer disabled:opacity-40"
+                                className="size-10 text-sm font-semibold text-on-surface hover:bg-surface transition-colors cursor-pointer disabled:opacity-40"
                                 disabled={
                                   inCartQty >= tier.maxAllowed || inCartQty >= tier.available
                                 }
@@ -180,7 +188,7 @@ export function BookingTierList({ booking }: Props) {
                             <button
                               type="button"
                               onClick={() => removeFromCart(cartItemId)}
-                              className="p-1.5 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-lg transition"
+                              className="flex size-10 items-center justify-center text-on-surface-variant hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors"
                               title="Xóa khỏi giỏ"
                             >
                               <Trash2 className="size-4" />
@@ -192,7 +200,7 @@ export function BookingTierList({ booking }: Props) {
                           type="button"
                           onClick={() => addToCart(tier, 1)}
                           disabled={tier.available <= 0}
-                          className="w-full py-2.5 bg-primary hover:bg-primary-hover text-white text-xs font-bold rounded-xl transition shadow-xs flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                          className="w-full min-h-11 px-3 py-2.5 bg-primary hover:bg-primary-hover text-white text-sm font-semibold rounded-lg transition-colors flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                           <Plus className="size-4" />
                           <span>Thêm vào giỏ hàng</span>
@@ -200,12 +208,12 @@ export function BookingTierList({ booking }: Props) {
                       )
                     ) : /* SEATED Ticket */
                     inCartQty > 0 ? (
-                      <div className="flex items-center justify-between bg-purple-50/50 p-2.5 rounded-xl border border-purple-200">
+                      <div className="flex flex-wrap gap-3 items-center justify-between bg-white p-3 rounded-lg border border-outline-variant">
                         <div>
-                          <span className="text-xs font-bold text-purple-900 block">
+                          <span className="text-xs font-semibold text-on-surface block">
                             Đã chọn {cartItem?.selectedSeats?.length || 0} ghế
                           </span>
-                          <span className="text-[11px] text-purple-700 font-mono">
+                          <span className="text-xs text-on-surface-variant font-mono break-words">
                             {cartItem?.selectedSeats?.map((s) => getSeatLabel(s)).join(", ")}
                           </span>
                         </div>
@@ -213,14 +221,14 @@ export function BookingTierList({ booking }: Props) {
                           <button
                             type="button"
                             onClick={() => openSeatModal(tier)}
-                            className="px-3 py-1.5 text-xs font-bold text-purple-800 bg-purple-100 hover:bg-purple-200 rounded-lg transition cursor-pointer"
+                            className="min-h-10 px-3 py-2 text-xs font-semibold text-primary bg-primary-container hover:bg-primary/10 rounded-lg transition-colors cursor-pointer"
                           >
                             Đổi ghế
                           </button>
                           <button
                             type="button"
                             onClick={() => removeFromCart(cartItemId)}
-                            className="p-1.5 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-lg transition"
+                            className="flex size-10 items-center justify-center text-on-surface-variant hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors"
                             title="Xóa vé"
                           >
                             <Trash2 className="size-4" />
@@ -232,10 +240,10 @@ export function BookingTierList({ booking }: Props) {
                         type="button"
                         onClick={() => openSeatModal(tier)}
                         disabled={tier.available <= 0}
-                        className="w-full py-2.5 bg-purple-700 hover:bg-purple-800 text-white text-xs font-bold rounded-xl transition shadow-xs flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="w-full min-h-11 px-3 py-2.5 bg-primary hover:bg-primary-hover text-white text-sm font-semibold rounded-lg transition-colors flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                       >
                         <Armchair className="size-4" />
-                        <span>Chọn vị trí ghế ngồi & Thêm</span>
+                        <span>Chọn vị trí ghế</span>
                       </button>
                     )}
                   </div>

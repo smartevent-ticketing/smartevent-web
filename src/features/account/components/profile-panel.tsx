@@ -19,13 +19,13 @@ import { UserAvatar } from "@/components/ui/user-avatar"
 
 function ProfileField({ icon, label, value }: { icon: ReactNode; label: string; value?: string }) {
   return (
-    <div className="flex min-w-0 items-start gap-3 rounded-2xl border border-[#eee7e2] bg-[#fbf9f7] p-4">
-      <span className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-[#bd443a]/10 text-[#bd443a]">
+    <div className="flex min-w-0 items-start gap-3 rounded-2xl border border-outline-variant bg-surface p-4">
+      <span className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-primary-container text-primary">
         {icon}
       </span>
       <div className="min-w-0">
-        <p className="text-xs font-medium text-[#7a6f75]">{label}</p>
-        <p className="mt-1 break-words text-sm font-semibold text-[#251d25]">
+        <p className="text-xs font-medium text-on-surface-variant">{label}</p>
+        <p className="mt-1 break-words text-sm font-semibold text-on-surface">
           {value?.trim() || "Chưa cập nhật"}
         </p>
       </div>
@@ -101,16 +101,18 @@ export function CustomerProfilePanel() {
 
   return (
     <div className="space-y-6">
-      <section className="flex flex-wrap items-center gap-5 rounded-3xl border border-[#e7ddd7] bg-white p-5 shadow-sm sm:p-7">
+      <section className="flex flex-wrap items-center gap-5 rounded-2xl border border-outline-variant bg-white p-5 shadow-sm sm:p-7">
         <UserAvatar
           src={avatarUrl}
           name={user?.fullName}
           initials={initials}
-          className="flex size-20 items-center justify-center rounded-3xl bg-[#ff8063] text-2xl font-extrabold text-[#261621]"
+          className="flex size-20 items-center justify-center rounded-2xl bg-primary-container text-2xl font-bold text-primary"
         />
         <div className="min-w-0 flex-1">
-          <h3 className="text-lg font-extrabold text-[#251d25]">Ảnh đại diện</h3>
-          <p className="mt-1 text-sm text-[#7a6f75]">Dùng ảnh JPG, PNG hoặc WEBP, tối đa 2 MB.</p>
+          <h3 className="text-lg font-bold text-on-surface">Ảnh đại diện</h3>
+          <p className="mt-1 text-sm text-on-surface-variant">
+            Dùng ảnh JPG, PNG hoặc WEBP, tối đa 2 MB.
+          </p>
           <input
             ref={fileInput}
             type="file"
@@ -124,27 +126,27 @@ export function CustomerProfilePanel() {
             type="button"
             disabled={isUploading}
             onClick={() => fileInput.current?.click()}
-            className="mt-3 inline-flex items-center gap-2 rounded-xl bg-[#251d25] px-4 py-2.5 text-sm font-bold text-white transition hover:bg-[#483442] disabled:cursor-wait disabled:opacity-60"
+            className="mt-3 inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-bold text-white transition hover:bg-primary-hover disabled:cursor-wait disabled:opacity-60"
           >
             <Camera className="size-4" /> {isUploading ? "Đang tải ảnh..." : "Cập nhật ảnh"}
           </button>
           {avatarMessage && (
-            <p role="status" className="mt-2 text-sm text-[#216b44]">
+            <p role="status" className="mt-2 text-sm text-emerald-700">
               {avatarMessage}
             </p>
           )}
           {avatarError && (
-            <p role="alert" className="mt-2 text-sm text-[#a34234]">
+            <p role="alert" className="mt-2 text-sm text-red-700">
               {avatarError}
             </p>
           )}
         </div>
       </section>
-      <section className="overflow-hidden rounded-3xl border border-[#e7ddd7] bg-white shadow-sm">
-        <div className="flex flex-wrap items-center justify-between gap-4 border-b border-[#eee7e2] px-6 py-5 sm:px-7">
+      <section className="overflow-hidden rounded-2xl border border-outline-variant bg-white shadow-sm">
+        <div className="flex flex-wrap items-center justify-between gap-4 border-b border-outline-variant px-6 py-5 sm:px-7">
           <div>
-            <h3 className="text-lg font-extrabold text-[#251d25]">Thông tin cá nhân</h3>
-            <p className="mt-1 text-sm text-[#7a6f75]">
+            <h3 className="text-lg font-bold text-on-surface">Thông tin cá nhân</h3>
+            <p className="mt-1 text-sm text-on-surface-variant">
               Thông tin liên hệ gắn với tài khoản của bạn.
             </p>
           </div>
@@ -153,8 +155,8 @@ export function CustomerProfilePanel() {
               className={
                 "inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-bold " +
                 (user?.status === "ACTIVE"
-                  ? "bg-[#e8f6ee] text-[#216b44]"
-                  : "bg-[#fff0eb] text-[#a34234]")
+                  ? "bg-emerald-50 text-emerald-700"
+                  : "bg-red-50 text-red-700")
               }
             >
               <BadgeCheck className="size-4" /> {status}
@@ -185,10 +187,10 @@ export function CustomerProfilePanel() {
         </div>
       </section>
 
-      <section className="overflow-hidden rounded-3xl border border-[#e7ddd7] bg-white shadow-sm">
-        <div className="border-b border-[#eee7e2] px-6 py-5 sm:px-7">
-          <h3 className="text-lg font-extrabold text-[#251d25]">Thông tin tài khoản</h3>
-          <p className="mt-1 text-sm text-[#7a6f75]">
+      <section className="overflow-hidden rounded-2xl border border-outline-variant bg-white shadow-sm">
+        <div className="border-b border-outline-variant px-6 py-5 sm:px-7">
+          <h3 className="text-lg font-bold text-on-surface">Thông tin tài khoản</h3>
+          <p className="mt-1 text-sm text-on-surface-variant">
             Vai trò và mã hồ sơ giúp nhận diện tài khoản SmartEvent của bạn.
           </p>
         </div>
@@ -203,10 +205,10 @@ export function CustomerProfilePanel() {
       </section>
 
       {organizer && (
-        <section className="overflow-hidden rounded-3xl border border-[#e7ddd7] bg-white shadow-sm">
-          <div className="border-b border-[#eee7e2] px-6 py-5 sm:px-7">
-            <h3 className="text-lg font-extrabold text-[#251d25]">Hồ sơ ban tổ chức</h3>
-            <p className="mt-1 text-sm text-[#7a6f75]">
+        <section className="overflow-hidden rounded-2xl border border-outline-variant bg-white shadow-sm">
+          <div className="border-b border-outline-variant px-6 py-5 sm:px-7">
+            <h3 className="text-lg font-bold text-on-surface">Hồ sơ ban tổ chức</h3>
+            <p className="mt-1 text-sm text-on-surface-variant">
               Thông tin đơn vị tổ chức đã lưu trên hệ thống.
             </p>
           </div>
