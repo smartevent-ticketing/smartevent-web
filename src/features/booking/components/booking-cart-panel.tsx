@@ -36,8 +36,8 @@ export function BookingCartPanel({ booking }: Props) {
 
   return (
     <aside aria-label="Vé đã chọn" className="w-full lg:sticky lg:top-24 lg:w-[380px] lg:shrink-0">
-      <div className="flex flex-col rounded-2xl border border-outline-variant bg-white shadow-sm lg:max-h-[calc(100dvh-7rem)]">
-        <div className="flex shrink-0 items-center justify-between gap-3 border-b border-outline-variant px-5 py-5 sm:px-6">
+      <div className="overflow-hidden rounded-2xl border border-outline-variant bg-white shadow-sm lg:max-h-[calc(100dvh-7rem)] lg:overflow-y-auto">
+        <div className="flex items-center justify-between gap-3 border-b border-outline-variant px-5 py-5 sm:px-6">
           <div className="flex items-center gap-3">
             <div className="flex size-10 items-center justify-center rounded-xl bg-primary-container text-primary">
               <ShoppingCart className="size-5" />
@@ -60,7 +60,7 @@ export function BookingCartPanel({ booking }: Props) {
           )}
         </div>
 
-        <div className="shrink-0 space-y-2 px-5 py-5 sm:px-6">
+        <div className="space-y-2 px-5 py-5 sm:px-6">
           <h3 className="text-sm font-semibold leading-6">{eventTitle}</h3>
           <p className="flex items-start gap-2 text-xs leading-5 text-on-surface-variant">
             <Calendar className="mt-0.5 size-3.5 shrink-0" />
@@ -91,7 +91,7 @@ export function BookingCartPanel({ booking }: Props) {
             </p>
           </div>
         ) : (
-          <div className="min-h-0 flex-1 space-y-4 overflow-y-auto border-t border-outline-variant px-5 py-5 sm:px-6">
+          <div className="space-y-4 border-t border-outline-variant px-5 py-5 sm:px-6">
             {cart.map((item) => (
               <div
                 key={item.id}
@@ -159,7 +159,7 @@ export function BookingCartPanel({ booking }: Props) {
           </div>
         )}
 
-        <div className="shrink-0 space-y-5 border-t border-outline-variant bg-surface/40 px-5 py-5 sm:px-6">
+        <div className="space-y-5 border-t border-outline-variant bg-surface/40 px-5 py-5 sm:px-6">
           <div className="flex flex-wrap items-end justify-between gap-3">
             <div>
               <p className="text-xs text-on-surface-variant">Tổng tiền vé</p>

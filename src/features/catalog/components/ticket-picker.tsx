@@ -37,7 +37,7 @@ export function TicketPicker({
   targetEventId,
 }: Props) {
   return (
-    <div className="overflow-hidden rounded-2xl border border-border bg-white shadow-[0_12px_40px_-20px_rgba(24,34,48,0.18)]">
+    <div className="overflow-hidden rounded-2xl border border-border bg-white shadow-[0_12px_40px_-20px_rgba(24,34,48,0.18)] lg:max-h-[calc(100dvh-8rem)] lg:overflow-y-auto">
       <div className="flex items-center justify-between gap-4 border-b border-border px-5 py-5 sm:px-6">
         <div className="flex items-center gap-3">
           <span className="flex size-10 items-center justify-center rounded-xl bg-primary-container text-primary">
@@ -95,7 +95,7 @@ export function TicketPicker({
           <>
             <fieldset>
               <legend className="mb-3 text-sm font-semibold text-foreground">Hạng vé</legend>
-              <div className="max-h-[360px] space-y-3 overflow-y-auto pr-1">
+              <div className="space-y-3">
                 {availableTiers.map((tier) => {
                   const isSelected = effectiveTierId === tier.id
                   return (

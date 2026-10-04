@@ -29,7 +29,7 @@ export function useHome() {
 
   const [searchQuery, setSearchQuery] = useState("")
 
-  const [selectedCity, setSelectedCity] = useState("all")
+  const [selectedCity, setSelectedCity] = useState("")
 
   useEffect(() => {
     let isMounted = true

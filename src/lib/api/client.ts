@@ -18,11 +18,9 @@ import type {
 
 // ─── Cấu hình ─────────────────────────────────────────────
 
-const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL
-
-if (!apiBaseUrl) {
-  throw new Error("Missing NEXT_PUBLIC_API_BASE_URL")
-}
+// Browser requests follow the frontend origin, including shared HTTPS tunnels.
+// The server render only creates this client; API calls run in the browser.
+const apiBaseUrl = typeof window === "undefined" ? "http://localhost" : window.location.origin
 
 // ─── Lưu bản clone request trước khi body bị tiêu thụ ────
 // request.clone() phải được gọi TRƯỚC khi fetch() tiêu thụ body.

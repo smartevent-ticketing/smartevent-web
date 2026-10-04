@@ -62,10 +62,15 @@ Hạ tầng và backend nên được chạy trước theo hướng dẫn trong 
 
 | Biến trong `.env.local` | Mục đích | Giá trị local |
 | --- | --- | --- |
-| `API_BASE_URL` | Các route `/api/auth/*` phía server gọi backend. | `http://localhost:8080` |
-| `NEXT_PUBLIC_API_BASE_URL` | Trình duyệt gọi API nghiệp vụ; giá trị được đưa vào bundle khi build. | `http://localhost:8080` |
+| `API_BASE_URL` | Next.js gọi backend ở runtime qua các route `/api/auth/*` và `/api/v1/*`. | `http://localhost:8080` |
 
-Nếu backend chạy ở địa chỉ khác, sửa hai biến này trước khi khởi động frontend. Không đưa token, mật khẩu hoặc khóa VNPay vào `NEXT_PUBLIC_*`; `.env.local` đã được Git bỏ qua.
+Nếu backend chạy ở địa chỉ khác, sửa `API_BASE_URL` trước khi khởi động frontend. Biến này chỉ dùng phía server và phải trỏ tới địa chỉ backend mà tiến trình Next.js truy cập được. Trình duyệt gọi API trên cùng địa chỉ với frontend; `NEXT_PUBLIC_API_BASE_URL` không còn được sử dụng. Không đưa token, mật khẩu hoặc khóa VNPay vào `NEXT_PUBLIC_*`; `.env.local` đã được Git bỏ qua.
+
+### Chia sẻ frontend qua Dev Tunnels
+
+Chia sẻ port **3000** rồi mở URL HTTPS của tunnel. Next.js chuyển tiếp `/api/v1/*` tới backend qua `API_BASE_URL`; các route `/api/auth/*` vẫn xử lý đăng nhập và cookie phiên. Backend phải đang chạy và truy cập được từ tiến trình Next.js. Nếu cả hai chạy trực tiếp trên cùng máy, giữ `API_BASE_URL=http://localhost:8080`; nếu Next.js chạy trong container, dùng địa chỉ backend trên mạng container.
+
+Sau khi lấy bản sửa hoặc đổi `.env.local`, dừng và khởi động lại `npm run dev`, rồi tải lại trang trên tunnel. Ảnh tải lên MinIO cần địa chỉ riêng mà trình duyệt truy cập được: cấu hình backend `APP_MINIO_PUBLIC_ENDPOINT` bằng URL HTTPS của dịch vụ MinIO. Chỉ chia sẻ port 3000 chưa làm cho URL ảnh `localhost:9000` truy cập được từ máy khác.
 
 ## Kiểm tra trước khi push
 
@@ -79,15 +84,15 @@ npm run build
 
 Có thể chạy toàn bộ bằng `npm run check`. `typecheck` tạo lại route types của Next.js trước khi kiểm tra TypeScript, kể cả ở checkout mới chưa có `.next`.
 
-GitHub Actions chạy cùng năm bước trên cho pull request và khi đẩy lên `main`, cài dependency bằng `npm ci`. CI dùng `NEXT_PUBLIC_API_BASE_URL=http://localhost:8080` để build; không cần backend đang chạy và không gọi đây là kiểm thử tích hợp.
+GitHub Actions chạy cùng năm bước trên cho pull request và khi đẩy lên `main`, cài dependency bằng `npm ci`. Build không yêu cầu địa chỉ API hoặc backend đang chạy; kiểm tra này chưa xác nhận tích hợp backend.
 
-Không commit `.env.local`, token hoặc secret; biến có tiền tố `NEXT_PUBLIC_` luôn có thể xuất hiện trong bundle trình duyệt. Chạy build triển khai với `NEXT_PUBLIC_API_BASE_URL` đúng môi trường đích.
+Không commit `.env.local`, token hoặc secret; biến có tiền tố `NEXT_PUBLIC_` luôn có thể xuất hiện trong bundle trình duyệt. Khi triển khai, cấu hình `API_BASE_URL` trong môi trường chạy Next.js; Docker image không cần build lại khi địa chỉ backend thay đổi.
 
 ## Cấu trúc chính
 
 ```text
 src/
-├── app/                 # route group, page, layout và auth route handlers
+├── app/                 # route group, page, layout, auth và API proxy handlers
 ├── features/
 │   ├── account/         # vé, đơn, hóa đơn, hồ sơ, hỗ trợ hoàn tiền
 │   ├── admin/           # duyệt, danh mục, người dùng, outbox

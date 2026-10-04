@@ -1,0 +1,41 @@
+// Current provincial-level units under Decision 19/2025/QĐ-TTg.
+// Values omit the administrative prefix so they also match existing event city text.
+export const VIETNAM_CITIES: readonly string[] = [
+  "Cần Thơ",
+  "Đà Nẵng",
+  "Hà Nội",
+  "Hải Phòng",
+  "Hồ Chí Minh",
+  "Huế",
+]
+
+export const VIETNAM_PROVINCES: readonly string[] = [
+  "An Giang",
+  "Bắc Ninh",
+  "Cà Mau",
+  "Cao Bằng",
+  "Đắk Lắk",
+  "Điện Biên",
+  "Đồng Nai",
+  "Đồng Tháp",
+  "Gia Lai",
+  "Hà Tĩnh",
+  "Hưng Yên",
+  "Khánh Hòa",
+  "Lai Châu",
+  "Lâm Đồng",
+  "Lạng Sơn",
+  "Lào Cai",
+  "Nghệ An",
+  "Ninh Bình",
+  "Phú Thọ",
+  "Quảng Ngãi",
+  "Quảng Ninh",
+  "Quảng Trị",
+  "Sơn La",
+  "Tây Ninh",
+  "Thái Nguyên",
+  "Thanh Hóa",
+  "Tuyên Quang",
+  "Vĩnh Long",
+]

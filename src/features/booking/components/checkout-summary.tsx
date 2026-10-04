@@ -19,7 +19,7 @@ export function CheckoutSummary({
   const ticketCount = items.reduce((total, item) => total + (item.quantity || 0), 0)
   return (
     <aside aria-label="Tóm tắt đơn hàng" className="lg:col-span-5 lg:sticky lg:top-24">
-      <div className="overflow-hidden rounded-2xl border border-outline-variant bg-white shadow-sm">
+      <div className="overflow-hidden rounded-2xl border border-outline-variant bg-white shadow-sm lg:max-h-[calc(100dvh-7rem)] lg:overflow-y-auto">
         <div className="flex items-center gap-3 border-b border-outline-variant px-5 py-5 sm:px-6">
           <div className="flex size-10 items-center justify-center rounded-xl bg-primary-container text-primary">
             <Ticket className="size-5" />

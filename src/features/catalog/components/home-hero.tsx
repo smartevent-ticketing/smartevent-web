@@ -7,6 +7,7 @@ import type { FormEvent } from "react"
 
 import { FeaturedCarousel } from "./featured-carousel"
 import { catalogUrl } from "../model/catalog-url"
+import { VIETNAM_CITIES, VIETNAM_PROVINCES } from "../model/vietnam-locations"
 import type { useHome } from "@/features/catalog/hooks/use-home"
 import type { components } from "@/lib/api/schema"
 
@@ -32,8 +33,7 @@ export function HomeHero({
   const router = useRouter()
   const submitSearch = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    const city = selectedCity === "hcm" ? "Hồ Chí Minh" : selectedCity === "hn" ? "Hà Nội" : ""
-    router.push(catalogUrl({ q: searchQuery, city }))
+    router.push(catalogUrl({ q: searchQuery, city: selectedCity }))
   }
 
   return (
@@ -83,16 +83,28 @@ export function HomeHero({
             <div className="flex items-center justify-between gap-2 border-t border-border pt-2">
               <label className="flex min-w-0 items-center gap-2 px-3 text-muted">
                 <MapPin className="size-4 shrink-0" />
-                <span className="sr-only">Thành phố</span>
+                <span className="sr-only">Tỉnh/Thành phố</span>
                 <select
-                  aria-label="Thành phố"
+                  aria-label="Tỉnh/Thành phố"
                   value={selectedCity}
                   onChange={(event) => setSelectedCity(event.target.value)}
                   className="min-w-0 appearance-none bg-transparent py-2 pr-1 text-sm text-foreground outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
                 >
-                  <option value="all">Toàn quốc</option>
-                  <option value="hcm">TP. HCM</option>
-                  <option value="hn">Hà Nội</option>
+                  <option value="">Toàn quốc</option>
+                  <optgroup label="Thành phố trực thuộc trung ương">
+                    {VIETNAM_CITIES.map((name) => (
+                      <option key={name} value={name}>
+                        {name === "Hồ Chí Minh" ? "TP. Hồ Chí Minh" : name}
+                      </option>
+                    ))}
+                  </optgroup>
+                  <optgroup label="Tỉnh">
+                    {VIETNAM_PROVINCES.map((name) => (
+                      <option key={name} value={name}>
+                        {name}
+                      </option>
+                    ))}
+                  </optgroup>
                 </select>
                 <ChevronDown className="size-3 shrink-0" />
               </label>

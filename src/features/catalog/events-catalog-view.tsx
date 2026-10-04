@@ -8,6 +8,7 @@ import { CatalogResults } from "./components/catalog-results"
 import { EventCardSkeleton } from "./components/event-card"
 import { useEventsCatalog } from "./hooks/use-events-catalog"
 import { catalogUrl, type CatalogFilters } from "./model/catalog-url"
+import { VIETNAM_CITIES, VIETNAM_PROVINCES } from "./model/vietnam-locations"
 
 function EventsCatalogContent({ filters }: { filters: CatalogFilters }) {
   const router = useRouter()
@@ -107,19 +108,31 @@ function EventsCatalogContent({ filters }: { filters: CatalogFilters }) {
                 </div>
               </label>
               <label className="block text-xs font-semibold text-foreground">
-                Thành phố
+                Tỉnh/Thành phố
                 <select
-                  aria-label="Thành phố"
+                  aria-label="Tỉnh/Thành phố"
                   value={city}
                   onChange={(event) => setCity(event.target.value)}
                   className="mt-2 w-full rounded-xl border border-border bg-background px-3 py-3 text-xs font-normal outline-none focus:border-primary focus:ring-2 focus:ring-primary/10"
                 >
-                  <option value="">Tất cả thành phố</option>
-                  {city && city !== "Hồ Chí Minh" && city !== "Hà Nội" && (
+                  <option value="">Toàn quốc</option>
+                  {city && !VIETNAM_CITIES.includes(city) && !VIETNAM_PROVINCES.includes(city) && (
                     <option value={city}>{city}</option>
                   )}
-                  <option value="Hồ Chí Minh">TP. Hồ Chí Minh</option>
-                  <option value="Hà Nội">Hà Nội</option>
+                  <optgroup label="Thành phố trực thuộc trung ương">
+                    {VIETNAM_CITIES.map((name) => (
+                      <option key={name} value={name}>
+                        {name === "Hồ Chí Minh" ? "TP. Hồ Chí Minh" : name}
+                      </option>
+                    ))}
+                  </optgroup>
+                  <optgroup label="Tỉnh">
+                    {VIETNAM_PROVINCES.map((name) => (
+                      <option key={name} value={name}>
+                        {name}
+                      </option>
+                    ))}
+                  </optgroup>
                 </select>
               </label>
               <label className="block text-xs font-semibold text-foreground">
