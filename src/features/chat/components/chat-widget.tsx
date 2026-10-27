@@ -53,7 +53,7 @@ export function ChatWidget() {
               </div>
               <div>
                 <div className="flex items-center gap-1.5 font-medium leading-none">
-                  <span>Trợ lý SmartEvent</span>
+                  <span>SmartEvent Bot</span>
                   <span className="flex size-2 rounded-full bg-emerald-500" title="Trực tuyến" />
                 </div>
                 <p className="mt-1 text-[11px] text-muted-foreground">
@@ -183,7 +183,7 @@ export function ChatWidget() {
               </Button>
             </form>
             <p className="mt-1.5 text-center text-[10px] text-muted-foreground/70">
-              Trợ lý cung cấp thông tin chỉ đọc (READ_ONLY), không tạo đơn đặt vé thay bạn.
+              Trợ lý cung cấp thông tin sự kiện, không thể đặt vé thay bạn.
             </p>
           </div>
         </div>

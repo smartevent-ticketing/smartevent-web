@@ -102,7 +102,7 @@ export function useChat() {
           id: createId(),
           role: "assistant",
           content:
-            "Không thể gửi tin nhắn đến trợ lý SmartEvent. Vui lòng kiểm tra lại kết nối mạng.",
+            "Không thể gửi tin nhắn đến SmartEvent Bot. Vui lòng kiểm tra lại kết nối mạng.",
           createdAt: new Date().toISOString(),
           intent: "NETWORK_ERROR",
           grounding: "NO_LIVE_DATA",
