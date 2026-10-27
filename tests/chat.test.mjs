@@ -140,3 +140,38 @@ test("sendChatMessage calls /api/chat and parses ChatResponseDTO", async (t) => 
   assert.equal(result.conversation_id, "c1")
   assert.equal(result.answer, "Xin chào bạn!")
 })
+
+test("chat API strips non-UUID conversation_id and invalid active_intent before forwarding", async (t) => {
+  let capturedBody = null
+  t.mock.method(globalThis, "fetch", async (url, options) => {
+    capturedBody = JSON.parse(options.body)
+    return Response.json({
+      conversation_id: "08c25afc-f9c9-4db0-aab7-02c779779d6c",
+      intent: "GREETING",
+      state: {},
+      answer: "Xin chào!",
+      grounding: "NO_LIVE_DATA",
+      tool_called: null,
+      citations: [],
+    })
+  })
+
+  const req = new Request("http://localhost:3000/api/chat", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      message: "Xin chào",
+      conversation_id: "non-uuid-conversation-id",
+      previous_state: {
+        city: "Hà Nội",
+        active_intent: "OFFLINE",
+      },
+    }),
+  })
+
+  const res = await POST(req)
+  assert.equal(res.status, 200)
+  assert.equal(capturedBody.conversation_id, undefined)
+  assert.equal(capturedBody.previous_state.city, "Hà Nội")
+  assert.equal(capturedBody.previous_state.active_intent, undefined)
+})

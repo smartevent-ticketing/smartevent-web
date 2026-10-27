@@ -1,9 +1,20 @@
 "use client"
 
-import { useCallback, useState } from "react"
+import { useCallback, useRef, useState } from "react"
 
 import { sendChatMessage } from "@/features/chat/api/chat-api"
 import type { ChatMessage, DialogueState } from "@/features/chat/model/chat"
+
+function createId(): string {
+  if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
+    return crypto.randomUUID()
+  }
+  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => {
+    const r = (Math.random() * 16) | 0
+    const v = c === "x" ? r : (r & 0x3) | 0x8
+    return v.toString(16)
+  })
+}
 
 const INITIAL_MESSAGE: ChatMessage = {
   id: "welcome-msg",
@@ -21,16 +32,18 @@ export function useChat() {
   const [isLoading, setIsLoading] = useState(false)
   const [conversationId, setConversationId] = useState<string | null>(null)
   const [dialogueState, setDialogueState] = useState<DialogueState>({})
+  const requestCounterRef = useRef(0)
 
   const toggleOpen = useCallback(() => {
     setIsOpen((prev) => !prev)
   }, [])
 
   const clearHistory = useCallback(() => {
+    requestCounterRef.current += 1
     setMessages([
       {
         ...INITIAL_MESSAGE,
-        id: crypto.randomUUID(),
+        id: createId(),
         createdAt: new Date().toISOString(),
       },
     ])
@@ -43,7 +56,8 @@ export function useChat() {
       const trimmed = text.trim()
       if (!trimmed || isLoading) return
 
-      const userMessageId = crypto.randomUUID()
+      const currentRequestId = ++requestCounterRef.current
+      const userMessageId = createId()
       const userMessage: ChatMessage = {
         id: userMessageId,
         role: "user",
@@ -61,11 +75,15 @@ export function useChat() {
           previous_state: dialogueState,
         })
 
+        if (currentRequestId !== requestCounterRef.current) {
+          return
+        }
+
         setConversationId(data.conversation_id)
         setDialogueState(data.state || {})
 
         const assistantMessage: ChatMessage = {
-          id: crypto.randomUUID(),
+          id: createId(),
           role: "assistant",
           content: data.answer,
           createdAt: new Date().toISOString(),
@@ -77,8 +95,11 @@ export function useChat() {
 
         setMessages((prev) => [...prev, assistantMessage])
       } catch {
+        if (currentRequestId !== requestCounterRef.current) {
+          return
+        }
         const errorAssistantMessage: ChatMessage = {
-          id: crypto.randomUUID(),
+          id: createId(),
           role: "assistant",
           content:
             "Không thể gửi tin nhắn đến trợ lý SmartEvent. Vui lòng kiểm tra lại kết nối mạng.",
@@ -88,7 +109,9 @@ export function useChat() {
         }
         setMessages((prev) => [...prev, errorAssistantMessage])
       } finally {
-        setIsLoading(false)
+        if (currentRequestId === requestCounterRef.current) {
+          setIsLoading(false)
+        }
       }
     },
     [conversationId, dialogueState, isLoading],

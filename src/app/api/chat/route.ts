@@ -2,6 +2,38 @@ import type { ChatRequestPayload, ChatResponseDTO } from "@/features/chat"
 
 export const dynamic = "force-dynamic"
 
+const UUID_REGEX =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
+
+const VALID_DOMAIN_INTENTS = new Set([
+  "GREETING",
+  "SEARCH_EVENT",
+  "EVENT_DETAIL",
+  "TICKET_RECOMMEND",
+  "TICKET_AVAILABILITY",
+  "ORDER_STATUS",
+  "PAYMENT_STATUS",
+  "MY_TICKETS",
+  "REFUND_POLICY",
+  "BOOKING_GUIDANCE",
+  "OUT_OF_SCOPE",
+  "CLARIFY",
+])
+
+function sanitizePreviousState(
+  state?: ChatRequestPayload["previous_state"],
+): Record<string, unknown> {
+  if (!state || typeof state !== "object") return {}
+  const sanitized = { ...state }
+  if (
+    sanitized.active_intent &&
+    !VALID_DOMAIN_INTENTS.has(sanitized.active_intent)
+  ) {
+    delete sanitized.active_intent
+  }
+  return sanitized
+}
+
 export async function POST(request: Request) {
   let body: unknown
   try {
@@ -54,7 +86,14 @@ export async function POST(request: Request) {
     )
   }
 
-  const aiServiceUrl = (process.env.AI_SERVICE_URL || "http://127.0.0.1:8000").replace(/\/$/, "")
+  const aiServiceUrl = (process.env.AI_SERVICE_URL || "http://127.0.0.1:8001").replace(/\/$/, "")
+
+  const safeConversationId =
+    payload.conversation_id && UUID_REGEX.test(payload.conversation_id)
+      ? payload.conversation_id
+      : undefined
+
+  const safePreviousState = sanitizePreviousState(payload.previous_state)
 
   try {
     const upstreamResponse = await fetch(`${aiServiceUrl}/api/v1/chat`, {
@@ -65,10 +104,10 @@ export async function POST(request: Request) {
       },
       body: JSON.stringify({
         message: rawMessage,
-        conversation_id: payload.conversation_id || undefined,
-        previous_state: payload.previous_state || {},
+        conversation_id: safeConversationId,
+        previous_state: safePreviousState,
       }),
-      signal: AbortSignal.timeout(10000),
+      signal: AbortSignal.timeout(30000),
     })
 
     if (!upstreamResponse.ok) {
@@ -101,7 +140,7 @@ function createFallbackResponse(
   return {
     conversation_id: payload.conversation_id || crypto.randomUUID(),
     intent: "OFFLINE",
-    state: payload.previous_state || {},
+    state: sanitizePreviousState(payload.previous_state),
     answer: fallbackMessage,
     grounding: "NO_LIVE_DATA",
     tool_called: null,
