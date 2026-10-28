@@ -2,8 +2,7 @@ import type { ChatRequestPayload, ChatResponseDTO } from "@/features/chat"
 
 export const dynamic = "force-dynamic"
 
-const UUID_REGEX =
-  /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
+const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
 
 const VALID_DOMAIN_INTENTS = new Set([
   "GREETING",
@@ -25,10 +24,7 @@ function sanitizePreviousState(
 ): Record<string, unknown> {
   if (!state || typeof state !== "object") return {}
   const sanitized = { ...state }
-  if (
-    sanitized.active_intent &&
-    !VALID_DOMAIN_INTENTS.has(sanitized.active_intent)
-  ) {
+  if (sanitized.active_intent && !VALID_DOMAIN_INTENTS.has(sanitized.active_intent)) {
     delete sanitized.active_intent
   }
   return sanitized

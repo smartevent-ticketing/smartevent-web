@@ -101,8 +101,7 @@ export function useChat() {
         const errorAssistantMessage: ChatMessage = {
           id: createId(),
           role: "assistant",
-          content:
-            "Không thể gửi tin nhắn đến SmartEvent Bot. Vui lòng kiểm tra lại kết nối mạng.",
+          content: "Không thể gửi tin nhắn đến SmartEvent Bot. Vui lòng kiểm tra lại kết nối mạng.",
           createdAt: new Date().toISOString(),
           intent: "NETWORK_ERROR",
           grounding: "NO_LIVE_DATA",
