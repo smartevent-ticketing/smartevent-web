@@ -1,5 +1,6 @@
 import type { ReactNode } from "react"
 import { SiteHeader, SiteFooter } from "@/components/layout"
+import { ChatWidget } from "@/features/chat"
 
 interface StorefrontLayoutProps {
   children: ReactNode
@@ -11,6 +12,7 @@ export default function StorefrontLayout({ children }: StorefrontLayoutProps) {
       <SiteHeader />
       <div className="flex-1">{children}</div>
       <SiteFooter />
+      <ChatWidget />
     </div>
   )
 }
