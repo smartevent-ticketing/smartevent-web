@@ -82,43 +82,62 @@ test("chat API forwards request to ai-service and returns response", async (t) =
   assert.deepEqual(data.event_links, mockAiResponse.event_links)
 })
 
-test("chat API returns safe fallback response when ai-service is unreachable", async (t) => {
+test("chat API reports unavailable AI as 502 without leaking transport details", async (t) => {
   t.mock.method(globalThis, "fetch", async () => {
-    throw new Error("Network connection refused")
+    throw new Error("SECRET_TRANSPORT_DETAILS")
   })
-
-  const req = new Request("http://localhost:3000/api/chat", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ message: "Có sự kiện gì hôm nay?" }),
-  })
-
-  const res = await POST(req)
-  assert.equal(res.status, 200)
-
-  const data = await res.json()
-  assert.equal(data.intent, "OFFLINE")
-  assert.equal(data.grounding, "NO_LIVE_DATA")
-  assert.match(data.answer, /Không thể kết nối/i)
+  const response = await POST(
+    new Request("http://localhost/api/chat", {
+      method: "POST",
+      body: JSON.stringify({ message: "xin chào" }),
+    }),
+  )
+  assert.equal(response.status, 502)
+  assert.equal((await response.json()).code, "AI_UNAVAILABLE")
 })
 
-test("chat API returns safe fallback response when ai-service returns 500 error", async (t) => {
+for (const status of [400, 422, 429, 500, 503, 504]) {
+  test(`chat API preserves upstream HTTP ${status} with safe error fields`, async (t) => {
+    t.mock.method(globalThis, "fetch", async () =>
+      Response.json({ code: "MODEL_UNAVAILABLE", message: "SECRET" }, { status }),
+    )
+    const response = await POST(
+      new Request("http://localhost/api/chat", {
+        method: "POST",
+        body: JSON.stringify({ message: "xin chào" }),
+      }),
+    )
+    assert.equal(response.status, status)
+    const body = await response.json()
+    assert.equal(body.code, "MODEL_UNAVAILABLE")
+    assert.doesNotMatch(body.message, /SECRET/)
+  })
+}
+
+test("chat API maps timeout to 504", async (t) => {
   t.mock.method(globalThis, "fetch", async () => {
-    return new Response("Internal Server Error", { status: 500 })
+    throw new DOMException("timed out", "TimeoutError")
   })
+  const response = await POST(
+    new Request("http://localhost/api/chat", {
+      method: "POST",
+      body: JSON.stringify({ message: "xin chào" }),
+    }),
+  )
+  assert.equal(response.status, 504)
+  assert.equal((await response.json()).code, "UPSTREAM_TIMEOUT")
+})
 
-  const req = new Request("http://localhost:3000/api/chat", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ message: "Chính sách hoàn vé" }),
+test("chat client forwards abort signal and retains error status/code", async (t) => {
+  const controller = new AbortController()
+  t.mock.method(globalThis, "fetch", async (url, options) => {
+    assert.equal(options.signal, controller.signal)
+    return Response.json({ code: "BACKEND_UNAVAILABLE" }, { status: 503 })
   })
-
-  const res = await POST(req)
-  assert.equal(res.status, 200)
-
-  const data = await res.json()
-  assert.equal(data.intent, "OFFLINE")
-  assert.match(data.answer, /tạm thời không thể phản hồi/i)
+  await assert.rejects(
+    sendChatMessage({ message: "xin chào" }, controller.signal),
+    (error) => error.status === 503 && error.code === "BACKEND_UNAVAILABLE",
+  )
 })
 
 test("sendChatMessage calls /api/chat and parses ChatResponseDTO", async (t) => {

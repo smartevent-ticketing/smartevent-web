@@ -55,7 +55,10 @@ export function ChatWidget() {
               <div>
                 <div className="flex items-center gap-1.5 font-medium leading-none">
                   <span>SmartEvent Bot</span>
-                  <span className="flex size-2 rounded-full bg-emerald-500" title="Trực tuyến" />
+                  <span
+                    className="flex size-2 rounded-full bg-emerald-500"
+                    title="Trợ lý SmartEvent"
+                  />
                 </div>
                 <p className="mt-1 text-[11px] text-muted-foreground">
                   Tìm sự kiện & hướng dẫn SmartEvent
@@ -101,7 +104,72 @@ export function ChatWidget() {
                         : "bg-muted/80 text-foreground rounded-bl-xs border border-border/40",
                     )}
                   >
-                    <p className="whitespace-pre-wrap">{msg.content}</p>
+                    <p className="whitespace-pre-wrap" role={msg.error_code ? "alert" : undefined}>
+                      {msg.content}
+                    </p>
+                    {msg.actions
+                      ?.filter(
+                        (action) => action.type === "BROWSE_EVENTS" && action.route === "/events",
+                      )
+                      .map((action) => (
+                        <a
+                          key={action.route}
+                          className="mt-2 block text-xs text-primary underline"
+                          href={action.route}
+                        >
+                          {action.label}
+                        </a>
+                      ))}
+                    {msg.events?.map((event) => (
+                      <div
+                        key={event.id}
+                        className="mt-3 rounded-lg border border-border bg-background p-3"
+                      >
+                        <p className="font-semibold">{event.name}</p>
+                        <p className="text-xs text-muted-foreground">
+                          {[event.venue_name, event.city].filter(Boolean).join(" · ")}
+                        </p>
+                        {event.start_time && Number.isFinite(Date.parse(event.start_time)) && (
+                          <p className="mt-1 text-xs">
+                            {new Intl.DateTimeFormat("vi-VN", {
+                              dateStyle: "medium",
+                              timeStyle: "short",
+                              timeZone: "Asia/Ho_Chi_Minh",
+                            }).format(new Date(event.start_time))}
+                          </p>
+                        )}
+                        {event.price != null &&
+                          event.currency === "VND" &&
+                          Number.isFinite(Number(event.price)) && (
+                            <p className="mt-1 text-xs">
+                              Giá vé:{" "}
+                              {new Intl.NumberFormat("vi-VN", {
+                                style: "currency",
+                                currency: "VND",
+                              }).format(Number(event.price))}{" "}
+                              / vé
+                            </p>
+                          )}
+                        {/^\/events\/[a-zA-Z0-9_-]+$/.test(event.detail_path) && (
+                          <a
+                            className="mt-2 inline-block text-xs font-medium text-primary underline"
+                            href={event.detail_path}
+                          >
+                            Xem chi tiết
+                          </a>
+                        )}
+                      </div>
+                    ))}
+                    {msg.has_more && (
+                      <p className="mt-2 text-xs">
+                        Còn kết quả khác. Bạn có thể thu hẹp điều kiện tìm kiếm.
+                      </p>
+                    )}
+                    {msg.mode === "extractive_fallback" && (
+                      <p className="mt-2 text-xs text-muted-foreground">
+                        Đang hiển thị trích đoạn từ tài liệu.
+                      </p>
+                    )}
 
                     {!isUser &&
                       msg.grounding === "BACKEND_READ" &&

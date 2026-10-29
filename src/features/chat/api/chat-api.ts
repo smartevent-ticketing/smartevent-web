@@ -1,18 +1,44 @@
 import type { ChatRequestPayload, ChatResponseDTO } from "@/features/chat/model/chat"
 
-export async function sendChatMessage(payload: ChatRequestPayload): Promise<ChatResponseDTO> {
+export class ChatServiceError extends Error {
+  constructor(
+    public readonly status: number,
+    public readonly code: string,
+    message: string,
+  ) {
+    super(message)
+    this.name = "ChatServiceError"
+  }
+}
+
+export async function sendChatMessage(
+  payload: ChatRequestPayload,
+  signal?: AbortSignal,
+): Promise<ChatResponseDTO> {
   const response = await fetch("/api/chat", {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-    },
+    headers: { "Content-Type": "application/json", Accept: "application/json" },
     body: JSON.stringify(payload),
+    signal,
   })
-
+  const data = await response.json()
   if (!response.ok) {
-    throw new Error("Lỗi kết nối API chat")
+    const code = typeof data.code === "string" ? data.code : "UPSTREAM_ERROR"
+    const messages: Record<string, string> = {
+      BACKEND_UNAVAILABLE: "Chưa tra cứu được dữ liệu sự kiện. Bạn vui lòng thử lại.",
+      MODEL_UNAVAILABLE: "Trợ lý đang gặp sự cố xử lý câu hỏi. Bạn vui lòng thử lại.",
+      KNOWLEDGE_UNAVAILABLE: "Chưa đọc được tài liệu hướng dẫn. Bạn vui lòng thử lại.",
+      UPSTREAM_TIMEOUT: "Phản hồi mất nhiều thời gian. Bạn vui lòng thử lại.",
+      INVALID_REQUEST: "Thông tin câu hỏi chưa hợp lệ. Bạn vui lòng sửa rồi gửi lại.",
+      AI_UNAVAILABLE: "Chưa kết nối được trợ lý. Bạn vui lòng thử lại sau.",
+      UPSTREAM_CONTRACT_ERROR: "Phản hồi chưa hợp lệ. Bạn vui lòng thử lại sau.",
+      TOOL_DISABLED: "Tính năng tra cứu này chưa sẵn sàng.",
+    }
+    throw new ChatServiceError(
+      response.status,
+      code,
+      messages[code] ?? "Trợ lý tạm thời chưa xử lý được yêu cầu. Bạn vui lòng thử lại.",
+    )
   }
-
-  return (await response.json()) as ChatResponseDTO
+  return data as ChatResponseDTO
 }

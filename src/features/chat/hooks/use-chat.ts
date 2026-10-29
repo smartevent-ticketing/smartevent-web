@@ -2,7 +2,7 @@
 
 import { useCallback, useRef, useState } from "react"
 
-import { sendChatMessage } from "@/features/chat/api/chat-api"
+import { ChatServiceError, sendChatMessage } from "@/features/chat/api/chat-api"
 import type { ChatMessage, DialogueState } from "@/features/chat/model/chat"
 
 function createId(): string {
@@ -33,13 +33,17 @@ export function useChat() {
   const [conversationId, setConversationId] = useState<string | null>(null)
   const [dialogueState, setDialogueState] = useState<DialogueState>({})
   const requestCounterRef = useRef(0)
+  const abortControllerRef = useRef<AbortController | null>(null)
 
   const toggleOpen = useCallback(() => {
     setIsOpen((prev) => !prev)
   }, [])
 
   const clearHistory = useCallback(() => {
+    abortControllerRef.current?.abort()
+    abortControllerRef.current = null
     requestCounterRef.current += 1
+    setIsLoading(false)
     setMessages([
       {
         ...INITIAL_MESSAGE,
@@ -55,7 +59,9 @@ export function useChat() {
   const sendMessage = useCallback(
     async (text: string) => {
       const trimmed = text.trim()
-      if (!trimmed || isLoading) return
+      if (!trimmed || abortControllerRef.current) return
+      const controller = new AbortController()
+      abortControllerRef.current = controller
 
       const currentRequestId = ++requestCounterRef.current
       const userMessageId = createId()
@@ -70,11 +76,14 @@ export function useChat() {
       setIsLoading(true)
 
       try {
-        const data = await sendChatMessage({
-          message: trimmed,
-          conversation_id: conversationId || undefined,
-          previous_state: dialogueState,
-        })
+        const data = await sendChatMessage(
+          {
+            message: trimmed,
+            conversation_id: conversationId || undefined,
+            previous_state: dialogueState,
+          },
+          controller.signal,
+        )
 
         if (currentRequestId !== requestCounterRef.current) {
           return
@@ -93,17 +102,25 @@ export function useChat() {
           tool_called: data.tool_called,
           citations: data.citations,
           event_links: data.event_links,
+          events: data.events,
+          actions: data.actions,
+          has_more: data.has_more,
+          mode: data.mode,
         }
 
         setMessages((prev) => [...prev, assistantMessage])
-      } catch {
+      } catch (error) {
         if (currentRequestId !== requestCounterRef.current) {
           return
         }
         const errorAssistantMessage: ChatMessage = {
           id: createId(),
           role: "assistant",
-          content: "Không thể gửi tin nhắn đến SmartEvent Bot. Vui lòng kiểm tra lại kết nối mạng.",
+          content:
+            error instanceof ChatServiceError
+              ? error.message
+              : "Không thể gửi tin nhắn đến SmartEvent Bot. Vui lòng kiểm tra lại kết nối mạng.",
+          error_code: error instanceof ChatServiceError ? error.code : "NETWORK_ERROR",
           createdAt: new Date().toISOString(),
           intent: "NETWORK_ERROR",
           grounding: "NO_LIVE_DATA",
@@ -111,11 +128,12 @@ export function useChat() {
         setMessages((prev) => [...prev, errorAssistantMessage])
       } finally {
         if (currentRequestId === requestCounterRef.current) {
+          abortControllerRef.current = null
           setIsLoading(false)
         }
       }
     },
-    [conversationId, dialogueState, isLoading],
+    [conversationId, dialogueState],
   )
 
   return {

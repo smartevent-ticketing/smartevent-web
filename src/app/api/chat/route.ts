@@ -14,6 +14,7 @@ const VALID_DOMAIN_INTENTS = new Set([
   "PAYMENT_STATUS",
   "MY_TICKETS",
   "REFUND_POLICY",
+  "POLICY_FAQ",
   "PUBLIC_HELP",
   "BOOKING_GUIDANCE",
   "OUT_OF_SCOPE",
@@ -108,39 +109,53 @@ export async function POST(request: Request) {
     })
 
     if (!upstreamResponse.ok) {
+      let code = [400, 422].includes(upstreamResponse.status) ? "INVALID_REQUEST" : "UPSTREAM_ERROR"
+      try {
+        const error = await upstreamResponse.json()
+        const allowed = new Set([
+          "BACKEND_UNAVAILABLE",
+          "MODEL_UNAVAILABLE",
+          "KNOWLEDGE_UNAVAILABLE",
+          "UPSTREAM_TIMEOUT",
+          "INVALID_REQUEST",
+          "UPSTREAM_CONTRACT_ERROR",
+          "TOOL_DISABLED",
+        ])
+        if (typeof error.code === "string" && allowed.has(error.code)) code = error.code
+      } catch {
+        /* Never reflect an untrusted upstream error body. */
+      }
       return Response.json(
-        createFallbackResponse(
-          payload,
-          "Trợ lý AI SmartEvent tạm thời không thể phản hồi câu hỏi này. Bạn vui lòng thử lại sau.",
-        ),
-        { status: 200 },
+        { code, message: "Trợ lý chưa xử lý được yêu cầu. Vui lòng thử lại." },
+        { status: upstreamResponse.status },
       )
     }
 
     const data = (await upstreamResponse.json()) as ChatResponseDTO
+    if (
+      !data ||
+      typeof data.answer !== "string" ||
+      typeof data.conversation_id !== "string" ||
+      !data.state ||
+      typeof data.state !== "object"
+    ) {
+      return Response.json(
+        { code: "UPSTREAM_CONTRACT_ERROR", message: "Phản hồi trợ lý không hợp lệ." },
+        { status: 502 },
+      )
+    }
     return Response.json(data, { status: 200 })
-  } catch {
+  } catch (error) {
+    const timeout =
+      error instanceof Error && (error.name === "TimeoutError" || error.name === "AbortError")
     return Response.json(
-      createFallbackResponse(
-        payload,
-        "Không thể kết nối đến máy chủ trợ lý AI SmartEvent. Vui lòng kiểm tra lại dịch vụ.",
-      ),
-      { status: 200 },
+      {
+        code: timeout ? "UPSTREAM_TIMEOUT" : "AI_UNAVAILABLE",
+        message: timeout
+          ? "Trợ lý phản hồi quá lâu. Bạn vui lòng thử lại."
+          : "Chưa kết nối được trợ lý. Bạn vui lòng thử lại.",
+      },
+      { status: timeout ? 504 : 502 },
     )
-  }
-}
-
-function createFallbackResponse(
-  payload: ChatRequestPayload,
-  fallbackMessage: string,
-): ChatResponseDTO {
-  return {
-    conversation_id: payload.conversation_id || crypto.randomUUID(),
-    intent: "OFFLINE",
-    state: sanitizePreviousState(payload.previous_state),
-    answer: fallbackMessage,
-    grounding: "NO_LIVE_DATA",
-    tool_called: null,
-    citations: [],
   }
 }
