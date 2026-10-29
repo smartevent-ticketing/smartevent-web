@@ -1,6 +1,6 @@
 "use client"
 
-import { useCallback, useRef, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 
 import { ChatServiceError, sendChatMessage } from "@/features/chat/api/chat-api"
 import type { ChatMessage, DialogueState } from "@/features/chat/model/chat"
@@ -34,6 +34,12 @@ export function useChat() {
   const [dialogueState, setDialogueState] = useState<DialogueState>({})
   const requestCounterRef = useRef(0)
   const abortControllerRef = useRef<AbortController | null>(null)
+
+  useEffect(() => {
+    return () => {
+      abortControllerRef.current?.abort()
+    }
+  }, [])
 
   const toggleOpen = useCallback(() => {
     setIsOpen((prev) => !prev)

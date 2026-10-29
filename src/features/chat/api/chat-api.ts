@@ -1,13 +1,14 @@
 import type { ChatRequestPayload, ChatResponseDTO } from "@/features/chat/model/chat"
 
 export class ChatServiceError extends Error {
-  constructor(
-    public readonly status: number,
-    public readonly code: string,
-    message: string,
-  ) {
+  readonly status: number
+  readonly code: string
+
+  constructor(status: number, code: string, message: string) {
     super(message)
     this.name = "ChatServiceError"
+    this.status = status
+    this.code = code
   }
 }
 

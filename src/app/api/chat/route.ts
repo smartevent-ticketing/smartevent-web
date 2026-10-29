@@ -105,7 +105,10 @@ export async function POST(request: Request) {
         conversation_id: safeConversationId,
         previous_state: safePreviousState,
       }),
-      signal: AbortSignal.timeout(30000),
+      signal:
+        typeof AbortSignal.any === "function" && request.signal
+          ? AbortSignal.any([request.signal, AbortSignal.timeout(30000)])
+          : AbortSignal.timeout(30000),
     })
 
     if (!upstreamResponse.ok) {
