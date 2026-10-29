@@ -29,6 +29,13 @@ export interface ChatResponseDTO {
   grounding: string
   tool_called?: string | null
   citations: Citation[]
+  event_links?: ChatEventLink[]
+}
+
+export interface ChatEventLink {
+  event_id: string
+  title: string
+  slug: string
 }
 
 export interface ChatRequestPayload {
@@ -46,4 +53,5 @@ export interface ChatMessage {
   grounding?: string
   tool_called?: string | null
   citations?: Citation[]
+  event_links?: ChatEventLink[]
 }

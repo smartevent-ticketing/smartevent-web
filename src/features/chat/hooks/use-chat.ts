@@ -20,7 +20,7 @@ const INITIAL_MESSAGE: ChatMessage = {
   id: "welcome-msg",
   role: "assistant",
   content:
-    "Xin chào! Tôi là trợ lý AI của SmartEvent. Tôi có thể hỗ trợ bạn tìm kiếm sự kiện, giải đáp thông tin vé, phân tích ngân sách hoặc tra cứu chính sách.",
+    "Xin chào! Tôi có thể giúp tìm sự kiện, mở trang chi tiết và tra cứu hướng dẫn SmartEvent có nguồn dẫn. Tôi không thực hiện giao dịch thay bạn.",
   createdAt: new Date().toISOString(),
   intent: "GREETING",
   grounding: "NO_LIVE_DATA",
@@ -49,6 +49,7 @@ export function useChat() {
     ])
     setConversationId(null)
     setDialogueState({})
+    setIsLoading(false)
   }, [])
 
   const sendMessage = useCallback(
@@ -91,6 +92,7 @@ export function useChat() {
           grounding: data.grounding,
           tool_called: data.tool_called,
           citations: data.citations,
+          event_links: data.event_links,
         }
 
         setMessages((prev) => [...prev, assistantMessage])

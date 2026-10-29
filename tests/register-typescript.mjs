@@ -23,6 +23,8 @@ function resolveSource(url) {
 // production dependencies. Type errors are checked separately by `typecheck`.
 registerHooks({
   resolve(specifier, context, nextResolve) {
+    // Node ESM requires the file extension for Next's CommonJS component entry.
+    if (specifier === "next/link") return nextResolve("next/link.js", context)
     const target = specifier.startsWith("@/")
       ? new URL(specifier.slice(2), sourceRoot)
       : specifier.startsWith(".") && context.parentURL?.startsWith(sourceRoot.href)
