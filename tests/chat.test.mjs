@@ -53,6 +53,7 @@ test("chat API forwards request to ai-service and returns response", async (t) =
     grounding: "BACKEND_READ",
     tool_called: "search_events",
     citations: [],
+    event_links: [{ event_id: "event-1", title: "Đêm nhạc", slug: "dem-nhac" }],
   }
 
   const upstream = t.mock.method(globalThis, "fetch", async (url, options) => {
@@ -78,6 +79,7 @@ test("chat API forwards request to ai-service and returns response", async (t) =
   assert.equal(data.intent, "SEARCH_EVENT")
   assert.equal(data.state.city, "Hà Nội")
   assert.equal(data.answer, "Danh sách sự kiện tại Hà Nội...")
+  assert.deepEqual(data.event_links, mockAiResponse.event_links)
 })
 
 test("chat API returns safe fallback response when ai-service is unreachable", async (t) => {
@@ -174,4 +176,36 @@ test("chat API strips non-UUID conversation_id and invalid active_intent before 
   assert.equal(capturedBody.conversation_id, undefined)
   assert.equal(capturedBody.previous_state.city, "Hà Nội")
   assert.equal(capturedBody.previous_state.active_intent, undefined)
+})
+
+test("chat API preserves public help intent and source citations across followup turns", async (t) => {
+  t.mock.method(globalThis, "fetch", async (_url, options) => {
+    const body = JSON.parse(options.body)
+    assert.equal(body.previous_state.active_intent, "PUBLIC_HELP")
+    return Response.json({
+      conversation_id: "08c25afc-f9c9-4db0-aab7-02c779779d6c",
+      intent: "PUBLIC_HELP",
+      state: body.previous_state,
+      answer: "Phiên bản hiện tại tích hợp VNPay.",
+      grounding: "APPROVED_CORPUS",
+      tool_called: null,
+      event_links: [],
+      citations: [
+        { source_id: "HELP-01", title: "Phương thức thanh toán", heading_path: ["VNPay"] },
+      ],
+    })
+  })
+  const response = await POST(
+    new Request("http://localhost:3000/api/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        message: "Còn MoMo thì sao?",
+        previous_state: { active_intent: "PUBLIC_HELP" },
+      }),
+    }),
+  )
+  const data = await response.json()
+  assert.equal(data.grounding, "APPROVED_CORPUS")
+  assert.equal(data.citations[0].source_id, "HELP-01")
 })

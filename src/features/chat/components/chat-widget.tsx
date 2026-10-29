@@ -6,12 +6,13 @@ import { Bot, MessageSquare, RotateCcw, Send, Sparkles, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useChat } from "@/features/chat/hooks/use-chat"
 import { cn } from "@/lib/utils"
+import { ChatEventLinks } from "./chat-event-links"
 
 const SUGGESTIONS = [
-  "Tìm sự kiện tại Hà Nội",
-  "Chính sách hoàn hủy vé thế nào?",
-  "2 vé dưới 1 triệu tổng",
-  "Hướng dẫn cách mua vé",
+  "Tìm sự kiện ở Hồ Chí Minh",
+  "Có những cách thanh toán nào?",
+  "Tôi đặt vé như thế nào?",
+  "Tôi xem vé đã mua ở đâu?",
 ]
 
 export function ChatWidget() {
@@ -57,7 +58,7 @@ export function ChatWidget() {
                   <span className="flex size-2 rounded-full bg-emerald-500" title="Trực tuyến" />
                 </div>
                 <p className="mt-1 text-[11px] text-muted-foreground">
-                  Hỗ trợ tra cứu sự kiện & chính sách vé
+                  Tìm sự kiện & hướng dẫn SmartEvent
                 </p>
               </div>
             </div>
@@ -101,6 +102,11 @@ export function ChatWidget() {
                     )}
                   >
                     <p className="whitespace-pre-wrap">{msg.content}</p>
+
+                    {!isUser &&
+                      msg.grounding === "BACKEND_READ" &&
+                      msg.tool_called === "search_events" &&
+                      !!msg.event_links?.length && <ChatEventLinks links={msg.event_links} />}
 
                     {/* Citations if available */}
                     {msg.citations && msg.citations.length > 0 && (
@@ -169,7 +175,7 @@ export function ChatWidget() {
                 type="text"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                placeholder="Hỏi về sự kiện, giá vé, chính sách..."
+                placeholder="Tìm sự kiện hoặc hỏi cách sử dụng..."
                 className="flex-1 rounded-xl border border-input bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground/70 focus-visible:border-ring focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30"
                 disabled={isLoading}
               />
