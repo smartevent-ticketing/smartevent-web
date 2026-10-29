@@ -102,12 +102,12 @@ export function PaymentView() {
           }`}
         >
           <div className="flex items-center gap-2">
-            <Timer className={`size-5 text-white ${!isExpired ? "animate-pulse" : ""}`} />
-            <span className="text-xs sm:text-sm font-semibold text-white">
+            <Timer className={`size-5 ${!isExpired ? "animate-pulse" : ""}`} />
+            <span className="text-xs sm:text-sm font-semibold">
               {isExpired ? "Đơn hàng đã hết hạn thanh toán!" : "Thời gian hoàn tất giao dịch còn:"}
             </span>
           </div>
-          <span className="font-mono text-lg font-bold text-white tracking-widest">
+          <span className="font-mono text-lg font-bold tracking-widest">
             {isExpired ? "00:00" : timerDisplay}
           </span>
         </div>
