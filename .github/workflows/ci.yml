@@ -16,7 +16,11 @@ concurrency:
 jobs:
   validate:
     name: Lint, Typecheck, Test, Build
-    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
     timeout-minutes: 15
     env:
       NEXT_PUBLIC_API_BASE_URL: "http://localhost:8080"
@@ -48,4 +52,8 @@ jobs:
         run: npm test
 
       - name: Build Next.js application
+        if: runner.os != 'Windows'
         run: npm run build
+      - name: Build local Windows server
+        if: runner.os == 'Windows'
+        run: npm run build:local

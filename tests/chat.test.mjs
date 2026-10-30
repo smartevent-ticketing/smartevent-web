@@ -12,7 +12,9 @@ test("chat API rejects non-JSON or missing message with 400", async () => {
   })
   const res1 = await POST(req1)
   assert.equal(res1.status, 400)
-  assert.equal((await res1.json()).success, false)
+  const data1 = await res1.json()
+  assert.equal(data1.success, false)
+  assert.equal(data1.code, "INVALID_REQUEST")
 
   const req2 = new Request("http://localhost:3000/api/chat", {
     method: "POST",
@@ -21,7 +23,9 @@ test("chat API rejects non-JSON or missing message with 400", async () => {
   })
   const res2 = await POST(req2)
   assert.equal(res2.status, 400)
-  assert.equal((await res2.json()).success, false)
+  const data2 = await res2.json()
+  assert.equal(data2.success, false)
+  assert.equal(data2.code, "INVALID_REQUEST")
 
   const req3 = new Request("http://localhost:3000/api/chat", {
     method: "POST",
@@ -30,7 +34,9 @@ test("chat API rejects non-JSON or missing message with 400", async () => {
   })
   const res3 = await POST(req3)
   assert.equal(res3.status, 400)
-  assert.equal((await res3.json()).success, false)
+  const data3 = await res3.json()
+  assert.equal(data3.success, false)
+  assert.equal(data3.code, "INVALID_REQUEST")
 })
 
 test("chat API rejects message longer than 2000 characters", async () => {
@@ -41,7 +47,9 @@ test("chat API rejects message longer than 2000 characters", async () => {
   })
   const res = await POST(req)
   assert.equal(res.status, 400)
-  assert.equal((await res.json()).success, false)
+  const data = await res.json()
+  assert.equal(data.success, false)
+  assert.equal(data.code, "INVALID_REQUEST")
 })
 
 test("chat API forwards request to ai-service and returns response", async (t) => {
@@ -82,48 +90,67 @@ test("chat API forwards request to ai-service and returns response", async (t) =
   assert.deepEqual(data.event_links, mockAiResponse.event_links)
 })
 
-test("chat API returns safe fallback response when ai-service is unreachable", async (t) => {
+test("chat API reports unavailable AI as 502 without leaking transport details", async (t) => {
   t.mock.method(globalThis, "fetch", async () => {
-    throw new Error("Network connection refused")
+    throw new Error("SECRET_TRANSPORT_DETAILS")
   })
-
-  const req = new Request("http://localhost:3000/api/chat", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ message: "Có sự kiện gì hôm nay?" }),
-  })
-
-  const res = await POST(req)
-  assert.equal(res.status, 200)
-
-  const data = await res.json()
-  assert.equal(data.intent, "OFFLINE")
-  assert.equal(data.grounding, "NO_LIVE_DATA")
-  assert.match(data.answer, /Không thể kết nối/i)
+  const response = await POST(
+    new Request("http://localhost/api/chat", {
+      method: "POST",
+      body: JSON.stringify({ message: "xin chào" }),
+    }),
+  )
+  assert.equal(response.status, 502)
+  assert.equal((await response.json()).code, "AI_UNAVAILABLE")
 })
 
-test("chat API returns safe fallback response when ai-service returns 500 error", async (t) => {
+for (const status of [400, 422, 429, 500, 503, 504]) {
+  test(`chat API preserves upstream HTTP ${status} with safe error fields`, async (t) => {
+    t.mock.method(globalThis, "fetch", async () =>
+      Response.json({ code: "MODEL_UNAVAILABLE", message: "SECRET" }, { status }),
+    )
+    const response = await POST(
+      new Request("http://localhost/api/chat", {
+        method: "POST",
+        body: JSON.stringify({ message: "xin chào" }),
+      }),
+    )
+    assert.equal(response.status, status)
+    const body = await response.json()
+    assert.equal(body.code, "MODEL_UNAVAILABLE")
+    assert.doesNotMatch(body.message, /SECRET/)
+  })
+}
+
+test("chat API maps timeout to 504", async (t) => {
   t.mock.method(globalThis, "fetch", async () => {
-    return new Response("Internal Server Error", { status: 500 })
+    throw new DOMException("timed out", "TimeoutError")
   })
+  const response = await POST(
+    new Request("http://localhost/api/chat", {
+      method: "POST",
+      body: JSON.stringify({ message: "xin chào" }),
+    }),
+  )
+  assert.equal(response.status, 504)
+  assert.equal((await response.json()).code, "UPSTREAM_TIMEOUT")
+})
 
-  const req = new Request("http://localhost:3000/api/chat", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ message: "Chính sách hoàn vé" }),
+test("chat client forwards abort signal and retains error status/code", async (t) => {
+  const controller = new AbortController()
+  t.mock.method(globalThis, "fetch", async (url, options) => {
+    assert.equal(options.signal, controller.signal)
+    return Response.json({ code: "BACKEND_UNAVAILABLE" }, { status: 503 })
   })
-
-  const res = await POST(req)
-  assert.equal(res.status, 200)
-
-  const data = await res.json()
-  assert.equal(data.intent, "OFFLINE")
-  assert.match(data.answer, /tạm thời không thể phản hồi/i)
+  await assert.rejects(
+    sendChatMessage({ message: "xin chào" }, controller.signal),
+    (error) => error.status === 503 && error.code === "BACKEND_UNAVAILABLE",
+  )
 })
 
 test("sendChatMessage calls /api/chat and parses ChatResponseDTO", async (t) => {
   const mockResponse = {
-    conversation_id: "c1",
+    conversation_id: "08c25afc-f9c9-4db0-aab7-02c779779d6c",
     intent: "GREETING",
     state: {},
     answer: "Xin chào bạn!",
@@ -139,7 +166,7 @@ test("sendChatMessage calls /api/chat and parses ChatResponseDTO", async (t) => 
   })
 
   const result = await sendChatMessage({ message: "Chào bạn" })
-  assert.equal(result.conversation_id, "c1")
+  assert.equal(result.conversation_id, "08c25afc-f9c9-4db0-aab7-02c779779d6c")
   assert.equal(result.answer, "Xin chào bạn!")
 })
 
@@ -191,7 +218,16 @@ test("chat API preserves public help intent and source citations across followup
       tool_called: null,
       event_links: [],
       citations: [
-        { source_id: "HELP-01", title: "Phương thức thanh toán", heading_path: ["VNPay"] },
+        {
+          source_id: "HELP-01",
+          version: "1.0.0",
+          title: "Phương thức thanh toán",
+          canonical_uri: "https://example.com/payment",
+          chunk_id: "c-01",
+          heading_path: ["VNPay"],
+          start: 0,
+          end: 100,
+        },
       ],
     })
   })

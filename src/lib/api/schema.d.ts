@@ -4780,7 +4780,7 @@ export interface operations {
     };
     getAvailableSeatsByArea: {
         parameters: {
-            query?: never;
+            query?: { includeUnavailable?: boolean };
             header?: never;
             path: {
                 areaId: string;

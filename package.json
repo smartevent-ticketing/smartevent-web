@@ -8,7 +8,9 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "build:local": "node scripts/build-local.mjs",
     "start": "next start",
+    "start:local": "node scripts/start-local.mjs",
     "lint": "eslint",
     "format": "prettier --write .",
     "format:check": "prettier --check .",

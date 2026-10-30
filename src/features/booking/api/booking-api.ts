@@ -21,7 +21,19 @@ export const bookingApi = {
       FetchOptions<ApiPaths["/api/v1/areas/{areaId}/seats/available"]["get"]>,
       "parseAs"
     > & { parseAs?: "json" },
-  ) => requireApiSuccess(apiClient.GET("/api/v1/areas/{areaId}/seats/available", options)),
+  ) =>
+    requireApiSuccess(
+      apiClient.GET("/api/v1/areas/{areaId}/seats/available", {
+        ...options,
+        params: {
+          ...options.params,
+          query: {
+            ...options.params?.query,
+            includeUnavailable: true,
+          },
+        },
+      }),
+    ),
 
   getActiveReservation: (
     options: Omit<FetchOptions<ApiPaths["/api/v1/reservations/active"]["get"]>, "parseAs"> & {
