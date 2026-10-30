@@ -2,7 +2,8 @@ import type { NextConfig } from "next"
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
-  output: "standalone",
+  output: process.env.SMARTEVENT_LOCAL_BUILD === "1" ? undefined : "standalone",
+  distDir: process.env.SMARTEVENT_LOCAL_BUILD === "1" ? ".next-local" : ".next",
   allowedDevOrigins: ["localhost", "127.0.0.1", "192.168.116.1", "172.21.144.1"],
   images: {
     remotePatterns: [

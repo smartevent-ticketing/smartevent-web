@@ -1,4 +1,5 @@
 import type { ChatRequestPayload, ChatResponseDTO } from "@/features/chat/model/chat"
+import { isChatResponse } from "@/features/chat/model/contract"
 
 export class ChatServiceError extends Error {
   readonly status: number
@@ -22,9 +23,17 @@ export async function sendChatMessage(
     body: JSON.stringify(payload),
     signal,
   })
-  const data = await response.json()
+  let data: unknown
+  try {
+    data = await response.json()
+  } catch {
+    data = null
+  }
   if (!response.ok) {
-    const code = typeof data.code === "string" ? data.code : "UPSTREAM_ERROR"
+    const code =
+      data && typeof data === "object" && "code" in data && typeof data.code === "string"
+        ? data.code
+        : "UPSTREAM_ERROR"
     const messages: Record<string, string> = {
       BACKEND_UNAVAILABLE: "Chưa tra cứu được dữ liệu sự kiện. Bạn vui lòng thử lại.",
       MODEL_UNAVAILABLE: "Trợ lý đang gặp sự cố xử lý câu hỏi. Bạn vui lòng thử lại.",
@@ -41,5 +50,7 @@ export async function sendChatMessage(
       messages[code] ?? "Trợ lý tạm thời chưa xử lý được yêu cầu. Bạn vui lòng thử lại.",
     )
   }
-  return data as ChatResponseDTO
+  if (!isChatResponse(data))
+    throw new ChatServiceError(502, "UPSTREAM_CONTRACT_ERROR", "Phản hồi trợ lý không hợp lệ.")
+  return data
 }

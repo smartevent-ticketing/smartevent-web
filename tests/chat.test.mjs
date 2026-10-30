@@ -142,7 +142,7 @@ test("chat client forwards abort signal and retains error status/code", async (t
 
 test("sendChatMessage calls /api/chat and parses ChatResponseDTO", async (t) => {
   const mockResponse = {
-    conversation_id: "c1",
+    conversation_id: "08c25afc-f9c9-4db0-aab7-02c779779d6c",
     intent: "GREETING",
     state: {},
     answer: "Xin chào bạn!",
@@ -158,7 +158,7 @@ test("sendChatMessage calls /api/chat and parses ChatResponseDTO", async (t) => 
   })
 
   const result = await sendChatMessage({ message: "Chào bạn" })
-  assert.equal(result.conversation_id, "c1")
+  assert.equal(result.conversation_id, "08c25afc-f9c9-4db0-aab7-02c779779d6c")
   assert.equal(result.answer, "Xin chào bạn!")
 })
 
