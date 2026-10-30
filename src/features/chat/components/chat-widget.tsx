@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
+import Link from "next/link"
 import { Bot, MessageSquare, RotateCcw, Send, Sparkles, X } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
@@ -112,13 +113,13 @@ export function ChatWidget() {
                         (action) => action.type === "BROWSE_EVENTS" && action.route === "/events",
                       )
                       .map((action) => (
-                        <a
+                        <Link
                           key={action.route}
                           className="mt-2 block text-xs text-primary underline"
                           href={action.route}
                         >
                           {action.label}
-                        </a>
+                        </Link>
                       ))}
                     {msg.events?.map((event) => (
                       <div
@@ -151,12 +152,12 @@ export function ChatWidget() {
                             </p>
                           )}
                         {/^\/events\/[a-zA-Z0-9_-]+$/.test(event.detail_path) && (
-                          <a
+                          <Link
                             className="mt-2 inline-block text-xs font-medium text-primary underline"
                             href={event.detail_path}
                           >
                             Xem chi tiết
-                          </a>
+                          </Link>
                         )}
                       </div>
                     ))}

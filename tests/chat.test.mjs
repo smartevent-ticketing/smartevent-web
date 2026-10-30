@@ -12,7 +12,9 @@ test("chat API rejects non-JSON or missing message with 400", async () => {
   })
   const res1 = await POST(req1)
   assert.equal(res1.status, 400)
-  assert.equal((await res1.json()).success, false)
+  const data1 = await res1.json()
+  assert.equal(data1.success, false)
+  assert.equal(data1.code, "INVALID_REQUEST")
 
   const req2 = new Request("http://localhost:3000/api/chat", {
     method: "POST",
@@ -21,7 +23,9 @@ test("chat API rejects non-JSON or missing message with 400", async () => {
   })
   const res2 = await POST(req2)
   assert.equal(res2.status, 400)
-  assert.equal((await res2.json()).success, false)
+  const data2 = await res2.json()
+  assert.equal(data2.success, false)
+  assert.equal(data2.code, "INVALID_REQUEST")
 
   const req3 = new Request("http://localhost:3000/api/chat", {
     method: "POST",
@@ -30,7 +34,9 @@ test("chat API rejects non-JSON or missing message with 400", async () => {
   })
   const res3 = await POST(req3)
   assert.equal(res3.status, 400)
-  assert.equal((await res3.json()).success, false)
+  const data3 = await res3.json()
+  assert.equal(data3.success, false)
+  assert.equal(data3.code, "INVALID_REQUEST")
 })
 
 test("chat API rejects message longer than 2000 characters", async () => {
@@ -41,7 +47,9 @@ test("chat API rejects message longer than 2000 characters", async () => {
   })
   const res = await POST(req)
   assert.equal(res.status, 400)
-  assert.equal((await res.json()).success, false)
+  const data = await res.json()
+  assert.equal(data.success, false)
+  assert.equal(data.code, "INVALID_REQUEST")
 })
 
 test("chat API forwards request to ai-service and returns response", async (t) => {

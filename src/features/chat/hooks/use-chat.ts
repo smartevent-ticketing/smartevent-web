@@ -37,6 +37,7 @@ export function useChat() {
 
   useEffect(() => {
     return () => {
+      requestCounterRef.current++
       abortControllerRef.current?.abort()
     }
   }, [])

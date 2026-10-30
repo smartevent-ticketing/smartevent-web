@@ -25,7 +25,13 @@ export const bookingApi = {
     requireApiSuccess(
       apiClient.GET("/api/v1/areas/{areaId}/seats/available", {
         ...options,
-        params: { ...options.params, query: { includeUnavailable: true } },
+        params: {
+          ...options.params,
+          query: {
+            ...options.params?.query,
+            includeUnavailable: true,
+          },
+        },
       }),
     ),
 

@@ -34,7 +34,7 @@ function sanitizePreviousState(
 }
 
 export async function POST(request: Request) {
-  if (request.signal.aborted) return new Response(null, { status: 499 })
+  if (request.signal?.aborted) return new Response(null, { status: 499 })
   let body: unknown
   try {
     body = await request.json()
@@ -42,6 +42,7 @@ export async function POST(request: Request) {
     return Response.json(
       {
         success: false,
+        code: "INVALID_REQUEST",
         message: "Dữ liệu yêu cầu không hợp lệ (Invalid JSON)",
       },
       { status: 400 },
@@ -57,6 +58,7 @@ export async function POST(request: Request) {
     return Response.json(
       {
         success: false,
+        code: "INVALID_REQUEST",
         message: "Nội dung câu hỏi (message) không được để trống",
       },
       { status: 400 },
@@ -70,6 +72,7 @@ export async function POST(request: Request) {
     return Response.json(
       {
         success: false,
+        code: "INVALID_REQUEST",
         message: "Nội dung tin nhắn không thể chỉ chứa khoảng trắng",
       },
       { status: 400 },
@@ -80,6 +83,7 @@ export async function POST(request: Request) {
     return Response.json(
       {
         success: false,
+        code: "INVALID_REQUEST",
         message: "Tin nhắn quá dài (tối đa 2000 ký tự)",
       },
       { status: 400 },
