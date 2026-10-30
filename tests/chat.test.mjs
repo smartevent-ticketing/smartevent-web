@@ -218,7 +218,16 @@ test("chat API preserves public help intent and source citations across followup
       tool_called: null,
       event_links: [],
       citations: [
-        { source_id: "HELP-01", title: "Phương thức thanh toán", heading_path: ["VNPay"] },
+        {
+          source_id: "HELP-01",
+          version: "1.0.0",
+          title: "Phương thức thanh toán",
+          canonical_uri: "https://example.com/payment",
+          chunk_id: "c-01",
+          heading_path: ["VNPay"],
+          start: 0,
+          end: 100,
+        },
       ],
     })
   })

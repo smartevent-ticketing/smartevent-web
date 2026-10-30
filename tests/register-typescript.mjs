@@ -4,6 +4,8 @@ import { extname } from "node:path"
 import { fileURLToPath } from "node:url"
 import ts from "typescript"
 
+process.env.NEXT_PUBLIC_API_BASE_URL ||= "http://localhost:8080"
+
 const sourceRoot = new URL("../src/", import.meta.url)
 
 function resolveSource(url) {
